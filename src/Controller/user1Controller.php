@@ -6,15 +6,15 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-class userEditController extends AbstractController
+class user1Controller extends AbstractController
 {
     /**
-     * @Route("/userEdit");
+     * @Route("/user1");
      */
 
-    public function userEdit(){
+    public function user()
+    {
 
-        return $this->render('userEdit.html.twig');
-
+        return $this->render('user.html.twig');
     }
 }

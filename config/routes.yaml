@@ -11,9 +11,9 @@ index:
     controller: App\Controller\indexController::index
 
 user:
-    path: /user
-    controller: App\Controller\userController::user
+    path: /user1
+    controller: App\Controller\user1Controller::user
 
-user_edit:
-    path: /user_edit
-    controller: App\Controller\userEditController::userEdit
+user_edit1:
+    path: /user1_edit
+    controller: App\Controller\userEdit1Controller::userEdit1
