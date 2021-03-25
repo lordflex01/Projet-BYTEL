@@ -12,7 +12,7 @@ index:
 
 user:
     path: /user1
-    controller: App\Controller\user1Controller::user
+    controller: App\Controller\UserController::user
 
 user_edit1:
     path: /user1_edit

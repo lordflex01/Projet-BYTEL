@@ -8,9 +8,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class user1Controller extends AbstractController
 {
-    /**
-     * @Route("/user1");
-     */
+
 
     public function user()
     {
