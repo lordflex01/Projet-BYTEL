@@ -20,8 +20,8 @@ class UserType extends AbstractType
                 'multiple' => false,
                 'expanded' => false,
                 'choices' => [
-                    'User' => 'UserRole',
-                    'admin' => 'AdminRole',
+                    'User' => 'User',
+                    'Admin' => 'Admin',
                 ],
             ])
             ->add('password')
