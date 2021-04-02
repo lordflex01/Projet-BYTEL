@@ -2,10 +2,6 @@
 #    path: /
 #    controller: App\Controller\DefaultController::index
 
-hello:
-    path: /hello-word
-    controller: App\Controller\HelloWorldController::sayHello
-
 index:
     path: /
     controller: App\Controller\indexController::index
@@ -13,7 +9,3 @@ index:
 user:
     path: /user1
     controller: App\Controller\UserController::user
-
-user_edit1:
-    path: /user1_edit
-    controller: App\Controller\userEdit1Controller::userEdit1
