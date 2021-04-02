@@ -18,7 +18,7 @@ class UserController extends AbstractController
 {
 
     /**
-     * @Route("/user1", name="user1", methods={"GET","POST"})
+     * @Route("/user", name="user1", methods={"GET","POST"})
      */
     public function user(UserRepository $userRepository): Response
     {
@@ -38,7 +38,7 @@ class UserController extends AbstractController
      */
     public function index(UserRepository $userRepository): Response
     {
-        return $this->render('user/index.html.twig', [
+        return $this->render('user/user.html.twig', [
             'users' => $userRepository->findAll(),
         ]);
     }
@@ -62,7 +62,7 @@ class UserController extends AbstractController
             $entityManager->persist($user);
             $entityManager->flush();
 
-            return $this->redirectToRoute('user1');
+            return $this->redirectToRoute('user');
         }
 
         return $this->render('user/new.html.twig', [
@@ -101,7 +101,7 @@ class UserController extends AbstractController
             $entityManager->flush();
 
 
-            return $this->redirectToRoute('user1');
+            return $this->redirectToRoute('user');
         }
 
         return $this->render('user/edit.html.twig', [
@@ -121,6 +121,6 @@ class UserController extends AbstractController
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('user1');
+        return $this->redirectToRoute('user');
     }
 }
