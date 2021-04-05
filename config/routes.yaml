@@ -3,7 +3,7 @@
 #    controller: App\Controller\DefaultController::index
 
 index:
-    path: /
+    path: /index
     controller: App\Controller\indexController::index
 
 user:
