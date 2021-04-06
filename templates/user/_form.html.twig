@@ -1,4 +1,55 @@
 {{ form_start(form) }}
-{{ form_widget(form) }}
-<button class="btn">{{ button_label|default('Save') }}</button>
-{{ form_end(form) }}
+<!-- Main content -->
+<section class="content">
+	<div class="container-fluid">
+		<div
+			class="row">
+			<!-- left column -->
+			<div
+				class="col-md-6">
+				<!-- general form elements -->
+				<div class="card card-primary">
+					<div class="card-header">
+						<h3 class="card-title">Créer un utilisateur</h3>
+					</div>
+
+					<!-- /.card-header -->
+					<!-- form start -->
+					<form>
+						<div class="card-body">
+							<div class="form-group">
+								<label for="{{form.email.vars.id}}">Adresse Email</label>
+								{{form_widget( form.email)}}
+								{% do form.email.setRendered %}
+							</div>
+							<div class="form-group">
+								<label for="{{form.username.vars.id}}">Nom d'utilisateur</label>
+								{{form_widget( form.username)}}
+								{% do form.email.setRendered %}
+							</div>
+							<div class="form-group">
+								<label for="{{form.password.vars.id}}">Mot de passe</label>
+								{{form_widget( form.password)}}
+								{% do form.email.setRendered %}
+							</div>
+							<div class="form-group">
+								<label for="{{form.roles.vars.id}}">Role</label>
+								{{form_widget( form.roles)}}
+								{% do form.email.setRendered %}
+							</div>
+
+						</div>
+						<!-- /.card-body -->
+
+						<div class="card-footer">
+
+							<a href="{{ path('user') }}">
+								<i class="fas fa-backspace"></i>
+								Retour
+							</a>
+							<button type="submit" class="btn btn-primary">{{ button_label|default('Enregistrer') }}</button>
+						</div>
+					</form>
+				</div>
+				<!--<button class="btn">{{ button_label|default('Save') }}</button>-->
+				{{ form_end(form) }}
