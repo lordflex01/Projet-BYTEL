@@ -11,6 +11,7 @@
 				<div class="card card-primary">
 					<div class="card-header">
 						<h3 class="card-title">Créer un utilisateur</h3>
+						<input href="{{ path('user_show', {'id': app.user.id}) }}" type="hidden" value="xm234jq">
 					</div>
 
 					<!-- /.card-header -->
@@ -25,17 +26,17 @@
 							<div class="form-group">
 								<label for="{{form.username.vars.id}}">Nom d'utilisateur</label>
 								{{form_widget( form.username)}}
-								{% do form.email.setRendered %}
+								{% do form.username.setRendered %}
 							</div>
 							<div class="form-group">
 								<label for="{{form.password.vars.id}}">Mot de passe</label>
 								{{form_widget( form.password)}}
-								{% do form.email.setRendered %}
+								{% do form.password.setRendered %}
 							</div>
 							<div class="form-group">
 								<label for="{{form.roles.vars.id}}">Role</label>
 								{{form_widget( form.roles)}}
-								{% do form.email.setRendered %}
+								{% do form.roles.setRendered %}
 							</div>
 
 						</div>

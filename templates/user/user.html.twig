@@ -1,4 +1,46 @@
 {% extends 'header.html.twig' %}
+{% block javascripts %}
+	<script src="{{asset ("assets/js/bootstrap.js")}}"></script>
+	<script src="{{asset ("/assets/js/datatable/jquery.min.js")}}"></script>
+	<script src="{{asset ("/assets/js/datatable/jquery.dataTables.min.js")}}"></script>
+
+	<link rel="stylesheet" href="{{asset ("/assets/css/datatable/buttons.bootstrap4.min.css")}}">
+	<link rel="stylesheet" href="{{asset ("/assets/css/datatable/dataTables.bootstrap4.min.css")}}">
+	<link rel="stylesheet" href="{{asset ("/assets/css/datatable/responsive.bootstrap4.min.css")}}">
+
+
+	<script src="{{asset ("/assets/js/datatable/buttons.bootstrap4.min.js")}}"></script>
+	<script src="{{asset ("/assets/js/datatable/buttons.colVis.min.js")}}"></script>
+	<script src="{{asset ("/assets/js/datatable/buttons.html5.min.js")}}"></script>
+	<script src="{{asset ("/assets/js/datatable/buttons.print.min.js")}}"></script>
+	<script src="{{asset ("/assets/js/datatable/dataTables.bootstrap4.min.js")}}"></script>
+	<script src="{{asset ("/assets/js/datatable/dataTables.buttons.min.js")}}"></script>
+	<script src="{{asset ("/assets/js/datatable/dataTables.responsive.min.js")}}"></script>
+
+	<script src="{{asset ("/assets/js/datatable/jszip.min.js")}}"></script>
+	<script src="{{asset ("/assets/js/datatable/pdfmake.min.js")}}"></script>
+	<script src="{{asset ("/assets/js/datatable/responsive.bootstrap4.min.js")}}"></script>
+	<script src="{{asset ("/assets/js/datatable/vfs_fonts.js")}}"></script>
+
+	<script>
+		$(function () {
+$("#example1").DataTable({
+"responsive": true,
+"lengthChange": false,
+"autoWidth": false,
+"buttons": [
+"copy",
+"csv",
+"excel",
+"pdf",
+"print",
+"colvis"
+]
+}).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+});
+	</script>
+
+{% endblock %}
 {% block body %}
 
 	<!-- Content Wrapper. Contains page content -->
@@ -113,6 +155,62 @@
 						</tbody>
 					</tbody>
 				</table>
+				<div class="card">
+					<div class="card-header">
+						<h3 class="card-title">
+							<a class="btn btn-primary btn-sm" href="{{ path('user_new') }}">Create new>
+							</a>
+						</h3>
+					</div>
+					<!-- /.card-header -->
+					<div class="card-body">
+						<table id="example1" class="table table-bordered table-striped">
+							<thead>
+								<tr>
+									<th>Numéro</th>
+									<th>Id</th>
+									<th>Email</th>
+									<th>Nom d'utilisateur</th>
+									<th>le role</th>
+								</tr>
+							</thead>
+							<tbody>
+								{% for user in users %}
+									<tr>
+										<td>
+											#
+										</td>
+										<td>
+
+											{{ user.id }}
+
+
+										</td>
+										<td>
+											{{ user.email }}
+										</td>
+										<td>
+											{{ user.username }}
+										</td>
+										<td>
+											{{ user.roles ? user.roles|json_encode : '' }}
+										</td>
+
+
+									</tr>
+
+								{% else %}
+									<tr>
+										<td colspan="6">no records found</td>
+									</tr>
+								{% endfor %}
+
+							</tbody>
+						</table>
+					</div>
+					<!-- /.card-body -->
+				</div>
+
 			</div>
 			<!-- /.card-body -->
 		</div>

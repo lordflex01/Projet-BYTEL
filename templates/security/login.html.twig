@@ -43,7 +43,15 @@
 					</div>
 					<form method="post">
 						<div class="card-body">
-							<p class="login-box-msg">Connectez-vous pour démarrer votre session</p>
+							{% if app.user %}
+								<div class="mb-3">
+									Vous êtes deja connecté en tant que
+									{{ app.user.username }},
+									<a href="{{ path('app_logout') }}">Déconnexion</a>
+								</div>
+							{% else %}
+								<p class="login-box-msg">Connectez-vous pour démarrer votre session</p>
+							{% endif %}
 							<div class="input-group mb-3">
 								<input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control" placeholder="E-mail" required autofocus>
 								<div class="input-group-append">
@@ -61,37 +69,42 @@
 									</div>
 								</div>
 							</div>
+							<form method="post">
+								{% if error %}
+									<div class="alert alert-danger">E-mail ou mot de passe est incorrecte.</div>
+								{% endif %}
 
-							<input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
-							<div class="row">
-								<div class="col-8">
-									<div class="icheck-primary">
-										<input type="checkbox" name="_remember_me">
-										<label for="remember">
-											&nbsp;Se Souvenir de moi
-										</label>
+								<input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+								<div class="row">
+									<div class="col-8">
+										<div class="icheck-primary">
+											<input type="checkbox" name="_remember_me">
+											<label for="remember">
+												&nbsp;Se Souvenir de moi
+											</label>
+										</div>
 									</div>
+									<div class="col-4">
+										<button type="submit" class="btn btn-primary btn-block">S'identifier</button>
+									</div>
+									<!-- /.col -->
 								</div>
-								<div class="col-4">
-									<button type="submit" class="btn btn-primary btn-block">S'identifier</button>
-								</div>
-								<!-- /.col -->
-							</div>
-						</form>
+							</form>
+						</div>
+						<!-- /.card-body -->
 					</div>
-					<!-- /.card-body -->
+					<!-- /.card -->
 				</div>
-				<!-- /.card -->
-			</div>
-			<!-- /.login-box -->
+				<!-- /.login-box -->
 
-		{% endblock %}
+			{% endblock %}
 
-		{% block javascripts %}
+			{% block javascripts %}
 
-			<script src="{{asset ("assets/js/bootstrap.js")}}"></script>
-			<script src="{{asset ("assets/js/jquery.js")}}"></script>
+				<script src="{{asset ("assets/js/bootstrap.js")}}"></script>
+				<script src="{{asset ("assets/js/jquery.js")}}"></script>
 
-		{% endblock %}
+			{% endblock %}
+		</body>
 	</body>
 </html>
