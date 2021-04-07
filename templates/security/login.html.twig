@@ -3,14 +3,16 @@
 	<head>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<title>Bouygues-Telecom</title>
+		<title>Bouygues Telecom</title>
 
 		{% block stylesheets %}
+		<!-- fav icon for website -->
+			<link rel="icon" type="image/png" href="{{asset ("assets/img/Bouygues_Télécom.gif")}}">
 			<link
-			rel="stylesheet" href="{{asset ("assets/css/plugins/fontawesome-free/css/all.min.css")}}">
+			rel="stylesheet" href="{{asset ("assets/plugins/fontawesome-free/css/all.css")}}">
 			<!-- Theme style -->
 			<link
-			rel="stylesheet" href="{{asset ("assets/css/adminlte.css")}}">
+			rel="stylesheet" href="{{asset ("assets/css/styles.css")}}">
 		<!-- -->
 		{% endblock %}
 
@@ -43,7 +45,7 @@
 					</div>
 					<form method="post">
 						<div class="card-body">
-							<p class="login-box-msg">Connectez-vous pour démarrer votre session</p>
+
 							<div class="input-group mb-3">
 								<input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control" placeholder="E-mail" required autofocus>
 								<div class="input-group-append">
