@@ -45,7 +45,7 @@
 					class="navbar-nav ml-auto">
 					<!-- Navbar Search -->
 					<li class="nav-item">
-						<a class="nav-link" data-widget="navbar-search" href="#" role="button">
+						<a class="nav-link" data-widget="navbar-search" href="" role="button">
 							<div class="navbar-search-block">
 								<form class="form-inline">
 									<div class="input-group input-group-sm">
@@ -115,7 +115,7 @@
 					<!-- Sidebar user panel (optional) -->
 					<div class="user-panel mt-3 pb-3 mb-3 d-flex">
 						<div class="user-panel-icon">
-							<a href="{{ path('user_show', {'id': app.user.id}) }}" class="nav-link"  data-toggle="modal" data-target="#modal-sm">
+							<a class="nav-link">
 								<i class="nav-icon fas fa-user"></i>
 							</a>
 
@@ -173,15 +173,22 @@
 			<div class="modal fade" id="modal-sm">
 				<div class="modal-dialog modal-sm">
 					<div class="modal-content">
-						<div class="modal-header">
-							<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-								<span aria-hidden="true">&times;</span>
-							</button>
+						<div class="picture">
+							<i class="nav-icon fas fa-user"></i>
 						</div>
-						<div class="modal-body">
-							<p>One fine body&hellip;</p>
+						<div class="info-content">
+							<h3 class="name">{{ app.user.username }}</h3>
+							<h4 class="roles">
+								{% if app.user.roles  == ["User"]%}
+									Utilisateur
+								{% else %}
+
+									Administrateur
+								{% endif %}
+							</h4>
+							<a href="">{{ app.user.email }}</a>
 						</div>
-					
+
 					</div>
 					<!-- /.modal-content -->
 				</div>
