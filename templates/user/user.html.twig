@@ -1,6 +1,107 @@
 {% extends 'header.html.twig' %}
-{% block javascripts %}
 
+{% block body %}
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1>
+              Liste des utilisateurs
+            </h1>
+          </div>
+		  <div class="card-header">
+					<h3 class="card-title">
+						<a class="btn btn-primary btn-sm" href="{{ path('user_new') }}">Créer un nouveau >
+						</a>
+					</h3>
+				</div>
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item"><a href="#">Acceuil</a></li>
+              <li class="breadcrumb-item active">Utilisateurs</li>
+            </ol>
+          </div>
+        </div>
+      </div>
+      <!-- /.container-fluid -->
+    </section>
+    <div class="card-body">
+      <table id="example1" class="table table-bordered table-striped">
+        <thead>
+          <tr>
+            <th>
+              Numéro
+            </th>
+            <th>
+              E-mail
+            </th>
+            <th>
+              Nom d'utilisateur
+            </th>
+            <th>
+              Rôle
+            </th>
+            <th>
+              Editer
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for user in users %}
+            <tr>
+              <td>
+                {% set number = (number|default(0)) + 1 %}
+                <p>
+                  {{ number }}
+                </p>
+              </td>
+              <td>
+                {{ user.email }}
+              </td>
+              <td>
+                {{ user.username }}
+              </td>
+              <td>
+                {{ user.roles ? user.roles|json_encode : '' }}
+              </td>
+              <td class="project-actions text-right">
+                <a class="btn btn-info btn-sm"
+                  href="{{
+                  path(
+                    'user_edit',
+                    {
+                      id: user.id
+                    }
+                  )
+                  }}">
+                  <i class="fas fa-pencil-alt"></i>
+                </a>
+                <a class="btn">{{ include('user/_delete_form.html.twig') }}</a>
+              </td>
+            </tr>
+          {% else %}
+            <tr>
+              <td colspan="6">
+                Aucun utilisateur trouvé
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    <!-- /.card-body -->
+  </div>
+  <!-- Main Footer -->
+  <footer class="main-footer">
+    <!-- Default to the left -->
+    Copyright &copy;
+    <strong>Bouygues Telecom</strong>
+    | Tous les droits sont réservés.
+  </footer>
+  {% block javascripts %}
+<!-- DataTables  & Plugins -->
 	<script src="{{asset ("/assets/js/datatable/jquery.min.js")}}"></script>
 	<script src="{{asset ("/assets/js/datatable/jquery.dataTables.min.js")}}"></script>
 	<script src="{{asset ("assets/js/bootstrap.js")}}"></script>
@@ -23,123 +124,22 @@
 	<script src="{{asset ("/assets/js/datatable/pdfmake.min.js")}}"></script>
 	<script src="{{asset ("/assets/js/datatable/responsive.bootstrap4.min.js")}}"></script>
 	<script src="{{asset ("/assets/js/datatable/vfs_fonts.js")}}"></script>
-
-	<script>
-		$(function () {
-$("#example1").DataTable({
-"responsive": true,
-"lengthChange": false,
-"autoWidth": false,
-"buttons": [
-"copy",
-"csv",
-"excel",
-"pdf",
-"print",
-"colvis"
-]
-}).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
-});
-	</script>
-
+<script>
+  $(function () {
+    $("#example1").DataTable({
+      "responsive": true, "lengthChange": false, "autoWidth": false,
+      "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+    }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+    $('#example2').DataTable({
+      "paging": true,
+      "lengthChange": false,
+      "searching": false,
+      "ordering": true,
+      "info": true,
+      "autoWidth": false,
+      "responsive": true,
+    });
+  });
+</script>
 {% endblock %}
-{% block body %}
-
-	<!-- Content Wrapper. Contains page content -->
-	<div
-		class="content-wrapper">
-		<!-- Content Header (Page header) -->
-		<section class="content-header">
-			<div class="container-fluid">
-				<div class="row mb-2">
-					<div class="col-sm-6">
-						<h1>Liste des utilisateurs</h1>
-					</div>
-					<div class="col-sm-6">
-						<ol class="breadcrumb float-sm-right">
-							<li class="breadcrumb-item">
-								<a href="/index">Accueil</a>
-							</li>
-							<li class="breadcrumb-item active">Utilisateurs</li>
-						</ol>
-					</div>
-				</div>
-			</div>
-			<!-- /.container-fluid -->
-		</section>
-
-		<!-- Main content -->
-		<section
-			class="content">
-
-			<!-- Default box -->
-			<div class="card">
-				<div class="card-header">
-					<h3 class="card-title">
-						<a class="btn btn-primary btn-sm" href="{{ path('user_new') }}">Créer un nouveau >
-						</a>
-					</h3>
-				</div>
-				<!-- /.card-header -->
-				<div class="card-body">
-					<table id="example1" class="table table-bordered table-striped">
-						<thead>
-							<tr>
-								<th>Numéro</th>
-								<th>Email</th>
-								<th>Nom d'utilisateur</th>
-								<th>Role</th>
-								<th>Modifier</th>
-							</tr>
-						</thead>
-						<tbody>
-							{% for user in users %}
-								<tr>
-									<td>
-										{% set number = ( number | default(0) ) + 1 %}
-										<p>{{ number }}</p>
-
-									</td>
-									<td>
-										{{ user.email }}
-									</td>
-									<td>
-										{{ user.username }}
-									</td>
-									<td>
-										{{ user.roles ? user.roles|json_encode : '' }}
-									</td>
-									<td class="project-actions text-right">
-										<a class="btn btn-primary btn-sm" href="{{ path('user_show', {'id': user.id}) }}">
-											<i class="fas fa-eye"></i>
-											<!--<i class="fas fa-folder"></i>-->
-										</a>
-										<a class="btn btn-info btn-sm" href="{{ path('user_edit', {'id': user.id}) }}">
-											<i class="fas fa-pencil-alt"></i>
-										</a>
-										<a class="btn">
-											{{ include('user/_delete_form.html.twig') }}
-										</a>
-									</td>
-
-
-								</tr>
-
-							{% else %}
-								<tr>
-									<td colspan="6">Aucun utilisateur trouvé</td>
-								</tr>
-							{% endfor %}
-
-						</tbody>
-					</table>
-				</div>
-				<!-- /.card-body -->
-			</div>
-
-		</div>
-		<!-- /.card-body -->
-	</div>
-	<!-- /.card -->
-
-</section>{% endblock %}
+{% endblock %}
