@@ -11,10 +11,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
 		{% block stylesheets %}
 			<link rel="stylesheet" href="{{asset ("assets/css/fontawesome-free/css/headerCSS.css")}}">
-			<link
-			rel="stylesheet" href="{{asset ("assets/css/starterCSS.css")}}">
-			<!--<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">-->
+			<link rel="stylesheet" href="{{asset ("assets/css/starterCSS.css")}}">
 
+
+			<script src="{{asset ("assets/js/admin.js")}}"></script>
 			<script src="{{asset ("assets/js/jquery.js")}}"></script>
 			<script src="{{asset ("assets/js/bootstrap.js")}}"></script>
 
@@ -111,9 +111,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 			<aside
 				class="main-sidebar sidebar-dark-primary elevation-4">
 				<!-- Brand Logo -->
-				<a
-					href="/index" class="brand-link">
-					<!--<img src="dist/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">-->
+				<a href="/index" class="brand-link">
 					<img src="{{asset ("assets/img/bouygues_Télécom.gif")}}" alt="Bouygues Telecom" class="brand-image img-circle elevation-3" style="opacity: .8">
 					<span class="brand-text font-weight-light">Bouygues Telecom</span>
 				</a>
@@ -124,9 +122,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
 					<!-- Sidebar user panel (optional) -->
 					<div class="user-panel mt-3 pb-3 mb-3 d-flex">
 						<div>
-							<!--<img src="dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">-->
-							<!--<img src="{{asset ("assets/image/user3-128x128.jpg")}}" class="img-circle elevation-2" alt="User Image">-->
-								<a href="{{ path('user_show', {'id': app.user.id}) }}" class="nav-link"> <i class="nav-icon fas fa-user"></i>
+							<a href="{{ path('user_show', {'id': app.user.id}) }}" class="nav-link">
+								<i class="nav-icon fas fa-user"></i>
 							</a>
 
 						</div>
@@ -152,7 +149,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 						<ul
 							class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
 							<!-- Add icons to the links using the .nav-icon class
-																																																																																																																																																																																																																																																																																																																																																																																																	               with font-awesome or any other icon font library -->
+																																																																																																																																																																																																																																																																																																																																																																																																																																																		               with font-awesome or any other icon font library -->
 							<li class="nav-item menu-open">
 								<a href="#" class="nav-link active">
 									<i class="nav-icon fas fa-tachometer-alt"></i>
@@ -194,8 +191,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
 			{% block body %}{% endblock %}
 			{% block javascripts %}
 
-				<script src="{{asset ("assets/js/bootstrap.js")}}"></script>
+				<script src="{{asset ("assets/js/admin.js")}}"></script>
 				<script src="{{asset ("assets/js/jquery.js")}}"></script>
+				<script src="{{asset ("assets/js/bootstrap.js")}}"></script>
 
 			{% endblock %}
 		</div>
