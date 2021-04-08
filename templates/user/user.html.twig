@@ -18,6 +18,7 @@
 	<script src="{{asset ("/assets/js/datatable/dataTables.buttons.min.js")}}"></script>
 	<script src="{{asset ("/assets/js/datatable/dataTables.responsive.min.js")}}"></script>
 
+	<script src="{{asset ("assets/js/admin.js")}}"></script>
 	<script src="{{asset ("/assets/js/datatable/jszip.min.js")}}"></script>
 	<script src="{{asset ("/assets/js/datatable/pdfmake.min.js")}}"></script>
 	<script src="{{asset ("/assets/js/datatable/responsive.bootstrap4.min.js")}}"></script>
@@ -59,7 +60,7 @@ $("#example1").DataTable({
 							<li class="breadcrumb-item">
 								<a href="/index">Accueil</a>
 							</li>
-							<li class="breadcrumb-item active">utilisateurs</li>
+							<li class="breadcrumb-item active">Utilisateurs</li>
 						</ol>
 					</div>
 				</div>
@@ -75,7 +76,7 @@ $("#example1").DataTable({
 			<div class="card">
 				<div class="card-header">
 					<h3 class="card-title">
-						<a class="btn btn-primary btn-sm" href="{{ path('user_new') }}">Create new>
+						<a class="btn btn-primary btn-sm" href="{{ path('user_new') }}">Créer un nouveau >
 						</a>
 					</h3>
 				</div>
@@ -112,11 +113,12 @@ $("#example1").DataTable({
 										<a class="btn btn-primary btn-sm" href="{{ path('user_show', {'id': user.id}) }}">
 											<i class="fas fa-eye"></i>
 											<!--<i class="fas fa-folder"></i>-->
-											Consulter
 										</a>
 										<a class="btn btn-info btn-sm" href="{{ path('user_edit', {'id': user.id}) }}">
 											<i class="fas fa-pencil-alt"></i>
-											Modifier
+										</a>
+										<a class="btn">
+											{{ include('user/_delete_form.html.twig') }}
 										</a>
 									</td>
 
