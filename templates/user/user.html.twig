@@ -51,14 +51,14 @@ $("#example1").DataTable({
 			<div class="container-fluid">
 				<div class="row mb-2">
 					<div class="col-sm-6">
-						<h1>Users</h1>
+						<h1>Liste des utilisateurs</h1>
 					</div>
 					<div class="col-sm-6">
 						<ol class="breadcrumb float-sm-right">
 							<li class="breadcrumb-item">
-								<a href="#">Home</a>
+								<a href="/index">Accueil</a>
 							</li>
-							<li class="breadcrumb-item active">Users</li>
+							<li class="breadcrumb-item active">utilisateurs</li>
 						</ol>
 					</div>
 				</div>
@@ -77,51 +77,25 @@ $("#example1").DataTable({
 						<a class="btn btn-primary btn-sm" href="{{ path('user_new') }}">Create new>
 						</a>
 					</h3>
-
-
-					<div class="card-tools">
-						<button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
-							<i class="fas fa-minus"></i>
-						</button>
-						<button type="button" class="btn btn-tool" data-card-widget="remove" title="Remove">
-							<i class="fas fa-times"></i>
-						</button>
-					</div>
 				</div>
-				<div class="card-body p-0">
-					<table class="table table-striped projects">
+				<!-- /.card-header -->
+				<div class="card-body">
+					<table id="example1" class="table table-bordered table-striped">
 						<thead>
 							<tr>
-								<th style="width: 1%">
-									#
-								</th>
-								<th style="width: 20%">
-									Id
-								</th>
-								<th style="width: 20%">
-									Email
-								</th>
-								<th style="width: 20%">
-									Username
-								</th>
-								<th style="width: 20%">
-									Roles
-								</th>
-
+								<th>Numéro</th>
+								<th>Email</th>
+								<th>Nom d'utilisateur</th>
+								<th>Role</th>
+								<th>Modifier</th>
 							</tr>
-
 						</thead>
-
 						<tbody>
 							{% for user in users %}
 								<tr>
 									<td>
-										#
-									</td>
-									<td>
-
-										{{ user.id }}
-
+										{% set number = ( number | default(0) ) + 1 %}
+										<p>{{ number }}</p>
 
 									</td>
 									<td>
@@ -136,103 +110,40 @@ $("#example1").DataTable({
 									<td class="project-actions text-right">
 										<a class="btn btn-primary btn-sm" href="{{ path('user_show', {'id': user.id}) }}">
 											<i class="fas fa-folder"></i>
-											View
+											Consulter
 										</a>
 										<a class="btn btn-info btn-sm" href="{{ path('user_edit', {'id': user.id}) }}">
 											<i class="fas fa-pencil-alt"></i>
-											Edit
+											Modifier
 										</a>
 									</td>
+
 
 								</tr>
 
 							{% else %}
 								<tr>
-									<td colspan="6">no records found</td>
+									<td colspan="6">Aucun utilisateur trouvé</td>
 								</tr>
 							{% endfor %}
 
 						</tbody>
-					</tbody>
-				</table>
-				<div class="card">
-					<div class="card-header">
-						<h3 class="card-title">
-							<a class="btn btn-primary btn-sm" href="{{ path('user_new') }}">Create new>
-							</a>
-						</h3>
-					</div>
-					<!-- /.card-header -->
-					<div class="card-body">
-						<table id="example1" class="table table-bordered table-striped">
-							<thead>
-								<tr>
-									<th>Numéro</th>
-									<th>Id</th>
-									<th>Email</th>
-									<th>Nom d'utilisateur</th>
-									<th>le role</th>
-								</tr>
-							</thead>
-							<tbody>
-								{% for user in users %}
-									<tr>
-										<td>
-											#
-										</td>
-										<td>
-
-											{{ user.id }}
-
-
-										</td>
-										<td>
-											{{ user.email }}
-										</td>
-										<td>
-											{{ user.username }}
-										</td>
-										<td>
-											{{ user.roles ? user.roles|json_encode : '' }}
-										</td>
-
-
-									</tr>
-
-								{% else %}
-									<tr>
-										<td colspan="6">no records found</td>
-									</tr>
-								{% endfor %}
-
-							</tbody>
-						</table>
-					</div>
-					<!-- /.card-body -->
+					</table>
 				</div>
-
+				<!-- /.card-body -->
 			</div>
-			<!-- /.card-body -->
+
 		</div>
-		<!-- /.card -->
-
-	</section>
-	<!-- /.content -->
-</div>
-<!-- /.content-wrapper -->
-
-<footer class="main-footer">
-	<div class="float-right d-none d-sm-block">
-		<b>Version</b>
-		3.1.0-rc
+		<!-- /.card-body -->
 	</div>
-	<strong>Copyright &copy; 2014-2021
-		<a href="https://adminlte.io">AdminLTE.io</a>.</strong>
-	All rights reserved.
-</footer>
+	<!-- /.card -->
 
-<!-- Control Sidebar -->
-<aside
-	class="control-sidebar control-sidebar-dark"><!-- Control sidebar content goes here -->
-</aside>
-<!-- /.control-sidebar --></div>{% endblock %}
+</section>
+<!-- /.content --></div><!-- /.content-wrapper --><footer class="main-footer">
+<div class="float-right d-none d-sm-block">
+	<b>Version</b>
+	3.1.0-rc
+</div>
+<strong>Copyright &copy; 2014-2021
+	<a href="https://adminlte.io">AdminLTE.io</a>.</strong>
+All rights reserved.</footer><!-- Control Sidebar --><aside class="control-sidebar control-sidebar-dark"><!-- Control sidebar content goes here --></aside><!-- /.control-sidebar --></div>{% endblock %}
