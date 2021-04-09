@@ -122,7 +122,6 @@
 						</div>
 						<div class="info">
 							<a href="" class="d-block" data-toggle="modal" data-target="#modal-sm">{{ app.user.username }}</a>
-
 						</div>
 					</div>
 
@@ -176,7 +175,7 @@
 							<i class="nav-icon fas fa-user"></i>
 						</div>
 						<div class="info-content">
-							<h3 class="name">{{ app.user.username }}</h3>
+							<h4 class="name">{{ app.user.username }}</h4>
 							<h4 class="roles">
 								{% if app.user.roles  == ["User"]%}
 									Utilisateur
@@ -185,9 +184,7 @@
 									Administrateur
 								{% endif %}
 							</h4>
-							<a href="">{{ app.user.email }}</a>
 						</div>
-
 					</div>
 					<!-- /.modal-content -->
 				</div>
