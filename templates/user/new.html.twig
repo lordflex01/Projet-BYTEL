@@ -1,4 +1,3 @@
-
 {% extends 'header.html.twig' %}
 
 {% block body %}
@@ -13,31 +12,31 @@
 						<h2 class="m-0">Ajouter un nouvel utilisateur</h2>
 					</div>
 					<div class="col-sm-6">
-                        <ol class="breadcrumb float-sm-right">
-                            <li class="breadcrumb-item">
-                                <a href="/index">Accueil</a>
-                            </li>
-                            <li class="breadcrumb-item">
-                                <a href="/user">Utilisateurs</a>
-                            </li>
-                            <li class="breadcrumb-item active">Nouvel utilisateur</li>
-                        </ol>
-                    </div>
+						<ol class="breadcrumb float-sm-right">
+							<li class="breadcrumb-item">
+								<a href="/index">Accueil</a>
+							</li>
+							<li class="breadcrumb-item">
+								<a href="/user">Utilisateurs</a>
+							</li>
+							<li class="breadcrumb-item active">Nouvel utilisateur</li>
+						</ol>
+					</div>
 				</div>
 				<!-- /.row -->
 			</div>
 			<!-- /.container-fluid -->
 		</div>
 		<!-- /.content-header -->
+		{{ include('user/_form.html.twig') }}
 
-	{{ include('user/_form.html.twig') }}
+	</div>
 
-	</div>	
-			
 	<!-- /.content-wrapper -->
 
 	<!-- Main Footer -->
-	<footer class="main-footer">
+	<footer
+		class="main-footer">
 		<!-- Default to the left -->
 		Copyright &copy;
 		<strong>
