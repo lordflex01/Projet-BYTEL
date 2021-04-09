@@ -17,7 +17,7 @@ class UserType extends AbstractType
         $builder
             ->add('email', TextType::class, [
                 'attr' => [
-                    'placeholder' => "Enter l'adresse e-mail"
+                    'placeholder' => "Veuillez entrer votre adresse e-mail"
                 ]
             ])
             ->add('roles', ChoiceType::class, [
@@ -31,12 +31,12 @@ class UserType extends AbstractType
             ])
             ->add('password', TextType::class, [
                 'attr' => [
-                    'placeholder' => "Enter le mot de passe"
+                    'placeholder' => "Veuillez entrer votre mot de passe"
                 ]
             ])
             ->add('username', TextType::class, [
                 'attr' => [
-                    'placeholder' => "Enter le nom d'utilisateur"
+                    'placeholder' => "Veuillez entrer votre nom d'utilisateur"
                 ]
             ]);
 
