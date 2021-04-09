@@ -1,13 +1,45 @@
-{% extends 'base.html.twig' %}
+{% extends 'header.html.twig' %}
 
-{% block title %}Nouvelle utilisateur
-{% endblock %}
-
-{% form_theme form 'bootstrap_4_layout.html.twig' %}
 {% block body %}
-
-	<h1>Nouvelle utilisateur</h1>
+	<!-- Content Wrapper. Contains page content -->
+	<div
+		class="content-wrapper">
+		<!-- Content Header (Page header) -->
+		<div class="content-header">
+			<div class="container-fluid">
+				<div class="row mb-2">
+					<div class="col-sm-6">
+						<h1 class="m-0">Créer un utilisateur</h1>
+					</div>
+					<div class="col-sm-6">
+						<ol class="breadcrumb float-sm-right">
+							<li class="breadcrumb-item">
+								<a href="/index">Accueil</a>
+							</li>
+							<li href="{{ path('user') }}" class="breadcrumb-item active">Utilisateurs</li>
+						</li>
+						<li class="breadcrumb-item active">Nouvelle utilisateur</li>
+					</ol>
+				</div>
+			</div>
+			<!-- /.row -->
+		</div>
+		<!-- /.container-fluid -->
+	</div>
+	<!-- /.content-header -->
 	{{ include('user/_form.html.twig') }}
 
-	<!--<a href="{{ path('user') }}">back to list</a>-->
-{% endblock %}
+</div>
+
+<!-- /.content-wrapper -->
+
+<!-- Main Footer -->
+<footer
+	class="main-footer">
+	<!-- Default to the left -->
+	Copyright &copy;
+	<strong>
+		Bouygues Telecom
+	</strong>
+	| Tous les droits sont réservés.
+</footer>{% endblock %}

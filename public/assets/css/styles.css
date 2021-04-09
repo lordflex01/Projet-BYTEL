@@ -6060,20 +6060,35 @@ a.close.disabled, a.disabled.mailbox-attachment-close {
 
 .modal-content {
   position: relative;
-  display: -ms-flexbox;
-  display: flex;
-  -ms-flex-direction: column;
-  flex-direction: column;
-  width: 100%;
-  pointer-events: auto;
-  background-color: #fff;
-  background-clip: padding-box;
-  border: 1px solid rgba(0, 0, 0, 0.2);
-  border-radius: 0.3rem;
-  box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.5);
-  outline: 0;
+  width: 274px;
+  height: 300px;
+  background: white;
+  border-radius: 20px;
+  overflow: hidden;
+  transition: 0.5s;
+  box-shadow: 0 0.25rem 0.5rem rgb(0 0 0 / 50%);
+ 
 }
-
+.modal-content .picture {
+  position: relative;
+  width: 100%;
+  height: 57%;
+  background: #0053a6;
+  clip-path: circle(140px at center 0);
+  text-align: center;
+}
+.modal-content .info-content{
+  position: absolute;
+  /* bottom: 10px; */
+  margin-left: 30px;
+  padding-bottom: 20px;
+  text-align: center;
+}
+.modal-content .picture .nav-icon{
+  font-size: 63px;
+    margin-top: 33Px;
+    color: white;
+}
 .modal-backdrop {
   position: fixed;
   top: 0;
