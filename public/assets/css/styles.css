@@ -2643,6 +2643,8 @@ fieldset:disabled a.btn {
 
 .btn-success {
   color: #fff;
+  float: right;
+  padding: 10px;
   background-color: #28a745;
   border-color: #28a745;
   box-shadow: none;
@@ -2651,7 +2653,7 @@ fieldset:disabled a.btn {
 .btn-success:hover {
   color: #fff;
   background-color: #218838;
-  border-color: #1e7e34;
+  border-color: #218838;
 }
 
 .btn-success:focus, .btn-success.focus {
