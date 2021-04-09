@@ -16,30 +16,32 @@
 							<li class="breadcrumb-item">
 								<a href="/index">Accueil</a>
 							</li>
-							<li href="{{ path('user') }}" class="breadcrumb-item active">Utilisateurs</li>
-						</li>
-						<li class="breadcrumb-item active">Nouvelle utilisateur</li>
-					</ol>
+							<li class="breadcrumb-item">
+								<a href="/user">Utilisateurs</a>
+							</li>
+							<li class="breadcrumb-item active">Nouvel utilisateur</li>
+						</ol>
+					</div>
 				</div>
+				<!-- /.row -->
 			</div>
-			<!-- /.row -->
+			<!-- /.container-fluid -->
 		</div>
-		<!-- /.container-fluid -->
+		<!-- /.content-header -->
+		{{ include('user/_form.html.twig') }}
+
 	</div>
-	<!-- /.content-header -->
-	{{ include('user/_form.html.twig') }}
 
-</div>
+	<!-- /.content-wrapper -->
 
-<!-- /.content-wrapper -->
-
-<!-- Main Footer -->
-<footer
-	class="main-footer">
-	<!-- Default to the left -->
-	Copyright &copy;
-	<strong>
-		Bouygues Telecom
-	</strong>
-	| Tous les droits sont réservés.
-</footer>{% endblock %}
+	<!-- Main Footer -->
+	<footer
+		class="main-footer">
+		<!-- Default to the left -->
+		Copyright &copy;
+		<strong>
+			Bouygues Telecom
+		</strong>
+		| Tous les droits sont réservés.
+	</footer>
+{% endblock %}

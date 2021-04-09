@@ -107,15 +107,18 @@ $("#example1").DataTable({
 										{{ user.username }}
 									</td>
 									<td>
-										{{ user.roles ? user.roles|json_encode : '' }}
+										{% if user.roles  == ["User"]%}
+											Utilisateur
+										{% else %}
+
+											Administrateur
+										{% endif %}
 									</td>
 									<td class="project-actions text-right">
-										<a class="btn btn-primary btn-sm" href="{{ path('user_show', {'id': user.id}) }}">
-											<i class="fas fa-eye"></i>
-											<!--<i class="fas fa-folder"></i>-->
-										</a>
-										<a class="btn btn-info btn-sm" href="{{ path('user_edit', {'id': user.id}) }}">
-											<i class="fas fa-pencil-alt"></i>
+										<!--<a class="btn btn-primary btn-sm" href="{{ path('user_show', {'id': user.id}) }}">-->
+										<!--<i class="fas fa-eye"></i></a>-->
+											<a class="btn btn-info btn-sm" href="{{ path('user_edit', {'id': user.id}) }}"> <i class="fas fa-pencil-alt"></i>
+											Modifier
 										</a>
 										<a class="btn">
 											{{ include('user/_delete_form.html.twig') }}
