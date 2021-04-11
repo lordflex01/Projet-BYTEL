@@ -2567,21 +2567,21 @@ fieldset:disabled a.btn {
 
 .btn-primary {
   color: #fff;
-  background-color: #009cce;
-  border-color: #009cce;
+  background-color: #0477ad;
+  border-color: #0477ad;
   box-shadow: none;
 }
 
 .btn-primary:hover {
   color: #fff;
-  background-color: #0053a6;
-  border-color: #0053a6;
+  background-color: #034a91;
+  border-color: #034a91;
 }
 
 .btn-primary:focus, .btn-primary.focus {
   color: #fff;
-  background-color: #0069d9;
-  border-color: #0062cc;
+  background-color: #034a91;
+  border-color: #034a91;
   box-shadow: 0 0 0 0 rgba(38, 143, 255, 0.5);
 }
 
@@ -16737,7 +16737,7 @@ body.text-sm .input-group-text {
 }
 
 .card-primary.card-outline {
-  border-top: 3px solid #009cce;
+  border-top: 3px solid #0578ad;
 }
 
 .card-primary.card-outline-tabs > .card-header a:hover {
@@ -18641,7 +18641,8 @@ body.text-sm .input-group-text {
 }
 
 .card {
-  box-shadow: 0 0 1px rgba(0, 0, 0, 0.125), 0 1px 3px rgba(0, 0, 0, 0.2);
+  box-shadow: 8px 12px 19px 4px #768b95;
+  /*box-shadow: 0 0 1px rgba(0, 0, 0, 0.125), 0 1px 3px rgba(0, 0, 0, 0.2);*/
   margin-bottom: 1rem;
 }
 
@@ -21500,10 +21501,6 @@ a.close.disabled, a.disabled.mailbox-attachment-close {
   justify-content: center;
 }
 
-.login-box,
-.register-box {
-  width: 370px;
-}
 
 @media (max-width: 576px) {
   .login-box,
@@ -32597,3 +32594,36 @@ a.text-muted:hover {
   color: #ced4da;
 }
 /*# sourceMappingURL=adminlte.css.map */
+.flex-container {
+  display: flex;
+    height: 100%;
+    flex-wrap: wrap;
+    align-content: center;
+}
+
+.flex-container .gauche {
+  width: 35%;
+    margin: 120px;
+    text-align: center;
+}
+
+.flex-container img{
+  width: 400px;
+}
+.gauche h2{
+  font-family: SFProDisplay-Regular, Helvetica, Arial, sans-serif;
+    font-size: 21px;
+    letter-spacing: 2px;
+    font-weight: 400;
+    line-height: 33px;
+    margin-left: -2px;
+    color: #014589;
+}
+
+.flex-container #droite {
+  width: 100px;
+  margin: 150px;
+  text-align: center;
+  line-height: 75px;
+  font-size: 30px;
+}
