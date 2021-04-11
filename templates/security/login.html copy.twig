@@ -16,43 +16,33 @@
 		<!-- -->
 		{% endblock %}
 
-	<style>
-	.container-login {
-  display: flex;
-  justify-content: space-around;
-}
-
-.container-login > div {
-  margin: 50px;
- 
-}
-.container-login .logo-box img{
-	width: 400px;
-}
-
-.container-login .logo-box h2{
-	margin-left: 30px;
-    font-size: 26px;
-    color: #0477ad;
-    letter-spacing: 3px;
-    font-weight: 400;
-}
-}
-	</style>
 	</head>
 	{% block body %}
 
+	{# {% extends 'base.html.twig' %}
+
+{% block title %}Log in!{% endblock %}
+
+{% block body %}
+<form method="post">
+    {% if error %}
+        <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+    {% endif %}
+
+    {% if app.user %}
+        <div class="mb-3">
+            You are logged in as {{ app.user.username }}, <a href="{{ path('app_logout') }}">Logout</a>
+        </div>
+    {% endif %}
+    #}
 		<body class="hold-transition login-page">
-		<div class="container-login">
-<div class="logo-box">
-			<img src="{{asset ("assets/img/Bouygues_Télécom.png")}}">
-				<h2>On est fait pour être ensemble. <br>
-				 Communiquez en toute liberté</h2>
-			</div>
 			<div
 				class="login-box">
 				<!-- /.login-logo -->
 				<div class="card card-outline card-primary">
+					<div class="card-header text-center">
+						<img src="assets/img/Bouygues_Télécom.png">
+					</div>
 					<form method="post">
 						<div class="card-body">
 							{% if app.user %}
@@ -61,7 +51,8 @@
 									{{ app.user.username }},
 									<a href="{{ path('app_logout') }}">Déconnexion</a>
 								</div>
-								
+							{% else %}
+								<p class="login-box-msg">Connectez-vous pour démarrer votre session</p>
 							{% endif %}
 							<div class="input-group mb-3">
 								<input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control" placeholder="E-mail" required autofocus>
@@ -106,8 +97,6 @@
 					</div>
 					<!-- /.card -->
 				</div>
-		</div>
-			
 				<!-- /.login-box -->
 
 			{% endblock %}
