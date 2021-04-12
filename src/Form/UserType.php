@@ -25,8 +25,8 @@ class UserType extends AbstractType
                 'multiple' => false,
                 'expanded' => false,
                 'choices' => [
-                    'User' => 'User',
-                    'Admin' => 'Admin',
+                    'Utilisateur' => 'ROLE_USER',
+                    'Administrateur' => 'ROLE_ADMIN',
                 ],
             ])
             ->add('password', TextType::class, [
