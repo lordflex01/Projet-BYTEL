@@ -44,8 +44,9 @@ class userController extends AbstractController
         ]);
     }
 
-    //@IsGranted("User")
+    //@IsGranted("Admin")
     /**
+     * @IsGranted("ROLE_ADMIN")
      * @Route("/new", name="user_new", methods={"GET","POST"})
      */
     public function new(Request $request): Response
