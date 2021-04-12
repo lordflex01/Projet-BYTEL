@@ -16,98 +16,98 @@
 		<!-- -->
 		{% endblock %}
 
-	<style>
-	.container-login {
-  display: flex;
-  justify-content: space-around;
-}
+		<style>
+			.container-login {
+				display: flex;
+				justify-content: space-around;
+			}
 
-.container-login > div {
-  margin: 50px;
- 
-}
-.container-login .logo-box img{
-	width: 400px;
-}
+			.container-login > div {
+				margin: 50px;
 
-.container-login .logo-box h2{
-	margin-left: 30px;
-    font-size: 26px;
-    color: #0477ad;
-    letter-spacing: 3px;
-    font-weight: 400;
-}
-}
-	</style>
+			}
+			.container-login .logo-box img {
+				width: 400px;
+			}
+
+			.container-login .logo-box h2 {
+				margin-left: 30px;
+				font-size: 26px;
+				color: #0477ad;
+				letter-spacing: 3px;
+				font-weight: 400;
+			}
+		</style>
 	</head>
 	{% block body %}
 
 		<body class="hold-transition login-page">
-		<div class="container-login">
-<div class="logo-box">
-			<img src="{{asset ("assets/img/Bouygues_Télécom.png")}}">
-				<h2>On est fait pour être ensemble. <br>
-				 Communiquez en toute liberté</h2>
-			</div>
-			<div
-				class="login-box">
-				<!-- /.login-logo -->
-				<div class="card card-outline card-primary">
-					<form method="post">
-						<div class="card-body">
-							{% if app.user %}
-								<div class="mb-3">
-									Vous êtes deja connecté en tant que
-									{{ app.user.username }},
-									<a href="{{ path('app_logout') }}">Déconnexion</a>
-								</div>
-								
-							{% endif %}
-							<div class="input-group mb-3">
-								<input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control" placeholder="E-mail" required autofocus>
-								<div class="input-group-append">
-									<div class="input-group-text">
-										<span class="fas fa-envelope"></span>
+			<div class="container-login">
+				<div class="logo-box">
+					<img src="{{asset ("assets/img/Bouygues_Télécom.png")}}">
+					<h2>On est fait pour être ensemble.
+						<br>
+						Communiquez en toute liberté</h2>
+				</div>
+				<div
+					class="login-box">
+					<!-- /.login-logo -->
+					<div class="card card-outline card-primary">
+						<form method="post">
+							<div class="card-body">
+								{% if app.user %}
+									<div class="mb-3">
+										Vous êtes deja connecté en tant que
+										{{ app.user.username }},
+										<a href="{{ path('app_logout') }}">Déconnexion</a>
 									</div>
-								</div>
-							</div>
 
-							<div class="input-group mb-3">
-								<input type="password" class="form-control" name="password" id="inputPassword" placeholder="Mot de passe" required>
-								<div class="input-group-append">
-									<div class="input-group-text">
-										<span class="fas fa-lock"></span>
-									</div>
-								</div>
-							</div>
-							<form method="post">
-								{% if error %}
-									<div class="alert alert-danger">E-mail ou mot de passe est incorrecte.</div>
 								{% endif %}
-
-								<input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
-								<div class="row">
-									<div class="col-8">
-										<div class="icheck-primary">
-											<input type="checkbox" name="_remember_me">
-											<label for="remember">
-												&nbsp;Se Souvenir de moi
-											</label>
+								<div class="input-group mb-3">
+									<input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control" placeholder="E-mail" required autofocus>
+									<div class="input-group-append">
+										<div class="input-group-text">
+											<span class="fas fa-envelope"></span>
 										</div>
 									</div>
-									<div class="col-4">
-										<button type="submit" class="btn btn-primary btn-block">S'identifier</button>
-									</div>
-									<!-- /.col -->
 								</div>
-							</form>
+
+								<div class="input-group mb-3">
+									<input type="password" class="form-control" name="password" id="inputPassword" placeholder="Mot de passe" required>
+									<div class="input-group-append">
+										<div class="input-group-text">
+											<span class="fas fa-lock"></span>
+										</div>
+									</div>
+								</div>
+								<form method="post">
+									{% if error %}
+										<div class="alert alert-danger">E-mail ou mot de passe est incorrecte.</div>
+									{% endif %}
+
+									<input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+									<div class="row">
+										<div class="col-8">
+											<div class="icheck-primary">
+												<input type="checkbox" name="_remember_me">
+												<label for="remember">
+													&nbsp;Se Souvenir de moi
+												</label>
+											</div>
+										</div>
+										<div class="col-4">
+											<button type="submit" class="btn btn-info btn-sm" style="background-color : #0477ad">S'identifier</button>
+										</div>
+										<!-- /.col -->
+									</div>
+								</form>
+							</div>
+							<!-- /.card-body -->
 						</div>
-						<!-- /.card-body -->
+						<!-- /.card -->
 					</div>
-					<!-- /.card -->
 				</div>
-		</div>
-			
+
 				<!-- /.login-box -->
 
 			{% endblock %}
