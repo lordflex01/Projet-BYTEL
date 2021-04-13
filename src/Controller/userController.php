@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Image;
 use App\Entity\User;
 use App\Form\UserType;
 use App\Repository\UserRepository;
@@ -11,6 +12,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
  * @Route("/user")
@@ -44,7 +46,6 @@ class userController extends AbstractController
         ]);
     }
 
-    //@IsGranted("Admin")
     /**
      * @IsGranted("ROLE_ADMIN")
      * @Route("/new", name="user_new", methods={"GET","POST"})
@@ -56,6 +57,23 @@ class userController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            //On récupère les images transmises
+            $image = $form->get('image')->getData();
+
+            //on gèrère un nouveau nom de fichier
+            $fichier = md5(uniqid()) . '.' . $image->guessExtension();
+
+            //on copie le fichier dans le dossier uploads
+            $image->move(
+                $this->getParameter('image_directory'),
+                $fichier
+            );
+
+            //on stocke l'image dans la base de données (son nom)
+            $img = new Image();
+            $img->setName($fichier);
+            $user->setImage($img);
+
             $entityManager = $this->getDoctrine()->getManager();
 
             $plainpwd = $user->getPassword();
@@ -93,6 +111,32 @@ class userController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            //on récupère le nom de l'image
+            $img = $user->getImage();
+            $nom = $img->getName();
+            //on supprime le fichier
+            unlink($this->getParameter('image_directory') . '/' . $nom);
+            //on supprime l'entrée de la base
+            $em = $this->getDoctrine()->getManager();
+            $em->remove($img);
+            $em->flush();
+
+            //On récupère les images transmises
+            $image = $form->get('image')->getData();
+
+            //on gèrère un nouveau nom de fichier
+            $fichier = md5(uniqid()) . '.' . $image->guessExtension();
+
+            //on copie le fichier dans le dossier uploads
+            $image->move(
+                $this->getParameter('image_directory'),
+                $fichier
+            );
+
+            //on stocke l'image dans la base de données (son nom)
+            $img = new Image();
+            $img->setName($fichier);
+            $user->setImage($img);
 
             $entityManager = $this->getDoctrine()->getManager();
 
@@ -124,5 +168,28 @@ class userController extends AbstractController
             $entityManager->flush();
         }
         return $this->redirectToRoute('user');
+    }
+
+    /**
+     * @Route("supprime/image/{id}", name="user_delete_image", methods={"DELETE"})
+     */
+    public function deleteImage(Image $image, Request $request)
+    {
+        $data = json_decode($request->getContent(), true);
+
+        if ($this->isCsrfTokenValid('delete' . $image->getId(), $data['_token'])) {
+            //on récupère le nom de l'image
+            $nom = $image->getName();
+            //on supprime le fichier
+            unlink($this->getParameter('image_directory') . '/' . $nom);
+
+            //on supprime l'entrée de la base
+            $em = $this->getDoctrine()->getManager();
+            $em->remove($image);
+            $em->flush();
+            return new JsonResponse(['success' => 1]);
+        } else {
+            return new JsonResponse(['error' => 'Token invalide'], 400);
+        }
     }
 }

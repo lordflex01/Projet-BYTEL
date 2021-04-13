@@ -87,7 +87,8 @@ $("#example1").DataTable({"responsive": true, "lengthChange": true, "autoWidth":
 								<tr>
 									<td>
 										{% set number = ( number | default(0) ) + 1 %}
-										<p>{{ number }}</p>
+										<p>{{ number }}
+											<img src="{{asset ('/uploads/' ~ user.image.name)}}" class="img-circle elevation-2" alt="Image" width="30"></p>
 
 									</td>
 									<td>
