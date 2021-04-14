@@ -1,0 +1,75 @@
+{% extends 'header.html.twig' %}
+
+{% block body %}
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1 class="m-0">
+              Contactez-nous
+            </h1>
+          </div>
+        </div>
+        <!-- /.row -->
+      </div>
+      <!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+
+    <!-- Main content -->
+    <div class="content">
+      <div class="container-fluid">
+        <!-- Default box -->
+      <div class="card">
+        <div class="card-body row">
+          <div class="col-5 text-center d-flex align-items-center justify-content-center">
+            <div class="">
+              <h2 style="margin-left: -13px;color: #0477ad;">Bouygues<strong>Telecom</strong></h2>
+              <p class="lead mb-5" style="font-family: Brush Script MT;">Nous sommes là pour vous !<br>
+              
+              </p>
+            </div>
+          </div>
+          <div class="col-7">
+            <div class="form-group">
+              <label for="inputName">Nom Complet</label>
+              <input type="text" id="inputName" class="form-control" />
+            </div>
+            <div class="form-group">
+              <label for="inputEmail">Adresse E-Mail</label>
+              <input type="email" id="inputEmail" class="form-control" />
+            </div>
+            <div class="form-group">
+              <label for="inputSubject">Sujet</label>
+              <input type="text" id="inputSubject" class="form-control" />
+            </div>
+            <div class="form-group">
+              <label for="inputMessage">Message</label>
+              <textarea id="inputMessage" class="form-control" rows="4"></textarea>
+            </div>
+            <div class="form-group">
+              <input type="submit" class="btn btn-primary" value="Envoyer" style="background: #ec5b00;
+    border-color: #ec5b00;
+    float: right;">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      </div>
+      <!-- /.container-fluid -->
+    </div>
+    <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
+  <!-- Main Footer -->
+  <footer class="main-footer">
+    <!-- Default to the left -->
+    Copyright &copy;
+    <strong>Bouygues Telecom</strong>
+    | Tous les droits sont réservés.
+  </footer>
+{% endblock %}

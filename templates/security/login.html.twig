@@ -23,7 +23,8 @@
 			}
 
 			.container-login > div {
-				margin: 50px;
+				    margin: 60px;
+    				margin-top: -13px;
 
 			}
 			.container-login .logo-box img {
@@ -43,7 +44,7 @@
 
 		<body class="hold-transition login-page">
 			<div class="container-login">
-				<div class="logo-box">
+				<div class="logo-box" style="margin-top: -34px;">
 					<img src="{{asset ("assets/img/Bouygues_Télécom.png")}}">
 					<h2>On est fait pour être ensemble.
 						<br>
@@ -52,7 +53,7 @@
 				<div
 					class="login-box">
 					<!-- /.login-logo -->
-					<div class="card card-outline card-primary">
+					<div class="card card-outline card-primary" style="width:400px">
 						<form method="post">
 							<div class="card-body">
 								{% if app.user %}
@@ -95,9 +96,9 @@
 												</label>
 											</div>
 										</div>
-										<div class="col-4">
-											<button type="submit" class="btn btn-info btn-sm" style="background-color : #0477ad">S'identifier</button>
-										</div>
+									<div class="col-4">
+										<button type="submit" class="btn btn-primary btn-block">S'identifier</button>
+									</div>
 										<!-- /.col -->
 									</div>
 								</form>
@@ -112,12 +113,6 @@
 
 			{% endblock %}
 
-			{% block javascripts %}
-
-				<script src="{{asset ("assets/js/bootstrap.js")}}"></script>
-				<script src="{{asset ("assets/js/jquery.js")}}"></script>
-
-			{% endblock %}
 		</body>
 	</body>
 </html>

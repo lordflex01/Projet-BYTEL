@@ -1,75 +1,182 @@
 {% extends 'header.html.twig' %}
 
 {% block body %}
-	<!-- Content Wrapper. Contains page content -->
-	<div
-		class="content-wrapper">
-		<!-- Content Header (Page header) -->
-		<div class="content-header">
-			<div class="container-fluid">
-				<div class="row mb-2">
-					<div class="col-sm-6">
-						<h1 class="m-0">Page d'accueil</h1>
-					</div>
-				</div>
-				<!-- /.row -->
-			</div>
-			<!-- /.container-fluid -->
-		</div>
-		<!-- /.content-header -->
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1 class="m-0">
+              Page de démarrage
+            </h1>
+          </div>
+        </div>
+        <!-- /.row -->
+      </div>
+      <!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
 
-		<!-- Main content -->
-		<div class="content">
-			<div class="container-fluid">
-				<div class="row">
-					<div class="col-lg-6">
-						<div class="card">
-							<div class="card-body">
-								<h5 class="card-title">Titre de la carte</h5>
+    <!-- Main content -->
+    <div class="content">
+      <div class="container-fluid">
+        <!-- ./card-body -->
+        <div class="card-footer">
+          <div class="row">
+            <div class="col-sm-3 col-6">
+              <div class="description-block border-right">
+                <span class="description-percentage text-success">
+                  <i class="fas fa-caret-up"></i> 17%
+                </span>
+                <h5 class="description-header">
+                  $35,210.43
+                </h5>
+                <span class="description-text">REVENU TOTAL</span>
+              </div>
+              <!-- /.description-block -->
+            </div>
+            <!-- /.col -->
+            <div class="col-sm-3 col-6">
+              <div class="description-block border-right">
+                <span class="description-percentage text-warning">
+                  <i class="fas fa-caret-left"></i> 0%
+                </span>
+                <h5 class="description-header">
+                  $10,390.90
+                </h5>
+                <span class="description-text">COÛT TOTAL</span>
+              </div>
+              <!-- /.description-block -->
+            </div>
+            <!-- /.col -->
+            <div class="col-sm-3 col-6">
+              <div class="description-block border-right">
+                <span class="description-percentage text-success">
+                  <i class="fas fa-caret-up"></i> 20%
+                </span>
+                <h5 class="description-header">
+                  $24,813.53
+                </h5>
+                <span class="description-text">BÉNÉFICE TOTAL</span>
+              </div>
+              <!-- /.description-block -->
+            </div>
+            <!-- /.col -->
+            <div class="col-sm-3 col-6">
+              <div class="description-block">
+                <span class="description-percentage text-danger">
+                  <i class="fas fa-caret-down"></i> 18%
+                </span>
+                <h5 class="description-header">
+                  1200
+                </h5>
+                <span class="description-text">ACHÈVEMENT DES OBJECTIFS</span>
+              </div>
+              <!-- /.description-block -->
+            </div>
+          </div>
+          <!-- /.row -->
+        </div>
+        <!-- /.card-footer -->
+<br>
+        <div class="row">
+          <div class="col-lg-6">
+            <div class="card">
+              <div class="card-header border-0">
+                <div class="d-flex justify-content-between">
+                  <h3 class="card-title">
+                   Visiteurs en ligne
+                  </h3>
+                  <a href="javascript:void(0);">Voir le rapport</a>
+                </div>
+              </div>
+              <div class="card-body">
+                <div class="d-flex">
+                  <p class="d-flex flex-column">
+                    <span class="text-bold text-lg">820</span>
+                    <span>Visiteurs au fil du temps</span>
+                  </p>
+                  <p class="ml-auto d-flex flex-column text-right">
+                    <span class="text-success">
+                      <i class="fas fa-arrow-up"></i> 12.5%
+                    </span>
+                    <span class="text-muted">Depuis la semaine dernière</span>
+                  </p>
+                </div>
+                <!-- /.d-flex -->
 
-								<p class="card-text">
-									Un exemple de texte rapide pour construire sur le titre de la carte et constituer la majeure partie de la carte.
-								</p>
+                <div class="position-relative mb-4">
+                  <canvas id="visitors-chart" height="200"></canvas>
+                </div>
 
-								<a href="#" class="card-link">Lien de la carte</a>
-								<a href="#" class="card-link">Un autre lien</a>
-							</div>
-						</div>
+                <div class="d-flex flex-row justify-content-end">
+                  <span class="mr-2">
+                    <i class="fas fa-square text-primary"></i> Cette semaine
+                  </span>
 
-						<div class="card card-primary card-outline">
-							<div class="card-body">
-								<h5 class="card-title">Titre de la carte</h5>
+                  <span><i class="fas fa-square text-gray"></i> Semaine dernière</span>
+                </div>
+              </div>
+            </div>
+            <!-- /.card -->
+          </div>
+          <!-- /.col-md-6 -->
+          <div class="col-lg-6">
+            <div class="card">
+              <div class="card-header border-0">
+                <div class="d-flex justify-content-between">
+                  <h3 class="card-title">
+                    Ventes
+                  </h3>
+                  <a href="javascript:void(0);">Voir le rapport</a>
+                </div>
+              </div>
+              <div class="card-body">
+                <div class="d-flex">
+                  <p class="d-flex flex-column">
+                    <span class="text-bold text-lg">$18,230.00</span>
+                    <span>Ventes au fil du temps</span>
+                  </p>
+                  <p class="ml-auto d-flex flex-column text-right">
+                    <span class="text-success">
+                      <i class="fas fa-arrow-up"></i> 33.1%
+                    </span>
+                    <span class="text-muted">Depuis le mois dernier</span>
+                  </p>
+                </div>
+                <!-- /.d-flex -->
 
-								<p class="card-text">
-									Un exemple de texte rapide à construire sur le titre de la carte et à constituer l'essentiel du contenu de la carte.
-																																																																																	                  content.
-								</p>
-								<a href="#" class="card-link">Lien de la carte</a>
-								<a href="#" class="card-link">Un autre lien</a>
-							</div>
-						</div>
-						<!-- /.card -->
-					</div>
-					<!-- /.col-md-6 -->
+                <div class="position-relative mb-4">
+                  <canvas id="sales-chart" height="200"></canvas>
+                </div>
 
-					<!-- /.col-md-6 -->
-				</div>
-				<!-- /.row -->
-			</div>
-			<!-- /.container-fluid -->
-		</div>
-		<!-- /.content -->
-	</div>
-	<!-- /.content-wrapper -->
+                <div class="d-flex flex-row justify-content-end">
+                  <span class="mr-2">
+                    <i class="fas fa-square text-primary"></i> Cette année
+                  </span>
 
-	<!-- Main Footer -->
-	<footer
-		class="main-footer">
-		<!-- Default to the left -->
-		Copyright &copy;
-		<strong>
-			Bouygues Telecom
-		</strong>
-		| Tous les droits sont réservés.
-	</footer>
+                  <span><i class="fas fa-square text-gray"></i> L'année dernière</span>
+                </div>
+              </div>
+            </div>
+            <!-- /.card -->
+          </div>
+          <!-- /.col-md-6 -->
+        </div>
+        <!-- /.row -->
+      </div>
+      <!-- /.container-fluid -->
+    </div>
+    <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
+  <!-- Main Footer -->
+  <footer class="main-footer">
+    <!-- Default to the left -->
+    Copyright &copy;
+    <strong>Bouygues Telecom</strong>
+    | Tous les droits sont réservés.
+  </footer>
 {% endblock %}

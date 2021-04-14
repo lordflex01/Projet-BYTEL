@@ -9,3 +9,7 @@ index:
 user:
     path: /user
     controller: App\Controller\UserController::user
+
+cotact:
+    path: /contact
+    controller: App\Controller\ContactController::contact
