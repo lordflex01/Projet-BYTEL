@@ -3,12 +3,15 @@
 namespace App\Form;
 
 use App\Entity\User;
+use phpDocumentor\Reflection\PseudoTypes\True_;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\CallbackTransformer;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 class UserType extends AbstractType
@@ -32,20 +35,57 @@ class UserType extends AbstractType
             ->add('roles', ChoiceType::class, [
                 'required' => true,
                 'multiple' => false,
-                'expanded' => false,
+                'expanded' => true,
                 'choices' => [
                     'Utilisateur' => 'ROLE_USER',
                     'Administrateur' => 'ROLE_ADMIN',
                 ],
             ])
-            ->add('password', TextType::class, [
-                'attr' => [
-                    'placeholder' => "Veuillez entrer votre mot de passe"
-                ]
+            ->add('password', RepeatedType::class, [
+                'type' => PasswordType::class,
+                'invalid_message' => 'Les champs du mot de passe doivent correspondre.',
+                'options' => ['attr' => ['class' => 'Mot de passe']],
+                'required' => true,
+                'first_options'  => ['label' => 'Mot de passe'],
+                'second_options' => ['label' => 'Confirmer le mot de passe'],
             ])
+            #->add('password', PasswordType::class, [
+            #  'attr' => [
+            #      'placeholder' => "Veuillez entrer votre mot de passe"
+            #  ]
+            #  ])
             ->add('username', TextType::class, [
                 'attr' => [
                     'placeholder' => "Veuillez entrer votre nom d'utilisateur"
+                ]
+            ])
+            ->add('departement', ChoiceType::class, [
+                'required' => true,
+                'multiple' => false,
+                'expanded' => false,
+                'choices' => [
+                    'Informatique' => 'informatique',
+                    'Ressource humaine' => 'RH',
+                    'Financier' => 'financier',
+                    'Sécurité' => 'Sécurité',
+                    'Communication' => 'communication',
+                ],
+            ])
+            ->add('poste', ChoiceType::class, [
+                'required' => true,
+                'multiple' => false,
+                'expanded' => false,
+                'choices' => [
+                    'Développeur' => 'développeur',
+                    'Team lead' => 'TL',
+                    'Scrum master' => 'scrum master',
+                    'Manager' => 'manager',
+                    'Chef de projet' => 'chef de projet',
+                ],
+            ])
+            ->add('site', TextType::class, [
+                'attr' => [
+                    'placeholder' => "Veuillez entrer votre site"
                 ]
             ]);
 
