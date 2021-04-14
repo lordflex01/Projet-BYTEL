@@ -17,7 +17,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 /**
  * @Route("/user")
  */
-class UserController extends AbstractController
+class userController extends AbstractController
 {
 
     /**
