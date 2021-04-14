@@ -138,13 +138,13 @@
 					</div>
 
 					<!-- Sidebar Menu -->
-					<nav class="mt-2">
+					<nav class="mt-2" id="nav">
 						<ul
 							class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
 							<!-- Add icons to the links using the .nav-icon class !-->
 
 							<li class="nav-item">
-								<a href="#" class="nav-link active">
+								<a href="#" class="nav-link">
 									<i class="nav-icon fas fa-tachometer-alt"></i>
 									<p>
 										Page de démarrage
@@ -201,6 +201,22 @@
 				<script src="{{asset ("assets/plugins/chart.js/Chart.min.js")}}"></script>
 				<!-- AdminLTE dashboard demo (This is only for demo purposes) -->
 				<script src="{{asset ("assets/js/pages/dashboard3.js")}}"></script>
+				<script>
+				$(function(){
+    $page = jQuery.url.attr("file");
+    if(!$page) {
+        $page = 'index.html.twig';
+    }
+    $('#nav li a').each(function(){ /* on récupère la valeur de l'attribut href de chaque lien */
+        var $href = $(this).attr('href');
+        if ( ($href == $page) || ($href == '') ) { /* on compare ensuite a celui de la page par defaut de notre site */
+            $(this).addClass('active');            /* si différent alors on lui donne la class "active" */
+        } else {
+            $(this).removeClass('active');         /* sinon on lui retire cette class */
+        }
+    });
+});
+				</script>
 			{% endblock %}
 		</body>
 	</body>
