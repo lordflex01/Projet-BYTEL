@@ -53,26 +53,6 @@ class User implements UserInterface
      */
     private $username;
 
-    /**
-     * @ORM\OneToOne(targetEntity=Image::class, mappedBy="user", cascade={"persist", "remove"})
-     */
-    private $image;
-
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $poste;
-
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $departement;
-
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private $site;
-
     public function getId(): ?int
     {
         return $this->id;
@@ -107,7 +87,7 @@ class User implements UserInterface
     {
         $roles = $this->roles;
         // guarantee every user at least has ROLE_USER
-        $roles[] = 'ROLE_USER';
+        $roles[] = 'User';
 
         return array_unique($roles);
     }
@@ -157,59 +137,6 @@ class User implements UserInterface
     public function setUsername(?string $username): self
     {
         $this->username = $username;
-
-        return $this;
-    }
-
-    public function getImage(): ?Image
-    {
-        return $this->image;
-    }
-
-    public function setImage(Image $image): self
-    {
-        // set the owning side of the relation if necessary
-        if ($image->getUser() !== $this) {
-            $image->setUser($this);
-        }
-
-        $this->image = $image;
-
-        return $this;
-    }
-
-    public function getPoste(): ?string
-    {
-        return $this->poste;
-    }
-
-    public function setPoste(string $poste): self
-    {
-        $this->poste = $poste;
-
-        return $this;
-    }
-
-    public function getDepartement(): ?string
-    {
-        return $this->departement;
-    }
-
-    public function setDepartement(string $departement): self
-    {
-        $this->departement = $departement;
-
-        return $this;
-    }
-
-    public function getSite(): ?string
-    {
-        return $this->site;
-    }
-
-    public function setSite(?string $site): self
-    {
-        $this->site = $site;
 
         return $this;
     }

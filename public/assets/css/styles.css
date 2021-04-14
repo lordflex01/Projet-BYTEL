@@ -399,8 +399,10 @@ h6, .h6 {
 }
 
 .lead {
-  font-size: 1.25rem;
+  font-size: 27px;
+  letter-spacing: 4px;
   font-weight: 300;
+  color: #ec5b00;
 }
 
 .display-1 {
@@ -2024,7 +2026,7 @@ pre code {
   width: 100%;
   height: calc(2.25rem + 2px);
   padding: 0.375rem 0.75rem;
-  font-size: 1rem;
+  font-size: 14px;
   font-weight: 400;
   line-height: 1.5;
   color: #495057;
@@ -4779,7 +4781,7 @@ input[type="button"].btn-block {
   background-color: #fff;
   background-clip: border-box;
   border: 0 solid rgba(0, 0, 0, 0.125);
-  border-radius: 0.25rem;
+  
 }
 
 .card > hr {
@@ -4843,13 +4845,13 @@ input[type="button"].btn-block {
   border-bottom: 0 solid rgba(0, 0, 0, 0.125);
 }
 
+
 .card-header:first-child {
   border-radius: calc(0.25rem - 0) calc(0.25rem - 0) 0 0;
 }
-
 .card-footer {
-  padding: 0.75rem 1.25rem;
-  background-color: rgba(0, 0, 0, 0.03);
+  padding: 0.7em 1.25rem;
+  background-color: #e4eaed;
   border-top: 0 solid rgba(0, 0, 0, 0.125);
 }
 
@@ -6865,7 +6867,7 @@ button.bg-dark:focus {
 }
 
 .border-right {
-  border-right: 1px solid #dee2e6 !important;
+  border-right: 2px solid #b2b6b8 !important;
 }
 
 .border-bottom {
@@ -10433,7 +10435,7 @@ body:not(.layout-fixed).layout-navbar-fixed.text-sm .wrapper .main-sidebar .side
 }
 
 .layout-navbar-fixed .wrapper .sidebar-dark-primary .brand-link:not([class*="navbar"]) {
-  background-color: #343a40;
+  background-color: #2e445b;
 }
 
 .layout-navbar-fixed .wrapper .content-wrapper {
@@ -10534,7 +10536,7 @@ body:not(.layout-fixed).layout-navbar-fixed.text-sm .wrapper .main-sidebar .side
 }
 
 .layout-navbar-fixed .wrapper .sidebar-dark-primary .brand-link:not([class*="navbar"]) {
-  background-color: #343a40;
+  background-color: #2e445b;
 }
 
 .layout-navbar-fixed .wrapper .content-wrapper {
@@ -11249,7 +11251,7 @@ body.sidebar-collapse:not(.sidebar-mini-md):not(.sidebar-mini) .main-header::bef
 }
 
 .content-header {
-  padding: 15px 0.5rem;
+  padding: 15px 15px;
 }
 
 .text-sm .content-header {
@@ -11257,8 +11259,9 @@ body.sidebar-collapse:not(.sidebar-mini-md):not(.sidebar-mini) .main-header::bef
 }
 
 .content-header h1 {
-  font-size: 1.8rem;
-  margin: 0;
+  font-size: 18px;
+    margin: 0;
+    color: #0477ad;
 }
 
 .text-sm .content-header h1 {
@@ -11804,7 +11807,7 @@ body.sidebar-collapse:not(.sidebar-mini-md):not(.sidebar-mini) .main-header::bef
 }
 
 [class*="sidebar-dark-"] {
-  background-color: #343a40;
+  background-color: #2e445b;
 }
 
 [class*="sidebar-dark-"] .user-panel a:hover {
@@ -11887,7 +11890,7 @@ body.sidebar-collapse:not(.sidebar-mini-md):not(.sidebar-mini) .main-header::bef
 
 .sidebar-dark-primary .nav-sidebar > .nav-item > .nav-link.active,
 .sidebar-light-primary .nav-sidebar > .nav-item > .nav-link.active {
-  background-color: #007bff;
+  background-color: #3b6695;
   color: #fff;
 }
 
@@ -12519,7 +12522,7 @@ body.sidebar-collapse:not(.sidebar-mini-md):not(.sidebar-mini) .main-header::bef
 
 [class*="sidebar-dark"] .form-control-sidebar,
 [class*="sidebar-dark"] .btn-sidebar {
-  background-color: #3f474e;
+  background-color: #2e445b;
   border: 1px solid #56606a;
   color: white;
 }
@@ -18805,8 +18808,8 @@ html.maximized-card {
 }
 .card-header {
   background-color: transparent;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.125);
   position: relative;
+  padding: 20px;
   border-top-left-radius: 0.25rem;
   border-top-right-radius: 0.25rem;
 }
@@ -32594,36 +32597,3 @@ a.text-muted:hover {
   color: #ced4da;
 }
 /*# sourceMappingURL=adminlte.css.map */
-.flex-container {
-  display: flex;
-    height: 100%;
-    flex-wrap: wrap;
-    align-content: center;
-}
-
-.flex-container .gauche {
-  width: 35%;
-    margin: 120px;
-    text-align: center;
-}
-
-.flex-container img{
-  width: 400px;
-}
-.gauche h2{
-  font-family: SFProDisplay-Regular, Helvetica, Arial, sans-serif;
-    font-size: 21px;
-    letter-spacing: 2px;
-    font-weight: 400;
-    line-height: 33px;
-    margin-left: -2px;
-    color: #014589;
-}
-
-.flex-container #droite {
-  width: 100px;
-  margin: 150px;
-  text-align: center;
-  line-height: 75px;
-  font-size: 30px;
-}
