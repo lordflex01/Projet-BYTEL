@@ -73,6 +73,7 @@
             </div>
             <!-- /.card-body -->
 
+<<<<<<< HEAD
             <div class="card-footer">
               <button type="submit" class="btn btn-success swalDefaultSuccess">
                 {{ button_label|default('Ajouter') }}
@@ -85,3 +86,69 @@
   </div>
   {{ form_end(form) }}
 </section>
+=======
+
+					<!-- /.card-header -->
+					<!-- form start -->
+						<form>
+							<div class="card-body"> <div class="form-group">
+								<label for="{{form.email.vars.id}}">Adresse E-mail</label>
+								{{form_widget( form.email)}}
+								{{form_errors(form.email)}}
+								{% do form.email.setRendered %}
+							</div>
+							<div class="form-group">
+								<label for="{{form.username.vars.id}}">Nom d'utilisateur</label>
+								{{form_widget( form.username)}}
+								{% do form.username.setRendered %}
+							</div>
+							<div class="form-group">
+								<label for="{{form.site.vars.id}}">Site</label>
+								{{form_widget( form.site)}}
+								{% do form.site.setRendered %}
+							</div>
+							<div class="row">
+								<div class="col">
+									<label for="{{form.departement.vars.id}}">Département</label>
+									{{form_widget( form.departement)}}
+									{% do form.departement.setRendered %}</div>
+								<div class="col">
+									<label for="{{form.poste.vars.id}}">Poste</label>
+									{{form_widget( form.poste)}}
+									{% do form.poste.setRendered %}</div>
+							</div>
+							<div class="form-group">
+								<label for="{{form.roles.vars.id}}">Rôle</label>
+								{{form_widget( form.roles)}}
+								{% do form.roles.setRendered %}
+							</div>
+							<div
+								class="form-group">
+								<!--<label for="{{form.password.vars.id}}">Mot de passe</label>-->
+								{{form_widget( form.password)}}
+								{% do form.password.setRendered %}
+							</div>
+							<div>
+								<label for="{{form.image.vars.id}}">Sélectionner une photo</label>
+							</div>
+							<div class="form-group">
+								<input
+								type="file" id="{{form.image.vars.id}}" name="{{form.image.vars.full_name}}" accept="image/*">
+								<!--{{form_widget( form.image)}}-->
+								{% do form.image.setRendered %}
+							</div>
+
+						</div>
+						<!-- /.card-body -->
+
+						<div class="card-footer">
+
+							<button type="submit" class="btn btn-success swalDefaultSuccess">{{ button_label|default('Ajouter') }}</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+	{{ form_end(form) }}
+>>>>>>> b83ad02738ce70a92e8f9269b4025c97d01801ba
