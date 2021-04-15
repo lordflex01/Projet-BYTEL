@@ -144,7 +144,7 @@
 							<!-- Add icons to the links using the .nav-icon class !-->
 
 							<li class="nav-item">
-								<a href="#" class="nav-link">
+								<a href="/index" class="nav-link">
 									<i class="nav-icon fas fa-tachometer-alt"></i>
 									<p>
 										Page de démarrage
@@ -152,15 +152,16 @@
 									</p>
 								</a>
 							</li>
-							<li class="nav-item">
-								<a href="https://127.0.0.1:8000/user" class="nav-link">
-									<i class="nav-icon fas fa-users"></i>
-									<p>
-										Utilisateurs
-									</p>
-								</a>
-							</li>
-
+							{% if is_granted('ROLE_ADMIN') %}
+								<li class="nav-item">
+									<a href="https://127.0.0.1:8000/user" class="nav-link">
+										<i class="nav-icon fas fa-users"></i>
+										<p>
+											Utilisateurs
+										</p>
+									</a>
+								</li>
+							{% endif %}
 						</ul>
 					</nav>
 					<!-- /.sidebar-menu -->
@@ -202,19 +203,19 @@
 				<!-- AdminLTE dashboard demo (This is only for demo purposes) -->
 				<script src="{{asset ("assets/js/pages/dashboard3.js")}}"></script>
 				<script>
-				$(function(){
-    $page = jQuery.url.attr("file");
-    if(!$page) {
-        $page = 'index.html.twig';
-    }
-    $('#nav li a').each(function(){ /* on récupère la valeur de l'attribut href de chaque lien */
-        var $href = $(this).attr('href');
-        if ( ($href == $page) || ($href == '') ) { /* on compare ensuite a celui de la page par defaut de notre site */
-            $(this).addClass('active');            /* si différent alors on lui donne la class "active" */
-        } else {
-            $(this).removeClass('active');         /* sinon on lui retire cette class */
-        }
-    });
+					$(function () {
+$page = jQuery.url.attr("file");
+if (!$page) {
+$page = 'index.html.twig';
+}
+$('#nav li a').each(function () { /* on récupère la valeur de l'attribut href de chaque lien */
+var $href = $(this).attr('href');
+if (($href == $page) || ($href == '')) { /* on compare ensuite a celui de la page par defaut de notre site */
+$(this).addClass('active'); /* si différent alors on lui donne la class "active" */
+} else {
+$(this).removeClass('active'); /* sinon on lui retire cette class */
+}
+});
 });
 				</script>
 			{% endblock %}

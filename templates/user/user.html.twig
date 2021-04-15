@@ -76,6 +76,8 @@ $("#example1").DataTable({"responsive": true, "lengthChange": true, "autoWidth":
 								<th>N°</th>
 								<th>Adresse E-mail</th>
 								<th>Nom d'utilisateur</th>
+								<th>Poste</th>
+								<th>Departement</th>
 								<th>Rôle</th>
 								<th>Actions</th>
 							</tr>
@@ -86,14 +88,22 @@ $("#example1").DataTable({"responsive": true, "lengthChange": true, "autoWidth":
 									<td>
 										{% set number = ( number | default(0) ) + 1 %}
 										<p>{{ number }}
-											<img src="{{asset ('/uploads/' ~ user.image.name)}}" class="img-circle elevation-2" alt="Image" width="30"></p>
-
+										</p>
 									</td>
 									<td>
+										<img src="{{asset ('/uploads/' ~ user.image.name)}}" class="img-circle elevation-2" alt="Image" width="30">
 										{{ user.email }}
 									</td>
 									<td>
 										{{ user.username }}
+									</td>
+									<td>
+										{{ user.poste }}
+
+									</td>
+									<td>
+										{{ user.departement }}
+
 									</td>
 									<td>
 										{% if user.roles  == ["ROLE_USER"]%}

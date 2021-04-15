@@ -30,9 +30,9 @@ class User implements UserInterface
     /**
      * @ORM\Column(type="string", length=180, unique=true)
      * @Assert\Regex(
-    *  pattern="/^[a-zA-Z0-9_.-]+@capgemini.com/",
-    *  message="Votre e-mail n'est pas valide"
-    * )
+     *  pattern="/^[a-zA-Z0-9_.-]+@capgemini.com/",
+     *  message="Votre e-mail n'est pas valide"
+     * )
      */
     private $email;
 

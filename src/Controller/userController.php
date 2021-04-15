@@ -15,6 +15,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
+ * @IsGranted("ROLE_ADMIN")
  * @Route("/user")
  */
 class userController extends AbstractController

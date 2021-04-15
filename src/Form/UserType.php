@@ -49,11 +49,6 @@ class UserType extends AbstractType
                 'first_options'  => ['label' => 'Mot de passe'],
                 'second_options' => ['label' => 'Confirmer le mot de passe'],
             ])
-            #->add('password', PasswordType::class, [
-            #  'attr' => [
-            #      'placeholder' => "Veuillez entrer votre mot de passe"
-            #  ]
-            #  ])
             ->add('username', TextType::class, [
                 'attr' => [
                     'placeholder' => "Veuillez entrer votre nom d'utilisateur"
@@ -64,11 +59,11 @@ class UserType extends AbstractType
                 'multiple' => false,
                 'expanded' => false,
                 'choices' => [
-                    'Informatique' => 'informatique',
-                    'Ressource humaine' => 'RH',
-                    'Financier' => 'financier',
+                    'Informatique' => 'Informatique',
+                    'Ressource humaine' => 'Ressource humaine',
+                    'Financier' => 'Financier',
                     'Sécurité' => 'Sécurité',
-                    'Communication' => 'communication',
+                    'Communication' => 'Communication',
                 ],
             ])
             ->add('poste', ChoiceType::class, [
@@ -76,11 +71,11 @@ class UserType extends AbstractType
                 'multiple' => false,
                 'expanded' => false,
                 'choices' => [
-                    'Développeur' => 'développeur',
-                    'Team lead' => 'TL',
-                    'Scrum master' => 'scrum master',
-                    'Manager' => 'manager',
-                    'Chef de projet' => 'chef de projet',
+                    'Développeur' => 'Développeur',
+                    'Team lead' => 'Team lead',
+                    'Scrum master' => 'Scrum master',
+                    'Manager' => 'Manager',
+                    'Chef de projet' => 'Chef de projet',
                 ],
             ])
             ->add('site', TextType::class, [
