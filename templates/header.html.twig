@@ -141,27 +141,37 @@
 					<nav class="mt-2" id="nav">
 						<ul
 							class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-							<!-- Add icons to the links using the .nav-icon class !-->
-
+							<!-- Menu page de demarage avec condition  !-->
 							<li class="nav-item">
-								<a href="/index" class="nav-link">
-									<i class="nav-icon fas fa-tachometer-alt"></i>
-									<p>
-										Page de démarrage
-
-									</p>
-								</a>
-							</li>
-							{% if is_granted('ROLE_ADMIN') %}
-								<li class="nav-item">
-									<a href="https://127.0.0.1:8000/user" class="nav-link">
-										<i class="nav-icon fas fa-users"></i>
+								{% if app.request.uri  == 'https://127.0.0.1:8000/index' %}
+									<a href="/index" class="nav-link active">
+									{% else %}
+										<a href="/index" class="nav-link">
+										{% endif %}
+										<i class="nav-icon fas fa-home"></i>
+										<!--<i class="nav-icon fas fa-tachometer-alt"></i>-->
 										<p>
-											Utilisateurs
+											Accueil
 										</p>
 									</a>
 								</li>
-							{% endif %}
+								<!-- Menu utilisateur avec condition  !-->
+								{% if is_granted('ROLE_ADMIN') %}
+									<li class="nav-item">
+										{% if app.request.uri  == 'https://127.0.0.1:8000/user/' %}
+											<a href="https://127.0.0.1:8000/user" class="nav-link active">
+											{% else %}
+												<a href="https://127.0.0.1:8000/user" class="nav-link">
+												{% endif %}
+												<i class="nav-icon fas fa-users"></i>
+												<p>
+													Utilisateurs
+												</p>
+											</a>
+										</li>
+									{% endif %}
+								</li>
+							</li>
 						</ul>
 					</nav>
 					<!-- /.sidebar-menu -->
@@ -191,6 +201,8 @@
 				<!-- /.modal-dialog -->
 			</div>
 			{% block body %}{% endblock %}
+
+
 			{% block javascripts %}
 				<!-- jQuery -->
 				<script src="{{asset ("assets/plugins/jquery/jquery.js")}}"></script>
@@ -221,4 +233,4 @@ $(this).removeClass('active'); /* sinon on lui retire cette class */
 			{% endblock %}
 		</body>
 	</body>
-</html>
+</html></body></html>

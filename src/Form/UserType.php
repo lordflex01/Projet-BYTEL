@@ -29,7 +29,7 @@ class UserType extends AbstractType
 
             ->add('email', TextType::class, [
                 'attr' => [
-                    'placeholder' => "Veuillez entrer votre adresse e-mail"
+                    'placeholder' => "xxxxx@capgemini.com"
                 ]
             ])
             ->add('roles', ChoiceType::class, [
