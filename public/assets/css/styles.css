@@ -11166,6 +11166,7 @@ body.sidebar-collapse:not(.sidebar-mini-md):not(.sidebar-mini) .main-header::bef
 
 .content-wrapper > .content {
   padding: 0 0.5rem;
+  margin-top: 30px;
 }
 
 .main-sidebar, .main-sidebar::before {
@@ -11579,9 +11580,9 @@ body.sidebar-collapse:not(.sidebar-mini-md):not(.sidebar-mini) .main-header::bef
 }
 
 .user-panel-icon{
-  margin-left: 5px;
+  margin-left: -3px;
     font-size: 20px;
-    MARGIN-RIGHT: -5PX;
+    MARGIN-RIGHT: -9PX;
 }
 
 .user-panel .info {
