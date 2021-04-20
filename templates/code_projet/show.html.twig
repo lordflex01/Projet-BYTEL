@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+
+<title>CodeProjet</title>
+
+{% block body %}
+    <h1>CodeProjet</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ code_projet.id }}</td>
+            </tr>
+            <tr>
+                <th>Libelle</th>
+                <td>{{ code_projet.libelle }}</td>
+            </tr>
+            <tr>
+                <th>Description</th>
+                <td>{{ code_projet.description }}</td>
+            </tr>
+            <tr>
+                <th>Statut</th>
+                <td>{{ code_projet.statut ? 'Yes' : 'No' }}</td>
+            </tr>
+            <tr>
+                <th>Budget</th>
+                <td>{{ code_projet.budget }}</td>
+            </tr>
+            <tr>
+                <th>DateD</th>
+                <td>{{ code_projet.dateD ? code_projet.dateD|date('Y-m-d') : '' }}</td>
+            </tr>
+            <tr>
+                <th>DateF</th>
+                <td>{{ code_projet.DateF ? code_projet.DateF|date('Y-m-d') : '' }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('code_projet_index') }}">back to list</a>
+
+    <a href="{{ path('code_projet_edit', {'id': code_projet.id}) }}">edit</a>
+
+    {{ include('code_projet/_delete_form.html.twig') }}
+{% endblock %}

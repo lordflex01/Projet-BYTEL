@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+
+<title>Imputation index</title>
+
+{% block body %}
+    <h1>Imputation index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Commentaire</th>
+                <th>DateD</th>
+                <th>DateF</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for imputation in imputations %}
+            <tr>
+                <td>{{ imputation.id }}</td>
+                <td>{{ imputation.commentaire }}</td>
+                <td>{{ imputation.dateD ? imputation.dateD|date('Y-m-d') : '' }}</td>
+                <td>{{ imputation.dateF ? imputation.dateF|date('Y-m-d') : '' }}</td>
+                <td>
+                    <a href="{{ path('imputation_show', {'id': imputation.id}) }}">show</a>
+                    <a href="{{ path('imputation_edit', {'id': imputation.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="5">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('imputation_new') }}">Create new</a>
+{% endblock %}

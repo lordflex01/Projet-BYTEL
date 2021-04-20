@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+
+<title>New Imputation</title>
+
+{% block body %}
+    <h1>Create new Imputation</h1>
+
+    {{ include('imputation/_form.html.twig') }}
+
+    <a href="{{ path('imputation_index') }}">back to list</a>
+{% endblock %}

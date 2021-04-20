@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+
+<title>Taches</title>
+
+{% block body %}
+    <h1>Taches</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ tach.id }}</td>
+            </tr>
+            <tr>
+                <th>Libelle</th>
+                <td>{{ tach.libelle }}</td>
+            </tr>
+            <tr>
+                <th>Description</th>
+                <td>{{ tach.description }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('taches_index') }}">back to list</a>
+
+    <a href="{{ path('taches_edit', {'id': tach.id}) }}">edit</a>
+
+    {{ include('taches/_delete_form.html.twig') }}
+{% endblock %}

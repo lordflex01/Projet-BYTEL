@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+
+<title>Projet index</title>
+
+{% block body %}
+    <h1>Projet index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Libelle</th>
+                <th>Description</th>
+                <th>Statut</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for projet in projets %}
+            <tr>
+                <td>{{ projet.id }}</td>
+                <td>{{ projet.libelle }}</td>
+                <td>{{ projet.description }}</td>
+                <td>{{ projet.statut ? 'Yes' : 'No' }}</td>
+                <td>
+                    <a href="{{ path('projet_show', {'id': projet.id}) }}">show</a>
+                    <a href="{{ path('projet_edit', {'id': projet.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="5">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('projet_new') }}">Create new</a>
+{% endblock %}

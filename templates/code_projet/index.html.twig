@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+
+<title>CodeProjet index</title>
+
+{% block body %}
+    <h1>CodeProjet index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Libelle</th>
+                <th>Description</th>
+                <th>Statut</th>
+                <th>Budget</th>
+                <th>DateD</th>
+                <th>DateF</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for code_projet in code_projets %}
+            <tr>
+                <td>{{ code_projet.id }}</td>
+                <td>{{ code_projet.libelle }}</td>
+                <td>{{ code_projet.description }}</td>
+                <td>{{ code_projet.statut ? 'Yes' : 'No' }}</td>
+                <td>{{ code_projet.budget }}</td>
+                <td>{{ code_projet.dateD ? code_projet.dateD|date('Y-m-d') : '' }}</td>
+                <td>{{ code_projet.DateF ? code_projet.DateF|date('Y-m-d') : '' }}</td>
+                <td>
+                    <a href="{{ path('code_projet_show', {'id': code_projet.id}) }}">show</a>
+                    <a href="{{ path('code_projet_edit', {'id': code_projet.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="8">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('code_projet_new') }}">Create new</a>
+{% endblock %}
