@@ -1,39 +1,116 @@
-<!DOCTYPE html>
-
-<title>Projet index</title>
-
+{% extends 'header.html.twig' %}
 {% block body %}
-    <h1>Projet index</h1>
+	<div
+		class="content-wrapper">
+		<!-- Content Header (Page header) -->
+		<section class="content-header">
+			<div class="container-fluid">
+				<div class="row mb-2">
+					<div class="col-sm-6">
+						<h1 class="m-0" style="font-size:19px">Liste des projets</h1>
+					</div>
+					<div class="col-sm-6">
+						<ol class="breadcrumb float-sm-right">
+							<li class="breadcrumb-item">
+								<a href="/index">Accueil</a>
+							</li>
+							<li class="breadcrumb-item active">Projets</li>
+						</ol>
+					</div>
+				</div>
+			</div>
+			<!-- /.container-fluid -->
+		</section>
+		<section
+			class="content">
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Libelle</th>
-                <th>Description</th>
-                <th>Statut</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for projet in projets %}
-            <tr>
-                <td>{{ projet.id }}</td>
-                <td>{{ projet.libelle }}</td>
-                <td>{{ projet.description }}</td>
-                <td>{{ projet.statut ? 'Yes' : 'No' }}</td>
-                <td>
-                    <a href="{{ path('projet_show', {'id': projet.id}) }}">show</a>
-                    <a href="{{ path('projet_edit', {'id': projet.id}) }}">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="5">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+			<!-- Default box -->
+			<div class="card">
+				<div class="card-header">
+					<h3 class="card-title">Projects</h3>
 
-    <a href="{{ path('projet_new') }}">Create new</a>
+					<div class="card-tools">
+						<button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+							<i class="fas fa-minus"></i>
+						</button>
+						<button type="button" class="btn btn-tool" data-card-widget="remove" title="Remove">
+							<i class="fas fa-times"></i>
+						</button>
+					</div>
+				</div>
+				<div class="card-body p-0">
+					<table class="table table-striped projects">
+						<thead>
+							<tr>
+								<th style="width: 1%">
+									#
+								</th>
+								<th style="width: 20%">
+									Nom du projet
+								</th>
+								<th style="width: 30%">
+									Description
+								</th>
+								<th>
+									Code projet
+								</th>
+								<th style="width: 8%" class="text-center">
+									Statut
+								</th>
+								<th style="width: 20%"></th>
+							</tr>
+						</thead>
+						<tbody>
+							{% for projet in projets %}
+								<tr>
+									<td>
+										#
+									</td>
+									<td>
+
+										{{ projet.libelle }}
+
+									</td>
+									<td>
+										{{ projet.description }}
+									</td>
+									<td>
+										<a href="{{ path('projet_show', {'id': projet.id}) }}">Code projet
+											{{ projet.libelle }}</a>
+
+									</td>
+									{% if projet.statut == 'yes' %}
+										<td class="project-state">
+											<span class="badge badge-success">En cours</span>
+										</td>
+									{% else %}
+										<td class="project-state">
+											<span class="badge badge-danger">Terminé</span>
+										</td>
+									{% endif %}
+									<td class="project-actions text-right">
+										<a class="btn btn-info btn-sm" href="{{ path('projet_edit', {'id': projet.id}) }}">
+											<i class="fas fa-pencil-alt"></i>
+										</a>
+										<a class="btn">
+											{{ include('projet/_delete_form.html.twig') }}
+										</a>
+									</td>
+								</tr>
+							{% endfor %}
+
+						</tbody>
+					</table>
+				</div>
+				<!-- /.card-body -->
+			</div>
+
+			<div style="float:right;">
+				<a class="btn btn-primary" href="{{ path('projet_new') }}">Ajouter un nouveau projet</a>
+				<a class="btn btn-primary" href="{{ path('code_projet_new') }}">Ajouter un nouveau code projet</a>
+			</div>
+			<!-- /.card -->
+		</section>
+		<!-- /.content -->
+	</div>
 {% endblock %}

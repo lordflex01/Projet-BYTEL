@@ -3,9 +3,12 @@
 namespace App\Form;
 
 use App\Entity\CodeProjet;
+use App\Entity\Projet;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 class CodeProjetType extends AbstractType
 {
@@ -18,8 +21,12 @@ class CodeProjetType extends AbstractType
             ->add('budget')
             ->add('dateD')
             ->add('DateF')
-            ->add('projet')
-        ;
+            ->add('projet', EntityType::class, [
+                'required' => true,
+                'multiple' => false,
+                'expanded' => true,
+                'class' => Projet::class,
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver)

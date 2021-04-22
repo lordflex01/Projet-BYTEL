@@ -14,8 +14,7 @@ class ProjetType extends AbstractType
         $builder
             ->add('libelle')
             ->add('description')
-            ->add('statut')
-        ;
+            ->add('statut');
     }
 
     public function configureOptions(OptionsResolver $resolver)

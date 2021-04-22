@@ -5,6 +5,8 @@ namespace App\Controller;
 use App\Entity\Projet;
 use App\Form\ProjetType;
 use App\Repository\ProjetRepository;
+use App\Form\CodeProjetType;
+use App\Repository\CodeProjetRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -18,10 +20,11 @@ class ProjetController extends AbstractController
     /**
      * @Route("/", name="projet_index", methods={"GET"})
      */
-    public function index(ProjetRepository $projetRepository): Response
+    public function index(ProjetRepository $projetRepository, CodeProjetRepository $codeProjetRepository): Response
     {
         return $this->render('projet/index.html.twig', [
             'projets' => $projetRepository->findAll(),
+            'code_projets' => $codeProjetRepository->findAll(),
         ]);
     }
 
@@ -51,10 +54,11 @@ class ProjetController extends AbstractController
     /**
      * @Route("/{id}", name="projet_show", methods={"GET"})
      */
-    public function show(Projet $projet): Response
+    public function show(Projet $projet, CodeProjetRepository $codeProjetRepository): Response
     {
         return $this->render('projet/show.html.twig', [
             'projet' => $projet,
+            'code_projets' => $codeProjetRepository->findAll(),
         ]);
     }
 
@@ -83,7 +87,7 @@ class ProjetController extends AbstractController
      */
     public function delete(Request $request, Projet $projet): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$projet->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $projet->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($projet);
             $entityManager->flush();

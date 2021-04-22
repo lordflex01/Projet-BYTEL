@@ -170,52 +170,65 @@
 											</a>
 										</li>
 									{% endif %}
-								</li>
+									<!-- Menu page de demarage avec condition  !-->
+									<li class="nav-item">
+										{% if app.request.uri  == 'https://127.0.0.1:8000/projet/' %}
+											<a href="/projet" class="nav-link active">
+											{% else %}
+												<a href="/projet" class="nav-link">
+												{% endif %}
+												<i class="nav-icon fas fa-tasks"></i>
+												<p>
+													Projets
+												</p>
+											</a>
+										</li>
+									</li>
+								</ul>
 							</li>
-						</ul>
-					</nav>
-					<!-- /.sidebar-menu -->
-				</div>
-				<!-- /.sidebar -->
-
-			</aside>
-			<div class="modal fade" id="modal-sm">
-				<div class="modal-dialog modal-sm">
-					<div class="modal-content">
-						<div class="picture">
-							<i class="nav-icon fas fa-user"></i>
-						</div>
-						<div class="info-content">
-							<h4 class="name">{{ app.user.username }}</h4>
-							<h4 class="roles">
-								{% if app.user.roles  == ["ROLE_USER"]%}
-									Utilisateur
-								{% else %}
-									Administrateur
-								{% endif %}
-							</h4>
-						</div>
+						</nav>
+						<!-- /.sidebar-menu -->
 					</div>
-					<!-- /.modal-content -->
+					<!-- /.sidebar -->
+
+				</aside>
+				<div class="modal fade" id="modal-sm">
+					<div class="modal-dialog modal-sm">
+						<div class="modal-content">
+							<div class="picture">
+								<i class="nav-icon fas fa-user"></i>
+							</div>
+							<div class="info-content">
+								<h4 class="name">{{ app.user.username }}</h4>
+								<h4 class="roles">
+									{% if app.user.roles  == ["ROLE_USER"]%}
+										Utilisateur
+									{% else %}
+										Administrateur
+									{% endif %}
+								</h4>
+							</div>
+						</div>
+						<!-- /.modal-content -->
+					</div>
+					<!-- /.modal-dialog -->
 				</div>
-				<!-- /.modal-dialog -->
-			</div>
-			{% block body %}{% endblock %}
+				{% block body %}{% endblock %}
 
 
-			{% block javascripts %}
-				<!-- jQuery -->
-				<script src="{{asset ("assets/plugins/jquery/jquery.js")}}"></script>
-				<!-- Bootstrap 4 -->
-				<script src="{{asset ("assets/plugins/bootstrap/js/bootstrap.js")}}"></script>
-				<!-- AdminLTE App -->
-				<script src="{{asset ("assets/js/adminlte.js")}}"></script>
-				<!-- OPTIONAL SCRIPTS -->
-				<script src="{{asset ("assets/plugins/chart.js/Chart.min.js")}}"></script>
-				<!-- AdminLTE dashboard demo (This is only for demo purposes) -->
-				<script src="{{asset ("assets/js/pages/dashboard3.js")}}"></script>
-				<script>
-					$(function () {
+				{% block javascripts %}
+					<!-- jQuery -->
+					<script src="{{asset ("assets/plugins/jquery/jquery.js")}}"></script>
+					<!-- Bootstrap 4 -->
+					<script src="{{asset ("assets/plugins/bootstrap/js/bootstrap.js")}}"></script>
+					<!-- AdminLTE App -->
+					<script src="{{asset ("assets/js/adminlte.js")}}"></script>
+					<!-- OPTIONAL SCRIPTS -->
+					<script src="{{asset ("assets/plugins/chart.js/Chart.min.js")}}"></script>
+					<!-- AdminLTE dashboard demo (This is only for demo purposes) -->
+					<script src="{{asset ("assets/js/pages/dashboard3.js")}}"></script>
+					<script>
+						$(function () {
 $page = jQuery.url.attr("file");
 if (!$page) {
 $page = 'index.html.twig';
@@ -229,8 +242,9 @@ $(this).removeClass('active'); /* sinon on lui retire cette class */
 }
 });
 });
-				</script>
-			{% endblock %}
+					</script>
+				{% endblock %}
+			</body>
 		</body>
 	</body>
 </html></body></html>

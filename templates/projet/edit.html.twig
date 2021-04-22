@@ -3,11 +3,11 @@
 <title>Edit Projet</title>
 
 {% block body %}
-    <h1>Edit Projet</h1>
+	<h1>Edit Projet</h1>
 
-    {{ include('projet/_form.html.twig', {'button_label': 'Update'}) }}
+	{{ include('projet/_form.html.twig', {'button_label': 'Update'}) }}
 
-    <a href="{{ path('projet_index') }}">back to list</a>
+	<a href="{{ path('projet_index') }}">back to list</a>
 
-    {{ include('projet/_delete_form.html.twig') }}
+	{{ include('projet/_delete_form.html.twig') }}
 {% endblock %}
