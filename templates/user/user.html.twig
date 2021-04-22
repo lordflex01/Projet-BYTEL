@@ -3,7 +3,6 @@
 
 	<script src="{{asset ("/assets/js/datatable/jquery.min.js")}}"></script>
 	<script src="{{asset ("/assets/js/datatable/jquery.dataTable.min.js")}}"></script>
-	<script src="{{asset ("assets/js/bootstrap.js")}}"></script>
 
 	<link rel="stylesheet" href="{{asset ("/assets/css/datatable/buttons.bootstrap4.min.css")}}">
 	<link rel="stylesheet" href="{{asset ("/assets/css/datatable/dataTables.bootstrap4.min.css")}}">
@@ -53,11 +52,7 @@ $("#example1").DataTable({"responsive": true, "lengthChange": true, "autoWidth":
 					</div>
 					
 				</div>
-				{% if is_granted('ROLE_ADMIN') %}
-						<div style="float:right;">
-							<a class="btn btn-primary btn-sm" href="{{ path('user_new') }}">Ajouter un nouvel utilisateur</a>
-						</div>
-					{% endif %}
+				
 			</div>
 			
 			<!-- /.container-fluid -->
@@ -69,8 +64,14 @@ $("#example1").DataTable({"responsive": true, "lengthChange": true, "autoWidth":
 			<!-- Default box -->
 			<div
 				class="card">
+				
 				<!-- /.card-header -->
 				<div class="card-body">
+				{% if is_granted('ROLE_ADMIN') %}
+						<div style="float:right;">
+							<a class="btn btn-primary btn-sm" href="{{ path('user_new') }}">Ajouter un nouvel utilisateur</a>
+						</div>
+					{% endif %}
 					<table id="example1" class="table table-bordered table-striped">
 						<thead>
 							<tr>

@@ -13,7 +13,9 @@
 			<!-- css header -->
 			<link
 			rel="stylesheet" href="{{asset ("assets/plugins/fontawesome-free/css/all.css")}}">
-
+			<!-- overlayScrollbars -->
+			<link
+			rel="stylesheet" href="{{asset ("assets/plugins/overlayScrollbars/css/OverlayScrollbars.min.css")}}">
 			<!-- css starter page -->
 			<link rel="stylesheet" href="{{asset ("assets/css/styles.css")}}">
 
@@ -34,16 +36,6 @@
 							<i class="fas fa-bars"></i>
 						</a>
 					</li>
-					<li class="nav-item d-none d-sm-inline-block">
-						<a href="/contact" class="nav-link">Contactez-nous</a>
-					</li>
-
-				</ul>
-
-				<!-- Right navbar links -->
-				<ul
-					class="navbar-nav ml-auto">
-					<!-- Navbar Search -->
 					<li class="nav-item">
 						<a class="nav-link" data-widget="navbar-search" href="" role="button">
 							<div class="navbar-search-block">
@@ -62,10 +54,15 @@
 						</a>
 
 					</li>
+				</ul>
+
+				<!-- Right navbar links -->
+				<ul class="navbar-nav ml-auto">
+					<!-- Navbar Search -->
+
 
 					<!-- Messages Dropdown Menu -->
-					<li class="nav-item dropdown">
-						<a class="nav-link" data-toggle="dropdown" href="#">
+						<li class="nav-item dropdown"> <a class="nav-link" data-toggle="dropdown" href="#">
 							<i class="far fa-comments"></i>
 							<span class="badge badge-danger navbar-badge"></span>
 						</a>
@@ -95,6 +92,7 @@
 							<i class="fas fa-sign-out-alt"></i>
 							Déconnexion
 						</a>
+						
 					</li>
 				</ul>
 			</nav>
@@ -121,7 +119,15 @@
 
 						</div>
 						<div class="info">
-							<a href="" class="d-block" data-toggle="modal" data-target="#modal-sm">{{ app.user.username }}</a>
+							<a href="" class="d-block">{{ app.user.username }}</a>
+							<a href="" class="d-block">
+								{% if app.user.roles  == ["ROLE_USER"]%}
+									Utilisateur
+								{% else %}
+									Administrateur
+								{% endif %}
+
+							</a>
 						</div>
 					</div>
 
@@ -152,85 +158,271 @@
 										<!--<i class="nav-icon fas fa-tachometer-alt"></i>-->
 										<p>
 											Accueil
+											<i class="right fas fa-angle-left"></i>
 										</p>
 									</a>
-								</li>
-								<!-- Menu utilisateur avec condition  !-->
-								{% if is_granted('ROLE_ADMIN') %}
-									<li class="nav-item">
-										{% if app.request.uri  == 'https://127.0.0.1:8000/user/' %}
-											<a href="https://127.0.0.1:8000/user" class="nav-link active">
-											{% else %}
-												<a href="https://127.0.0.1:8000/user" class="nav-link">
-												{% endif %}
-												<i class="nav-icon fas fa-users"></i>
-												<p>
-													Utilisateurs
-												</p>
+									<ul class="nav nav-treeview">
+										<li class="nav-item">
+											<a href="./index.html" class="nav-link active">
+												<i class="far 	fa-circle nav-icon"></i>
+												<p>Analyse des problèmes</p>
 											</a>
 										</li>
-									{% endif %}
+										<li class="nav-item">
+											<a href="./index2.html" class="nav-link">
+												<i class="far fa-circle nav-icon"></i>
+												<p>Prévisions / Gestion</p>
+											</a>
+										</li>
+
+									</ul>
 								</li>
 							</li>
-						</ul>
-					</nav>
-					<!-- /.sidebar-menu -->
-				</div>
-				<!-- /.sidebar -->
-
-			</aside>
-			<div class="modal fade" id="modal-sm">
-				<div class="modal-dialog modal-sm">
-					<div class="modal-content">
-						<div class="picture">
-							<i class="nav-icon fas fa-user"></i>
-						</div>
-						<div class="info-content">
-							<h4 class="name">{{ app.user.username }}</h4>
-							<h4 class="roles">
-								{% if app.user.roles  == ["ROLE_USER"]%}
-									Utilisateur
-								{% else %}
-									Administrateur
+							<li class="nav-item">
+								<a href="/calendar" class="nav-link">
+									<i class="nav-icon far fa-calendar-alt"></i>
+									<p>
+										Planification
+									</p>
+								</a>
+							</li>
+							<!-- Menu utilisateur avec condition  !-->
+							{% if is_granted('ROLE_ADMIN') %}
+								<li class="nav-item">
+									{% if app.request.uri  == 'https://127.0.0.1:8000/user/' %}
+										<a href="https://127.0.0.1:8000/user" class="nav-link active">
+										{% else %}
+											<a href="https://127.0.0.1:8000/user" class="nav-link">
+											{% endif %}
+											<i class="nav-icon fas fa-users"></i>
+											<p>
+												Collaborateurs
+											</p>
+										</a>
+									</li>
 								{% endif %}
-							</h4>
-						</div>
-					</div>
-					<!-- /.modal-content -->
-				</div>
-				<!-- /.modal-dialog -->
+							</li>
+
+							<li class="nav-item">
+								<a href="/projets" class="nav-link">
+									<i class="nav-icon fas fa-tasks"></i>
+									<p>
+										Projets
+									</p>
+								</a>
+							</li>
+
+							<li class="nav-item">
+								<a href="/pointage" class="nav-link">
+									<i class="nav-icon far fa-calendar-check"></i>
+									<p>
+										Pointage
+									</p>
+								</a>
+							</li>
+							<li class="nav-item">
+								<a href="/contact" class="nav-link">
+									<i class="nav-icon far fa-envelope-open"></i>
+									<p>
+										Contact
+									</p>
+								</a>
+							</li>
+						</li>
+					</ul>
+				</nav>
+				<!-- /.sidebar-menu -->
 			</div>
-			{% block body %}{% endblock %}
+			<!-- /.sidebar -->
+
+		</aside>
+		{% block body %}{% endblock %}
 
 
-			{% block javascripts %}
-				<!-- jQuery -->
-				<script src="{{asset ("assets/plugins/jquery/jquery.js")}}"></script>
-				<!-- Bootstrap 4 -->
-				<script src="{{asset ("assets/plugins/bootstrap/js/bootstrap.js")}}"></script>
-				<!-- AdminLTE App -->
-				<script src="{{asset ("assets/js/adminlte.js")}}"></script>
-				<!-- OPTIONAL SCRIPTS -->
-				<script src="{{asset ("assets/plugins/chart.js/Chart.min.js")}}"></script>
-				<!-- AdminLTE dashboard demo (This is only for demo purposes) -->
-				<script src="{{asset ("assets/js/pages/dashboard3.js")}}"></script>
-				<script>
-					$(function () {
-$page = jQuery.url.attr("file");
-if (!$page) {
-$page = 'index.html.twig';
-}
-$('#nav li a').each(function () { /* on récupère la valeur de l'attribut href de chaque lien */
-var $href = $(this).attr('href');
-if (($href == $page) || ($href == '')) { /* on compare ensuite a celui de la page par defaut de notre site */
-$(this).addClass('active'); /* si différent alors on lui donne la class "active" */
-} else {
-$(this).removeClass('active'); /* sinon on lui retire cette class */
-}
-});
-});
-				</script>
-			{% endblock %}
-		</body>
+		{% block javascripts %}
+			<!-- jQuery -->
+			<script src="{{asset ("assets/plugins/jquery/jquery.js")}}"></script>
+			<!-- Bootstrap 4 -->
+			<script src="{{asset ("assets/plugins/bootstrap/js/bootstrap.js")}}"></script>
+			<!-- AdminLTE App -->
+			<!-- overlayScrollbars -->
+			<script src="{{asset ("assets/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js")}}"></script>
+			<script src="{{asset ("assets/js/adminlte.js")}}"></script>
+			<!-- OPTIONAL SCRIPTS -->
+			<script src="{{asset ("assets/plugins/chart.js/Chart.min.js")}}"></script>
+			<!-- AdminLTE dashboard demo (This is only for demo purposes) -->
+			<script src="{{asset ("assets/js/pages/dashboard3.js")}}"></script>
+
+			<!-- fullCalendar 2.2.5 -->
+			<script src="{{asset ("assets/plugins/moment/moment.min.js")}}"></script>
+			<script src="{{asset ("assets/plugins/fullcalendar/main.js")}}"></script>
+			<script>
+  $(function () {
+
+    /* initialize the external events
+     -----------------------------------------------------------------*/
+    function ini_events(ele) {
+      ele.each(function () {
+
+        // create an Event Object (https://fullcalendar.io/docs/event-object)
+        // it doesn't need to have a start or end
+        var eventObject = {
+          title: $.trim($(this).text()) // use the element's text as the event title
+        }
+
+        // store the Event Object in the DOM element so we can get to it later
+        $(this).data('eventObject', eventObject)
+
+        // make the event draggable using jQuery UI
+        $(this).draggable({
+          zIndex        : 1070,
+          revert        : true, // will cause the event to go back to its
+          revertDuration: 0  //  original position after the drag
+        })
+
+      })
+    }
+
+    ini_events($('#external-events div.external-event'))
+
+    /* initialize the calendar
+     -----------------------------------------------------------------*/
+    //Date for the calendar events (dummy data)
+    var date = new Date()
+    var d    = date.getDate(),
+        m    = date.getMonth(),
+        y    = date.getFullYear()
+
+    var Calendar = FullCalendar.Calendar;
+    var Draggable = FullCalendar.Draggable;
+
+    var containerEl = document.getElementById('external-events');
+    var checkbox = document.getElementById('drop-remove');
+    var calendarEl = document.getElementById('calendar');
+
+    // initialize the external events
+    // -----------------------------------------------------------------
+
+    new Draggable(containerEl, {
+      itemSelector: '.external-event',
+      eventData: function(eventEl) {
+        return {
+          title: eventEl.innerText,
+          backgroundColor: window.getComputedStyle( eventEl ,null).getPropertyValue('background-color'),
+          borderColor: window.getComputedStyle( eventEl ,null).getPropertyValue('background-color'),
+          textColor: window.getComputedStyle( eventEl ,null).getPropertyValue('color'),
+        };
+      }
+    });
+
+    var calendar = new Calendar(calendarEl, {
+      headerToolbar: {
+        left  : 'prev,next today',
+        center: 'title',
+        right : 'dayGridMonth,timeGridWeek,timeGridDay'
+      },
+      themeSystem: 'bootstrap',
+      //Random default events
+      events: [
+        {
+          title          : 'All Day Event',
+          start          : new Date(y, m, 1),
+          backgroundColor: '#f56954', //red
+          borderColor    : '#f56954', //red
+          allDay         : true
+        },
+        {
+          title          : 'Long Event',
+          start          : new Date(y, m, d - 5),
+          end            : new Date(y, m, d - 2),
+          backgroundColor: '#f39c12', //yellow
+          borderColor    : '#f39c12' //yellow
+        },
+        {
+          title          : 'Meeting',
+          start          : new Date(y, m, d, 10, 30),
+          allDay         : false,
+          backgroundColor: '#0073b7', //Blue
+          borderColor    : '#0073b7' //Blue
+        },
+        {
+          title          : 'Lunch',
+          start          : new Date(y, m, d, 12, 0),
+          end            : new Date(y, m, d, 14, 0),
+          allDay         : false,
+          backgroundColor: '#00c0ef', //Info (aqua)
+          borderColor    : '#00c0ef' //Info (aqua)
+        },
+        {
+          title          : 'Birthday Party',
+          start          : new Date(y, m, d + 1, 19, 0),
+          end            : new Date(y, m, d + 1, 22, 30),
+          allDay         : false,
+          backgroundColor: '#00a65a', //Success (green)
+          borderColor    : '#00a65a' //Success (green)
+        },
+        {
+          title          : 'Click for Google',
+          start          : new Date(y, m, 28),
+          end            : new Date(y, m, 29),
+          url            : 'https://www.google.com/',
+          backgroundColor: '#3c8dbc', //Primary (light-blue)
+          borderColor    : '#3c8dbc' //Primary (light-blue)
+        }
+      ],
+      editable  : true,
+      droppable : true, // this allows things to be dropped onto the calendar !!!
+      drop      : function(info) {
+        // is the "remove after drop" checkbox checked?
+        if (checkbox.checked) {
+          // if so, remove the element from the "Draggable Events" list
+          info.draggedEl.parentNode.removeChild(info.draggedEl);
+        }
+      }
+    });
+
+    calendar.render();
+    // $('#calendar').fullCalendar()
+
+    /* ADDING EVENTS */
+    var currColor = '#3c8dbc' //Red by default
+    // Color chooser button
+    $('#color-chooser > li > a').click(function (e) {
+      e.preventDefault()
+      // Save color
+      currColor = $(this).css('color')
+      // Add color effect to button
+      $('#add-new-event').css({
+        'background-color': currColor,
+        'border-color'    : currColor
+      })
+    })
+    $('#add-new-event').click(function (e) {
+      e.preventDefault()
+      // Get value and make sure it is not null
+      var val = $('#new-event').val()
+      if (val.length == 0) {
+        return
+      }
+
+      // Create events
+      var event = $('<div />')
+      event.css({
+        'background-color': currColor,
+        'border-color'    : currColor,
+        'color'           : '#fff'
+      }).addClass('external-event')
+      event.text(val)
+      $('#external-events').prepend(event)
+
+      // Add draggable funtionality
+      ini_events(event)
+
+      // Remove event from text input
+      $('#new-event').val('')
+    })
+  })
+</script>
+		{% endblock %}
 	</body>
-</html></body></html>
+</html></body></html></body></html>
