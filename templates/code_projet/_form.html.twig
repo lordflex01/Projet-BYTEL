@@ -1,4 +1,66 @@
 {{ form_start(form) }}
-    {{ form_widget(form) }}
-    <button class="btn">{{ button_label|default('Save') }}</button>
-{{ form_end(form) }}
+<!-- Main content -->
+<section
+	class="content">
+
+	<!--{{ dump() }}-->
+
+	<div class="container-fluid">
+		<div
+			class="row">
+			<!-- left column -->
+			<div
+				class="col-md-12">
+				<!-- general form elements -->
+				<div class="card card-primary">
+
+
+					<!-- /.card-header -->
+					<!-- form start -->
+						<form>
+							<div class="card-body"> <div class="form-group">
+								<label for="{{form.projet.vars.id}}">Projet</label>
+								{{form_widget( form.projet)}}
+								{{form_errors(form.projet)}}
+								{% do form.projet.setRendered %}
+							</div>
+							<div class="form-group">
+								<label for="{{form.libelle.vars.id}}">Code du projet</label>
+								{{form_widget( form.libelle)}}
+								{{form_errors(form.libelle)}}
+								{% do form.libelle.setRendered %}
+							</div>
+							<div class="form-group">
+								<label for="{{form.description.vars.id}}">Description</label>
+								{{form_widget( form.description)}}
+								{% do form.description.setRendered %}
+							</div>
+							<div class="form-group">
+								<label for="{{form.budget.vars.id}}">Budget</label>
+								{{form_widget( form.budget)}}
+								{% do form.budget.setRendered %}
+							</div>
+							<div class="form-group">
+								<label for="{{form.dateD.vars.id}}">Date de debut</label>
+								{{form_widget( form.dateD)}}
+								{% do form.dateD.setRendered %}</div>
+							<div class="form-group">
+								<label for="{{form.DateF.vars.id}}">Date de fin</label>
+								{{form_widget( form.DateF)}}
+								{% do form.DateF.setRendered %}</div>
+							<div class="form-group">
+								{{form_widget( form.statut)}}
+								{% do form.statut.setRendered %}</div>
+						</div>
+						<!-- /.card-body -->
+
+						<div class=" card-footer">
+
+							<button type="submit" class="btn btn-success swalDefaultSuccess">{{ button_label|default('Ajouter') }}</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+	{{ form_end(form) }}

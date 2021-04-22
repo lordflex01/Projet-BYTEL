@@ -1,4 +1,36 @@
 {% extends 'header.html.twig' %}
+{% block javascripts %}
+
+	<script src="{{asset ("/assets/js/datatable/jquery.min.js")}}"></script>
+	<script src="{{asset ("/assets/js/datatable/jquery.dataTable.min.js")}}"></script>
+	<script src="{{asset ("assets/js/bootstrap.js")}}"></script>
+
+	<link rel="stylesheet" href="{{asset ("/assets/css/datatable/buttons.bootstrap4.min.css")}}">
+	<link rel="stylesheet" href="{{asset ("/assets/css/datatable/dataTables.bootstrap4.min.css")}}">
+	<link rel="stylesheet" href="{{asset ("/assets/css/datatable/responsive.bootstrap4.min.css")}}">
+
+
+	<script src="{{asset ("/assets/js/datatable/buttons.bootstrap4.min.js")}}"></script>
+	<script src="{{asset ("/assets/js/datatable/buttons.colVis.min.js")}}"></script>
+	<script src="{{asset ("/assets/js/datatable/buttons.html5.min.js")}}"></script>
+	<script src="{{asset ("/assets/js/datatable/buttons.print.min.js")}}"></script>
+	<script src="{{asset ("/assets/js/datatable/dataTables.bootstrap4.min.js")}}"></script>
+	<script src="{{asset ("/assets/js/datatable/dataTables.buttons.min.js")}}"></script>
+	<script src="{{asset ("/assets/js/datatable/dataTables.responsive.min.js")}}"></script>
+
+	<script src="{{asset ("assets/js/admin.js")}}"></script>
+	<script src="{{asset ("/assets/js/datatable/jszip.min.js")}}"></script>
+	<script src="{{asset ("/assets/js/datatable/pdfmake.min.js")}}"></script>
+	<script src="{{asset ("/assets/js/datatable/responsive.bootstrap4.min.js")}}"></script>
+	<script src="{{asset ("/assets/js/datatable/vfs_fonts.js")}}"></script>
+
+	<script>
+		$(function () {
+$("#example1").DataTable({"responsive": true, "lengthChange": true, "autoWidth": false}).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+});
+	</script>
+
+{% endblock %}
 {% block body %}
 	<div
 		class="content-wrapper">
@@ -24,67 +56,139 @@
 			</div>
 			<!-- /.container-fluid -->
 		</section>
-		<table class="table">
-			<tbody>
-				<tr>
-					<th>Id</th>
-					<td>{{ projet.id }}</td>
-				</tr>
-				<tr>
-					<th>Libelle</th>
-					<td>{{ projet.libelle }}</td>
-				</tr>
-				<tr>
-					<th>Description</th>
-					<td>{{ projet.description }}</td>
-				</tr>
-				<tr>
-					<th>Statut</th>
-					<td>{{ projet.statut ? 'Yes' : 'No' }}</td>
-				</tr>
+		<!--<table class="table">-->
+		<!--<tbody>-->
+		<!--<tr>-->
+		<!--<th>Id</th>-->
+		<!--<td>{{ projet.id }}</td>-->
+		<!--</tr>-->
+		<!--<tr>-->
+		<!--	<th>Libelle</th>-->
+		<!--	<td>{{ projet.libelle }}</td>-->
+		<!--</tr>-->
+		<!--<tr>-->
+		<!--	<th>Description</th>-->
+		<!--	<td>{{ projet.description }}</td>-->
+		<!--</tr>-->
+		<!--<tr>-->
+		<!--	<th>Statut</th>-->
+		<!--	<td>{{ projet.statut ? 'Yes' : 'No' }}</td>-->
+		<!--	</tr>-->
+		<!--</tbody>-->
+		<!--</table>-->
+		<!-- Main content -->
+			<section
+			class="content"> <!-- Default box -->
+			<div
+				class="card">
+				<!-- /.card-header -->
+				<div class="card-body">
+					<table id="example1" class="table table-bordered table-striped">
+						<thead>
+							<tr>
+								<th>N°</th>
+								<th>Projet</th>
+								<th>Libelle</th>
+								<th>Description</th>
+								<th>Statut</th>
+								<th>Budget</th>
+								<th>Date</th>
+								<th>Actions</th>
+							</tr>
+						</thead>
+						<tbody>
+							{% for code_projet in code_projets %}
+								{% if projet.id == code_projet.projet.id %}
+									<tr>
+										<td>
+											{% set number = ( number | default(0) ) + 1 %}
+											<p>{{ number }}
+											</p>
+										</td>
+										<td>
+											{{ code_projet.projet.libelle }}
+										</td>
+										<td>
+											{{ code_projet.libelle }}
+										</td>
+										<td>
+											{{ code_projet.description }}
+
+										</td>
+										{% if code_projet.statut == 'yes' %}
+											<td class="project-state">
+												<span class="badge badge-success">En cours</span>
+											</td>
+										{% else %}
+											<td class="project-state">
+												<span class="badge badge-danger">Terminé</span>
+											</td>
+										{% endif %}
+										<td>
+											<!-- DEBUT convertisseur date a jour-->
+											{% set difference = date(code_projet.DateF).diff(date(code_projet.dateD)) %}
+											{% set jourTotal = difference.days %}
+											{% set difference1 = date(code_projet.DateF).diff(date("now"|date("Y-m-d"))) %}
+											{% set jourRestant = difference1.days %}
+											{% set budg = (jourRestant*code_projet.budget) / jourTotal %}
+											{% if date("now"|date("Y-m-d")) > code_projet.DateF %}
+												{% set budg = 0 %}
+											{% endif %}
+											{{ code_projet.budget|number_format(0) }}
+											Dh au total
+											<div>
+												<small>
+													{{budg|number_format(0)}}
+													Dh restant
+												</small>
+											</div>
+										</td>
+										<td>
+											Du
+											{{ code_projet.dateD ? code_projet.dateD|date('Y-m-d') : '' }}
+											au
+											{{ code_projet.DateF ? code_projet.DateF|date('Y-m-d') : '' }}
+											{% if date("now"|date("Y-m-d")) > code_projet.DateF %}
+												{% set troi = 100 %}
+												{% set jourRestant = 0 %}
+											{% else %}
+												{% set troi = (jourRestant*100)/jourTotal %}
+												{% set troi = 100 - troi %}
+											{% endif %}
+											<!-- FIN convertisseur date a jour-->
+											<div class="progress progress-sm">
+												<div class="progress-bar bg-green" role="progressbar" aria-valuenow="{{ troi }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ troi }}%"></div>
+											</div>
+											<small>
+												{{jourRestant}}
+												jours restant
+											</small>
+										</td>
+										<td class="project-actions text-right">
+											<a class="btn btn-info btn-sm" href="{{ path('code_projet_edit', {'id': code_projet.id}) }}">
+												<i class="fas fa-pencil-alt"></i>
+
+											</a>
+											<a class="btn">
+												{{ include('code_projet/_delete_form.html.twig') }}
+											</a>
+										</td>
+									</tr>
+								{% endif %}
+						{% else %}
+							</td>
+						</tbody>
+					</tr>
+					<tr>
+						<td colspan="6">Aucun code projet trouvé</td>
+					</tr>
+				{% endfor %}
+
 			</tbody>
 		</table>
-		{% set condition = true %}
-		<table class="table">
-			{% for code_projet in code_projets %}
-
-				{% if (condition)  and ( projet.id == code_projet.projet.id ) %}
-					<thead>
-						<tr>
-							<th>Projet</th>
-							<th>Libelle</th>
-							<th>Description</th>
-							<th>Statut</th>
-							<th>Budget</th>
-							<th>DateD</th>
-							<th>DateF</th>
-							<th>actions</th>
-						</tr>
-						{% set condition = false %}
-					</thead>
-				{% endif %}
-				<tbody>
-					{% if projet.id == code_projet.projet.id %}
-						<tr>
-							<td>{{ code_projet.projet.libelle }}</td>
-							<td>{{ code_projet.libelle }}</td>
-							<td>{{ code_projet.description }}</td>
-							<td>{{ code_projet.statut ? 'Yes' : 'No' }}</td>
-							<td>{{ code_projet.budget }}</td>
-							<td>{{ code_projet.dateD ? code_projet.dateD|date('Y-m-d') : '' }}</td>
-							<td>{{ code_projet.DateF ? code_projet.DateF|date('Y-m-d') : '' }}</td>
-							<td>
-								<a href="{{ path('code_projet_show', {'id': code_projet.id}) }}">show</a>
-								<a href="{{ path('code_projet_edit', {'id': code_projet.id}) }}">edit</a>
-							</td>
-						</tr>
-					{% endif %}
-				{% else %}
-					<tr>
-						<td colspan="8">no records found</td>
-					</tr>
-				</tbody>
-			{% endfor %}
-		</table>
 	</div>
-{% endblock %}
+	<!-- /.card-body -->
+</div>
+<div style="float:right;">
+	<a class="btn btn-primary" href="{{ path('code_projet_new') }}">Ajouter un nouveau code projet</a>
+</div></div><!-- /.card-body --></div><!-- /.card --></section></div>{% endblock %}
