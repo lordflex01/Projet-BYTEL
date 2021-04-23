@@ -6,6 +6,7 @@ use App\Entity\CodeProjet;
 use App\Form\CodeProjetType;
 use App\Repository\CodeProjetRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -25,6 +26,7 @@ class CodeProjetController extends AbstractController
         ]);
     }
     /**
+     * @IsGranted("ROLE_ADMIN")
      * @Route("/new", name="code_projet_new", methods={"GET","POST"})
      */
     public function new(Request $request): Response
@@ -58,6 +60,7 @@ class CodeProjetController extends AbstractController
     }
 
     /**
+     * @IsGranted("ROLE_ADMIN")
      * @Route("/{id}/edit", name="code_projet_edit", methods={"GET","POST"})
      */
     public function edit(Request $request, CodeProjet $codeProjet): Response
@@ -78,6 +81,7 @@ class CodeProjetController extends AbstractController
     }
 
     /**
+     * @IsGranted("ROLE_ADMIN")
      * @Route("/{id}", name="code_projet_delete", methods={"DELETE"})
      */
     public function delete(Request $request, CodeProjet $codeProjet): Response
@@ -88,6 +92,6 @@ class CodeProjetController extends AbstractController
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('code_projet_index');
+        return $this->redirectToRoute('projet_index');
     }
 }

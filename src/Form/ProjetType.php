@@ -7,6 +7,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 
 class ProjetType extends AbstractType
 {
@@ -23,7 +24,10 @@ class ProjetType extends AbstractType
                     'placeholder' => "Veuillez entrer une description du projet"
                 ]
             ])
-            ->add('statut');
+            ->add('statut', CheckboxType::class, [
+                'label_attr' => ['class' => 'switch-custom'],
+                'required' => false,
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver)

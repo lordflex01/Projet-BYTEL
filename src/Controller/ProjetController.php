@@ -7,6 +7,7 @@ use App\Form\ProjetType;
 use App\Repository\ProjetRepository;
 use App\Form\CodeProjetType;
 use App\Repository\CodeProjetRepository;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -29,6 +30,7 @@ class ProjetController extends AbstractController
     }
 
     /**
+     * @IsGranted("ROLE_ADMIN")
      * @Route("/new", name="projet_new", methods={"GET","POST"})
      */
     public function new(Request $request): Response
@@ -63,6 +65,7 @@ class ProjetController extends AbstractController
     }
 
     /**
+     * @IsGranted("ROLE_ADMIN")
      * @Route("/{id}/edit", name="projet_edit", methods={"GET","POST"})
      */
     public function edit(Request $request, Projet $projet): Response
@@ -83,6 +86,7 @@ class ProjetController extends AbstractController
     }
 
     /**
+     * @IsGranted("ROLE_ADMIN")
      * @Route("/{id}", name="projet_delete", methods={"DELETE"})
      */
     public function delete(Request $request, Projet $projet): Response

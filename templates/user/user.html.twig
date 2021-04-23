@@ -3,7 +3,6 @@
 
 	<script src="{{asset ("/assets/js/datatable/jquery.min.js")}}"></script>
 	<script src="{{asset ("/assets/js/datatable/jquery.dataTable.min.js")}}"></script>
-	<script src="{{asset ("assets/js/bootstrap.js")}}"></script>
 
 	<link rel="stylesheet" href="{{asset ("/assets/css/datatable/buttons.bootstrap4.min.css")}}">
 	<link rel="stylesheet" href="{{asset ("/assets/css/datatable/dataTables.bootstrap4.min.css")}}">
@@ -49,12 +48,15 @@ $("#example1").DataTable({"responsive": true, "lengthChange": true, "autoWidth":
 							</li>
 							<li class="breadcrumb-item active">Utilisateurs</li>
 						</ol>
+
 					</div>
+
 				</div>
+
 			</div>
+
 			<!-- /.container-fluid -->
 		</section>
-
 		<!-- Main content -->
 		<section
 			class="content">
@@ -62,11 +64,12 @@ $("#example1").DataTable({"responsive": true, "lengthChange": true, "autoWidth":
 			<!-- Default box -->
 			<div
 				class="card">
+
 				<!-- /.card-header -->
 				<div class="card-body">
 					{% if is_granted('ROLE_ADMIN') %}
 						<div style="float:right;">
-							<a class="btn btn-primary btn-sm" href="/user/new">Ajouter un nouvel utilisateur</a>
+							<a class="btn btn-primary btn-sm" href="{{ path('user_new') }}">Ajouter un nouvel utilisateur</a>
 						</div>
 					{% endif %}
 					<table id="example1" class="table table-bordered table-striped">
@@ -76,7 +79,7 @@ $("#example1").DataTable({"responsive": true, "lengthChange": true, "autoWidth":
 								<th>Adresse E-mail</th>
 								<th>Nom d'utilisateur</th>
 								<th>Poste</th>
-								<th>Departement</th>
+								<th>Département</th>
 								<th>Rôle</th>
 								<th>Actions</th>
 							</tr>
@@ -90,7 +93,7 @@ $("#example1").DataTable({"responsive": true, "lengthChange": true, "autoWidth":
 										</p>
 									</td>
 									<td>
-										<img src="{{asset ('/uploads/' ~ user.image.name)}}" class="img-circle elevation-2" alt="Image" width="30">
+										<img src="{{asset ('/uploads/' ~ user.image.name)}}" class="img-circle elevation-2" alt="Image" width="30">&nbsp;
 										{{ user.email }}
 									</td>
 									<td>
@@ -106,7 +109,7 @@ $("#example1").DataTable({"responsive": true, "lengthChange": true, "autoWidth":
 									</td>
 									<td>
 										{% if user.roles  == ["ROLE_USER"]%}
-											Utilisateur
+											Collaborateurs
 										{% else %}
 
 											Administrateur
