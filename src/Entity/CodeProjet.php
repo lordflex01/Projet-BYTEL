@@ -5,10 +5,16 @@ namespace App\Entity;
 use App\Repository\CodeProjetRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass=CodeProjetRepository::class)
+ * @UniqueEntity(
+ * fields={"libelle"},
+ * errorPath="libelle",
+ * message="Il semble que vous avez déjà crée ce code projet."
+ *)
  */
 class CodeProjet
 {
