@@ -141,10 +141,11 @@ $("#example1").DataTable({"responsive": true, "lengthChange": true, "autoWidth":
 											{{ code_projet.budget|number_format(0) }}
 											Dh au total
 											<div>
-												<small>
-													{{budg|number_format(0)}}
-													Dh restant
-												</small>
+
+												<span class="float-left badge bg-info">{{budg|number_format(0)}}
+													Dh restant</span>
+
+
 											</div>
 										</td>
 										<td>

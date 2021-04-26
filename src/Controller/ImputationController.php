@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
+/** 
  * @Route("/imputation")
  */
 class ImputationController extends AbstractController
@@ -24,17 +24,21 @@ class ImputationController extends AbstractController
             'imputations' => $imputationRepository->findAll(),
         ]);
     }
-
     /**
      * @Route("/new", name="imputation_new", methods={"GET","POST"})
      */
     public function new(Request $request): Response
     {
         $imputation = new Imputation();
+        $imputation->setUser($this->container->get('security.token_storage')->getToken()->getUser());
         $form = $this->createForm(ImputationType::class, $imputation);
         $form->handleRequest($request);
+        // Définir le nouveau fuseau horaire
+        date_default_timezone_set('Europe/Paris');
+        $date = date('d-m-y h:i:s');
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $imputation->setTime($date);
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($imputation);
             $entityManager->flush();
@@ -65,8 +69,12 @@ class ImputationController extends AbstractController
     {
         $form = $this->createForm(ImputationType::class, $imputation);
         $form->handleRequest($request);
+        // Définir le nouveau fuseau horaire
+        date_default_timezone_set('Europe/Paris');
+        $date = date('d-m-y h:i:s');
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $imputation->setTime($date);
             $this->getDoctrine()->getManager()->flush();
 
             return $this->redirectToRoute('imputation_index');
@@ -83,7 +91,7 @@ class ImputationController extends AbstractController
      */
     public function delete(Request $request, Imputation $imputation): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$imputation->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $imputation->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($imputation);
             $entityManager->flush();

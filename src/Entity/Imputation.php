@@ -43,6 +43,11 @@ class Imputation
      */
     private $user;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $time;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -104,6 +109,18 @@ class Imputation
     public function setUser(?User $user): self
     {
         $this->user = $user;
+
+        return $this;
+    }
+
+    public function getTime(): ?string
+    {
+        return $this->time;
+    }
+
+    public function setTime(?string $time): self
+    {
+        $this->time = $time;
 
         return $this;
     }

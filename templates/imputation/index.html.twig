@@ -1,39 +1,146 @@
-<!DOCTYPE html>
-
-<title>Imputation index</title>
-
+{% extends 'header.html.twig' %}
+{% block javascripte %}{% endblock %}
 {% block body %}
-    <h1>Imputation index</h1>
+	<div class="content-wrapper">
+		<!-- Content Wrapper. Contains page content -->
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Commentaire</th>
-                <th>DateD</th>
-                <th>DateF</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for imputation in imputations %}
-            <tr>
-                <td>{{ imputation.id }}</td>
-                <td>{{ imputation.commentaire }}</td>
-                <td>{{ imputation.dateD ? imputation.dateD|date('Y-m-d') : '' }}</td>
-                <td>{{ imputation.dateF ? imputation.dateF|date('Y-m-d') : '' }}</td>
-                <td>
-                    <a href="{{ path('imputation_show', {'id': imputation.id}) }}">show</a>
-                    <a href="{{ path('imputation_edit', {'id': imputation.id}) }}">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="5">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+		<!-- Content Header (Page header) -->
+			<section class="content-header"> <div class="container-fluid">
+				<div class="row mb-2">
+					<div class="col-sm-6">
+						<h1 class="m-0" style="font-size:19px">Historique d'imputation</h1>
+					</div>
+					<div class="col-sm-6">
+						<ol class="breadcrumb float-sm-right">
+							<li class="breadcrumb-item">
+								<a href="/index">Accueil</a>
+							</li>
+							<li class="breadcrumb-item active">Imputation</li>
+						</ol>
+					</div>
+					<a style="float:right;" class="btn btn-primary" href="{{ path('imputation_new') }}">Faire une imputation</a>
+				</div>
+			</div>
+			<!-- /.container-fluid -->
 
-    <a href="{{ path('imputation_new') }}">Create new</a>
+		</section>
+
+		<!-- Main content -->
+		<section class="content">
+			<div
+				class="container-fluid">
+				<!-- Timelime example  -->
+				<div class="row">
+					<div
+						class="col-md-12">
+						<!-- The time line -->
+						<div class="timeline">
+							{% if app.user.roles == ["ROLE_USER"] %}
+								{% for imputation in imputations %}
+									{% if app.user.id == imputation.user.id %}
+										<!-- timeline time label -->
+										<div class="time-label">
+											<span class="bg-green">{{ imputation.dateD ? imputation.dateD|format_datetime('full', 'none', locale='fr')}}</span>
+										</div>
+										<!-- /.timeline-label -->
+										<!-- timeline item -->
+										<div>
+											<!--<i class="fas fa-user {{ random(['bg-green', 'bg-blue', 'bg-purple']) }}"></i>-->
+											<i class="fas fa-user bg-purple"></i>
+											<div class="timeline-item">
+												<span class="time">
+													<i class="fas fa-clock"></i>
+													{{ imputation.time|format_datetime('long', 'short', locale='fr') }}</span>
+												<h3 class="timeline-header">
+													<a href="#">{{ imputation.user.username }}</a>
+													{{ imputation.codeprojet.libelle }}
+													:
+													{{ imputation.codeprojet.description }}</h3>
+
+												<div class="timeline-body">
+													{{ imputation.commentaire }}
+												</div>
+												<div class="timeline-footer">
+													<a class="btn btn-info btn-sm" href="{{ path('imputation_edit', {'id': imputation.id}) }}">
+														<i class="fas fa-pencil-alt"></i>
+													</a>
+													<a class="btn">
+														{{ include('imputation/_delete_form.html.twig') }}
+													</a>
+												</div>
+											</div>
+										</div>
+										<!-- END timeline item -->
+										<!-- timeline time label -->
+										<div class="time-label">
+											<span class="bg-red">{{ imputation.dateF ? imputation.dateF|format_datetime('long', 'none', locale='fr')}}</span>
+										</div>
+									{% endif %}
+								{% else %}
+									<tr>
+										<td colspan="5">Aucune imputation trouvé</td>
+									</tr>
+								{% endfor %}
+							{% else %}
+								{% for imputation in imputations %}
+									<!-- timeline time label -->
+									<div class="time-label">
+										<span class="bg-green">{{ imputation.dateD ? imputation.dateD|format_datetime('full', 'none', locale='fr') }}</span>
+									</div>
+									<!-- /.timeline-label -->
+									<!-- timeline item -->
+									<div>
+										<!--<i class="fas fa-user {{ random(['bg-green', 'bg-blue', 'bg-purple']) }}"></i>-->
+										<i class="fas fa-user bg-purple"></i>
+										<div class="timeline-item">
+											<span class="time">
+												<i class="fas fa-clock"></i>
+												{{ imputation.time|format_datetime('long', 'short', locale='fr') }}</span>
+											<h3 class="timeline-header">
+												<a href="#">{{ imputation.user.username }}</a>
+												{{ imputation.codeprojet.libelle }}
+												:
+												{{ imputation.codeprojet.description }}</h3>
+
+											<div class="timeline-body">
+												{{ imputation.commentaire }}
+											</div>
+											{% if app.user.id ==  imputation.user.id %}
+												<div class="timeline-footer">
+													<a class="btn btn-info btn-sm" href="{{ path('imputation_edit', {'id': imputation.id}) }}">
+														<i class="fas fa-pencil-alt"></i>
+													</a>
+													<a class="btn">
+														{{ include('imputation/_delete_form.html.twig') }}
+													</a>
+												</div>
+											{% endif %}
+										</div>
+									</div>
+									<!-- END timeline item -->
+									<!-- timeline time label -->
+									<div class="time-label">
+										<span class="bg-red">{{ imputation.dateF ? imputation.dateF|format_datetime('long', 'none', locale='fr')}}</span>
+									</div>
+								{% else %}
+									<tr>
+										<td colspan="5">Aucune imputation trouvé</td>
+									</tr>
+								{% endfor %}
+								<div>
+									<i class="fas fa-clock bg-gray"></i>
+								</div>
+							{% endif %}
+							<!-- /.timeline-label -->
+
+						</div>
+					</div>
+					<!-- /.col -->
+				</div>
+			</div>
+			<!-- /.timeline -->
+		</section>
+		<!-- /.content -->
+	</div>
+	<!-- /.content-wrapper -->
 {% endblock %}
