@@ -81,7 +81,7 @@
 			<div
 				class="container-fluid">
 				<!-- ./card-body -->
-				<div class="card-footer">
+				<div class="card-footer-index">
 					<div class="row">
 						<div
 							class="col-lg-3 col-6">
@@ -90,13 +90,13 @@
 								<div class="inner">
 									<h3>{{userA}}</h3>
 
-									<p>Nombre de collaborateurs</p>
+									<p>Nombres de <br>collaborateurs</p>
 								</div>
 								<div class="icon">
 									<i class="ion ion-person-add"></i>
 								</div>
-								<a href="https://127.0.0.1:8000/user" class="small-box-footer">En savoir plus
-									<i class="fas fa-arrow-circle-right"></i>
+								<a href="https://127.0.0.1:8000/user" class="small-box-footer">+
+									
 								</a>
 							</div>
 						</div>
@@ -108,15 +108,15 @@
 								<div class="inner">
 									<h3>{{Cout100|number_format(0)}}<sup style="font-size: 20px">%</sup>
 									</h3>
-									<p>Budget total restant:
+									<p>Budget total restant: <br>
 										{{CoutR|number_format(0)}}
 										DH</p>
 								</div>
 								<div class="icon">
 									<i class="ion ion-cash"></i>
 								</div>
-								<a href="/projet" class="small-box-footer">En savoir plus
-									<i class="fas fa-arrow-circle-right"></i>
+								<a href="/projet" class="small-box-footer">+
+								
 								</a>
 							</div>
 						</div>
@@ -128,14 +128,15 @@
 								<div class="inner">
 									<h3>{{PStatue100|number_format(0)}}<sup style="font-size: 20px">%</h3>
 
-										<p>Projet achever:
+										<p>Projet achevé:
 											{{PStatueF}}</p>
+											<br>
 									</div>
 									<div class="icon">
 										<i class="ion ion-pie-graph"></i>
 									</div>
-									<a href="/projet" class="small-box-footer">En savoir plus
-										<i class="fas fa-arrow-circle-right"></i>
+									<a href="/projet" class="small-box-footer">+
+										
 									</a>
 								</div>
 							</div>
@@ -147,14 +148,14 @@
 									<div class="inner">
 										<h3>{{codeStatue100|number_format(0)}}<sup style="font-size: 20px">%</h3>
 
-											<p>Code projet achever:
-												{{codeStatueF}}</p>
+											<p>Code projet achevé:
+												{{codeStatueF}}</p><br>
 										</div>
 										<div class="icon">
 											<i class="ion ion-stats-bars"></i>
 										</div>
-										<a href="/projet" class="small-box-footer">En savoir plus
-											<i class="fas fa-arrow-circle-right"></i>
+										<a href="/projet" class="small-box-footer">+
+											
 										</a>
 									</div>
 								</div>
@@ -263,4 +264,12 @@
 				<!-- /.content -->
 			</div>
 			<!-- /.content-wrapper -->
+			<!-- Main Footer -->
+			<footer
+				class="main-footer">
+				<!-- Default to the left -->
+				Copyright &copy;
+				<strong>Bouygues Telecom</strong>
+				| Tous les droits sont réservés.
+			</footer>
 		{% endblock %}
