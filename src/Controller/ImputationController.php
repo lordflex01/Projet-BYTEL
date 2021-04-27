@@ -35,7 +35,7 @@ class ImputationController extends AbstractController
         $form->handleRequest($request);
         // Définir le nouveau fuseau horaire
         date_default_timezone_set('Europe/Paris');
-        $date = date('d-m-y h:i:s');
+        $date = date('Y-m-d h:i:s');
 
         if ($form->isSubmitted() && $form->isValid()) {
             $imputation->setTime($date);
@@ -71,7 +71,7 @@ class ImputationController extends AbstractController
         $form->handleRequest($request);
         // Définir le nouveau fuseau horaire
         date_default_timezone_set('Europe/Paris');
-        $date = date('d-m-y h:i:s');
+        $date = date('Y-m-d h:i:s');
 
         if ($form->isSubmitted() && $form->isValid()) {
             $imputation->setTime($date);
