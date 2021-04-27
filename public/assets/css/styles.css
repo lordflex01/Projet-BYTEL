@@ -19525,7 +19525,6 @@ a.close.disabled, a.disabled.mailbox-attachment-close {
   margin-bottom: 20px;
   position: relative;
 }
-
 .small-box > .inner {
   padding: 10px;
 }
@@ -19610,8 +19609,8 @@ a.close.disabled, a.disabled.mailbox-attachment-close {
 }
 
 .small-box .icon > i.fa, .small-box .icon > i.fas, .small-box .icon > i.far, .small-box .icon > i.fab, .small-box .icon > i.fal, .small-box .icon > i.fad, .small-box .icon > i.ion {
-  font-size: 70px;
-  top: 20px;
+  font-size: 49px;
+    top: 14px;
 }
 
 .small-box .icon svg {
