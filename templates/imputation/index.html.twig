@@ -98,6 +98,7 @@
 												{{ imputation.time|format_datetime('long', 'short', locale='fr') }}</span>
 											<h3 class="timeline-header">
 												<a href="#">{{ imputation.user.username }}</a>
+												[{{ imputation.codeprojet.projet.libelle }}]
 												{{ imputation.codeprojet.libelle }}
 												:
 												{{ imputation.codeprojet.description }}</h3>

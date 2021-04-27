@@ -1,10 +1,66 @@
 {% extends 'header.html.twig' %}
 
 {% block body %}
+	<!--DEBUT declaration-->
+	{% set codeStatueF = 0 %}
+	{% set codeStatueT = 0 %}
+	{% set codeStatue100 = 0 %}
+	{% set CoutR = 0 %}
+	{% set CoutT = 0 %}
+	{% set Cout100 = 0 %}
+	<!--FIN declaration-->
+
+	<!--DEBUT calcule des stistiques Codes projets-->
+		{% for code_projet in code_projets %}
+		<!--DEBUT calcule des statuts Codes projets-->
+		{% set codeStatueT = codeStatueT  + 1 %}
+				{% if code_projet.statut == 'yes' %}
+			{% else %}
+				{% set codeStatueF = codeStatueF  + 1 %}
+		{% endif %}
+		<!--FIN calcule des statuts Codes projets-->
+
+		<!--DEBUT calcule des Budgets-->
+		{% set difference = date(code_projet.DateF).diff(date(code_projet.dateD)) %}
+		{% set jourTotal = difference.days %}
+		{% set difference1 = date(code_projet.DateF).diff(date("now"|date("Y-m-d"))) %}
+		{% set jourRestant = difference1.days %}
+		{% set budg = (jourRestant*code_projet.budget) / jourTotal %}
+		{% if date("now"|date("Y-m-d")) > code_projet.DateF %}
+			{% set budg = 0 %}
+		{% endif %}
+		{% set CoutT = CoutT + code_projet.budget %}
+		{% set CoutR = CoutR + budg %}
+		<!--FIN calcule des Budgets-->
+	{% endfor %}
+
+	{% set Cout100 = (CoutR*100)/CoutT %}
+	{% set codeStatue100 = (codeStatueF*100)/codeStatueT %}
+
+	<!--DEBUT calcule des statuts projets-->
+	{% set PStatueF = 0 %}
+	{% set PStatueT = 0 %}
+	{% set PStatue100 = 0 %}
+	{% for projet in projets %}
+		{% set PStatueT = PStatueT  + 1 %}
+		{% if projet.statut == 'yes' %}
+			{% else %}
+				{% set PStatueF = PStatueF  + 1 %}
+		{% endif %}
+	{% endfor %}
+	{% set PStatue100 = (PStatueF*100)/PStatueT %}
+	<!--FIN calcule des statuts projets-->
+
+	<!--DEBUT calcule des collaboreteurs-->
+	{% set userA = 0 %}
+		{% for user in users %}
+	{% set userA = userA + 1 %}
+	{% endfor %}
+	<!--DEBUT calcule des collaboreteurs-->
+
 	<!-- Content Wrapper. Contains page content -->
-	<div
-		class="content-wrapper">
-		<!-- Content Header (Page header) -->
+		<div
+		class="content-wrapper"> <!-- Content Header (Page header) -->
 		<div class="content-header">
 			<div class="container-fluid">
 				<div class="row mb-2">
@@ -27,163 +83,184 @@
 				<!-- ./card-body -->
 				<div class="card-footer">
 					<div class="row">
-						<div class="col-sm-3 col-6">
-							<div class="description-block border-right">
-								<span class="description-percentage text-success">
-									<i class="fas fa-caret-up"></i>
-									17%
-								</span>
-								<h5 class="description-header">
-									$35,210.43
-								</h5>
-								<span class="description-text">REVENU TOTAL</span>
+						<div
+							class="col-lg-3 col-6">
+							<!-- small box -->
+							<div class="small-box bg-info">
+								<div class="inner">
+									<h3>{{userA}}</h3>
+
+									<p>Nombre de collaborateurs</p>
+								</div>
+								<div class="icon">
+									<i class="ion ion-person-add"></i>
+								</div>
+								<a href="https://127.0.0.1:8000/user" class="small-box-footer">En savoir plus
+									<i class="fas fa-arrow-circle-right"></i>
+								</a>
 							</div>
-							<!-- /.description-block -->
 						</div>
-						<!-- /.col -->
-						<div class="col-sm-3 col-6">
-							<div class="description-block border-right">
-								<span class="description-percentage text-warning">
-									<i class="fas fa-caret-left"></i>
-									0%
-								</span>
-								<h5 class="description-header">
-									$10,390.90
-								</h5>
-								<span class="description-text">COÛT TOTAL</span>
-							</div>
-							<!-- /.description-block -->
-						</div>
-						<!-- /.col -->
-						<div class="col-sm-3 col-6">
-							<div class="description-block border-right">
-								<span class="description-percentage text-success">
-									<i class="fas fa-caret-up"></i>
-									20%
-								</span>
-								<h5 class="description-header">
-									$24,813.53
-								</h5>
-								<span class="description-text">BÉNÉFICE TOTAL</span>
-							</div>
-							<!-- /.description-block -->
-						</div>
-						<!-- /.col -->
-						<div class="col-sm-3 col-6">
-							<div class="description-block">
-								<span class="description-percentage text-danger">
-									<i class="fas fa-caret-down"></i>
-									18%
-								</span>
-								<h5 class="description-header">
-									1200
-								</h5>
-								<span class="description-text">ACHÈVEMENT DES OBJECTIFS</span>
-							</div>
-							<!-- /.description-block -->
-						</div>
-					</div>
-					<!-- /.row -->
-				</div>
-				<!-- /.card-footer -->
-				<br>
-				<div class="row">
-					<div class="col-lg-6">
-						<div class="card">
-							<div class="card-header border-0">
-								<div class="d-flex justify-content-between">
-									<h3 class="card-title">
-										Visiteurs en ligne
+						<!-- ./col -->
+						<div
+							class="col-lg-3 col-6">
+							<!-- small box -->
+							<div class="small-box bg-success">
+								<div class="inner">
+									<h3>{{Cout100|number_format(0)}}<sup style="font-size: 20px">%</sup>
 									</h3>
-									<a href="javascript:void(0);">Voir le rapport</a>
+									<p>Budget total restant:
+										{{CoutR|number_format(0)}}
+										DH</p>
 								</div>
-							</div>
-							<div class="card-body">
-								<div class="d-flex">
-									<p class="d-flex flex-column">
-										<span class="text-bold text-lg">820</span>
-										<span>Visiteurs au fil du temps</span>
-									</p>
-									<p class="ml-auto d-flex flex-column text-right">
-										<span class="text-success">
-											<i class="fas fa-arrow-up"></i>
-											12.5%
-										</span>
-										<span class="text-muted">Depuis la semaine dernière</span>
-									</p>
+								<div class="icon">
+									<i class="ion ion-cash"></i>
 								</div>
-								<!-- /.d-flex -->
-
-								<div class="position-relative mb-4">
-									<canvas id="visitors-chart" height="200"></canvas>
-								</div>
-
-								<div class="d-flex flex-row justify-content-end">
-									<span class="mr-2">
-										<i class="fas fa-square text-primary"></i>
-										Cette semaine
-									</span>
-
-									<span>
-										<i class="fas fa-square text-gray"></i>
-										Semaine dernière</span>
-								</div>
+								<a href="/projet" class="small-box-footer">En savoir plus
+									<i class="fas fa-arrow-circle-right"></i>
+								</a>
 							</div>
 						</div>
-						<!-- /.card -->
-					</div>
-					<!-- /.col-md-6 -->
-					<div class="col-lg-6">
-						<div class="card">
-							<div class="card-header border-0">
-								<div class="d-flex justify-content-between">
-									<h3 class="card-title">
-										Ventes
-									</h3>
-									<a href="javascript:void(0);">Voir le rapport</a>
+						<!-- ./col -->
+						<div
+							class="col-lg-3 col-6">
+							<!-- small box -->
+							<div class="small-box bg-warning">
+								<div class="inner">
+									<h3>{{PStatue100|number_format(0)}}<sup style="font-size: 20px">%</h3>
+
+										<p>Projet achever:
+											{{PStatueF}}</p>
+									</div>
+									<div class="icon">
+										<i class="ion ion-pie-graph"></i>
+									</div>
+									<a href="/projet" class="small-box-footer">En savoir plus
+										<i class="fas fa-arrow-circle-right"></i>
+									</a>
 								</div>
 							</div>
-							<div class="card-body">
-								<div class="d-flex">
-									<p class="d-flex flex-column">
-										<span class="text-bold text-lg">$18,230.00</span>
-										<span>Ventes au fil du temps</span>
-									</p>
-									<p class="ml-auto d-flex flex-column text-right">
-										<span class="text-success">
-											<i class="fas fa-arrow-up"></i>
-											33.1%
-										</span>
-										<span class="text-muted">Depuis le mois dernier</span>
-									</p>
-								</div>
-								<!-- /.d-flex -->
+							<!-- ./col -->
+							<div
+								class="col-lg-3 col-6">
+								<!-- small box -->
+								<div class="small-box bg-danger">
+									<div class="inner">
+										<h3>{{codeStatue100|number_format(0)}}<sup style="font-size: 20px">%</h3>
 
-								<div class="position-relative mb-4">
-									<canvas id="sales-chart" height="200"></canvas>
+											<p>Code projet achever:
+												{{codeStatueF}}</p>
+										</div>
+										<div class="icon">
+											<i class="ion ion-stats-bars"></i>
+										</div>
+										<a href="/projet" class="small-box-footer">En savoir plus
+											<i class="fas fa-arrow-circle-right"></i>
+										</a>
+									</div>
 								</div>
-
-								<div class="d-flex flex-row justify-content-end">
-									<span class="mr-2">
-										<i class="fas fa-square text-primary"></i>
-										Cette année
-									</span>
-
-									<span>
-										<i class="fas fa-square text-gray"></i>
-										L'année dernière</span>
-								</div>
+								<!-- ./col -->
 							</div>
+							<!-- /.row -->
 						</div>
-						<!-- /.card -->
+						<!-- /.card-footer -->
+						<br>
+						<div class="row">
+							<div class="col-lg-6">
+								<div class="card">
+									<div class="card-header border-0">
+										<div class="d-flex justify-content-between">
+											<h3 class="card-title">
+												Visiteurs en ligne
+											</h3>
+											<a href="javascript:void(0);">Voir le rapport</a>
+										</div>
+									</div>
+									<div class="card-body">
+										<div class="d-flex">
+											<p class="d-flex flex-column">
+												<span class="text-bold text-lg">820</span>
+												<span>Visiteurs au fil du temps</span>
+											</p>
+											<p class="ml-auto d-flex flex-column text-right">
+												<span class="text-success">
+													<i class="fas fa-arrow-up"></i>
+													12.5%
+												</span>
+												<span class="text-muted">Depuis la semaine dernière</span>
+											</p>
+										</div>
+										<!-- /.d-flex -->
+
+										<div class="position-relative mb-4">
+											<canvas id="visitors-chart" height="200"></canvas>
+										</div>
+
+										<div class="d-flex flex-row justify-content-end">
+											<span class="mr-2">
+												<i class="fas fa-square text-primary"></i>
+												Cette semaine
+											</span>
+
+											<span>
+												<i class="fas fa-square text-gray"></i>
+												Semaine dernière</span>
+										</div>
+									</div>
+								</div>
+								<!-- /.card -->
+							</div>
+							<!-- /.col-md-6 -->
+							<div class="col-lg-6">
+								<div class="card">
+									<div class="card-header border-0">
+										<div class="d-flex justify-content-between">
+											<h3 class="card-title">
+												Avancement des projets
+											</h3>
+											<a href="/projet">Voir les projet</a>
+										</div>
+									</div>
+									<div class="card-body">
+										<div class="d-flex">
+											<p class="d-flex flex-column">
+												<span class="text-bold text-lg">$18,230.00</span>
+												<span>Ventes au fil du temps</span>
+											</p>
+											<p class="ml-auto d-flex flex-column text-right">
+												<span class="text-success">
+													<i class="fas fa-arrow-up"></i>
+													33.1%
+												</span>
+												<span class="text-muted">Depuis le mois dernier</span>
+											</p>
+										</div>
+										<!-- /.d-flex -->
+
+										<div class="position-relative mb-4">
+											<canvas id="sales-chart" height="200"></canvas>
+										</div>
+
+										<div class="d-flex flex-row justify-content-end">
+											<span class="mr-2">
+												<i class="fas fa-square text-primary"></i>
+												Cette année
+											</span>
+
+											<span>
+												<i class="fas fa-square text-gray"></i>
+												L'année dernière</span>
+										</div>
+									</div>
+								</div>
+								<!-- /.card -->
+							</div>
+							<!-- /.col-md-6 -->
+						</div>
+						<!-- /.row -->
 					</div>
-					<!-- /.col-md-6 -->
+					<!-- /.container-fluid -->
 				</div>
-				<!-- /.row -->
+				<!-- /.content -->
 			</div>
-			<!-- /.container-fluid -->
-		</div>
-		<!-- /.content -->
-	</div>
-	<!-- /.content-wrapper -->
-{% endblock %}
+			<!-- /.content-wrapper -->
+		{% endblock %}
