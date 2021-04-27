@@ -87,12 +87,41 @@
 							<i class="fas fa-expand-arrows-alt"></i>
 						</a>
 					</li>
-					<li class="nav-item">
-						<a class="nav-link" href="{{ path('app_logout') }}">
-							<i class="fas fa-sign-out-alt"></i>
-							Déconnexion
-						</a>
+					<div class="user-panel-icon-navbar">
+							<a class="nav-link">
+								<img src="{{asset ('/uploads/' ~ app.user.image.name)}}" class="img-circle-navbar" alt="Image" width="30">
+							</a>
 
+						</div>
+					<li class="nav-item dropdown">
+						<a id="dropdownSubMenu1" href="" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link dropdown-toggle">{{ app.user.username }}</a>
+
+						<ul aria-labelledby="dropdownSubMenu1" class="dropdown-menu">
+							<li class="nav-item">
+								<a class="nav-link" href="">
+									<i class="fa fa-user" aria-hidden="true"></i>
+									&nbsp;Profil
+								</a>
+
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" href="">
+									<i class="fa fa-envelope" aria-hidden="true"></i>
+										&nbsp;Messages
+								</a>
+
+							</li>
+							<li class="dropdown-divider"></li>
+
+							<li class="nav-item">
+								<a class="nav-link" href="{{ path('app_logout') }}">
+									<i class="fa fa-power-off" aria-hidden="true"></i>
+										&nbsp;Déconnexion
+								</a>
+
+							</li>
+							<!-- End Level two -->
+						</ul>
 					</li>
 				</ul>
 			</nav>
@@ -122,7 +151,7 @@
 							<a href="" class="d-block">{{ app.user.username }}</a>
 							<a href="" class="d-block">
 								{% if app.user.roles  == ["ROLE_USER"]%}
-									Collaborateurs
+									Utilisateur
 								{% else %}
 									Administrateur
 								{% endif %}
@@ -163,13 +192,13 @@
 									</a>
 									<ul class="nav nav-treeview">
 										<li class="nav-item">
-											<a href="./index" class="nav-link active">
+											<a href="./index.html" class="nav-link active">
 												<i class="far 	fa-circle nav-icon"></i>
 												<p>Analyse des problèmes</p>
 											</a>
 										</li>
 										<li class="nav-item">
-											<a href="./index" class="nav-link">
+											<a href="./index2.html" class="nav-link">
 												<i class="far fa-circle nav-icon"></i>
 												<p>Prévisions / Gestion</p>
 											</a>
@@ -179,49 +208,41 @@
 								</li>
 							</li>
 							<li class="nav-item">
-								{% if app.request.uri  == 'https://127.0.0.1:8000/calendar' %}
-									<a href="/calendar" class="nav-link active">
-									{% else %}
-										<a href="/calendar" class="nav-link">
-										{% endif %}
-										<i class="nav-icon far fa-calendar-alt"></i>
-										<p>
-											Planification
-										</p>
-									</a>
-								</li>
-								<!-- Menu utilisateur avec condition  !-->
-								{% if is_granted('ROLE_ADMIN') %}
-									<li class="nav-item">
-										{% if app.request.uri  == 'https://127.0.0.1:8000/user/' %}
-											<a href="https://127.0.0.1:8000/user" class="nav-link active">
-											{% else %}
-												<a href="https://127.0.0.1:8000/user" class="nav-link">
-												{% endif %}
-												<i class="nav-icon fas fa-users"></i>
-												<p>
-													Collaborateurs
-												</p>
-											</a>
-										</li>
-									{% endif %}
-								</li>
+								<a href="/calendar" class="nav-link">
+									<i class="nav-icon far fa-calendar-alt"></i>
+									<p>
+										Planification
+									</p>
+								</a>
 							</li>
-							<li class="nav-item">
-								{% if app.request.uri  == 'https://127.0.0.1:8000/projet/' %}
-									<a href="/projet" class="nav-link active">
-									{% else %}
-										<a href="/projet" class="nav-link">
-										{% endif %}
-										<i class="nav-icon fas fa-tasks"></i>
-										<p>
-											Projets
-										</p>
-									</a>
-								</li>
+							<!-- Menu utilisateur avec condition  !-->
+							{% if is_granted('ROLE_ADMIN') %}
+								<li class="nav-item">
+									{% if app.request.uri  == 'https://127.0.0.1:8000/user/' %}
+										<a href="https://127.0.0.1:8000/user" class="nav-link active">
+										{% else %}
+											<a href="https://127.0.0.1:8000/user" class="nav-link">
+											{% endif %}
+											<i class="nav-icon fas fa-users"></i>
+											<p>
+												Collaborateurs
+											</p>
+										</a>
+									</li>
+								{% endif %}
 							</li>
+
 							<li class="nav-item">
-								<a href="/imputation" class="nav-link">
+								<a href="/projet" class="nav-link">
+									<i class="nav-icon fas fa-tasks"></i>
+									<p>
+										Projets
+									</p>
+								</a>
+							</li>
+
+							<li class="nav-item">
+								<a href="/pointage" class="nav-link">
 									<i class="nav-icon far fa-calendar-check"></i>
 									<p>
 										Pointage
@@ -229,56 +250,43 @@
 								</a>
 							</li>
 							<li class="nav-item">
-								{% if app.request.uri  == 'https://127.0.0.1:8000/contact' %}
-									<a href="/contact" class="nav-link active">
-									{% else %}
-										<a href="/contact" class="nav-link">
-										{% endif %}
-										<i class="nav-icon far fa-envelope-open"></i>
-										<p>
-											Contact
-										</p>
-									</a>
-								</li>
+								<a href="/contact" class="nav-link">
+									<i class="nav-icon far fa-envelope-open"></i>
+									<p>
+										Contact
+									</p>
+								</a>
 							</li>
-						</ul>
-					</nav>
-					<!-- /.sidebar-menu -->
-				</div>
-				<!-- /.sidebar -->
+						</li>
+					</ul>
+				</nav>
+				<!-- /.sidebar-menu -->
+			</div>
+			<!-- /.sidebar -->
 
-			</aside>
-			{% block body %}{% endblock %}
-			<!-- Main Footer -->
-			<footer
-				class="main-footer">
-				<!-- Default to the left -->
-				Copyright &copy;
-				<strong>
-					Bouygues Telecom
-				</strong>
-				| Tous les droits sont réservés.
-			</footer>
+		</aside>
+		{% block body %}{% endblock %}
 
-			{% block javascripts %}
-				<!-- jQuery -->
-				<script src="{{asset ("assets/plugins/jquery/jquery.js")}}"></script>
-				<!-- Bootstrap 4 -->
-				<script src="{{asset ("assets/plugins/bootstrap/js/bootstrap.js")}}"></script>
-				<!-- AdminLTE App -->
-				<!-- overlayScrollbars -->
-				<script src="{{asset ("assets/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js")}}"></script>
-				<script src="{{asset ("assets/js/adminlte.js")}}"></script>
-				<!-- OPTIONAL SCRIPTS -->
-				<script src="{{asset ("assets/plugins/chart.js/Chart.min.js")}}"></script>
-				<!-- AdminLTE dashboard demo (This is only for demo purposes) -->
-				<script src="{{asset ("assets/js/pages/dashboard3.js")}}"></script>
 
-				<!-- fullCalendar 2.2.5 -->
-				<script src="{{asset ("assets/plugins/moment/moment.min.js")}}"></script>
-				<script src="{{asset ("assets/plugins/fullcalendar/main.js")}}"></script>
-				<script>
-					$(function () { /* initialize the external events
+		{% block javascripts %}
+			<!-- jQuery -->
+			<script src="{{asset ("assets/plugins/jquery/jquery.js")}}"></script>
+			<!-- Bootstrap 4 -->
+			<script src="{{asset ("assets/plugins/bootstrap/js/bootstrap.js")}}"></script>
+			<!-- AdminLTE App -->
+			<!-- overlayScrollbars -->
+			<script src="{{asset ("assets/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js")}}"></script>
+			<script src="{{asset ("assets/js/adminlte.js")}}"></script>
+			<!-- OPTIONAL SCRIPTS -->
+			<script src="{{asset ("assets/plugins/chart.js/Chart.min.js")}}"></script>
+			<!-- AdminLTE dashboard demo (This is only for demo purposes) -->
+			<script src="{{asset ("assets/js/pages/dashboard3.js")}}"></script>
+
+			<!-- fullCalendar 2.2.5 -->
+			<script src="{{asset ("assets/plugins/moment/moment.min.js")}}"></script>
+			<script src="{{asset ("assets/plugins/fullcalendar/main.js")}}"></script>
+			<script>
+				$(function () { /* initialize the external events
      -----------------------------------------------------------------*/
 function ini_events(ele) {
 ele.each(function () {
@@ -430,8 +438,7 @@ ini_events(event)
 $('#new-event').val('')
 })
 })
-				</script>
-			{% endblock %}
-		</body>
+			</script>
+		{% endblock %}
 	</body>
 </html></body></html></body></html>
