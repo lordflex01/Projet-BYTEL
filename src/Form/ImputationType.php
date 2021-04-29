@@ -10,6 +10,8 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 
 class ImputationType extends AbstractType
 {
@@ -21,8 +23,12 @@ class ImputationType extends AbstractType
                     'placeholder' => "Veuillez entrer votre commentaire"
                 ]
             ])
-            ->add('dateD')
-            ->add('dateF')
+            ->add('dateD', DateTimeType::class, [
+                'widget' => 'single_text',
+            ])
+            ->add('dateF', DateType::class, [
+                'widget' => 'single_text',
+            ])
             ->add('codeprojet', EntityType::class, [
                 'required' => true,
                 'multiple' => false,

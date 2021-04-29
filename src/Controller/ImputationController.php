@@ -20,10 +20,35 @@ class ImputationController extends AbstractController
      */
     public function index(ImputationRepository $imputationRepository): Response
     {
+        $imputation = [];
+        $color = array('#f39c12', '#f56954', '#0073b7', '#00c0ef', '#00a65a');
+        $i = 0;
+        $events = $imputationRepository->findAll();
+        foreach ($events as $event) {
+            if ($i == 5)
+                $i = 0;
+
+            $title = $event->getUser()->getUsername() . ' ' . '[' . $event->getCodeprojet()->getProjet()->getLibelle() . '] ' . $event->getCodeprojet()->getLibelle() . ': ' . $event->getCommentaire();
+            $imputation[] = [
+                'id' => $event->getId(),
+                'start' => $event->getDateD()->format('Y-m-d'),
+                'end' => $event->getDateF()->format('Y-m-d'),
+                'title' => $title,
+                'backgroundColor' => $color[$i],
+                'borderColor' => $color[$i],
+            ];
+            $i = $i + 1;
+        }
+
+        $data = json_encode($imputation);
+
         return $this->render('imputation/index.html.twig', [
+            'datas' => $data,
             'imputations' => $imputationRepository->findAll(),
+
         ]);
     }
+
     /**
      * @Route("/new", name="imputation_new", methods={"GET","POST"})
      */

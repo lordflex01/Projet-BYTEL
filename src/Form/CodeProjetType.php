@@ -37,8 +37,12 @@ class CodeProjetType extends AbstractType
                     'placeholder' => "Veuillez entrer votre budget"
                 ]
             ])
-            ->add('dateD', DateType::class)
-            ->add('DateF', DateType::class)
+            ->add('dateD', DateType::class, [
+                'widget' => 'single_text',
+            ])
+            ->add('DateF', DateType::class, [
+                'widget' => 'single_text',
+            ])
 
             ->add('projet', EntityType::class, [
                 'required' => true,
