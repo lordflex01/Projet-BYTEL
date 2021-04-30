@@ -1,0 +1,59 @@
+{% extends 'header.html.twig' %}
+{% block javascripts %}
+	<!-- jQuery -->
+	<script src="{{asset ("assets/plugins/jquery/jquery.min.js")}}"></script>
+	<!-- Bootstrap 4 -->
+	<script src="{{asset ("assets/plugins/bootstrap/js/bootstrap.js")}}"></script>
+	<!-- overlayScrollbars -->
+	<script src="{{asset ("assets/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js")}}"></script>
+	<script src="{{asset ("assets/js/AdminLTE.js")}}"></script>
+	<!-- OPTIONAL SCRIPTS -->
+	<script src="{{asset ("assets/plugins/chart.js/Chart.min.js")}}"></script>
+	<!-- AdminLTE dashboard demo (This is only for demo purposes) -->
+	<script src="{{asset ("assets/js/pages/dashboard3.js")}}"></script>
+	<script src="{{asset ("assets/js/impCal/lib/main.js")}}"></script>
+	<script>
+
+		document.addEventListener('DOMContentLoaded', function () {
+var calendarEl = document.getElementById('calendar');
+
+var calendar = new FullCalendar.Calendar(calendarEl, {
+locale: "fr",
+scrollTime: '00:00', // undo default 6am scrollTime
+editable: true, // enable draggable events
+selectable: true,
+aspectRatio: 1.8,
+headerToolbar: {
+left: 'today prev,next',
+center: 'title',
+right: 'resourceTimelineDay,timeGridWeek,dayGridMonth,listWeek'
+},
+initialView: 'resourceTimelineDay',
+resourceAreaHeaderContent: 'Collaborateurs',
+resources: {{ uses | raw }},
+events: {{ datas | raw }}
+});
+
+calendar.render();
+});
+	</script>
+{% endblock %}
+{% block body %}
+	<!--{{ dump(datas) }}-->
+	<!--{{ dump(uses) }}-->
+	<!-- Content Wrapper. Contains page content -->
+		<div
+		class="content-wrapper"> <!-- Content Header (Page header) -->
+		<section class="content-header">
+			<div class="container-fluid">
+				<div class="row mb-2">
+					<div class="col-sm-6">
+						<h1>Calendrier</h1>
+					</div>
+				</div>
+
+				<div id='calendar'></div>
+			</div>
+		</section>
+	</div>
+{% endblock %}

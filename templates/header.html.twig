@@ -17,20 +17,13 @@
 			<link
 			rel="stylesheet" href="{{asset ("assets/plugins/overlayScrollbars/css/OverlayScrollbars.min.css")}}">
 			<!-- css starter page -->
-			<link
-			rel="stylesheet" href="{{asset ("assets/css/styles.css")}}">
+			<link rel="stylesheet" href="{{asset ("assets/css/styles.css")}}">
 			<!-- css calendar -->
+			<!-- css imputation calendar -->
 			<link
-			rel="stylesheet" href="{{asset ("assets/css/calendar.css")}}">
-			<!-- Ionicons -->
+			rel='stylesheet' href="{{asset ("assets/js/impCal/lib/main.css")}}"> <!-- Ionicons -->
 			<link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
 
-			<style>
-				#calendrier {
-					width: 80%;
-					margin: auto;
-				}
-			</style>
 
 		{% endblock %}
 	</head>
@@ -110,16 +103,9 @@
 
 						<ul aria-labelledby="dropdownSubMenu1" class="dropdown-menu">
 							<li class="nav-item">
-								<a class="nav-link" href="">
+								<a class="nav-link" href="/profil">
 									<i class="fa fa-user" aria-hidden="true"></i>
 									&nbsp;Profil
-								</a>
-
-							</li>
-							<li class="nav-item">
-								<a class="nav-link" href="">
-									<i class="fa fa-envelope" aria-hidden="true"></i>
-									&nbsp;Messages
 								</a>
 
 							</li>
@@ -154,14 +140,14 @@
 					<!-- Sidebar user panel (optional) -->
 					<div class="user-panel mt-3 pb-3 mb-3 d-flex">
 						<div class="user-panel-icon">
-							<a class="nav-link">
+							<a class="nav-link" href="/profil">
 								<img src="{{asset ('/uploads/' ~ app.user.image.name)}}" class="img-circle elevation-2" alt="Image" width="30">
 							</a>
 
 						</div>
 						<div class="info">
-							<a href="" class="d-block">{{ app.user.username }}</a>
-							<a href="" class="d-block">
+							<a href="/profil" class="d-block">{{ app.user.username }}</a>
+							<a href="/profil" class="d-block">
 								{% if app.user.roles  == ["ROLE_USER"]%}
 									Utilisateur
 								{% else %}
@@ -196,7 +182,6 @@
 										<a href="/index" class="nav-link">
 										{% endif %}
 										<i class="nav-icon fas fa-home"></i>
-										<!--<i class="nav-icon fas fa-tachometer-alt"></i>-->
 										<p>
 											Accueil
 											<i class="right fas fa-angle-left"></i>
@@ -204,15 +189,15 @@
 									</a>
 									<ul class="nav nav-treeview">
 										<li class="nav-item">
-											<a href="./index.html" class="nav-link active">
+											<a href="/index" class="nav-link active">
 												<i class="far 	fa-circle nav-icon"></i>
-												<p>Analyse des problèmes</p>
+												<p>Rapports / Statistiques</p>
 											</a>
 										</li>
 										<li class="nav-item">
-											<a href="./index2.html" class="nav-link">
+											<a href="/analyseProb" class="nav-link">
 												<i class="far fa-circle nav-icon"></i>
-												<p>Prévisions / Gestion</p>
+												<p>Analyse des problèmes</p>
 											</a>
 										</li>
 
@@ -231,9 +216,9 @@
 							{% if is_granted('ROLE_ADMIN') %}
 								<li class="nav-item">
 									{% if app.request.uri  == 'https://127.0.0.1:8000/user/' %}
-										<a href="https://127.0.0.1:8000/user" class="nav-link active">
+										<a href="/user" class="nav-link active">
 										{% else %}
-											<a href="https://127.0.0.1:8000/user" class="nav-link">
+											<a href="/user" class="nav-link">
 											{% endif %}
 											<i class="nav-icon fas fa-users"></i>
 											<p>
@@ -252,14 +237,18 @@
 									</p>
 								</a>
 							</li>
-
 							<li class="nav-item">
-								<a href="/imputation" class="nav-link">
-									<i class="nav-icon far fa-calendar-check"></i>
-									<p>
-										Pointage
-									</p>
-								</a>
+								{% if app.request.uri  == 'https://127.0.0.1:8000/imputation' %}
+									<a href="/imputation" class="nav-link active">
+									{% else %}
+										<a href="/imputation" class="nav-link">
+										{% endif %}
+										<i class="nav-icon fas fa-calendar-check"></i>
+										<p>
+											Imputation
+										</p>
+									</a>
+								</li>
 							</li>
 							<li class="nav-item">
 								<a href="/contact" class="nav-link">
@@ -287,12 +276,11 @@
 			<script src="{{asset ("assets/plugins/bootstrap/js/bootstrap.js")}}"></script>
 			<!-- overlayScrollbars -->
 			<script src="{{asset ("assets/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js")}}"></script>
-			<script src="{{asset ("assets/js/adminlte.js")}}"></script>
+			<script src="{{asset ("assets/js/AdminLTE.js")}}"></script>
 			<!-- OPTIONAL SCRIPTS -->
 			<script src="{{asset ("assets/plugins/chart.js/Chart.min.js")}}"></script>
 			<!-- AdminLTE dashboard demo (This is only for demo purposes) -->
 			<script src="{{asset ("assets/js/pages/dashboard3.js")}}"></script>
-
 		{% endblock %}
 	</body>
 </html>
