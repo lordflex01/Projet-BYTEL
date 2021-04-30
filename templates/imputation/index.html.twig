@@ -1,14 +1,51 @@
 {% extends 'header.html.twig' %}
-{% block javascripte %}{% endblock %}
-{% block body %}
-	<div class="content-wrapper">
-		<!-- Content Wrapper. Contains page content -->
+{% block javascripts %}
+	<!-- jQuery -->
+	<script src="{{asset ("assets/plugins/jquery/jquery.min.js")}}"></script>
+	<!-- Bootstrap 4 -->
+	<script src="{{asset ("assets/plugins/bootstrap/js/bootstrap.js")}}"></script>
+	<!-- overlayScrollbars -->
+	<script src="{{asset ("assets/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js")}}"></script>
+	<script src="{{asset ("assets/js/AdminLTE.js")}}"></script>
+	<!-- OPTIONAL SCRIPTS -->
+	<script src="{{asset ("assets/plugins/chart.js/Chart.min.js")}}"></script>
+	<!-- AdminLTE dashboard demo (This is only for demo purposes) -->
+	<script src="{{asset ("assets/js/pages/dashboard3.js")}}"></script>
+	<script src="{{asset ("assets/js/impCal/lib/main.js")}}"></script>
+	<script>
 
+		document.addEventListener('DOMContentLoaded', function () {
+var calendarEl = document.getElementById('calendar');
+
+var calendar = new FullCalendar.Calendar(calendarEl, {
+locale: "fr", // undo default 6am scrollTime
+editable: false, // enable draggable events
+selectable: true,
+aspectRatio: 1.8,
+headerToolbar: {
+left: 'today prev,next',
+center: 'title',
+right: 'resourceTimelineDay,timeGridWeek,dayGridMonth,listWeek'
+},
+initialView: 'resourceTimelineDay',
+resourceAreaHeaderContent: 'Collaborateurs',
+resources: {{ uses | raw }},
+events: {{ datas | raw }}
+});
+
+calendar.render();
+});
+	</script>
+{% endblock %}
+{% block body %}
+	<!--{{ dump(datas) }}-->
+	<!-- Content Wrapper. Contains page content -->
+		<div class="content-wrapper"> <!-- Content Header (Page header) -->
 		<!-- Content Header (Page header) -->
 			<section class="content-header"> <div class="container-fluid">
 				<div class="row mb-2">
 					<div class="col-sm-6">
-						<h1 class="m-0" style="font-size:19px">Historique d'imputation</h1>
+						<h1 class="m-0" style="font-size:19px">Imputation</h1>
 					</div>
 					<div class="col-sm-6">
 						<ol class="breadcrumb float-sm-right">
@@ -18,29 +55,82 @@
 							<li class="breadcrumb-item active">Imputation</li>
 						</ol>
 					</div>
-					<a style="float:right;" class="btn btn-primary" href="{{ path('imputation_new') }}">Faire une imputation</a>
+					<div style="float:right;">
+						<a style="float:right;" class="btn btn-primary" href="{{ path('imputation_new') }}">Faire une imputation</a>
+					</div>
 				</div>
 			</div>
 			<!-- /.container-fluid -->
 
-		</section>
+			<!-- /////////////////////////////DEBUT historique/////////////////////////// -->
+			<!-- /////////////////////////////DEBUT historique/////////////////////////// -->
+			<!-- Content Wrapper. Contains page content -->
 
-		<!-- Main content -->
-		<section class="content">
-			<div
-				class="container-fluid">
-				<!-- Timelime example  -->
-				<div class="row">
-					<div
-						class="col-md-12">
-						<!-- The time line -->
-						<div class="timeline">
-							{% if app.user.roles == ["ROLE_USER"] %}
-								{% for imputation in imputations %}
-									{% if app.user.id == imputation.user.id %}
+
+			<!-- Main content -->
+				<section class="content"> <div class="card">
+					<div class="card-body" id='calendar'></div>
+				</div>
+
+				<div
+					class="container-fluid">
+					<!-- Timelime example  -->
+					<div class="row">
+						<div
+							class="col-md-12">
+							<!-- The time line -->
+							<div class="timeline">
+								{% if app.user.roles == ["ROLE_USER"] %}
+									{% for imputation in imputations %}
+										{% if app.user.id == imputation.user.id %}
+											<!-- timeline time label -->
+											<div class="time-label">
+												<span class="bg-green">{{ imputation.dateD ? imputation.dateD|format_datetime('full', 'none', locale='fr')}}</span>
+											</div>
+											<!-- /.timeline-label -->
+											<!-- timeline item -->
+											<div>
+												<!--<i class="fas fa-user {{ random(['bg-green', 'bg-blue', 'bg-purple']) }}"></i>-->
+												<i class="fas fa-user bg-purple"></i>
+												<div class="timeline-item">
+													<span class="time">
+														<i class="fas fa-clock"></i>
+														{{ imputation.time|format_datetime('long', 'short', locale='fr') }}</span>
+													<h3 class="timeline-header">
+														<a href="#">{{ imputation.user.username }}</a>
+														{{ imputation.codeprojet.libelle }}
+														:
+														{{ imputation.codeprojet.description }}</h3>
+
+													<div class="timeline-body">
+														{{ imputation.commentaire }}
+													</div>
+													<div class="timeline-footer">
+														<a class="btn btn-info btn-sm" href="{{ path('imputation_edit', {'id': imputation.id}) }}">
+															<i class="fas fa-pencil-alt"></i>
+														</a>
+														<a class="btn">
+															{{ include('imputation/_delete_form.html.twig') }}
+														</a>
+													</div>
+												</div>
+											</div>
+											<!-- END timeline item -->
+											<!-- timeline time label -->
+											<div class="time-label">
+												<span class="bg-red">{{ imputation.dateF ? imputation.dateF|format_datetime('long', 'none', locale='fr')}}</span>
+											</div>
+										{% endif %}
+									{% else %}
+										<tr>
+											<td colspan="5">Aucune imputation trouvé</td>
+										</tr>
+									{% endfor %}
+								{% else %}
+									{% for imputation in imputations %}
 										<!-- timeline time label -->
 										<div class="time-label">
-											<span class="bg-green">{{ imputation.dateD ? imputation.dateD|format_datetime('full', 'none', locale='fr')}}</span>
+											<span class="bg-green">{{ imputation.dateD ? imputation.dateD|format_datetime('full', 'none', locale='fr') }}</span>
 										</div>
 										<!-- /.timeline-label -->
 										<!-- timeline item -->
@@ -53,6 +143,7 @@
 													{{ imputation.time|format_datetime('long', 'short', locale='fr') }}</span>
 												<h3 class="timeline-header">
 													<a href="#">{{ imputation.user.username }}</a>
+													[{{ imputation.codeprojet.projet.libelle }}]
 													{{ imputation.codeprojet.libelle }}
 													:
 													{{ imputation.codeprojet.description }}</h3>
@@ -60,6 +151,7 @@
 												<div class="timeline-body">
 													{{ imputation.commentaire }}
 												</div>
+
 												<div class="timeline-footer">
 													<a class="btn btn-info btn-sm" href="{{ path('imputation_edit', {'id': imputation.id}) }}">
 														<i class="fas fa-pencil-alt"></i>
@@ -68,6 +160,7 @@
 														{{ include('imputation/_delete_form.html.twig') }}
 													</a>
 												</div>
+
 											</div>
 										</div>
 										<!-- END timeline item -->
@@ -75,73 +168,25 @@
 										<div class="time-label">
 											<span class="bg-red">{{ imputation.dateF ? imputation.dateF|format_datetime('long', 'none', locale='fr')}}</span>
 										</div>
-									{% endif %}
-								{% else %}
-									<tr>
-										<td colspan="5">Aucune imputation trouvé</td>
-									</tr>
-								{% endfor %}
-							{% else %}
-								{% for imputation in imputations %}
-									<!-- timeline time label -->
-									<div class="time-label">
-										<span class="bg-green">{{ imputation.dateD ? imputation.dateD|format_datetime('full', 'none', locale='fr') }}</span>
-									</div>
-									<!-- /.timeline-label -->
-									<!-- timeline item -->
+									{% else %}
+										<tr>
+											<td colspan="5">Aucune imputation trouvé</td>
+										</tr>
+									{% endfor %}
 									<div>
-										<!--<i class="fas fa-user {{ random(['bg-green', 'bg-blue', 'bg-purple']) }}"></i>-->
-										<i class="fas fa-user bg-purple"></i>
-										<div class="timeline-item">
-											<span class="time">
-												<i class="fas fa-clock"></i>
-												{{ imputation.time|format_datetime('long', 'short', locale='fr') }}</span>
-											<h3 class="timeline-header">
-												<a href="#">{{ imputation.user.username }}</a>
-												[{{ imputation.codeprojet.projet.libelle }}]
-												{{ imputation.codeprojet.libelle }}
-												:
-												{{ imputation.codeprojet.description }}</h3>
-
-											<div class="timeline-body">
-												{{ imputation.commentaire }}
-											</div>
-											{% if app.user.id ==  imputation.user.id %}
-												<div class="timeline-footer">
-													<a class="btn btn-info btn-sm" href="{{ path('imputation_edit', {'id': imputation.id}) }}">
-														<i class="fas fa-pencil-alt"></i>
-													</a>
-													<a class="btn">
-														{{ include('imputation/_delete_form.html.twig') }}
-													</a>
-												</div>
-											{% endif %}
-										</div>
+										<i class="fas fa-clock bg-gray"></i>
 									</div>
-									<!-- END timeline item -->
-									<!-- timeline time label -->
-									<div class="time-label">
-										<span class="bg-red">{{ imputation.dateF ? imputation.dateF|format_datetime('long', 'none', locale='fr')}}</span>
-									</div>
-								{% else %}
-									<tr>
-										<td colspan="5">Aucune imputation trouvé</td>
-									</tr>
-								{% endfor %}
-								<div>
-									<i class="fas fa-clock bg-gray"></i>
-								</div>
-							{% endif %}
-							<!-- /.timeline-label -->
+								{% endif %}
+								<!-- /.timeline-label -->
 
+							</div>
 						</div>
+						<!-- /.col -->
 					</div>
-					<!-- /.col -->
 				</div>
-			</div>
-			<!-- /.timeline -->
-		</section>
-		<!-- /.content -->
-	</div>
-	<!-- /.content-wrapper -->
-{% endblock %}
+				<!-- /.timeline -->
+			</section>
+			<!-- /.content -->
+
+			<!-- /.content-wrapper -->
+		{% endblock %}

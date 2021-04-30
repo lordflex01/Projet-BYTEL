@@ -83,6 +83,11 @@ $("#example1").DataTable({"responsive": true, "lengthChange": true, "autoWidth":
 				class="card">
 				<!-- /.card-header -->
 				<div class="card-body">
+					{% if is_granted('ROLE_ADMIN') %}
+						<div style="float:right;">
+							<a class="btn btn-primary" href="{{ path('code_projet_new') }}">Ajouter un nouveau code projet</a>
+						</div>
+					{% endif %}
 					<table id="example1" class="table table-bordered table-striped">
 						<thead>
 							<tr>
@@ -196,9 +201,4 @@ $("#example1").DataTable({"responsive": true, "lengthChange": true, "autoWidth":
 		</table>
 	</div>
 	<!-- /.card-body -->
-</div>
-{% if is_granted('ROLE_ADMIN') %}
-	<div style="float:right;">
-		<a class="btn btn-primary" href="{{ path('code_projet_new') }}">Ajouter un nouveau code projet</a>
-	</div>
-{% endif %}</div><!-- /.card-body --></div><!-- /.card --></section></div>{% endblock %}
+</div></div><!-- /.card-body --></div><!-- /.card --></section></div>{% endblock %}
