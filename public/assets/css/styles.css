@@ -10289,14 +10289,13 @@ body,
 }
 .layout-navbar-fixed .wrapper .content-wrapper {
   margin-top: calc(3.5rem + 1px);
-  margin-left: 219PX;
 }
 .layout-navbar-fixed .wrapper .sidebar-dark-primary .brand-link:not([class*="navbar"]) {
   background-color: #2e445b;
 }
 
 .layout-navbar-fixed .wrapper .main-header {
-  left: -33px;
+  left: 0;
   position: fixed;
   right: 0;
   top: 0;
@@ -10314,7 +10313,7 @@ body,
   position: fixed;
   top: 0;
   transition: width 0.3s ease-in-out;
-  width: 220px;
+  width: 250px;
   z-index: 1035;
 }
 
@@ -10952,7 +10951,7 @@ body.sidebar-collapse:not(.sidebar-mini-md):not(.sidebar-mini) .main-header::bef
   left: 0;
   position: fixed;
   top: 0;
-  width: 220px;
+  width: 250px;
 }
 
 .layout-fixed .control-sidebar {
@@ -11185,7 +11184,7 @@ body.sidebar-collapse:not(.sidebar-mini-md):not(.sidebar-mini) .main-header::bef
 
 .brand-link .brand-image {
   float: left;
-  margin-left: 2px;
+  margin-left: 11px;
   margin-right: 7PX;
   margin-top: -2px;
   max-height: 30px;
@@ -11241,7 +11240,7 @@ body.sidebar-collapse:not(.sidebar-mini-md):not(.sidebar-mini) .main-header::bef
 }
 
 .user-panel-icon{
-  margin-left: -11px;
+  margin-left: -2px;
   font-size: 20px;
   MARGIN-RIGHT: -13PX;
 }
