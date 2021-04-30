@@ -31,8 +31,8 @@ class CalendarController extends AbstractController
             $title = $event->getUser()->getUsername() . ' ' . '[' . $event->getCodeprojet()->getProjet()->getLibelle() . '] ' . $event->getCodeprojet()->getLibelle() . ': ' . $event->getCommentaire();
             $imputation[] = [
                 'id' => $event->getId(),
-                'start' => $event->getDateD()->format('Y-m-d'),
-                'end' => $event->getDateF()->format('Y-m-d'),
+                'start' => $event->getDateD()->format('Y-m-d H:i:s'),
+                'end' => $event->getDateF()->format('Y-m-d H:i:s'),
                 'title' => $title,
                 'backgroundColor' => $color[$i],
                 'borderColor' => $color[$i],

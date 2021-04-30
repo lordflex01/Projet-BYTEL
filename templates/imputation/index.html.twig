@@ -347,16 +347,16 @@ $('#new-event').val('')
 														<div class="timeline-body">
 															{{ imputation.commentaire }}
 														</div>
-														{% if app.user.id ==  imputation.user.id %}
-															<div class="timeline-footer">
-																<a class="btn btn-info btn-sm" href="{{ path('imputation_edit', {'id': imputation.id}) }}">
-																	<i class="fas fa-pencil-alt"></i>
-																</a>
-																<a class="btn">
-																	{{ include('imputation/_delete_form.html.twig') }}
-																</a>
-															</div>
-														{% endif %}
+
+														<div class="timeline-footer">
+															<a class="btn btn-info btn-sm" href="{{ path('imputation_edit', {'id': imputation.id}) }}">
+																<i class="fas fa-pencil-alt"></i>
+															</a>
+															<a class="btn">
+																{{ include('imputation/_delete_form.html.twig') }}
+															</a>
+														</div>
+
 													</div>
 												</div>
 												<!-- END timeline item -->

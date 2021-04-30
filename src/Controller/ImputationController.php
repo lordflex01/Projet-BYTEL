@@ -31,8 +31,8 @@ class ImputationController extends AbstractController
             $title = $event->getUser()->getUsername() . ' ' . '[' . $event->getCodeprojet()->getProjet()->getLibelle() . '] ' . $event->getCodeprojet()->getLibelle() . ': ' . $event->getCommentaire();
             $imputation[] = [
                 'id' => $event->getId(),
-                'start' => $event->getDateD()->format('Y-m-d'),
-                'end' => $event->getDateF()->format('Y-m-d'),
+                'start' => $event->getDateD()->format('Y-m-d H:i:s'),
+                'end' => $event->getDateF()->format('Y-m-d H:i:s'),
                 'title' => $title,
                 'backgroundColor' => $color[$i],
                 'borderColor' => $color[$i],
@@ -60,7 +60,7 @@ class ImputationController extends AbstractController
         $form->handleRequest($request);
         // Définir le nouveau fuseau horaire
         date_default_timezone_set('Europe/Paris');
-        $date = date('Y-m-d h:i:s');
+        $date = date('Y-m-d H:i:s');
 
         if ($form->isSubmitted() && $form->isValid()) {
             $imputation->setTime($date);
@@ -96,7 +96,7 @@ class ImputationController extends AbstractController
         $form->handleRequest($request);
         // Définir le nouveau fuseau horaire
         date_default_timezone_set('Europe/Paris');
-        $date = date('Y-m-d h:i:s');
+        $date = date('Y-m-d H:i:s');
 
         if ($form->isSubmitted() && $form->isValid()) {
             $imputation->setTime($date);

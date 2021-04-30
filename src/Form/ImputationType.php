@@ -26,7 +26,7 @@ class ImputationType extends AbstractType
             ->add('dateD', DateTimeType::class, [
                 'widget' => 'single_text',
             ])
-            ->add('dateF', DateType::class, [
+            ->add('dateF', DateTimeType::class, [
                 'widget' => 'single_text',
             ])
             ->add('codeprojet', EntityType::class, [
