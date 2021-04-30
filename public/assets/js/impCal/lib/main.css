@@ -1554,6 +1554,7 @@ vertical slots in both the header AND the body
     z-index: 3;
     width: 0; /* for event positioning. will end up on correct side based on dir */
   }
+
 .fc {
 
   /* harness */
@@ -1579,7 +1580,6 @@ vertical slots in both the header AND the body
 
   /* time and title spacing */
   /* ---------------------------------------------------------------------------------------------------- */
-
 }
 .fc-timeline-event .fc-event-main {
     flex-grow: 1;
