@@ -18,8 +18,13 @@
 var calendarEl = document.getElementById('calendar');
 
 var calendar = new FullCalendar.Calendar(calendarEl, {
-locale: "fr", // undo default 6am scrollTime
-editable: false, // enable draggable events
+
+eventClick: function (info) {
+alert(info.event.title + "\n\n\nModifier cette imputation:");
+info.el.style.borderColor = 'red';
+},
+locale: "fr",
+editable: true, // enable draggable events
 selectable: true,
 aspectRatio: 1.8,
 headerToolbar: {
@@ -29,9 +34,23 @@ right: 'resourceTimelineDay,timeGridWeek,dayGridMonth,listWeek'
 },
 initialView: 'resourceTimelineDay',
 resourceAreaHeaderContent: 'Collaborateurs',
+eventResizableFromStart: true,
 resources: {{ uses | raw }},
 events: {{ datas | raw }}
 });
+calendar.on('eventChange', (e) => {
+let url = `/api/${
+e.event.id
+}/edit`
+let donnees = {
+"title": e.event.title,
+"start": e.event.start,
+"end": e.event.end
+}
+let xhr = new XMLHttpRequest
+xhr.open("PUT", url)
+xhr.send(JSON.stringify(donnees))
+})
 
 calendar.render();
 });

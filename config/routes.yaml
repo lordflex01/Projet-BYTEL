@@ -6,6 +6,11 @@ index:
     path: /index
     controller: App\Controller\indexController::index
 
+api:
+    path: /api/{id}/edit
+    controller: App\Controller\ImputationController::majEvent
+
 user:
     path: /user
     controller: App\Controller\UserController::user
+
