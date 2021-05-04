@@ -10,6 +10,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Repository\UserRepository;
+use DateTime;
 
 /** 
  * @Route("/imputation")
@@ -33,6 +34,10 @@ class ImputationController extends AbstractController
                 'start' => $event->getDateD()->format('Y-m-d H:i:s'),
                 'end' => $event->getDateF()->format('Y-m-d H:i:s'),
                 'title' => $title,
+                'url' => $event->getId() . "/edit",
+                //'Commantaire' => $event->getCommentaire(),
+                // 'codeprojet' => $event->getCodeprojet(),
+                //'user' => $event->getUser(),
 
             ];
         }
@@ -90,6 +95,54 @@ class ImputationController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
+
+    /**
+     * @Route("/api/{id}/edit", name="api_event_edit", methods={"PUT"})
+     */
+    public function majEvent(?Imputation $imputation, Request $request)
+    {
+        //on recupère les données
+        $donnees = json_decode($request->getContent());
+
+        if (
+            isset($donnees->title) && !empty($donnees->title) &&
+            isset($donnees->start) && !empty($donnees->start) &&
+            isset($donnees->end) && !empty($donnees->end) // &&
+            //isset($donnees->resourceId) && !empty($donnees->resourceId) &&
+            //isset($donnees->Commantaire) && !empty($donnees->Commantaire)
+        ) {
+            //les données sont complètes
+            //on initialise un code
+            $code = 200;
+
+            //On vérifie si l'id existe
+            if (!$imputation) {
+                //on instancie un rendez vous
+                $imputation = new Imputation;
+                //on change de code
+                $code = 201;
+            }
+            //on hydrate l'objet avec les données
+            //$imputation->setCommentaire($donnees->Commantaire);
+            $imputation->setDateD(new DateTime($donnees->start));
+            $imputation->setDateF(new DateTime($donnees->end));
+
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($imputation);
+            $em->flush();
+
+            //on retourne le code
+            return new Response('Ok', $code);
+        } else {
+            //les données sont incomplètes
+            return new Response('Données incomplètes', 404);
+        }
+
+        return $this->render('imputation/index.html.twig', [
+            'imputation' => $imputation,
+        ]);
+    }
+
 
     /**
      * @Route("/{id}", name="imputation_show", methods={"GET"})
