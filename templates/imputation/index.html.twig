@@ -7,12 +7,8 @@
 	<!-- overlayScrollbars -->
 	<script src="{{asset ("assets/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js")}}"></script>
 	<script src="{{asset ("assets/js/AdminLTE.js")}}"></script>
-	<!-- OPTIONAL SCRIPTS -->
-	<script src="{{asset ("assets/plugins/chart.js/Chart.min.js")}}"></script>
-	<!-- AdminLTE dashboard demo (This is only for demo purposes) -->
-	<script src="{{asset ("assets/js/pages/dashboard3.js")}}"></script>
 	<script src="{{asset ("assets/js/impCal/lib/main.js")}}"></script>
-	<script src="{{asset ("assets/js/calendar/moment.min.js")}}"></script>
+	<script src="{{asset ("assets/js/impCal/lib/moment.min.js")}}"></script>
 
 	<script>
 
@@ -81,17 +77,9 @@ calendar.render();
 					<div class="col-sm-6">
 						<h1 class="m-0" style="font-size:19px">Imputation</h1>
 					</div>
-					<div class="col-sm-6">
-						<ol class="breadcrumb float-sm-right">
-							<li class="breadcrumb-item">
-								<a href="/index">Accueil</a>
-							</li>
-							<li class="breadcrumb-item active">Imputation</li>
-						</ol>
-					</div>
-					<div style="float:right;">
-						<a style="float:right;" class="btn btn-primary" href="{{ path('imputation_new') }}">Faire une imputation</a>
-					</div>
+					<!-- <div style="float:right;">
+											<a style="float:right;" class="btn btn-primary" href="{{ path('imputation_new') }}">Faire une imputation</a>
+										</div> -->
 				</div>
 			</div>
 			<!-- /.container-fluid -->
@@ -108,42 +96,26 @@ calendar.render();
 					<div class="modal fade" id="ModalEdit" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
 						<div class="modal-dialog" role="document">
 							<div class="modal-content">
-								<form class="form-horizontal" method="POST" action="editEventTitle.php">
+								<form class="form-horizontal">
 									<div class="modal-header">
+										<h4 class="modal-title" id="myModalLabel">Modifier un événement</h4>
 										<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 											<span aria-hidden="true">&times;</span>
 										</button>
-										<h4 class="modal-title" id="myModalLabel">Edit Event</h4>
 									</div>
 									<div class="modal-body">
 
 										<div class="form-group">
-											<label for="title" class="col-sm-2 control-label">Title</label>
+											<label for="title" class="col-sm-2 control-label">Titre</label>
 											<div class="col-sm-10">
 												<input type="text" name="title" class="form-control" id="title" placeholder="Title">
 											</div>
 										</div>
 										<div class="form-group">
-											<label for="color" class="col-sm-2 control-label">Color</label>
-											<div class="col-sm-10">
-												<select name="color" class="form-control" id="color">
-													<option value="">Choose</option>
-													<option style="color:#0071c5;" value="#0071c5">&#9724; Dark blue</option>
-													<option style="color:#40E0D0;" value="#40E0D0">&#9724; Turquoise</option>
-													<option style="color:#008000;" value="#008000">&#9724; Green</option>
-													<option style="color:#FFD700;" value="#FFD700">&#9724; Yellow</option>
-													<option style="color:#FF8C00;" value="#FF8C00">&#9724; Orange</option>
-													<option style="color:#FF0000;" value="#FF0000">&#9724; Red</option>
-													<option style="color:#000;" value="#000">&#9724; Black</option>
-
-												</select>
-											</div>
-										</div>
-										<div class="form-group">
 											<div class="col-sm-offset-2 col-sm-10">
-												<div class="checkbox">
-													<label class="text-danger"><input type="checkbox" name="delete">
-														Delete event</label>
+												<div class="custom-control custom-checkbox">
+													<input class="custom-control-input custom-control-input-danger" type="checkbox" id="customCheckbox4">
+													<label for="customCheckbox4" class="custom-control-label">Supprimer un événement</label>
 												</div>
 											</div>
 										</div>
@@ -153,8 +125,8 @@ calendar.render();
 
 									</div>
 									<div class="modal-footer">
-										<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-										<button type="submit" class="btn btn-primary">Save changes</button>
+										<button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
+										<button type="submit" class="btn btn-primary">Enregistrer</button>
 									</div>
 								</form>
 							</div>
@@ -165,121 +137,85 @@ calendar.render();
 					<div class="modal fade" id="ModalAdd" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
 						<div class="modal-dialog" role="document">
 							<div class="modal-content">
-								<form class="form-horizontal" method="POST" action="addEvent.php">
 
-									<div class="modal-header">
-										<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-											<span aria-hidden="true">&times;</span>
-										</button>
-										<h4 class="modal-title" id="myModalLabel">Add Event</h4>
+								<div class="modal-header">
+									<h4 class="modal-title" id="myModalLabel">Ajouter une imputation</h4>
+									<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+										<span aria-hidden="true">&times;</span>
+									</button>
+
+								</div>
+								<div class="modal-body">
+									<div class="form-group">
+										<label for="collaborateur" class="col-sm-2 control-label">Collaborateur</label>
+										<div class="col-sm-10">
+											<select class="custom-select">
+												<option>option 1</option>
+												<option>option 2</option>
+												<option>option 3</option>
+												<option>option 4</option>
+												<option>option 5</option>
+											</select>
+										</div>
 									</div>
-									<div class="modal-body">
 
-										<div class="form-group">
-											<label for="title" class="col-sm-2 control-label">Title</label>
-											<div class="col-sm-10">
-												<input type="text" name="title" class="form-control" id="title" placeholder="Title">
-											</div>
+									<div class="form-group">
+										<label for="code projet" class="col-sm-2 control-label">Code de Projet</label>
+										<div class="col-sm-10">
+											<select class="custom-select">
+												<option>option 1</option>
+												<option>option 2</option>
+												<option>option 3</option>
+												<option>option 4</option>
+												<option>option 5</option>
+											</select>
 										</div>
-										<div class="form-group">
-											<label for="color" class="col-sm-2 control-label">Color</label>
-											<div class="col-sm-10">
-												<select name="color" class="form-control" id="color">
-													<option value="">Choose</option>
-													<option style="color:#0071c5;" value="#0071c5">&#9724; Dark blue</option>
-													<option style="color:#40E0D0;" value="#40E0D0">&#9724; Turquoise</option>
-													<option style="color:#008000;" value="#008000">&#9724; Green</option>
-													<option style="color:#FFD700;" value="#FFD700">&#9724; Yellow</option>
-													<option style="color:#FF8C00;" value="#FF8C00">&#9724; Orange</option>
-													<option style="color:#FF0000;" value="#FF0000">&#9724; Red</option>
-													<option style="color:#000;" value="#000">&#9724; Black</option>
-
-												</select>
-											</div>
-										</div>
-										<div class="form-group">
-											<label for="start" class="col-sm-2 control-label">Start date</label>
-											<div class="col-sm-10">
-												<input type="text" name="start" class="form-control" id="start" readonly>
-											</div>
-										</div>
-										<div class="form-group">
-											<label for="end" class="col-sm-2 control-label">End date</label>
-											<div class="col-sm-10">
-												<input type="text" name="end" class="form-control" id="end" readonly>
-											</div>
-										</div>
-
 									</div>
-									<div class="modal-footer">
-										<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-										<button type="submit" class="btn btn-primary">Save changes</button>
+
+									<div class="form-group">
+										<label for="start" class="col-sm-2 control-label">Date de début</label>
+										<div class="col-sm-10">
+											<input type="date" name="start" class="form-control" id="start">
+										</div>
 									</div>
-								</form>
+									<div class="form-group">
+										<label for="end" class="col-sm-2 control-label">Date de fin</label>
+										<div class="col-sm-10">
+											<input type="date" name="end" class="form-control" id="end">
+										</div>
+									</div>
+
+									<div class="form-group">
+										<div class="col-sm-10">
+											<label for="commentaire" class="col-sm-2 control-label">Commentaire</label>
+											<textarea class="form-control" rows="3" placeholder="Enter ..."></textarea>
+										</div>
+									</div>
+								</div>
+								<div class="modal-footer">
+									<button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
+									<button type="submit" class="btn btn-primary">Enregistrer</button>
+								</div>
 							</div>
+
 						</div>
 					</div>
 				</div>
 
-				<div
-					class="container-fluid">
-					<!-- Timelime example  -->
-					<div class="row">
-						<div
-							class="col-md-12">
-							<!-- The time line -->
-							<div class="timeline">
-								{% if app.user.roles == ["ROLE_USER"] %}
-									{% for imputation in imputations %}
-										{% if app.user.id == imputation.user.id %}
-											<!-- timeline time label -->
-											<div class="time-label">
-												<span class="bg-green">{{ imputation.dateD ? imputation.dateD|format_datetime('full', 'none', locale='fr')}}</span>
-											</div>
-											<!-- /.timeline-label -->
-											<!-- timeline item -->
-											<div>
-												<!--<i class="fas fa-user {{ random(['bg-green', 'bg-blue', 'bg-purple']) }}"></i>-->
-												<i class="fas fa-user bg-purple"></i>
-												<div class="timeline-item">
-													<span class="time">
-														<i class="fas fa-clock"></i>
-														{{ imputation.time|format_datetime('long', 'short', locale='fr') }}</span>
-													<h3 class="timeline-header">
-														<a href="#">{{ imputation.user.username }}</a>
-														{{ imputation.codeprojet.libelle }}
-														:
-														{{ imputation.codeprojet.description }}</h3>
-
-													<div class="timeline-body">
-														{{ imputation.commentaire }}
-													</div>
-													<div class="timeline-footer">
-														<a class="btn btn-info btn-sm" href="{{ path('imputation_edit', {'id': imputation.id}) }}">
-															<i class="fas fa-pencil-alt"></i>
-														</a>
-														<a class="btn">
-															{{ include('imputation/_delete_form.html.twig') }}
-														</a>
-													</div>
-												</div>
-											</div>
-											<!-- END timeline item -->
-											<!-- timeline time label -->
-											<div class="time-label">
-												<span class="bg-red">{{ imputation.dateF ? imputation.dateF|format_datetime('long', 'none', locale='fr')}}</span>
-											</div>
-										{% endif %}
-									{% else %}
-										<tr>
-											<td colspan="5">Aucune imputation trouvé</td>
-										</tr>
-									{% endfor %}
-								{% else %}
-									{% for imputation in imputations %}
+			<div
+				class="container-fluid">
+				<!-- Timelime example  -->
+				<div class="row">
+					<div
+						class="col-md-12">
+						<!-- The time line -->
+						<div class="timeline">
+							{% if app.user.roles == ["ROLE_USER"] %}
+								{% for imputation in imputations %}
+									{% if app.user.id == imputation.user.id %}
 										<!-- timeline time label -->
 										<div class="time-label">
-											<span class="bg-green">{{ imputation.dateD ? imputation.dateD|format_datetime('full', 'none', locale='fr') }}</span>
+											<span class="bg-green">{{ imputation.dateD ? imputation.dateD|format_datetime('full', 'none', locale='fr')}}</span>
 										</div>
 										<!-- /.timeline-label -->
 										<!-- timeline item -->
@@ -292,7 +228,6 @@ calendar.render();
 													{{ imputation.time|format_datetime('long', 'short', locale='fr') }}</span>
 												<h3 class="timeline-header">
 													<a href="#">{{ imputation.user.username }}</a>
-													[{{ imputation.codeprojet.projet.libelle }}]
 													{{ imputation.codeprojet.libelle }}
 													:
 													{{ imputation.codeprojet.description }}</h3>
@@ -300,7 +235,6 @@ calendar.render();
 												<div class="timeline-body">
 													{{ imputation.commentaire }}
 												</div>
-
 												<div class="timeline-footer">
 													<a class="btn btn-info btn-sm" href="{{ path('imputation_edit', {'id': imputation.id}) }}">
 														<i class="fas fa-pencil-alt"></i>
@@ -309,7 +243,6 @@ calendar.render();
 														{{ include('imputation/_delete_form.html.twig') }}
 													</a>
 												</div>
-
 											</div>
 										</div>
 										<!-- END timeline item -->
@@ -317,25 +250,73 @@ calendar.render();
 										<div class="time-label">
 											<span class="bg-red">{{ imputation.dateF ? imputation.dateF|format_datetime('long', 'none', locale='fr')}}</span>
 										</div>
-									{% else %}
-										<tr>
-											<td colspan="5">Aucune imputation trouvé</td>
-										</tr>
-									{% endfor %}
-									<div>
-										<i class="fas fa-clock bg-gray"></i>
+									{% endif %}
+								{% else %}
+									<tr>
+										<td colspan="5">Aucune imputation trouvé</td>
+									</tr>
+								{% endfor %}
+							{% else %}
+								{% for imputation in imputations %}
+									<!-- timeline time label -->
+									<div class="time-label">
+										<span class="bg-green">{{ imputation.dateD ? imputation.dateD|format_datetime('full', 'none', locale='fr') }}</span>
 									</div>
-								{% endif %}
-								<!-- /.timeline-label -->
+									<!-- /.timeline-label -->
+									<!-- timeline item -->
+									<div>
+										<!--<i class="fas fa-user {{ random(['bg-green', 'bg-blue', 'bg-purple']) }}"></i>-->
+										<i class="fas fa-user bg-purple"></i>
+										<div class="timeline-item">
+											<span class="time">
+												<i class="fas fa-clock"></i>
+												{{ imputation.time|format_datetime('long', 'short', locale='fr') }}</span>
+											<h3 class="timeline-header">
+												<a href="#">{{ imputation.user.username }}</a>
+												[{{ imputation.codeprojet.projet.libelle }}]
+												{{ imputation.codeprojet.libelle }}
+												:
+												{{ imputation.codeprojet.description }}</h3>
 
-							</div>
+											<div class="timeline-body">
+												{{ imputation.commentaire }}
+											</div>
+
+											<div class="timeline-footer">
+												<a class="btn btn-info btn-sm" href="{{ path('imputation_edit', {'id': imputation.id}) }}">
+													<i class="fas fa-pencil-alt"></i>
+												</a>
+												<a class="btn">
+													{{ include('imputation/_delete_form.html.twig') }}
+												</a>
+											</div>
+
+										</div>
+									</div>
+									<!-- END timeline item -->
+									<!-- timeline time label -->
+									<div class="time-label">
+										<span class="bg-red">{{ imputation.dateF ? imputation.dateF|format_datetime('long', 'none', locale='fr')}}</span>
+									</div>
+								{% else %}
+									<tr>
+										<td colspan="5">Aucune imputation trouvé</td>
+									</tr>
+								{% endfor %}
+								<div>
+									<i class="fas fa-clock bg-gray"></i>
+								</div>
+							{% endif %}
+							<!-- /.timeline-label -->
+
 						</div>
-						<!-- /.col -->
 					</div>
+					<!-- /.col -->
 				</div>
-				<!-- /.timeline -->
-			</section>
-			<!-- /.content -->
+			</div>
+			<!-- /.timeline -->
+		</section>
+		<!-- /.content -->
 
-			<!-- /.content-wrapper -->
-		{% endblock %}
+		<!-- /.content-wrapper -->
+	{% endblock %}

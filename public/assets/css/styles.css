@@ -877,7 +877,7 @@ pre code {
   .col-sm-2 {
     -ms-flex: 0 0 16.666667%;
     flex: 0 0 16.666667%;
-    max-width: 16.666667%;
+    /*max-width: 16.666667%;*/
   }
   .col-sm-3 {
     -ms-flex: 0 0 25%;
@@ -917,7 +917,7 @@ pre code {
   .col-sm-10 {
     -ms-flex: 0 0 83.333333%;
     flex: 0 0 83.333333%;
-    max-width: 83.333333%;
+    /*max-width: 83.333333%;*/
   }
   .col-sm-11 {
     -ms-flex: 0 0 91.666667%;
@@ -5973,13 +5973,18 @@ a.close.disabled, a.disabled.mailbox-attachment-close {
 
 .modal-content {
   position: relative;
-  width: 274px;
-  height: 300px;
-  background: white;
-  border-radius: 20px;
-  overflow: hidden;
-  transition: 0.5s;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  width: 100%;
+  pointer-events: auto;
+  background-color: #fff;
+  background-clip: padding-box;
+  border: 1px solid rgba(0,0,0,.2);
+  border-radius: .3rem;
   box-shadow: 0 0.25rem 0.5rem rgb(0 0 0 / 50%);
+  outline: 0;
  
 }
 .modal-content .picture {
