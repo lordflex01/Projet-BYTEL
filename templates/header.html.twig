@@ -18,7 +18,6 @@
 			rel="stylesheet" href="{{asset ("assets/plugins/overlayScrollbars/css/OverlayScrollbars.min.css")}}">
 			<!-- css starter page -->
 			<link rel="stylesheet" href="{{asset ("assets/css/styles.css")}}">
-			<!-- css calendar -->
 			<!-- css imputation calendar -->
 			<link
 			rel='stylesheet' href="{{asset ("assets/js/impCal/lib/main.css")}}"> <!-- Ionicons -->
@@ -205,10 +204,23 @@
 								</li>
 							</li>
 							<li class="nav-item">
-								<a href="/calendar" class="nav-link">
-									<i class="nav-icon far fa-calendar-alt"></i>
+								{% if app.request.uri  == 'https://127.0.0.1:8000/imputation' %}
+									<a href="/imputation" class="nav-link active">
+									{% else %}
+										<a href="/imputation" class="nav-link">
+										{% endif %}
+										<i class="nav-icon fas fa-calendar-check"></i>
+										<p>
+											Imputation
+										</p>
+									</a>
+								</li>
+							</li>
+							<li class="nav-item">
+								<a href="/projet" class="nav-link">
+									<i class="nav-icon fas fa-tasks"></i>
 									<p>
-										Planification
+										Projets
 									</p>
 								</a>
 							</li>
@@ -228,28 +240,15 @@
 									</li>
 								{% endif %}
 							</li>
-
 							<li class="nav-item">
-								<a href="/projet" class="nav-link">
-									<i class="nav-icon fas fa-tasks"></i>
+								<a href="/calendar" class="nav-link">
+									<i class="nav-icon far fa-calendar-alt"></i>
 									<p>
-										Projets
+										Planification
 									</p>
 								</a>
 							</li>
-							<li class="nav-item">
-								{% if app.request.uri  == 'https://127.0.0.1:8000/imputation' %}
-									<a href="/imputation" class="nav-link active">
-									{% else %}
-										<a href="/imputation" class="nav-link">
-										{% endif %}
-										<i class="nav-icon fas fa-calendar-check"></i>
-										<p>
-											Imputation
-										</p>
-									</a>
-								</li>
-							</li>
+							
 							<li class="nav-item">
 								<a href="/contact" class="nav-link">
 									<i class="nav-icon far fa-envelope-open"></i>

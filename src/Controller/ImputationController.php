@@ -34,7 +34,7 @@ class ImputationController extends AbstractController
                 'start' => $event->getDateD()->format('Y-m-d H:i:s'),
                 'end' => $event->getDateF()->format('Y-m-d H:i:s'),
                 'title' => $title,
-                'url' => $event->getId() . "/edit",
+                //'url' => $event->getId() . "/edit",
                 //'Commantaire' => $event->getCommentaire(),
                 // 'codeprojet' => $event->getCodeprojet(),
                 //'user' => $event->getUser(),
