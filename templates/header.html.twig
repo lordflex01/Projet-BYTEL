@@ -17,10 +17,12 @@
 			<link
 			rel="stylesheet" href="{{asset ("assets/plugins/overlayScrollbars/css/OverlayScrollbars.min.css")}}">
 			<!-- css starter page -->
-			<link rel="stylesheet" href="{{asset ("assets/css/styles.css")}}">
+			<link
+			rel="stylesheet" href="{{asset ("assets/css/styles.css")}}">
 			<!-- css imputation calendar -->
 			<link
-			rel='stylesheet' href="{{asset ("assets/js/impCal/lib/main.css")}}"> <!-- Ionicons -->
+			rel='stylesheet' href="{{asset ("assets/js/impCal/lib/main.css")}}">
+			<!-- Ionicons -->
 			<link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
 
 
@@ -204,7 +206,7 @@
 								</li>
 							</li>
 							<li class="nav-item">
-								{% if app.request.uri  == 'https://127.0.0.1:8000/imputation' %}
+								{% if app.request.uri  == 'https://127.0.0.1:8000/imputation/' %}
 									<a href="/imputation" class="nav-link active">
 									{% else %}
 										<a href="/imputation" class="nav-link">
@@ -217,69 +219,83 @@
 								</li>
 							</li>
 							<li class="nav-item">
-								<a href="/projet" class="nav-link">
-									<i class="nav-icon fas fa-tasks"></i>
-									<p>
-										Projets
-									</p>
-								</a>
-							</li>
-							<!-- Menu utilisateur avec condition  !-->
-							{% if is_granted('ROLE_ADMIN') %}
-								<li class="nav-item">
-									{% if app.request.uri  == 'https://127.0.0.1:8000/user/' %}
-										<a href="/user" class="nav-link active">
-										{% else %}
-											<a href="/user" class="nav-link">
-											{% endif %}
-											<i class="nav-icon fas fa-users"></i>
-											<p>
-												Collaborateurs
-											</p>
-										</a>
-									</li>
-								{% endif %}
+								{% if app.request.uri  == 'https://127.0.0.1:8000/projet/' %}
+									<a href="/projet" class="nav-link active">
+									{% else %}
+										<a href="/projet" class="nav-link">
+										{% endif %}
+										<i class="nav-icon fas fa-tasks"></i>
+										<p>
+											Projets
+										</p>
+									</a>
+								</li>
+								<!-- Menu utilisateur avec condition  !-->
+								{% if is_granted('ROLE_ADMIN') %}
+									<li class="nav-item">
+										{% if app.request.uri  == 'https://127.0.0.1:8000/user/' %}
+											<a href="/user" class="nav-link active">
+											{% else %}
+												<a href="/user" class="nav-link">
+												{% endif %}
+												<i class="nav-icon fas fa-users"></i>
+												<p>
+													Collaborateurs
+												</p>
+											</a>
+										</li>
+									{% endif %}
+								</li>
 							</li>
 							<li class="nav-item">
-								<a href="/calendar" class="nav-link">
-									<i class="nav-icon far fa-calendar-alt"></i>
-									<p>
-										Planification
-									</p>
-								</a>
+								{% if app.request.uri  == 'https://127.0.0.1:8000/calendar' %}
+									<a href="/calendar" class="nav-link active">
+									{% else %}
+										<a href="/calendar" class="nav-link">
+										{% endif %}
+										<i class="nav-icon far fa-calendar-alt"></i>
+										<p>
+											Planification
+										</p>
+									</a>
+								</li>
 							</li>
-							
 							<li class="nav-item">
-								<a href="/contact" class="nav-link">
-									<i class="nav-icon far fa-envelope-open"></i>
-									<p>
-										Contact
-									</p>
-								</a>
+								{% if app.request.uri  == 'https://127.0.0.1:8000/contact' %}
+									<a href="/contact" class="nav-link active">
+									{% else %}
+										<a href="/contact" class="nav-link">
+										{% endif %}
+										<i class="nav-icon far fa-envelope-open"></i>
+										<p>
+											Contact
+										</p>
+									</a>
+								</li>
 							</li>
-						</li>
-					</ul>
-				</nav>
-				<!-- /.sidebar-menu -->
-			</div>
-			<!-- /.sidebar -->
+						</ul>
+					</nav>
+					<!-- /.sidebar-menu -->
+				</div>
+				<!-- /.sidebar -->
 
-		</aside>
-		{% block body %}{% endblock %}
+			</aside>
+			{% block body %}{% endblock %}
 
 
-		{% block javascripts %}
-			<!-- jQuery -->
-			<script src="{{asset ("assets/plugins/jquery/jquery.min.js")}}"></script>
-			<!-- Bootstrap 4 -->
-			<script src="{{asset ("assets/plugins/bootstrap/js/bootstrap.js")}}"></script>
-			<!-- overlayScrollbars -->
-			<script src="{{asset ("assets/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js")}}"></script>
-			<script src="{{asset ("assets/js/AdminLTE.js")}}"></script>
-			<!-- OPTIONAL SCRIPTS -->
-			<script src="{{asset ("assets/plugins/chart.js/Chart.min.js")}}"></script>
-			<!-- AdminLTE dashboard demo (This is only for demo purposes) -->
-			<script src="{{asset ("assets/js/pages/dashboard3.js")}}"></script>
-		{% endblock %}
+			{% block javascripts %}
+				<!-- jQuery -->
+				<script src="{{asset ("assets/plugins/jquery/jquery.min.js")}}"></script>
+				<!-- Bootstrap 4 -->
+				<script src="{{asset ("assets/plugins/bootstrap/js/bootstrap.js")}}"></script>
+				<!-- overlayScrollbars -->
+				<script src="{{asset ("assets/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js")}}"></script>
+				<script src="{{asset ("assets/js/AdminLTE.js")}}"></script>
+				<!-- OPTIONAL SCRIPTS -->
+				<script src="{{asset ("assets/plugins/chart.js/Chart.min.js")}}"></script>
+				<!-- AdminLTE dashboard demo (This is only for demo purposes) -->
+				<script src="{{asset ("assets/js/pages/dashboard3.js")}}"></script>
+			{% endblock %}
+		</body>
 	</body>
 </html>

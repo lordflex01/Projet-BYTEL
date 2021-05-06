@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Imputation;
 use App\Form\ImputationType;
 use App\Repository\ImputationRepository;
+use App\Repository\CodeProjetRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -20,7 +21,7 @@ class ImputationController extends AbstractController
     /**
      * @Route("/", name="imputation_index", methods={"GET"})
      */
-    public function index(ImputationRepository $imputationRepository, UserRepository $userRepository): Response
+    public function index(CodeProjetRepository $codeProjetRepository, ImputationRepository $imputationRepository, UserRepository $userRepository): Response
     {
         $imputation = [];
         $users = $userRepository->findAll();
@@ -60,11 +61,16 @@ class ImputationController extends AbstractController
         $data = json_encode($imputation);
         $use = json_encode($listuser);
 
+        $imputationU = new Imputation();
+        $imputationU->setUser($this->container->get('security.token_storage')->getToken()->getUser());
 
         return $this->render('imputation/index.html.twig', [
             'datas' => $data,
             'uses' => $use,
             'imputations' => $imputationRepository->findAll(),
+            'users' => $userRepository->findAll(),
+            'code_projets' => $codeProjetRepository->findAll(),
+            'imputationU' => $imputationU,
         ]);
     }
 
