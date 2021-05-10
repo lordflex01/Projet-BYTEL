@@ -45,9 +45,15 @@ class Projet
      */
     private $codeprojet;
 
+    /**
+     * @ORM\OneToMany(targetEntity=User::class, mappedBy="projet")
+     */
+    private $users;
+
     public function __construct()
     {
         $this->codeprojet = new ArrayCollection();
+        $this->users = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -126,5 +132,35 @@ class Projet
         return $this->libelle;
         // to show the id of the Category in the select
         // return $this->id;
+    }
+
+    /**
+     * @return Collection|User[]
+     */
+    public function getUsers(): Collection
+    {
+        return $this->users;
+    }
+
+    public function addUser(User $user): self
+    {
+        if (!$this->users->contains($user)) {
+            $this->users[] = $user;
+            $user->setProjet($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUser(User $user): self
+    {
+        if ($this->users->removeElement($user)) {
+            // set the owning side to null (unless already changed)
+            if ($user->getProjet() === $this) {
+                $user->setProjet(null);
+            }
+        }
+
+        return $this;
     }
 }

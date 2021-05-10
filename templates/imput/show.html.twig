@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+
+<title>Imput</title>
+
+{% block body %}
+    <h1>Imput</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ imput.id }}</td>
+            </tr>
+            <tr>
+                <th>Valeur</th>
+                <td>{{ imput.valeur }}</td>
+            </tr>
+            <tr>
+                <th>Date</th>
+                <td>{{ imput.date ? imput.date|date('Y-m-d') : '' }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('imput_index') }}">back to list</a>
+
+    <a href="{{ path('imput_edit', {'id': imput.id}) }}">edit</a>
+
+    {{ include('imput/_delete_form.html.twig') }}
+{% endblock %}

@@ -78,8 +78,8 @@ $("#example1").DataTable({"responsive": true, "lengthChange": true, "autoWidth":
 								<th>N°</th>
 								<th>Adresse E-mail</th>
 								<th>Nom d'utilisateur</th>
+								<th>Projet</th>
 								<th>Poste</th>
-								<th>Département</th>
 								<th>Rôle</th>
 								<th>Actions</th>
 							</tr>
@@ -100,11 +100,11 @@ $("#example1").DataTable({"responsive": true, "lengthChange": true, "autoWidth":
 										{{ user.username }}
 									</td>
 									<td>
-										{{ user.poste }}
+										{{ user.projet.libelle }}
 
 									</td>
 									<td>
-										{{ user.departement }}
+										{{ user.poste }}
 
 									</td>
 									<td>

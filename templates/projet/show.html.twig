@@ -201,6 +201,12 @@ $("#example1").DataTable({"responsive": true, "lengthChange": true, "autoWidth":
 				<!-- FIN de la boucle du Data table-->
 			</tbody>
 		</table>
+
 	</div>
 	<!-- /.card-body -->
-</div></div><!-- /.card-body --></div><!-- /.card --></section></div>{% endblock %}
+</div>
+{% if is_granted('ROLE_ADMIN') %}
+	<div style="float:right;">
+		<a class="btn btn-primary" href="{{ path('taches_index') }}">Consulter les taches</a>
+	</div>
+{% endif %}</div><!-- /.card-body --></div><!-- /.card --></section></div>{% endblock %}

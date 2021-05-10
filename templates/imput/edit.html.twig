@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+
+<title>Edit Imput</title>
+
+{% block body %}
+    <h1>Edit Imput</h1>
+
+    {{ include('imput/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a href="{{ path('imput_index') }}">back to list</a>
+
+    {{ include('imput/_delete_form.html.twig') }}
+{% endblock %}

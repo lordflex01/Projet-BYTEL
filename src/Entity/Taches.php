@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\TachesRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -32,6 +34,16 @@ class Taches
      * @ORM\JoinColumn(nullable=false)
      */
     private $codeprojet;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Imput::class, mappedBy="tache")
+     */
+    private $imput;
+
+    public function __construct()
+    {
+        $this->imput = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -70,6 +82,36 @@ class Taches
     public function setCodeprojet(?CodeProjet $codeprojet): self
     {
         $this->codeprojet = $codeprojet;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Imput[]
+     */
+    public function getImput(): Collection
+    {
+        return $this->imput;
+    }
+
+    public function addImput(Imput $imput): self
+    {
+        if (!$this->imput->contains($imput)) {
+            $this->imput[] = $imput;
+            $imput->setTache($this);
+        }
+
+        return $this;
+    }
+
+    public function removeImput(Imput $imput): self
+    {
+        if ($this->imput->removeElement($imput)) {
+            // set the owning side to null (unless already changed)
+            if ($imput->getTache() === $this) {
+                $imput->setTache(null);
+            }
+        }
 
         return $this;
     }
