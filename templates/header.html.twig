@@ -16,11 +16,16 @@
 			<!-- overlayScrollbars -->
 			<link
 			rel="stylesheet" href="{{asset ("assets/plugins/overlayScrollbars/css/OverlayScrollbars.min.css")}}">
+			<!-- Select2 -->
+			<link
+			rel="stylesheet" href="{{asset ("assets/plugins/select2/css/select2.min.css")}}">
 			<!-- css starter page -->
-			<link rel="stylesheet" href="{{asset ("assets/css/styles.css")}}">
+			<link
+			rel="stylesheet" href="{{asset ("assets/css/styles.css")}}">
 			<!-- css imputation calendar -->
 			<link
-			rel='stylesheet' href="{{asset ("assets/js/impCal/lib/main.css")}}"> <!-- Ionicons -->
+			rel='stylesheet' href="{{asset ("assets/js/impCal/lib/main.css")}}">
+			<!-- Ionicons -->
 			<link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
 
 
@@ -248,7 +253,7 @@
 									</p>
 								</a>
 							</li>
-							
+
 							<li class="nav-item">
 								<a href="/contact" class="nav-link">
 									<i class="nav-icon far fa-envelope-open"></i>
@@ -271,6 +276,7 @@
 		{% block javascripts %}
 			<!-- jQuery -->
 			<script src="{{asset ("assets/plugins/jquery/jquery.min.js")}}"></script>
+			<script src="{{asset ("assets/js/demo.js")}}"></script>
 			<!-- Bootstrap 4 -->
 			<script src="{{asset ("assets/plugins/bootstrap/js/bootstrap.js")}}"></script>
 			<!-- overlayScrollbars -->
@@ -280,6 +286,32 @@
 			<script src="{{asset ("assets/plugins/chart.js/Chart.min.js")}}"></script>
 			<!-- AdminLTE dashboard demo (This is only for demo purposes) -->
 			<script src="{{asset ("assets/js/pages/dashboard3.js")}}"></script>
+			<!-- select 2 -->
+			<script src="{{asset ("assets/plugins/select2/js/select2.full.min.js")}}"></script>
+
+			<!-- Filterizr-->
+			<script src="{{asset ("assets/plugins/filterizr/jquery.filterizr.min.js")}}"></script>
+			<script>
+				$(function () { // Initialize Select2 Elements
+$('.select2').select2()
+
+})
+$("#search").click(function () {
+document.getElementById("body-card").style.backgroundColor = "red";
+});
+$(function () {
+$(document).on('click', '[data-toggle="lightbox"]', function (event) {
+event.preventDefault();
+$(this).ekkoLightbox({alwaysShowClose: true});
+});
+
+$('.filter-container').filterizr({gutterPixels: 3});
+$('.btn[data-filter]').on('click', function () {
+$('.btn[data-filter]').removeClass('active');
+$(this).addClass('active');
+});
+})
+			</script>
 		{% endblock %}
 	</body>
 </html>
