@@ -1,37 +1,143 @@
-<!DOCTYPE html>
-
-<title>Taches index</title>
-
+{% extends 'header.html.twig' %}
 {% block body %}
-    <h1>Taches index</h1>
+	<div
+		class="content-wrapper">
+		<!-- Content Header (Page header) -->
+		<section class="content-header">
+			<div class="container-fluid">
+				<div class="row mb-2">
+					<div class="col-sm-6">
+						<h1 class="m-0" style="font-size:19px">Liste des Taches</h1>
+					</div>
+					<div class="col-sm-6">
+						<ol class="breadcrumb float-sm-right">
+							<li class="breadcrumb-item">
+								<a href="/index">Accueil</a>
+							</li>
+							<li class="breadcrumb-item">
+								<a href="/projet">Projet</a>
+							</li>
+							<li class="breadcrumb-item active">Taches</li>
+						</ol>
+					</div>
+				</div>
+			</div>
+			<!-- /.container-fluid -->
+		</section>
+		<section
+			class="content">
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Libelle</th>
-                <th>Description</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for tach in taches %}
-            <tr>
-                <td>{{ tach.id }}</td>
-                <td>{{ tach.libelle }}</td>
-                <td>{{ tach.description }}</td>
-                <td>
-                    <a href="{{ path('taches_show', {'id': tach.id}) }}">show</a>
-                    <a href="{{ path('taches_edit', {'id': tach.id}) }}">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="4">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+			<!-- Default box -->
+			<div class="card">
+				<div class="card-header">
+					<h3 class="card-title">Taches</h3>
 
-    <a href="{{ path('taches_new') }}">Create new</a>
+					<div class="card-tools">
+						<button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+							<i class="fas fa-minus"></i>
+						</button>
+						<button type="button" class="btn btn-tool" data-card-widget="remove" title="Remove">
+							<i class="fas fa-times"></i>
+						</button>
+					</div>
+
+					{% if is_granted('ROLE_ADMIN') %}
+						<div style="float:right;">
+							<a class="btn btn-primary" href="{{ path('taches_new') }}">Ajouter une nouvelle tache</a>
+						</div>
+					{% endif %}
+				</div>
+				<div class="card-body p-0">
+					<table class="table table-striped projects">
+						<thead>
+							<tr>
+								<th style="width: 1%">
+									#
+								</th>
+								<th style="width: 20%">
+									Code Projet
+								</th>
+								<th style="width: 30%">
+									Jira
+								</th>
+								<th>
+									Activité
+								</th>
+								<th style="width: 20%"></th>
+							</tr>
+						</thead>
+						<tbody>
+							{% for tach in taches %}
+								<tr>
+									<td>
+										#
+									</td>
+									<td>
+
+										{{ tach.codeprojet.libelle }}
+
+									</td>
+									<td>
+										{{ tach.libelle }}
+									</td>
+									<td>
+										{{ tach.description }}
+									</td>
+
+									<td class="project-actions text-right">
+										{% if is_granted('ROLE_ADMIN') %}
+											<a class="btn btn-info btn-sm" href="{{ path('taches_edit', {'id': tach.id}) }}">
+												<i class="fas fa-pencil-alt"></i>
+											</a>
+											<a class="btn">
+												{{ include('taches/_delete_form.html.twig') }}
+											</a>
+										{% endif %}
+									</td>
+
+								</tr>
+							{% endfor %}
+
+						</tbody>
+					</table>
+				</div>
+				<!-- /.card-body -->
+			</div>
+			<!-- /.card -->
+		</section>
+		<!-- /.content -->
+	</div>
+
+
+	<h1>Taches index</h1>
+
+	<table class="table">
+		<thead>
+			<tr>
+				<th>Id</th>
+				<th>Libelle</th>
+				<th>Description</th>
+				<th>actions</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for tach in taches %}
+				<tr>
+					<td>{{ tach.id }}</td>
+					<td>{{ tach.libelle }}</td>
+					<td>{{ tach.description }}</td>
+					<td>
+						<a href="{{ path('taches_show', {'id': tach.id}) }}">show</a>
+						<a href="{{ path('taches_edit', {'id': tach.id}) }}">edit</a>
+					</td>
+				</tr>
+			{% else %}
+				<tr>
+					<td colspan="4">no records found</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+
+	<a href="{{ path('taches_new') }}">Create new</a>
 {% endblock %}

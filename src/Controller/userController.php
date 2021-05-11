@@ -164,6 +164,16 @@ class userController extends AbstractController
     public function delete(Request $request, User $user): Response
     {
         if ($this->isCsrfTokenValid('delete' . $user->getId(), $request->request->get('_token'))) {
+            //on récupère le nom de l'image
+            $img = $user->getImage();
+            $nom = $img->getName();
+            //on supprime le fichier
+            unlink($this->getParameter('image_directory') . '/' . $nom);
+            //on supprime l'entrée de la base
+            $em = $this->getDoctrine()->getManager();
+            $em->remove($img);
+            $em->flush();
+
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($user);
             $entityManager->flush();

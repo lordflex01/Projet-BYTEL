@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Taches;
 use App\Form\TachesType;
 use App\Repository\TachesRepository;
+use App\Repository\CodeProjetRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -18,10 +19,11 @@ class TachesController extends AbstractController
     /**
      * @Route("/", name="taches_index", methods={"GET"})
      */
-    public function index(TachesRepository $tachesRepository): Response
+    public function index(TachesRepository $tachesRepository, CodeProjetRepository $codeProjetRepository): Response
     {
         return $this->render('taches/index.html.twig', [
             'taches' => $tachesRepository->findAll(),
+            'code_projets' => $codeProjetRepository->findAll(),
         ]);
     }
 
@@ -83,7 +85,7 @@ class TachesController extends AbstractController
      */
     public function delete(Request $request, Taches $tach): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$tach->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $tach->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($tach);
             $entityManager->flush();

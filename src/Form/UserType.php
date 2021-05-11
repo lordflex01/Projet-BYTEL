@@ -3,6 +3,7 @@
 namespace App\Form;
 
 use App\Entity\User;
+use App\Entity\Projet;
 use phpDocumentor\Reflection\PseudoTypes\True_;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -13,6 +14,7 @@ use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
 class UserType extends AbstractType
 {
@@ -54,17 +56,11 @@ class UserType extends AbstractType
                     'placeholder' => "Veuillez entrer votre nom d'utilisateur"
                 ]
             ])
-            ->add('departement', ChoiceType::class, [
+            ->add('projet', EntityType::class, [
                 'required' => true,
                 'multiple' => false,
                 'expanded' => false,
-                'choices' => [
-                    'Informatique' => 'Informatique',
-                    'Ressource humaine' => 'Ressource humaine',
-                    'Financier' => 'Financier',
-                    'Sécurité' => 'Sécurité',
-                    'Communication' => 'Communication',
-                ],
+                'class' => Projet::class,
             ])
             ->add('poste', ChoiceType::class, [
                 'required' => true,
@@ -72,10 +68,9 @@ class UserType extends AbstractType
                 'expanded' => false,
                 'choices' => [
                     'Développeur' => 'Développeur',
-                    'Team lead' => 'Team lead',
-                    'Scrum master' => 'Scrum master',
+                    'Testeur' => 'Testeur',
+                    'Business analyste' => 'Business analyste',
                     'Manager' => 'Manager',
-                    'Chef de projet' => 'Chef de projet',
                 ],
             ])
             ->add('site', TextType::class, [

@@ -1,11 +1,33 @@
-<!DOCTYPE html>
-
-<title>New Taches</title>
-
+{% extends 'header.html.twig' %}
 {% block body %}
-    <h1>Create new Taches</h1>
+	<!-- Content Wrapper. Contains page content -->
+	<div
+		class="content-wrapper">
+		<!-- Content Header (Page header) -->
+		<div class="content-header">
+			<div class="container-fluid">
+				<div class="row mb-2">
+					<div class="col-sm-6">
+						<h2 class="m-0" style="font-size:19px">Ajouter un nouveau projet</h2>
+					</div>
+					<div class="col-sm-6">
+						<ol class="breadcrumb float-sm-right">
+							<li class="breadcrumb-item">
+								<a href="/index">Accueil</a>
+							</li>
+							<li class="breadcrumb-item">
+								<a href="/taches">Taches</a>
+							</li>
+							<li class="breadcrumb-item active">Nouvelle tache</li>
+						</ol>
+					</div>
+				</div>
+				<!-- /.row -->
+			</div>
+			<!-- /.container-fluid -->
+		</div>
+		<!-- /.content-header -->
+		{{ include('taches/_form.html.twig') }}
 
-    {{ include('taches/_form.html.twig') }}
-
-    <a href="{{ path('taches_index') }}">back to list</a>
+	</div>
 {% endblock %}

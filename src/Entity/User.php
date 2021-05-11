@@ -66,10 +66,6 @@ class User implements UserInterface
      */
     private $poste;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $departement;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
@@ -81,9 +77,20 @@ class User implements UserInterface
      */
     private $imputations;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Projet::class, inversedBy="users")
+     */
+    private $projet;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Imput::class, mappedBy="user")
+     */
+    private $imputs;
+
     public function __construct()
     {
         $this->imputations = new ArrayCollection();
+        $this->imputs = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -203,17 +210,6 @@ class User implements UserInterface
         return $this;
     }
 
-    public function getDepartement(): ?string
-    {
-        return $this->departement;
-    }
-
-    public function setDepartement(string $departement): self
-    {
-        $this->departement = $departement;
-
-        return $this;
-    }
 
     public function getSite(): ?string
     {
@@ -262,5 +258,47 @@ class User implements UserInterface
         return $this->username;
         // to show the id of the Category in the select
         // return $this->id;
+    }
+
+    public function getProjet(): ?projet
+    {
+        return $this->projet;
+    }
+
+    public function setProjet(?projet $projet): self
+    {
+        $this->projet = $projet;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Imput[]
+     */
+    public function getImputs(): Collection
+    {
+        return $this->imputs;
+    }
+
+    public function addImput(Imput $imput): self
+    {
+        if (!$this->imputs->contains($imput)) {
+            $this->imputs[] = $imput;
+            $imput->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeImput(Imput $imput): self
+    {
+        if ($this->imputs->removeElement($imput)) {
+            // set the owning side to null (unless already changed)
+            if ($imput->getUser() === $this) {
+                $imput->setUser(null);
+            }
+        }
+
+        return $this;
     }
 }
