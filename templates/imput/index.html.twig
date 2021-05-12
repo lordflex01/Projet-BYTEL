@@ -1,37 +1,85 @@
-<!DOCTYPE html>
-
-<title>Imput index</title>
-
+{% extends 'header.html.twig' %}
 {% block body %}
-    <h1>Imput index</h1>
+	<div
+		class="content-wrapper">
+		<!-- Content Header (Page header) -->
+		<div class="content-header">
+			<div class="container-fluid">
+				<div class="row mb-2">
+					<div class="col-sm-6">
+						<h1 class="m-0">
+							Imputation
+						</h1>
+					</div>
+				</div>
+				<!-- /.row -->
+			</div>
+			<!-- /.container-fluid -->
+		</div>
+		<!-- /.content-header -->
+		<!-- /.content -->
+		<div class="col-12">
+			<div class="card card-primary">
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Valeur</th>
-                <th>Date</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for imput in imputs %}
-            <tr>
-                <td>{{ imput.id }}</td>
-                <td>{{ imput.valeur }}</td>
-                <td>{{ imput.date ? imput.date|date('Y-m-d') : '' }}</td>
-                <td>
-                    <a href="{{ path('imput_show', {'id': imput.id}) }}">show</a>
-                    <a href="{{ path('imput_edit', {'id': imput.id}) }}">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="4">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+				<div class="card-body">
+					<div>
+						<div class="btn-group w-100 mb-2">
+							{% for user in users %}
+								<a class="btn btn-info" href="javascript:void(0)" data-filter={{ user.id }}>
+									{{ user.username }}
+								</a>
+							{% endfor %}
+						</div>
 
-    <a href="{{ path('imput_new') }}">Create new</a>
+					</div>
+					<div class="filter-container p-0 row">
+						{% for imput in imputs %}
+							<div class="filtr-item col-sm-2" data-category={{ imput.user.id }}>
+								<tr>
+									<td>{{ imput.user.username }}</td>
+									<td>{{ imput.tache.libelle }}</td>
+									<td>{{ imput.valeur }}</td>
+									<td>{{ imput.date ? imput.date|date('Y-m-d') : '' }}</td>
+									<td>
+										<a href="{{ path('imput_show', {'id': imput.id}) }}">show</a>
+										<a href="{{ path('imput_edit', {'id': imput.id}) }}">edit</a>
+									</td>
+								</tr>
+							</div>
+						{% endfor %}
+					</div>
+
+				</div>
+			</div>
+		</div>
+		<table class="table">
+			<thead>
+				<tr>
+					<th>Id</th>
+					<th>Valeur</th>
+					<th>Date</th>
+					<th>actions</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for imput in imputs %}
+					<tr>
+						<td>{{ imput.id }}</td>
+						<td>{{ imput.valeur }}</td>
+						<td>{{ imput.date ? imput.date|date('Y-m-d') : '' }}</td>
+						<td>
+							<a href="{{ path('imput_show', {'id': imput.id}) }}">show</a>
+							<a href="{{ path('imput_edit', {'id': imput.id}) }}">edit</a>
+						</td>
+					</tr>
+				{% else %}
+					<tr>
+						<td colspan="4">no records found</td>
+					</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+
+		<a href="{{ path('imput_new') }}">Create new</a>
+	</div>
 {% endblock %}

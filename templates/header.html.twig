@@ -16,6 +16,9 @@
 			<!-- overlayScrollbars -->
 			<link
 			rel="stylesheet" href="{{asset ("assets/plugins/overlayScrollbars/css/OverlayScrollbars.min.css")}}">
+			<!-- Select2 -->
+			<link
+			rel="stylesheet" href="{{asset ("assets/plugins/select2/css/select2.min.css")}}">
 			<!-- css starter page -->
 			<link
 			rel="stylesheet" href="{{asset ("assets/css/styles.css")}}">
@@ -261,6 +264,19 @@
 								</li>
 							</li>
 							<li class="nav-item">
+								{% if app.request.uri  == 'https://127.0.0.1:8000/calendar' %}
+									<a href="/imput" class="nav-link active">
+									{% else %}
+										<a href="/imput" class="nav-link">
+										{% endif %}
+										<i class="nav-icon far fa-calendar-alt"></i>
+										<p>
+											Imput
+										</p>
+									</a>
+								</li>
+							</li>
+							<li class="nav-item">
 								{% if app.request.uri  == 'https://127.0.0.1:8000/contact' %}
 									<a href="/contact" class="nav-link active">
 									{% else %}
@@ -286,8 +302,7 @@
 			{% block javascripts %}
 				<!-- jQuery -->
 				<script src="{{asset ("assets/plugins/jquery/jquery.min.js")}}"></script>
-				<!-- Filterizr-->
-				<script src="{{asset ("assets/plugins/filterizr/jquery.filterizr.min.js")}}"></script>
+				<script src="{{asset ("assets/js/demo.js")}}"></script>
 				<!-- Bootstrap 4 -->
 				<script src="{{asset ("assets/plugins/bootstrap/js/bootstrap.js")}}"></script>
 				<!-- overlayScrollbars -->
@@ -297,6 +312,32 @@
 				<script src="{{asset ("assets/plugins/chart.js/Chart.min.js")}}"></script>
 				<!-- AdminLTE dashboard demo (This is only for demo purposes) -->
 				<script src="{{asset ("assets/js/pages/dashboard3.js")}}"></script>
+				<!-- select 2 -->
+				<script src="{{asset ("assets/plugins/select2/js/select2.full.min.js")}}"></script>
+
+				<!-- Filterizr-->
+				<script src="{{asset ("assets/plugins/filterizr/jquery.filterizr.min.js")}}"></script>
+				<script>
+					$(function () { // Initialize Select2 Elements
+$('.select2').select2()
+
+})
+$("#search").click(function () {
+document.getElementById("body-card").style.backgroundColor = "red";
+});
+$(function () {
+$(document).on('click', '[data-toggle="lightbox"]', function (event) {
+event.preventDefault();
+$(this).ekkoLightbox({alwaysShowClose: true});
+});
+
+$('.filter-container').filterizr({gutterPixels: 3});
+$('.btn[data-filter]').on('click', function () {
+$('.btn[data-filter]').removeClass('active');
+$(this).addClass('active');
+});
+})
+				</script>
 			{% endblock %}
 		</body>
 	</body>

@@ -9,6 +9,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use App\Repository\TachesRepository;
+use App\Repository\UserRepository;
 
 /**
  * @Route("/imput")
@@ -18,10 +20,12 @@ class ImputController extends AbstractController
     /**
      * @Route("/", name="imput_index", methods={"GET"})
      */
-    public function index(ImputRepository $imputRepository): Response
+    public function index(ImputRepository $imputRepository, UserRepository $userRepository, TachesRepository $tachesRepository): Response
     {
         return $this->render('imput/index.html.twig', [
             'imputs' => $imputRepository->findAll(),
+            'users' => $userRepository->findAll(),
+            'taches' => $tachesRepository->findAll(),
         ]);
     }
 
@@ -83,7 +87,7 @@ class ImputController extends AbstractController
      */
     public function delete(Request $request, Imput $imput): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$imput->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $imput->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($imput);
             $entityManager->flush();
