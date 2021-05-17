@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Imput;
 use App\Form\ImputType;
+use App\Repository\DateVRepository;
 use App\Repository\ImputRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -19,11 +20,12 @@ class ImputController extends AbstractController
     /**
      * @Route("/", name="imput_index", methods={"GET"})
      */
-    public function index(ImputRepository $imputRepository, UserRepository $userRepository): Response
+    public function index(ImputRepository $imputRepository, UserRepository $userRepository, DateVRepository $dateVRepository): Response
     {
         return $this->render('imput/index.html.twig', [
             'imputs' => $imputRepository->findAll(),
             'users' => $userRepository->findAll(),
+            'dateVs' => $dateVRepository->findAll(),
         ]);
     }
 
