@@ -2002,6 +2002,23 @@ pre code {
   box-shadow: inset 0 0 0 rgba(0, 0, 0, 0);
   transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 }
+.form-control-imput {
+  display: block;
+  max-width: 55px;
+  max-height: calc(2rem + 2px);
+  padding: 0.375rem 0.75rem;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.5;
+  color: #495057;
+  background-color: #fff;
+  background-clip: padding-box;
+  border: dashed #ced4da;
+  border-radius: 0.25rem;
+  box-shadow: inset 0 0 0 rgba(0, 0, 0, 0);
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
 
 @media (prefers-reduced-motion: reduce) {
   .form-control {
@@ -2023,6 +2040,13 @@ pre code {
   color: #495057;
   background-color: #fff;
   border-color: #80bdff;
+  outline: 0;
+  box-shadow: inset 0 0 0 rgba(0, 0, 0, 0);
+}
+.form-control-imput:focus {
+  color: #495057;
+  background-color: #fff;
+  border-color: #17a2b8;
   outline: 0;
   box-shadow: inset 0 0 0 rgba(0, 0, 0, 0);
 }
@@ -21322,7 +21346,7 @@ body.iframe-mode-fullscreen .content-wrapper.iframe-mode {
 .select2-container--default .select2-selection--single {
   border: 1px solid #ced4da;
   padding: 0.46875rem 0.75rem;
-  height: calc(2.25rem + 2px);
+  height: calc(2rem + 2px);
 }
 
 .select2-container--default.select2-container--open .select2-selection--single {
