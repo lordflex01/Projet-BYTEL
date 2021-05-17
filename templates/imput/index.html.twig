@@ -42,7 +42,11 @@
 						<div class="col-sm-3">
 
 							<div class="input-group">
+<<<<<<< HEAD
 								<input type="date" id="date-picker">
+=======
+								<input type="month" value="2021-05" class="form-control" data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy" data-mask>
+>>>>>>> a596051fe2b4bf955a5459ebc721f70cb7865cae
 							</div>
 						</div>
 						<div class="col-sm-2">
@@ -75,14 +79,14 @@
 							<thead>
 								<tr>
 									<th>Code Projet</th>
-									<th style="width: 40px">Lun</th>
-									<th style="width: 40px">Mar</th>
-									<th style="width: 40px">Mer</th>
-									<th style="width: 40px">Jeu</th>
-									<th style="width: 40px">Vend</th>
-									<th style="width: 40px">Sam</th>
-									<th style="width: 40px">Dim</th>
-									<th style="width: 40px;color:red">Total</th>
+									<th id="lun" style="width: 40px">Lun</th>
+									<th id="Mar" style="width: 40px">Mar</th>
+									<th id="Mer" style="width: 40px">Mer</th>
+									<th id="Jeu" style="width: 40px">Jeu</th>
+									<th id="Vend" style="width: 40px">Vend</th>
+									<th id="Sam" style="width: 40px">Sam</th>
+									<th id="Dim" style="width: 40px">Dim</th>
+									<th id="Total" style="width: 40px;color:red">Total</th>
 								</tr>
 							</thead>
 							<tbody>
@@ -100,33 +104,34 @@
 										</div>
 									</td>
 									{% for user in users %}
-												<div id='{{ user.id }}' class="data">
-													<span>{{user.username }}</span>
-												</div>
-											{% endfor %}
+										<div id='{{ user.id }}' class="data">
+											<span>{{user.username }}</span>
+										</div>
+									{% endfor %}
+
+									<td>
+										<input type="number" min="0" max="1" step="0.25" class="form-control-imput">
+									</td>
 									<td>
 										<input type="text" class="form-control-imput">
 									</td>
 									<td>
-									<input type="text" class="form-control-imput">
+										<input type="text" class="form-control-imput">
 									</td>
 									<td>
-									<input type="text" class="form-control-imput">
+										<input type="text" class="form-control-imput">
 									</td>
 									<td>
-									<input type="text" class="form-control-imput">
+										<input type="text" class="form-control-imput">
 									</td>
 									<td>
-									<input type="text" class="form-control-imput">
+										<input type="text" class="form-control-imput">
 									</td>
 									<td>
-									<input type="text" class="form-control-imput">
+										<input type="text" class="form-control-imput">
 									</td>
 									<td>
-									<input type="text" class="form-control-imput">
-									</td>
-									<td>
-									<input type="text" class="form-control-imput">
+										<input type="text" class="form-control-imput">
 									</td>
 								</tr>
 
@@ -137,6 +142,7 @@
 				</div>
 				<!-- /.card-body -->
 			</div>
+
 			<div class="card-body">
 
 				{% for user in users %}
@@ -145,7 +151,37 @@
 					</div>
 				{% endfor %}
 			</div>
+			<table class="table">
+				<thead>
+					<tr>
+						<th>Name</th>
+						<th>Tache</th>
+						<th>Valeur</th>
+						<th>Date</th>
+						<th>actions</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for dateV in dateVs %}
+						<tr>
+							<td>{{ dateV.imput.user.username }}</td>
+							<td>{{ dateV.imput.tache.libelle }}</td>
+							<td>{{ dateV.valeur }}</td>
+							<td>{{ dateV.date|format_datetime('long', 'short', locale='fr') }}</td>
+							<td>
+								<a href="{{ path('imput_show', {'id': dateV.imput.id}) }}">show</a>
+								<a href="{{ path('imput_edit', {'id': dateV.imput.id}) }}">edit</a>
+							</td>
+						</tr>
+					{% else %}
+						<tr>
+							<td colspan="4">no records found</td>
+						</tr>
+					{% endfor %}
+				</tbody>
+			</table>
 
+			<a href="{{ path('imput_new') }}">Create new</a>
 			<!--container-->
 		</div>
 	</div>

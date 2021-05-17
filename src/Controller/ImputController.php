@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Imput;
 use App\Form\ImputType;
+use App\Repository\DateVRepository;
 use App\Repository\ImputRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -19,11 +20,12 @@ class ImputController extends AbstractController
     /**
      * @Route("/", name="imput_index", methods={"GET"})
      */
-    public function index(ImputRepository $imputRepository ,UserRepository $userRepository): Response
+    public function index(ImputRepository $imputRepository, UserRepository $userRepository, DateVRepository $dateVRepository): Response
     {
         return $this->render('imput/index.html.twig', [
             'imputs' => $imputRepository->findAll(),
             'users' => $userRepository->findAll(),
+            'dateVs' => $dateVRepository->findAll(),
         ]);
     }
 
@@ -85,7 +87,7 @@ class ImputController extends AbstractController
      */
     public function delete(Request $request, Imput $imput): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$imput->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $imput->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($imput);
             $entityManager->flush();

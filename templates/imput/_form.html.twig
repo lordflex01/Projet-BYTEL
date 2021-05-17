@@ -1,4 +1,39 @@
 {{ form_start(form) }}
-    {{ form_widget(form) }}
-    <button class="btn">{{ button_label|default('Save') }}</button>
-{{ form_end(form) }}
+<!--{{ dump(form) }}-->
+<section class="content">
+	<div class="container-fluid">
+		<div
+			class="row">
+			<!-- left column -->
+			<div
+				class="col-md-12">
+				<!-- general form elements -->
+				<div class="card card-primary">
+					<!-- /.card-header -->
+					<!-- form start -->
+						<form>
+							<div class="card-body"> <div class="form-group">
+								<label for="{{form.user.vars.id}}">Collaborateur</label>
+								{{form_widget( form.user)}}
+								{% do form.user.setRendered %}
+							</div>
+							<div class="form-group">
+								<label for="{{form.tache.vars.id}}">Taches</label>
+								{{form_widget( form.tache)}}
+								{% do form.tache.setRendered %}
+							</div>
+							<div id="DateV" data-prototype="{{ form_row(form.DateVs.vars.prototype)|e('html_attr') }}">
+								{{form_row(form.DateVs)}}
+								{% do form.DateVs.setRendered %}
+								<span></span>
+							</div>
+						</div>
+						<!-- /.card-body -->
+						<div class=" card-footer">
+							{{ form_row(form.Valider) }}
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+		{{ form_end(form) }}

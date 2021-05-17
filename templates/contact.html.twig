@@ -1,5 +1,4 @@
 {% extends 'header.html.twig' %}
-
 {% block body %}
 	<!-- Content Wrapper. Contains page content -->
 	<div
@@ -26,12 +25,11 @@
 			<div class="card card-primary card-outline">
 				<div class="card-header">
 					<div class="row">
-						<div
-							class="col-sm-4">
+						<div class="col-sm-4">
 							<div class="form-group">
 								<select class="form-control select2" id="name" style="width: 100%;">
-               
-								{% for user in users %}
+
+									{% for user in users %}
 										<option value='{{ user.id }}'>{{ user.username }}</option>
 									{% endfor %}
 								</select>
@@ -44,27 +42,18 @@
 								<input type="month" value="2018-05" class="form-control" data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy" data-mask>
 							</div>
 						</div>
-						<div class="col-sm-1">
-							<span class="input-group-append">
-								<button type="button" class="btn btn-info btn-flat" id="search">
-									<i class="fa fa-search" aria-hidden="true"></i>
-								</button>
-							</span>
-						</div>
-						<div
-							class="col-sm-4"><!-- telechargement -->
+						<div class="card-body">
+							{% for user in users %}
+								<div id='{{ user.id }}' class="data">
+									<span>{{user.username }}</span>
+								</div>
+							{% endfor %}
 						</div>
 					</div>
-					<div class="card-body">
-          {% for user in users %}
-						<div id='{{ user.id }}' class="data"> <span>{{user.username }}</span></div>
-            {% endfor %}
-					</div>
-				</div>
 
-				<!--container-->
+					<!--container-->
+				</div>
 			</div>
 		</div>
-	</div>
-	<!-- /.content -->
-</div><!-- /.content-wrapper --><!-- Main Footer -->{% endblock %}
+		<!-- /.content -->
+	</div><!-- /.content-wrapper --><!-- Main Footer -->{% endblock %}
