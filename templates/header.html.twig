@@ -264,6 +264,19 @@
 								</li>
 							</li>
 							<li class="nav-item">
+								{% if app.request.uri  == 'https://127.0.0.1:8000/imput' %}
+									<a href="/imput" class="nav-link active">
+									{% else %}
+										<a href="/imput" class="nav-link">
+										{% endif %}
+										<i class="nav-icon far fa-envelope-open"></i>
+										<p>
+											Imput
+										</p>
+									</a>
+								</li>
+							</li>
+							<li class="nav-item">
 								{% if app.request.uri  == 'https://127.0.0.1:8000/contact' %}
 									<a href="/contact" class="nav-link active">
 									{% else %}
@@ -286,31 +299,54 @@
 			{% block body %}{% endblock %}
 
 
-		{% block javascripts %}
-			<!-- jQuery -->
-			<script src="{{asset ("assets/plugins/jquery/jquery.min.js")}}"></script>
-			<script src="{{asset ("assets/js/demo.js")}}"></script>
-			<!-- Bootstrap 4 -->
-			<script src="{{asset ("assets/plugins/bootstrap/js/bootstrap.js")}}"></script>
-			<!-- overlayScrollbars -->
-			<script src="{{asset ("assets/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js")}}"></script>
-			<script src="{{asset ("assets/js/AdminLTE.js")}}"></script>
-			<!-- OPTIONAL SCRIPTS -->
-			<script src="{{asset ("assets/plugins/chart.js/Chart.min.js")}}"></script>
-			<!-- AdminLTE dashboard demo (This is only for demo purposes) -->
-			<script src="{{asset ("assets/js/pages/dashboard3.js")}}"></script>
-			<!-- select 2 -->
-			<script src="{{asset ("assets/plugins/select2/js/select2.full.min.js")}}"></script>
-			<script>
-				$(function () { // Initialize Select2 Elements
+			{% block javascripts %}
+				<!-- jQuery -->
+				<script src="{{asset ("assets/plugins/jquery/jquery.min.js")}}"></script>
+				<!-- Bootstrap 4 -->
+				<script src="{{asset ("assets/plugins/bootstrap/js/bootstrap.bundle.min.js")}}"></script>
+				<!-- script page -->
+				<script src="{{asset ("assets/js/AdminLTE.js")}}"></script>
+				<!-- AdminLTE for demo purposes -->
+				<script src="{{asset ("assets/js/demo.js")}}"></script>
+				<!-- Bootstrap 4 
+				<script src="{{asset ("assets/plugins/bootstrap/js/bootstrap.js")}}"></script>-->
+				<!-- overlayScrollbars -->
+				<script src="{{asset ("assets/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js")}}"></script>
+
+				<!-- OPTIONAL SCRIPTS -->
+				<script src="{{asset ("assets/plugins/chart.js/Chart.min.js")}}"></script>
+				<!-- AdminLTE dashboard demo (This is only for demo purposes) -->
+				<script src="{{asset ("assets/js/pages/dashboard3.js")}}"></script>
+				<!-- select 2 -->
+				<script src="{{asset ("assets/plugins/select2/js/select2.full.min.js")}}"></script>
+				<!-- Export -->
+				<script src="{{asset ("assets/js/tableExport.js")}}"></script>
+
+				<script>
+					$(function () {
 $('.select2').select2()
 
-})
-$("#search").click(function () {
-document.getElementById("body-card").style.backgroundColor = "red";
 });
-			</script>
-		{% endblock %}
+$(function () {
+$('#name').change(function () {
+$('.data').hide();
+$('#' + $(this).val()).show();
+});
+
+});
+function exportTo(type) {
+
+$('.table').tableExport({filename: 'table_%DD%-%MM%-%YY%', format: type, cols: '2,3,4'});
+
+}
+
+function exportAll(type) {
+
+$('.table').tableExport({filename: 'table_%DD%-%MM%-%YY%-month(%MM%)', format: type});
+
+}
+				</script>
+			{% endblock %}
 		</body>
 	</body>
 </html>

@@ -1,37 +1,132 @@
-<!DOCTYPE html>
-
-<title>Imput index</title>
+{% extends 'header.html.twig' %}
 
 {% block body %}
-    <h1>Imput index</h1>
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Valeur</th>
-                <th>Date</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for imput in imputs %}
-            <tr>
-                <td>{{ imput.id }}</td>
-                <td>{{ imput.valeur }}</td>
-                <td>{{ imput.date ? imput.date|date('Y-m-d') : '' }}</td>
-                <td>
-                    <a href="{{ path('imput_show', {'id': imput.id}) }}">show</a>
-                    <a href="{{ path('imput_edit', {'id': imput.id}) }}">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="4">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
 
-    <a href="{{ path('imput_new') }}">Create new</a>
-{% endblock %}
+	<!-- Content Wrapper. Contains page content -->
+	<div
+		class="content-wrapper">
+		<!-- Content Header (Page header) -->
+		<div class="content-header">
+			<div class="container-fluid">
+				<div class="row mb-2">
+					<div class="col-sm-6">
+						<h1 class="m-0">
+							Imputation
+						</h1>
+					</div>
+				</div>
+				<!-- /.row -->
+			</div>
+			<!-- /.container-fluid -->
+		</div>
+		<!-- /.content-header -->
+
+		<!-- Main content -->
+		<div class="col-lg-12">
+
+			<div class="card card-primary card-outline cardT">
+				<div class="card-header">
+					<div class="rowT">
+						<div class="col-sm-4">
+							<div class="form-group">
+								<select class="form-control select2" id="name" style="width: 100%;">
+
+									{% for user in users %}
+										<option value='{{ user.id }}'>{{ user.username }}</option>
+									{% endfor %}
+								</select>
+
+							</div>
+						</div>
+						<div class="col-sm-3">
+
+							<div class="input-group">
+								<input type="month" value="2018-05" class="form-control" data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy" data-mask>
+							</div>
+						</div>
+						<div class="col-sm-2">
+							<button type="button" class="btn btn-block btn-info">Rechercher</button>
+						</div>
+						<div class="col-sm-3">
+							<div class="btn-group">
+								<button type="button" class="btn btn-info btn-flat">Exporter vers</button>
+								<button type="button" class="btn btn-info btn-flat dropdown-toggle dropdown-icon" data-toggle="dropdown">
+									<span class="sr-only">Toggle Dropdown</span>
+								</button>
+								<div class="dropdown-menu" role="menu">
+									<a class="dropdown-item" onclick="exportAll('csv');" href="javascript://">CSV</a>
+									<a class="dropdown-item" onclick="exportAll('txt');" href="javascript://">TXT</a>
+									<a class="dropdown-item" onclick="exportAll('xls');" href="javascript://">XLS</a>
+									<a class="dropdown-item" onclick="exportAll('sql');" href="javascript://">SQL</a>
+								</div>
+							</div>
+						</div>
+
+					</div>
+
+				</div>
+				<div
+					class="card">
+
+					<!-- /.card-header -->
+					<div class="card-body p-0 table-responsive">
+						<table class="table" id="firm_table">
+							<thead>
+								<tr>
+									<th>Code Projet</th>
+									<th style="width: 40px">Lun</th>
+									<th style="width: 40px">Mar</th>
+									<th style="width: 40px">Mer</th>
+									<th style="width: 40px">Jeu</th>
+									<th style="width: 40px">Vend</th>
+									<th style="width: 40px">Sam</th>
+									<th style="width: 40px">Dim</th>
+									<th style="width: 40px;color:red">Total</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td>
+										<div class="form-group">
+											<select class="form-control select2" style="width: 100%;">
+												<div class="data">
+													{% for imput in imputs %}
+														<option value='{{ imput.user.id }}'>{{ imput.tache.codeprojet.libelle }}</option>
+													</div>
+												{% endfor %}
+											</select>
+
+										</div>
+									</td>
+									<td>
+										<span class="badge bg-warning">
+											{% for user in users %}
+												<div id='{{ user.id }}' class="data">
+													<span>{{user.username }}</span>
+												</div>
+											{% endfor %}
+										</span>
+									</td>
+								</tr>
+
+							</tbody>
+						</div>
+					</table>
+				</div>
+				<!-- /.card-body -->
+			</div>
+			<div class="card-body">
+
+				{% for user in users %}
+					<div id='{{ user.id }}' class="data">
+						<span>{{user.username }}</span>
+					</div>
+				{% endfor %}
+			</div>
+
+			<!--container-->
+		</div>
+	</div>
+</div>
+<!-- /.content --></div><!-- /.content-wrapper --><!-- Main Footer -->{% endblock %}

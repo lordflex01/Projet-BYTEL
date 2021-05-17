@@ -1,4 +1,5 @@
 {% extends 'header.html.twig' %}
+
 {% block body %}
 	<!-- Content Wrapper. Contains page content -->
 	<div
@@ -27,11 +28,11 @@
 					<div class="row">
 						<div
 							class="col-sm-4">
-							<!-- select -->
 							<div class="form-group">
-								<select class="form-control select2" style="width: 100%;">
-									{% for user in users %}
-										<option data-filter="1">{{ user.username }}</option>
+								<select class="form-control select2" id="name" style="width: 100%;">
+               
+								{% for user in users %}
+										<option value='{{ user.id }}'>{{ user.username }}</option>
 									{% endfor %}
 								</select>
 
@@ -54,20 +55,16 @@
 							class="col-sm-4"><!-- telechargement -->
 						</div>
 					</div>
+					<div class="card-body">
+          {% for user in users %}
+						<div id='{{ user.id }}' class="data"> <span>{{user.username }}</span></div>
+            {% endfor %}
+					</div>
+				</div>
 
-				</div>
-				<div class="card-body" id="body-card">
-				<div class="filtr-item col-sm-2" data-category="1" data-sort="white sample">
-                      <a href="https://via.placeholder.com/1200/FFFFFF.png?text=1" data-toggle="lightbox" data-title="sample 1 - white">
-                        <img src="https://via.placeholder.com/300/FFFFFF?text=1" class="img-fluid mb-2" alt="white sample"/>
-                      </a>
-                    </div>
-				</div>
+				<!--container-->
 			</div>
 		</div>
-		<!-- /.content -->
 	</div>
-	<!-- /.content-wrapper -->
-	<!-- Main Footer -->
-
-{% endblock %}
+	<!-- /.content -->
+</div><!-- /.content-wrapper --><!-- Main Footer -->{% endblock %}

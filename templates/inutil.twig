@@ -1,0 +1,261 @@
+$(document).ready(function(){
+	$("#name").on('change',function()){
+		$(".data").hide();
+		$("#" + $(this).val()).fadeIn(700);
+	});
+});
+
+
+
+					<div class="card-body">
+						<div class="panel-heading">
+							<div class="row">
+								<div class="col-md-3">
+									<h4>Code Projet</h4>
+								</div>
+								<div class="col-md-3 col-lg-3">
+									<h4>Tâches</h4>
+								</div>
+								<div class="col-md-1 col-lg-1">
+									<h4>Mon</h4>
+								</div>
+								<div class="col-md-1 col-lg-1">
+									<h4>Tue</h4>
+								</div>
+								<div class="col-md-1 col-lg-1">
+									<h4>Wed</h4>
+								</div>
+								<div class="col-md-1 col-lg-1">
+									<h4>Thur</h4>
+								</div>
+								<div class="col-md-1 col-lg-1">
+									<h4>Fri</h4>
+								</div>
+								<div class="col-md-1 col-lg-1">
+									<h4>Sat</h4>
+								</div>
+								<div class="col-md-1 col-lg-1 ">
+									<h4>Sun</h4>
+								</div>
+								<div class="col-md-1 col-lg-1 ">
+									<h4>Total</h4>
+								</div>
+								<div class="col-md-1 col-lg-1">
+									<span class="glyphicon glyphicon-wrench more-toolbar" aria-hidden="true"></span>
+								</div>
+							</div>
+						</div>
+						{% for user in users %}
+							<div id='{{ user.id }}' class="data">
+								<div class="page-header">
+									<span>{{user.username }}</span>
+								</div>
+								<div class="container ">
+									<div class="panel panel-primary ">
+
+										<div class="panel-body" align="center">
+											<div class="row">
+												<div class="form-group">
+													<select class="form-control select2" style="width: 100%;">
+														<option selected="selected">Alabama</option>
+														<option>Alaska</option>
+														<option>California</option>
+														<option>Delaware</option>
+														<option>Tennessee</option>
+														<option>Texas</option>
+														<option>Washington</option>
+													</select>
+												</div>
+												<div class="col-md-1 col-lg-1 ">
+													<input type="text" class="form-control" placeholder="8.00" aria-label="...">
+												</div>
+												<div class="col-md-1 col-lg-1 ">
+													<input type="text" class="form-control" placeholder="8.00" aria-label="...">
+												</div>
+												<div class="col-md-1 col-lg-1">
+													<input type="text" class="form-control" placeholder="8.00" aria-label="...">
+												</div>
+												<div class="col-md-1 col-lg-1">
+													<input type="text" class="form-control" placeholder="8.00" aria-label="...">
+												</div>
+												<div class="col-md-1 col-lg-1">
+													<input type="text" class="form-control" placeholder="8.00" aria-label="...">
+												</div>
+												<div class="col-md-1 col-lg-1">
+													<input type="text" class="form-control" placeholder="8.00" aria-label="...">
+												</div>
+												<div class="col-md-1 col-lg-1">
+													<input type="text" class="form-control" placeholder="8.00" aria-label="...">
+												</div>
+												<div class="col-md-1 col-lg-1">
+													<button type="button" class="btn btn-success form-control" aria-label="Left Align">
+														40
+													</button>
+												</div>
+
+
+											</div>
+											<!--row-->
+
+
+											<!---------------------------->
+
+										</div>
+										<!--panel body-->
+
+										<div class="panel-footer">
+
+											<div class="row">
+												<div class="col-md-1 col-lg-1">
+													<button type="button" class="btn btn-info" aria-label="Left Align">
+														<span class="glyphicon glyphicon-floppy-disk" aria-hidden="true">
+															New
+														</span>
+													</button>
+												</div>
+												<div class="col-md-1 col-lg-1" text-center>
+													<button type="button" class="btn btn-info" aria-label="Left Align">
+														<span class="glyphicon glyphicon-floppy-open" aria-hidden="true">
+															Save</span>
+													</button>
+												</div>
+
+												<div class="col-md-1 col-lg-1"></div>
+												<div class="col-md-1 col-lg-1 text-center btg-group">
+													<button type="button" class="btn btn-primary" aria-label="Left Align">
+														<span>
+															8.00</span>
+													</button>
+												</div>
+												<div class="col-md-1 col-lg-1 text-center">
+													<button type="button" class="btn btn-primary" aria-label="Left Align">
+														<span>
+															8.00</span>
+													</button>
+												</div>
+												<div class="col-md-1 col-lg-1 text-center">
+													<button type="button" class="btn btn-primary" aria-label="Left Align">
+														<span>
+															8.00</span>
+													</button>
+												</div>
+												<div class="col-md-1 col-lg-1 text-center">
+													<button type="button" class="btn btn-primary" aria-label="Left Align">
+														<span>
+															8.00</span>
+													</button>
+												</div>
+												<div class="col-md-1 col-lg-1 text-center">
+													<button type="button" class="btn btn-primary" aria-label="Left Align">
+														<span>
+															8.00</span>
+													</button>
+
+												</div>
+												<div class="col-md-1 col-lg-1 text-center">
+													<button type="button" class="btn btn-primary" aria-label="Left Align">
+														<span>
+															8.00</span>
+													</button>
+
+												</div>
+												<div class="col-md-1 col-lg-1 text-center">
+													<button type="button" class="btn btn-primary" aria-label="Left Align">
+														<span>
+															8.00</span>
+													</button>
+
+												</div>
+												<div class="col-md-1 col-lg-1 text-center">
+													<button type="button" class="btn btn-success form-control" aria-label="Left Align">
+														<span>
+															40.00</span>
+													</button>
+
+												</div>
+
+											</div>
+
+										</div>
+
+									</div>
+									<!--panel-->
+								</div>
+								<!--container-->
+
+
+							</div>
+						{% endfor %}
+					</div>
+
+
+
+					
+		<!-------------------------------------------------------------------------------->
+		<div class="content-wrapper">
+
+			<!-- /.content-header -->
+			<!-- /.content -->
+				<div class="col-12"> <div class="card card-primary">
+
+					<div class="card-body">
+						<div>
+							<div class="btn-group w-100 mb-2">
+								{% for user in users %}
+									<a class="btn btn-info" href="javascript:void(0)" data-filter={{ user.id }}>
+										{{ user.username }}
+									</a>
+								{% endfor %}
+							</div>
+
+						</div>
+						<div class="filter-container p-0 row">
+							{% for imput in imputs %}
+								<div class="filtr-item col-sm-2" data-category={{ imput.user.id }}>
+									<tr>
+										<td>{{ imput.user.username }}</td>
+										<td>{{ imput.tache.libelle }}</td>
+										<td>{{ imput.valeur }}</td>
+										<td>{{ imput.date ? imput.date|date('Y-m-d') : '' }}</td>
+										<td>
+											<a href="{{ path('imput_show', {'id': imput.id}) }}">show</a>
+											<a href="{{ path('imput_edit', {'id': imput.id}) }}">edit</a>
+										</td>
+									</tr>
+								</div>
+							{% endfor %}
+						</div>
+
+					</div>
+				</div>
+			</div>
+			<table class="table">
+				<thead>
+					<tr>
+						<th>Id</th>
+						<th>Valeur</th>
+						<th>Date</th>
+						<th>actions</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for imput in imputs %}
+						<tr>
+							<td>{{ imput.id }}</td>
+							<td>{{ imput.valeur }}</td>
+							<td>{{ imput.date ? imput.date|date('Y-m-d') : '' }}</td>
+							<td>
+								<a href="{{ path('imput_show', {'id': imput.id}) }}">show</a>
+								<a href="{{ path('imput_edit', {'id': imput.id}) }}">edit</a>
+							</td>
+						</tr>
+					{% else %}
+						<tr>
+							<td colspan="4">no records found</td>
+						</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+
+			<a href="{{ path('imput_new') }}">Create new</a>
+		</div>
