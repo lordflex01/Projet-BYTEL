@@ -9,7 +9,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use App\Repository\TachesRepository;
 use App\Repository\UserRepository;
 
 /**
@@ -20,12 +19,11 @@ class ImputController extends AbstractController
     /**
      * @Route("/", name="imput_index", methods={"GET"})
      */
-    public function index(ImputRepository $imputRepository, UserRepository $userRepository, TachesRepository $tachesRepository): Response
+    public function index(ImputRepository $imputRepository, UserRepository $userRepository): Response
     {
         return $this->render('imput/index.html.twig', [
             'imputs' => $imputRepository->findAll(),
             'users' => $userRepository->findAll(),
-            'taches' => $tachesRepository->findAll(),
         ]);
     }
 

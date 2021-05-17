@@ -559,7 +559,16 @@ pre code {
   margin-right: -7.5px;
   margin-left: -7.5px;
 }
-
+.rowT{
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+  margin-right: -7.5px;
+  margin-left: -7.5px;
+  BACKGROUND: #f1f1f1;
+    padding: 10px;
+}
 .no-gutters {
   margin-right: 0;
   margin-left: 0;
@@ -4687,9 +4696,10 @@ input[type="button"].btn-block {
   background-color: #fff;
   background-clip: border-box;
   border: 0 solid rgba(0, 0, 0, 0.125);
+  box-shadow: 0 0 1px rgb(0 0 0 / 13%), 0 1px 3px rgb(0 0 0 / 20%); 
+    margin-bottom: 1rem;
   
 }
-
 .card > hr {
   margin-right: 0;
   margin-left: 0;
@@ -4724,7 +4734,15 @@ input[type="button"].btn-block {
   padding: 1.25rem;
 
 }
+.card-body-T {
+  -ms-flex: 1 1 auto;
+  flex: 1 1 auto;
+  min-height: 1px;
+}
 
+.card-body .data{
+  display: none;
+}
 .card-title {
   margin-bottom: 0.75rem;
 }
@@ -18139,11 +18157,7 @@ body.text-sm .input-group-text {
   color: #fff;
 }
 
-.card {
-  box-shadow: 8px 12px 19px 4px #768b95;
-  /*box-shadow: 0 0 1px rgba(0, 0, 0, 0.125), 0 1px 3px rgba(0, 0, 0, 0.2);*/
-  margin-bottom: 1rem;
-}
+
 
 .card.bg-dark .card-header {
   border-color: #383f45;
