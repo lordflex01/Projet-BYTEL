@@ -309,7 +309,7 @@
 				<!-- AdminLTE for demo purposes -->
 				<script src="{{asset ("assets/js/demo.js")}}"></script>
 				<!-- Bootstrap 4 
-								<script src="{{asset ("assets/plugins/bootstrap/js/bootstrap.js")}}"></script>-->
+												<script src="{{asset ("assets/plugins/bootstrap/js/bootstrap.js")}}"></script>-->
 				<!-- overlayScrollbars -->
 				<script src="{{asset ("assets/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js")}}"></script>
 
@@ -321,31 +321,11 @@
 				<script src="{{asset ("assets/plugins/select2/js/select2.full.min.js")}}"></script>
 				<!-- Export -->
 				<script src="{{asset ("assets/js/tableExport.js")}}"></script>
+				<!-- Imputation -->
+				<script src="{{asset ("assets/js/utilImputation.js")}}"></script>
+				<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
-				<script>
-					$(function () {
-$('.select2').select2()
 
-});
-$(function () {
-$('#name').change(function () {
-$('.data').hide();
-$('#' + $(this).val()).show();
-});
-
-});
-function exportTo(type) {
-
-$('.table').tableExport({filename: 'table_%DD%-%MM%-%YY%', format: type, cols: '2,3,4'});
-
-}
-
-function exportAll(type) {
-
-$('.table').tableExport({filename: 'table_%DD%-%MM%-%YY%-month(%MM%)', format: type});
-
-}
-				</script>
 			{% endblock %}
 		</body>
 	</body>
