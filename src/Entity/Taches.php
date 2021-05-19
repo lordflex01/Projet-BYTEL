@@ -36,13 +36,13 @@ class Taches
     private $codeprojet;
 
     /**
-     * @ORM\OneToMany(targetEntity=Imput::class, mappedBy="tache")
+     * @ORM\OneToMany(targetEntity=DateV::class, mappedBy="tache")
      */
-    private $imput;
+    private $dateVs;
 
     public function __construct()
     {
-        $this->imput = new ArrayCollection();
+        $this->dateVs = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -86,40 +86,41 @@ class Taches
         return $this;
     }
 
-    /**
-     * @return Collection|Imput[]
-     */
-    public function getImput(): Collection
-    {
-        return $this->imput;
-    }
-
-    public function addImput(Imput $imput): self
-    {
-        if (!$this->imput->contains($imput)) {
-            $this->imput[] = $imput;
-            $imput->setTache($this);
-        }
-
-        return $this;
-    }
-
-    public function removeImput(Imput $imput): self
-    {
-        if ($this->imput->removeElement($imput)) {
-            // set the owning side to null (unless already changed)
-            if ($imput->getTache() === $this) {
-                $imput->setTache(null);
-            }
-        }
-
-        return $this;
-    }
     public function __toString()
     {
         // to show the name of the Category in the select
         return $this->libelle;
         // to show the id of the Category in the select
         // return $this->id;
+    }
+
+    /**
+     * @return Collection|DateV[]
+     */
+    public function getDateVs(): Collection
+    {
+        return $this->dateVs;
+    }
+
+    public function addDateV(DateV $dateV): self
+    {
+        if (!$this->dateVs->contains($dateV)) {
+            $this->dateVs[] = $dateV;
+            $dateV->setTache($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDateV(DateV $dateV): self
+    {
+        if ($this->dateVs->removeElement($dateV)) {
+            // set the owning side to null (unless already changed)
+            if ($dateV->getTache() === $this) {
+                $dateV->setTache(null);
+            }
+        }
+
+        return $this;
     }
 }

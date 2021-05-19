@@ -91,8 +91,8 @@
 										<div class="form-group">
 											<select class="form-control select2" style="width: 100%;">
 												<div class="data">
-													{% for imput in imputs %}
-														<option value='{{ imput.user.id }}'>{{ imput.tache.codeprojet.libelle }}</option>
+													{% for dateV in dateVs %}
+														<option value='{{ dateV.imput.user.id }}'>{{ dateV.tache.codeprojet.libelle }}</option>
 													</div>
 												{% endfor %}
 											</select>
@@ -160,7 +160,7 @@
 					{% for dateV in dateVs %}
 						<tr>
 							<td>{{ dateV.imput.user.username }}</td>
-							<td>{{ dateV.imput.tache.libelle }}</td>
+							<td>{{ dateV.tache.libelle }}</td>
 							<td>{{ dateV.valeur }}</td>
 							<td>{{ dateV.date|format_datetime('long', 'short', locale='fr') }}</td>
 							<td>

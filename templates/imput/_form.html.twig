@@ -1,5 +1,5 @@
 {{ form_start(form) }}
-<!--{{ dump(form) }}-->
+{{ dump(form) }}
 <section class="content">
 	<div class="container-fluid">
 		<div
@@ -17,16 +17,14 @@
 								{{form_widget( form.user)}}
 								{% do form.user.setRendered %}
 							</div>
-							<div class="form-group">
-								<label for="{{form.tache.vars.id}}">Taches</label>
-								{{form_widget( form.tache)}}
-								{% do form.tache.setRendered %}
-							</div>
+
+
 							<div id="DateV" data-prototype="{{ form_row(form.DateVs.vars.prototype)|e('html_attr') }}">
 								{{form_row(form.DateVs)}}
 								{% do form.DateVs.setRendered %}
 								<span></span>
 							</div>
+
 						</div>
 						<!-- /.card-body -->
 						<div class=" card-footer">

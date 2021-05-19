@@ -35,6 +35,7 @@ class ImputController extends AbstractController
     public function new(Request $request): Response
     {
         $imput = new Imput();
+        $imput->setUser($this->container->get('security.token_storage')->getToken()->getUser());
         $form = $this->createForm(ImputType::class, $imput);
         $form->handleRequest($request);
 

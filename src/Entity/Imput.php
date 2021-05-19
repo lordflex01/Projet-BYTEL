@@ -21,11 +21,6 @@ class Imput
 
 
     /**
-     * @ORM\ManyToOne(targetEntity=Taches::class, inversedBy="user")
-     */
-    private $tache;
-
-    /**
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="imputs")
      */
     private $user;
@@ -46,17 +41,6 @@ class Imput
         return $this->id;
     }
 
-    public function getTache(): ?Taches
-    {
-        return $this->tache;
-    }
-
-    public function setTache(?Taches $tache): self
-    {
-        $this->tache = $tache;
-
-        return $this;
-    }
 
     public function getUser(): ?User
     {

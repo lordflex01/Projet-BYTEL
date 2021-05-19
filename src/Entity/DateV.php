@@ -32,6 +32,11 @@ class DateV
      */
     private $imput;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Taches::class, inversedBy="dateVs")
+     */
+    private $tache;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -69,6 +74,18 @@ class DateV
     public function setImput(?Imput $imput): self
     {
         $this->imput = $imput;
+
+        return $this;
+    }
+
+    public function getTache(): ?Taches
+    {
+        return $this->tache;
+    }
+
+    public function setTache(?Taches $tache): self
+    {
+        $this->tache = $tache;
 
         return $this;
     }
