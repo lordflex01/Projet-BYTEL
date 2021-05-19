@@ -23,7 +23,22 @@ class ImputController extends AbstractController
      */
     public function index(ImputRepository $imputRepository, UserRepository $userRepository, DateVRepository $dateVRepository): Response
     {
+
+        $imputation = [];
+        $dateVs = $dateVRepository->findAll();
+        foreach ($dateVs as $dateV) {
+            $imputation[] = [
+                'user' => $dateV->getImput()->getUser()->getId(),
+                'tache' => $dateV->getTache()->getId(),
+                'date' => $dateV->getDate(),
+                'valeur' => $dateV->getValeur(),
+            ];
+        }
+
+        $data = json_encode($imputation);
+
         return $this->render('imput/index.html.twig', [
+            'datas' => $data,
             'imputs' => $imputRepository->findAll(),
             'users' => $userRepository->findAll(),
             'dateVs' => $dateVRepository->findAll(),
@@ -36,6 +51,7 @@ class ImputController extends AbstractController
     public function new(Request $request): Response
     {
         $imput = new Imput();
+        $imput->setUser($this->container->get('security.token_storage')->getToken()->getUser());
         $form = $this->createForm(ImputType::class, $imput);
         $form->handleRequest($request);
 
@@ -96,13 +112,13 @@ class ImputController extends AbstractController
 
         return $this->redirectToRoute('imput_index');
     }
-    public function ajaxAction(Request $request)
+    public function ajaxAction(Request $request, DateVRepository $dateVRepository)
     {
         $imputs = $this->getDoctrine()
             ->getRepository('App:Imput')
             ->findAll();
         if ($request->isXmlHttpRequest() || $request->query->get('showJson') == 1) {
-            $jsonData = array();
+            /*  $jsonData = array();
             $idx = 0;
             foreach ($imputs as $imput) {
                 $temp = array(
@@ -111,8 +127,22 @@ class ImputController extends AbstractController
                     'dateVs' => $imput->getDateVs(),
                 );
                 $jsonData[$idx++] = $temp;
+            }*/
+
+            $imputation = [];
+            $dateVs = $dateVRepository->findAll();
+            foreach ($dateVs as $dateV) {
+                $imputation[] = [
+                    'user' => $dateV->getImput()->getUser()->getId(),
+                    'tache' => $dateV->getTache()->getId(),
+                    'date' => $dateV->getDate(),
+                    'valeur' => $dateV->getValeur(),
+                ];
             }
-            return new JsonResponse($jsonData);
+
+            $data = json_encode($imputation);
+
+            return new JsonResponse($data);
         } else {
 
             return $this->render('imput/index.html.twig');

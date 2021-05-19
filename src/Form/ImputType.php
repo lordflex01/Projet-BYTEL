@@ -4,7 +4,6 @@ namespace App\Form;
 
 use App\Entity\Imput;
 use App\Entity\User;
-use App\Entity\Taches;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -17,12 +16,7 @@ class ImputType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('tache', EntityType::class, [
-                'required' => true,
-                'multiple' => false,
-                'expanded' => false,
-                'class' => Taches::class,
-            ])
+
             ->add('user', EntityType::class, [
                 'required' => true,
                 'multiple' => false,
