@@ -10,6 +10,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use App\Repository\UserRepository;
 
 /**
@@ -94,5 +95,27 @@ class ImputController extends AbstractController
         }
 
         return $this->redirectToRoute('imput_index');
+    }
+    public function ajaxAction(Request $request)
+    {
+        $imputs = $this->getDoctrine()
+            ->getRepository('App:Imput')
+            ->findAll();
+        if ($request->isXmlHttpRequest() || $request->query->get('showJson') == 1) {
+            $jsonData = array();
+            $idx = 0;
+            foreach ($imputs as $imput) {
+                $temp = array(
+                    'tache' => $imput->getTache(),
+                    'user' => $imput->getUser(),
+                    'dateVs' => $imput->getDateVs(),
+                );
+                $jsonData[$idx++] = $temp;
+            }
+            return new JsonResponse($jsonData);
+        } else {
+
+            return $this->render('imput/index.html.twig');
+        }
     }
 }
