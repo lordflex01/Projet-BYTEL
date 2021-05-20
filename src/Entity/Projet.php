@@ -40,10 +40,6 @@ class Projet
      */
     private $statut;
 
-    /**
-     * @ORM\OneToMany(targetEntity=CodeProjet::class, mappedBy="projet")
-     */
-    private $codeprojet;
 
     /**
      * @ORM\OneToMany(targetEntity=User::class, mappedBy="projet")
@@ -52,7 +48,7 @@ class Projet
 
     public function __construct()
     {
-        $this->codeprojet = new ArrayCollection();
+
         $this->users = new ArrayCollection();
     }
 
@@ -97,35 +93,7 @@ class Projet
         return $this;
     }
 
-    /**
-     * @return Collection|CodeProjet[]
-     */
-    public function getCodeprojet(): Collection
-    {
-        return $this->codeprojet;
-    }
 
-    public function addCodeprojet(CodeProjet $codeprojet): self
-    {
-        if (!$this->codeprojet->contains($codeprojet)) {
-            $this->codeprojet[] = $codeprojet;
-            $codeprojet->setProjet($this);
-        }
-
-        return $this;
-    }
-
-    public function removeCodeprojet(CodeProjet $codeprojet): self
-    {
-        if ($this->codeprojet->removeElement($codeprojet)) {
-            // set the owning side to null (unless already changed)
-            if ($codeprojet->getProjet() === $this) {
-                $codeprojet->setProjet(null);
-            }
-        }
-
-        return $this;
-    }
     public function __toString()
     {
         // to show the name of the Category in the select

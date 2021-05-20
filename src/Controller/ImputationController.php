@@ -28,7 +28,7 @@ class ImputationController extends AbstractController
         $events = $imputationRepository->findAll();
         foreach ($events as $event) {
 
-            $title = $event->getUser()->getUsername() . ' ' . '[' . $event->getCodeprojet()->getProjet()->getLibelle() . '] ' . $event->getCodeprojet()->getLibelle() . ': ' . $event->getCommentaire();
+            $title = $event->getUser()->getUsername() . ' ' . $event->getCodeprojet()->getLibelle() . ': ' . $event->getCommentaire();
             $imputation[] = [
                 'id' => $event->getId(),
                 'resourceId' => $event->getUser()->getId(),

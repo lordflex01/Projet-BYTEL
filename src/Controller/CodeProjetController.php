@@ -40,7 +40,7 @@ class CodeProjetController extends AbstractController
             $entityManager->persist($codeProjet);
             $entityManager->flush();
 
-            return $this->redirectToRoute('projet_index');
+            return $this->redirectToRoute('code_projet_index');
         }
 
         return $this->render('code_projet/new.html.twig', [
@@ -71,7 +71,7 @@ class CodeProjetController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirectToRoute('projet_index');
+            return $this->redirectToRoute('code_projet_index');
         }
 
         return $this->render('code_projet/edit.html.twig', [
