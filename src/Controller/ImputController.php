@@ -114,9 +114,7 @@ class ImputController extends AbstractController
     }
     public function ajaxAction(Request $request, DateVRepository $dateVRepository)
     {
-        $imputs = $this->getDoctrine()
-            ->getRepository('App:Imput')
-            ->findAll();
+     
         if ($request->isXmlHttpRequest() || $request->query->get('showJson') == 1) {
             /*  $jsonData = array();
             $idx = 0;
@@ -126,7 +124,9 @@ class ImputController extends AbstractController
                     'user' => $imput->getUser(),
                     'dateVs' => $imput->getDateVs(),
                 );
-                $jsonData[$idx++] = $temp;
+                $jsonData[$idx++] = $temp;$imputs = $this->getDoctrine()
+            ->getRepository('App:Imput')
+            ->findAll();
             }*/
 
             $imputation = [];

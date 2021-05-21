@@ -1,10 +1,11 @@
 {% extends 'header.html.twig' %}
 {% block body %}
-	<!--{{ dump(datas) }}-->
+
 
 	<!-- Content Wrapper. Contains page content -->
-		<div
-		class="content-wrapper"> <!-- Content Header (Page header) -->
+	<div
+		class="content-wrapper">
+		<!-- Content Header (Page header) -->
 		<div class="content-header">
 			<div class="container-fluid">
 				<div class="row mb-2">
@@ -60,7 +61,6 @@
 								</div>
 							</div>
 						</div>
-
 					</div>
 
 				</div>
@@ -70,6 +70,7 @@
 
 					<div class="card-body p-0 table-responsive">
 						<table class="table" id="firm_table">
+							<thead id="entete"></thead>
 							<tbody id="tableB"></tbody>
 						</table>
 					</div>
@@ -77,8 +78,8 @@
 
 					<!--container-->
 				</div>
-				
-				<a href="{{ path('imput_new') }}">Create new</a>
+
+				<!--<a href="{{ path('imput_new') }}">Create new</a>-->
 			</div>
 		</div>
 		<!-- /.content -->
