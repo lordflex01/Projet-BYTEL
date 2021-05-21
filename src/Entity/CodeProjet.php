@@ -45,11 +45,6 @@ class CodeProjet
      */
     private $budget;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Projet::class, inversedBy="dateD")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $projet;
 
     /**
      * @ORM\Column(type="date")
@@ -70,6 +65,31 @@ class CodeProjet
      * @ORM\OneToMany(targetEntity=Imputation::class, mappedBy="codeprojet")
      */
     private $imputations;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    private $budgetNRJ;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    private $budgetDECO;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    private $chageJH;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    private $chageNRJ;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    private $chageDECO;
 
     public function __construct()
     {
@@ -130,17 +150,7 @@ class CodeProjet
         return $this;
     }
 
-    public function getProjet(): ?Projet
-    {
-        return $this->projet;
-    }
 
-    public function setProjet(?Projet $projet): self
-    {
-        $this->projet = $projet;
-
-        return $this;
-    }
 
     public function getDateD(): ?\DateTimeInterface
     {
@@ -231,5 +241,65 @@ class CodeProjet
         return $this->libelle;
         // to show the id of the Category in the select
         // return $this->id;
+    }
+
+    public function getBudgetNRJ(): ?float
+    {
+        return $this->budgetNRJ;
+    }
+
+    public function setBudgetNRJ(?float $budgetNRJ): self
+    {
+        $this->budgetNRJ = $budgetNRJ;
+
+        return $this;
+    }
+
+    public function getBudgetDECO(): ?float
+    {
+        return $this->budgetDECO;
+    }
+
+    public function setBudgetDECO(?float $budgetDECO): self
+    {
+        $this->budgetDECO = $budgetDECO;
+
+        return $this;
+    }
+
+    public function getChageJH(): ?float
+    {
+        return $this->chageJH;
+    }
+
+    public function setChageJH(?float $chageJH): self
+    {
+        $this->chageJH = $chageJH;
+
+        return $this;
+    }
+
+    public function getChageNRJ(): ?float
+    {
+        return $this->chageNRJ;
+    }
+
+    public function setChageNRJ(?float $chageNRJ): self
+    {
+        $this->chageNRJ = $chageNRJ;
+
+        return $this;
+    }
+
+    public function getChageDECO(): ?float
+    {
+        return $this->chageDECO;
+    }
+
+    public function setChageDECO(?float $chageDECO): self
+    {
+        $this->chageDECO = $chageDECO;
+
+        return $this;
     }
 }

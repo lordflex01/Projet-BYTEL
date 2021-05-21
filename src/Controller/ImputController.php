@@ -134,7 +134,8 @@ class ImputController extends AbstractController
             foreach ($dateVs as $dateV) {
                 $imputation[] = [
                     'user' => $dateV->getImput()->getUser()->getId(),
-                    'tache' => $dateV->getTache()->getId(),
+                    'tache' => $dateV->getTache()->getLibelle(),
+                    'codeprojet' => $dateV->getTache()->getCodeprojet()->getLibelle(),
                     'date' => $dateV->getDate(),
                     'valeur' => $dateV->getValeur(),
                 ];

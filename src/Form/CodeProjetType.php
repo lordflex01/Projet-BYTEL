@@ -37,18 +37,36 @@ class CodeProjetType extends AbstractType
                     'placeholder' => "Veuillez entrer votre budget"
                 ]
             ])
+            ->add('budgetNRJ', TextType::class, [
+                'attr' => [
+                    'placeholder' => "Veuillez entrer le budget d'NRJ"
+                ]
+            ])
+            ->add('budgetDECO', TextType::class, [
+                'attr' => [
+                    'placeholder' => "Veuillez entrer le budget de DECO"
+                ]
+            ])
+            ->add('chageJH', TextType::class, [
+                'attr' => [
+                    'placeholder' => "Veuillez entrer la charge en jour-homme"
+                ]
+            ])
+            ->add('chageNRJ', TextType::class, [
+                'attr' => [
+                    'placeholder' => "Veuillez entrer la charge en jour-homme pour le projet NRJ"
+                ]
+            ])
+            ->add('chageDECO', TextType::class, [
+                'attr' => [
+                    'placeholder' => "Veuillez entrer la charge en jour-homme pour le projet DECO"
+                ]
+            ])
             ->add('dateD', DateType::class, [
                 'widget' => 'single_text',
             ])
             ->add('DateF', DateType::class, [
                 'widget' => 'single_text',
-            ])
-
-            ->add('projet', EntityType::class, [
-                'required' => true,
-                'multiple' => false,
-                'expanded' => true,
-                'class' => Projet::class,
             ]);
     }
 
