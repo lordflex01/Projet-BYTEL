@@ -132,9 +132,15 @@ class ImputController extends AbstractController
             $imputation = [];
             $dateVs = $dateVRepository->findAll();
             foreach ($dateVs as $dateV) {
+                //Numero de semaine
+                $dmy = $dateV->getDate()->format('d-m-Y');
+                $week = "W" . date("W", strtotime($dmy));
+
                 $imputation[] = [
                     'user' => $dateV->getImput()->getUser()->getId(),
                     'tache' => $dateV->getTache()->getLibelle(),
+                    'commentaire' =>  $dateV->getImput()->getCommentaire(),
+                    'week' => $week,
                     'codeprojet' => $dateV->getTache()->getCodeprojet()->getLibelle(),
                     'date' => $dateV->getDate(),
                     'valeur' => $dateV->getValeur(),
