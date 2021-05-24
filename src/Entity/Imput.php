@@ -30,6 +30,11 @@ class Imput
      */
     private $dateVs;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $commentaire;
+
     public function __construct()
     {
         $this->dateVs = new ArrayCollection();
@@ -89,5 +94,17 @@ class Imput
         return $this->libelle;
         // to show the id of the Category in the select
         // return $this->id;
+    }
+
+    public function getCommentaire(): ?string
+    {
+        return $this->commentaire;
+    }
+
+    public function setCommentaire(?string $commentaire): self
+    {
+        $this->commentaire = $commentaire;
+
+        return $this;
     }
 }

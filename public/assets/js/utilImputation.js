@@ -31,8 +31,7 @@ $("#btnRech").click(function () {
     success: function (data, status) {
       var e = $('<th></th><th style="width: 40px">Lun</th><th  style="width: 40px">Mar</th><th  style="width: 40px">Mer</th><th  style="width: 40px">Jeu</th>' +
         '<th  style="width: 40px">Vend</th>' +
-        '<th style="width: 40px">Sam</th>' +
-        '<th  style="width: 40px">Dim</th><th  style="width: 40px;color:red">Total</th>');
+        '<th  style="width: 40px;color:red">Total</th>' + '<th  style="width: 40px;color:green">Commentaire</th>');
       $('#entete').html('');
       $('#entete').append(e);
       var div1 = $(
@@ -60,7 +59,9 @@ $("#btnRech").click(function () {
       var obj = jQuery.parseJSON(data);
       $.each(obj, function (key, value) {
         m = value.date.date.split('-');
-        if (id == value.user && month == m[1] && year == m[0]) {
+        // if (id == value.user && month == m[1] && year == m[0]) {
+        W = value.week;
+        if (id == value.user && month == W) {
           if (a != value.tache) {
             $('#tableB').append('<th><span>Code Projet: ' + value.codeprojet + '</span></th>');
           }
@@ -72,12 +73,12 @@ $("#btnRech").click(function () {
           //'<tr><td id = "user">' + value.codeprojet + ' ' + value.tache + '</td><td id = "date">' + value.date.date + '</td><td id = "valeur">' + value.valeur + '</td></tr>'
         }
       });
-      if (c == 0) {
 
+      if (c == 0) {
       }
       else {
         // IMPUT VIDE
-        while (c < 7) {
+        while (c < 5) {
           $('#tableB').append('<th style="width: 40px"><input type="number" min="0" max="1" step="0.25" class="form-control-imput" value="0"></th>');
           c = c + 1;
         }
