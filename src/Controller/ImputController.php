@@ -7,6 +7,7 @@ use App\Form\ImputType;
 use App\Repository\DateVRepository;
 use App\Repository\ImputRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Repository\CodeProjetRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -21,7 +22,7 @@ class ImputController extends AbstractController
     /**
      * @Route("/", name="imput_index", methods={"GET"})
      */
-    public function index(ImputRepository $imputRepository, UserRepository $userRepository, DateVRepository $dateVRepository): Response
+    public function index(CodeProjetRepository $codeProjetRepository, ImputRepository $imputRepository, UserRepository $userRepository, DateVRepository $dateVRepository): Response
     {
 
         $imputation = [];
@@ -34,8 +35,13 @@ class ImputController extends AbstractController
                 'valeur' => $dateV->getValeur(),
             ];
         }
+        $codeP = $codeProjetRepository->findAll();
+        //DEBUT calcule des chiifre d'$imputation
+        $somme = 0;
+        $somme =
+            //FIN de calcule des chiffre d'imputation
 
-        $data = json_encode($imputation);
+            $data = json_encode($imputation);
 
         return $this->render('imput/index.html.twig', [
             'datas' => $data,
