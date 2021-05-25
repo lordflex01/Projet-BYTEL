@@ -20,6 +20,7 @@ $("#btnRech").click(function () {
   var date = $("#date-input").val().split("-");
   week = date[1];
   year = date[0];
+  day = date[2];
   var id = $("#name").val();
   $("#idCard").html(week);
   $.ajax({
@@ -40,6 +41,7 @@ $("#btnRech").click(function () {
       var a = 0;
       var c = 0;
       var t = 0;
+      var bool = 0;
       var obj = jQuery.parseJSON(data);
 
       $.each(obj, function (key, value) {
@@ -65,17 +67,27 @@ $("#btnRech").click(function () {
       if (c > 0) {
         // IMPUT VIDE
         while (c < 5) {
-          $("#tableB").append(
-            '<th><input type="number" min="0" max="1" step="0.25" class="form-control-imput" value="0"></th>'
-          );
+          $('#tableB').append('<th><input type="number" min="0" max="1" step="0.25" class="form-control-imput" value="0"></th>');
           c = c + 1;
         }
         //TOTALE
-        $("#tableB").append(
-          '<th><input type="number" min="0" max="1" step="0.25" class="form-control-imput" value=' +
-            t +
-            "></th>"
-        );
+        $('#tableB').append('<th><input type="number" min="0" max="1" step="0.25" class="form-control-imput" value=' + t + '></th>');
+        com = "";
+        $.each(obj, function (key, value) {
+          if (id == value.user && bool == 0) {
+            $('#tableB').append('<th><input style="max-width: 280px" type="text" class="form-control-imput" value=' + value.commentaire + '></th>');
+            bool = 1;
+          }
+        });
+      }
+
+      for (i = 0; i < data.length; i++) {
+        imput = data[i];
+        var e = $('<tr><td id = "user"></td><td id = "dateVS"></td></tr>');
+
+        $('#user', e).html(imput['user']);
+        //$('#dateVS', e).html(imput['dateVs']);
+        $('#student').append(e);
       }
       
       var scntDiv = $("#tableB");
