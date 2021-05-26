@@ -17,6 +17,25 @@ function exportAll(type) {
 }
 
 $("#btnRech").click(function () {
+  let parseDates = (inp) => {
+    let year = parseInt(inp.slice(0, 4), 10);
+    let week = parseInt(inp.slice(6), 10);
+    
+    let day = (1 + (week - 1) * 7); // 1st of January + 7 days for each week
+    
+    let dayOffset = new Date(year, 0, 1).getDay(); // we need to know at what day of the week the year start
+    
+    dayOffset--; // depending on what day you want the week to start increment or decrement this value. This should make the week start on a monday
+    
+    let days = [];
+    for (let i = 0; i < 7; i++)  // do this 7 times, once for every day
+    days.push(new Date(year, 0, day - dayOffset + i));
+     // add a new Date object to the array with an offset of i days relative to the first day of the week
+    return days;
+    }
+    let week = document.querySelector('#date-input');
+    let dates = parseDates(week.value);
+    alert(dates);
   var date = $("#date-input").val().split("-");
   week = date[1];
   year = date[0];
@@ -84,7 +103,7 @@ $("#btnRech").click(function () {
       var i = $("#tableB tr").length + 1;
       $("#addScnt").click(function () {
         scntDiv.append(
-          '<tr><td><select id="cdprojet" class="form-control select2"><option>Douae</option></select></td>'+
+          '<tr><td><select class="form-control select2"><option>Douae</option></select></td>'+
           '<td><input type="number" min="0" max="1" step="0.25" class="form-control-imput" value="0"></td>'+
           '<td><input type="number" min="0" max="1" step="0.25" class="form-control-imput" value="0"></td>'+
           '<td><input type="number" min="0" max="1" step="0.25" class="form-control-imput" value="0"></td>'+
@@ -105,9 +124,7 @@ $("#btnRech").click(function () {
         }
         return false;
     });
-    $("#cdprojet").change(function () {
-          alert($(this).val());
-        });
+  
     },
     error: function (xhr, textStatus, errorThrown) {
       alert(xhr.responseText);
