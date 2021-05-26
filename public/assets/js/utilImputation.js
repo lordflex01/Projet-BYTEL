@@ -75,36 +75,28 @@ $("#btnRech").click(function () {
         com = "";
         $.each(obj, function (key, value) {
           if (id == value.user && bool == 0) {
-            $('#tableB').append('<th><input style="max-width: 280px" type="text" class="form-control-imput" value=' + value.commentaire + '></th>');
+            $('#tableB').append('<th><input style="max-width: 200px" type="text" class="form-control-imput" value=' + value.commentaire + '></th>');
             bool = 1;
           }
         });
       }
-
-      for (i = 0; i < data.length; i++) {
-        imput = data[i];
-        var e = $('<tr><td id = "user"></td><td id = "dateVS"></td></tr>');
-
-        $('#user', e).html(imput['user']);
-        //$('#dateVS', e).html(imput['dateVs']);
-        $('#student').append(e);
-      }
-      
       var scntDiv = $("#tableB");
       var i = $("#tableB tr").length + 1;
       $("#addScnt").click(function () {
         scntDiv.append(
-          '<tr><td><select name="type" class="form-control select2" id="type"></select></td>'+
+          '<tr><td><select id="cdprojet" class="form-control select2"><option>Douae</option></select></td>'+
           '<td><input type="number" min="0" max="1" step="0.25" class="form-control-imput" value="0"></td>'+
           '<td><input type="number" min="0" max="1" step="0.25" class="form-control-imput" value="0"></td>'+
           '<td><input type="number" min="0" max="1" step="0.25" class="form-control-imput" value="0"></td>'+
           '<td><input type="number" min="0" max="1" step="0.25" class="form-control-imput" value="0"></td>'+
           '<td><input type="number" min="0" max="1" step="0.25" class="form-control-imput" value="0"></td>'+
           '<td><input type="number" min="0" max="1" step="0.25" class="form-control-imput" value="0"></td>'+
-          '<td><a href="" id="remScnt">Remove</a></td></tr>'
+          '<td><input type="text"  style="max-width: 200px" class="form-control-imput"></td>'+
+          '<td><i class="fa fa-trash" style="font-size: 16px;margin-top: 8px;color: #cc1919;"id="remScnt"></i></td>'
         );
         i++;
         return false;
+        
       });
       $(document).on('click', '#remScnt', function() {
         if (i > 2) {
@@ -113,6 +105,9 @@ $("#btnRech").click(function () {
         }
         return false;
     });
+    $("#cdprojet").change(function () {
+          alert($(this).val());
+        });
     },
     error: function (xhr, textStatus, errorThrown) {
       alert(xhr.responseText);
