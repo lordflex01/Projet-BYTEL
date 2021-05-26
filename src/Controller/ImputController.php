@@ -35,19 +35,15 @@ class ImputController extends AbstractController
                 'valeur' => $dateV->getValeur(),
             ];
         }
-        $codeP = $codeProjetRepository->findAll();
-        //DEBUT calcule des chiifre d'$imputation
-        $somme = 0;
-        $somme =
-            //FIN de calcule des chiffre d'imputation
 
-            $data = json_encode($imputation);
+        $data = json_encode($imputation);
 
         return $this->render('imput/index.html.twig', [
             'datas' => $data,
             'imputs' => $imputRepository->findAll(),
             'users' => $userRepository->findAll(),
             'dateVs' => $dateVRepository->findAll(),
+            'code_projets' => $codeProjetRepository->findAll(),
         ]);
     }
 
