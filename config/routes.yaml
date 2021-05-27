@@ -10,6 +10,9 @@ api:
     path: /api/{id}/edit
     controller: App\Controller\ImputationController::majEvent
 
+apii:
+    path: /apii/{id}/edit
+    controller: App\Controller\ImputController::majEvent
 user:
     path: /user
     controller: App\Controller\UserController::user

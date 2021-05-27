@@ -361,3 +361,18 @@ $('#' + $(this).val()).show();
 			</table>
 				
 			</div>
+
+
+			var date = $("#date-input").val().split("-");
+month = date[1];
+year = date[0];
+var id = $("#name").val();
+$("#idCard").html(month);
+
+for(i = 0; i < data.length; i++) {  
+  student = data[i];  
+  var e = $('<tr><td id = "name"></td><td id = "address"></td></tr>');
+  
+  $('#name', e).html(student['name']);  
+  $('#student').append(e);  
+}  

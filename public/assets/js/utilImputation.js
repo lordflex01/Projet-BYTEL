@@ -17,96 +17,174 @@ function exportAll(type) {
 }
 
 $("#btnRech").click(function () {
+  let parseDates = (inp) => {
+    let year = parseInt(inp.slice(0, 4), 10);
+    let week = parseInt(inp.slice(6), 10);
+
+    let day = (1 + (week - 0) * 7); // 1st of January + 7 days for each week
+
+    let dayOffset = new Date(year, 0, 1).getDay(); // we need to know at what day of the week the year start
+
+    dayOffset--; // depending on what day you want the week to start increment or decrement this value. This should make the week start on a monday
+
+    let days = [];
+    for (let i = 0; i < 7; i++)  // do this 7 times, once for every day
+      days.push(new Date(year, 0, day - dayOffset + i));
+    // add a new Date object to the array with an offset of i days relative to the first day of the week
+    return days;
+  }
+  let week = document.querySelector('#date-input');
+  let dates = parseDates(week.value);
+  let days = [];
+  let Z;
+  let w;
+  for (let i = 0; i < 7; i++) {
+    Z = dates[i].toString();
+    w = Z.split(" ");
+    days[i] = w[2];
+  }
+
+  //alert(days);
   var date = $("#date-input").val().split("-");
-  month = date[1];
+  week = date[1];
   year = date[0];
-  day = date[2];
   var id = $("#name").val();
-  $("#idCard").html(month);
+  $("#idCard").html(week);
   $.ajax({
-    url: '/imput',
-    type: 'POST',
-    data: { field1: month, field2: id },
-    dataType: 'json',
+    url: "/imput",
+    type: "POST",
+    dataType: "json",
     async: true,
     success: function (data, status) {
-      var e = $('<th></th><th style="width: 40px">Lun</th><th  style="width: 40px">Mar</th><th  style="width: 40px">Mer</th><th  style="width: 40px">Jeu</th>' +
-        '<th  style="width: 40px">Vend</th>' +
-        '<th  style="width: 40px;color:red">Total</th>' + '<th  style="width: 40px;color:green">Commentaire</th>');
-      $('#entete').html('');
-      $('#entete').append(e);
-      var div1 = $(
-        '<div style="background-color:red"><tr><td><span>Semaine</span></td></tr></div>');
-      var es = $(
-        '<tr><td><span>Code Projet</span></td><td style="width: 40px"><input type="number" min="0" max="1" step="0.25" class="form-control-imput"></td>' +
-        '<td  style="width: 40px"><input type="number" min="0" max="1" step="0.25" class="form-control-imput"></td>' +
-        '<td  style="width: 40px"><input type="number" min="0" max="1" step="0.25" class="form-control-imput"></td>' +
-        '<td  style="width: 40px"><input type="number" min="0" max="1" step="0.25" class="form-control-imput"></td>' +
-        '<td  style="width: 40px"><input type="number" min="0" max="1" step="0.25" class="form-control-imput"></td>' +
-        '<td style="width: 40px"><input type="number" min="0" max="1" step="0.25" class="form-control-imput"></td>' +
-        '<td  style="width: 40px"><input type="number" min="0" max="1" step="0.25" class="form-control-imput"></td>' +
-        ' <td  style="width: 40px;color:red"><input type="number" min="0" max="1" step="0.25" class="form-control-imput"></td></tr>'
+      var e = $(
+        '<th><button id="addScnt" type="button" class="btn btn-block btn-info btn-sm" style="width: 30px;margin-bottom: -7px;border-radius: 30px;"><i class="fa fa-plus"></i></button></th><th style="width: 40px">Lun ' + days[0] + '</th><th  style="width: 40px">Mar ' + days[1] + '</th><th  style="width: 40px">Mer ' + days[2] + '</th><th  style="width: 40px">Jeu ' + days[3] + '</th>' +
+        '<th  style="width: 40px">Vend ' + days[4] + '</th>' +
+        '<th  style="width: 40px;color:red">Total</th>' +
+        '<th  style="width: 40px;color:green">Commentaires</th>'
       );
-      var div2 = $(
-        '<tr><td><button  style="width: 125%;"class="btn btn-outline-info btn-block btn-sm"><i class="fa fa-plus"></i>&nbsp;Ajouter une nouvelle imputation</button></td></tr>');
-      $("#tableB").html("");
-      // $("#tableB").append(div1);
 
-      //$('#tableB').append(es);
-      //alert(data);
+      $("#entete").html("");
+      $("#entete").append(e);
+      $("#tableB").html("");
       var a = 0;
       var c = 0;
       var t = 0;
+      var j = 0;
+      //bool = pour afficher une seul fois le commentaire
       var bool = 0;
+      //bool2 = si il ya une imputation pendant cette semaine
+      var bool2 = 0;
       var obj = jQuery.parseJSON(data);
+      var H = [];
+      H[0] = 0, H[1] = 0, H[2] = 0, H[3] = 0, H[4] = 0;
       $.each(obj, function (key, value) {
-        m = value.date.date.split('-');
-        // if (id == value.user && month == m[1] && year == m[0]) {
+        m = value.date.date.split("-");
+        z = m[2].split(" ");
         W = value.week;
-        if (id == value.user && month == W) {
+        //Condition pour afficher le code projet une seul fois
+        if (id == value.user && week == W) {
           if (a != value.tache) {
-            $('#tableB').append('<th><span>Code Projet: ' + value.codeprojet + '</span></th>');
+            $("#tableB").append(
+              "<th><span>Code Projet: " + value.codeprojet + "</span></th>"
+            );
           }
-          $('#tableB').append('<th style="width: 40px"><input type="number" min="0" max="1" step="0.25" class="form-control-imput" value=' + value.valeur + '></th>');
+          //Rempli le tableau qui sera afficher avec les valeur dans l'ordre
+          for (let i = 0; i < 5; i++) {
+            if (z[0] == days[i]) {
+              H[i] = value.valeur; t = t + value.valeur;
+            }
+          }
 
+          bool2 = 1;
           c = c + 1;
           a = value.tache;
-          t = t + value.valeur;
-          //'<tr><td id = "user">' + value.codeprojet + ' ' + value.tache + '</td><td id = "date">' + value.date.date + '</td><td id = "valeur">' + value.valeur + '</td></tr>'
+
         }
       });
-
-      if (c == 0) {
+      //verifie si il ya une imputation pendant cette semaine pour les afficher dans l'ordre
+      if (bool2 == 1) {
+        var L = $(
+          '<th><input type="number" min="0" max="1" step="0.25" class="form-control-imput" value=' +
+          H[0] +
+          '></th><th><input type="number" min="0" max="1" step="0.25" class="form-control-imput" value=' +
+          H[1] +
+          '></th><th><input type="number" min="0" max="1" step="0.25" class="form-control-imput" value=' +
+          H[2] +
+          '></th><th><input type="number" min="0" max="1" step="0.25" class="form-control-imput" value=' +
+          H[3] +
+          '></th><th><input type="number" min="0" max="1" step="0.25" class="form-control-imput" value=' +
+          H[4] +
+          '></th>'
+        );
+        $("#tableB").append(L
+        );
       }
-      else {
+      if (c > 0) {
         // IMPUT VIDE
-        while (c < 5) {
+        /*while (c < 5) {
           $('#tableB').append('<th><input type="number" min="0" max="1" step="0.25" class="form-control-imput" value="0"></th>');
           c = c + 1;
-        }
+        }*/
         //TOTALE
         $('#tableB').append('<th><input type="number" min="0" max="1" step="0.25" class="form-control-imput" value=' + t + '></th>');
         com = "";
         $.each(obj, function (key, value) {
           if (id == value.user && bool == 0) {
-            $('#tableB').append('<th><input style="max-width: 280px" type="text" class="form-control-imput" value=' + value.commentaire + '></th>');
+            $('#tableB').append('<th><input style="max-width: 200px" type="text" class="form-control-imput" value=' + value.commentaire + '></th>');
             bool = 1;
           }
         });
       }
-
-      for (i = 0; i < data.length; i++) {
-        imput = data[i];
-        var e = $('<tr><td id = "user"></td><td id = "dateVS"></td></tr>');
-
-        $('#user', e).html(imput['user']);
-        //$('#dateVS', e).html(imput['dateVs']);
-        $('#student').append(e);
+      var scntDiv = $("#tableB");
+      var i = $("#tableB tr").length + 1;
+      var tache = [];
+      while (j < obj[0].tacheliste.length) {
+        tache[j] = obj[0].tacheliste[j];
+        j++;
       }
+      tache;
+      $("#addScnt").click(function () {
+
+        scntDiv.append(
+          '<tr><td><select class="form-control select2"><option>' + tache[0].libelle + '</option><option>' + tache[1].libelle + '</option><option>' + tache[2].libelle + '</option><option>' + tache[3].libelle + '</option></select></td>' +
+          '<td><input type="number" min="0" max="1" step="0.25" class="form-control-imput" value="0"></td>' +
+          '<td><input type="number" min="0" max="1" step="0.25" class="form-control-imput" value="0"></td>' +
+          '<td><input type="number" min="0" max="1" step="0.25" class="form-control-imput" value="0"></td>' +
+          '<td><input type="number" min="0" max="1" step="0.25" class="form-control-imput" value="0"></td>' +
+          '<td><input type="number" min="0" max="1" step="0.25" class="form-control-imput" value="0"></td>' +
+          '<td><input type="number" min="0" max="1" step="0.25" class="form-control-imput" value="0"></td>' +
+          '<td><input type="text"  style="max-width: 200px" class="form-control-imput"></td>' +
+          '<td><i class="fa fa-trash" style="font-size: 16px;margin-top: 8px;color: #cc1919;"id="remScnt"></i></td>'
+        );
+        i++;
+        return false;
+        //DEBUT change
+
+        $(document).on('eventChange', (L) => {
+          /* let url = `/apii/${e.event.id
+             }/edit`
+           let donnees = {
+             "valeur": e.event.title
+           }
+           let xhr = new XMLHttpRequest
+           xhr.open("PUT", url)
+           xhr.send(JSON.stringify(donnees))*/
+        }
+
+        )
+        //FIN Changes
+      });
+      $(document).on('click', '#remScnt', function () {
+        if (i > 2) {
+          $(this).closest('tr').remove();
+          i--;
+        }
+        return false;
+      });
+
     },
     error: function (xhr, textStatus, errorThrown) {
       alert(xhr.responseText);
-    }
+    },
   });
-
 });

@@ -1,10 +1,11 @@
 {% extends 'header.html.twig' %}
 {% block body %}
-	<!--{{ dump(datas) }}-->
+
 
 	<!-- Content Wrapper. Contains page content -->
-		<div
-		class="content-wrapper"> <!-- Content Header (Page header) -->
+	<div
+		class="content-wrapper">
+		<!-- Content Header (Page header) -->
 		<div class="content-header">
 			<div class="container-fluid">
 				<div class="row mb-2">
@@ -40,7 +41,7 @@
 						<div class="col-sm-3">
 
 							<div class="input-group">
-								<input type="week" value='<?=date("dd-MM-yy")?>' id="date-input" class="form-control" name="month"/>
+								<input type="week" id="date-input" class="form-control" name="month"/>
 							</div>
 						</div>
 						<div class="col-sm-2">
@@ -60,7 +61,6 @@
 								</div>
 							</div>
 						</div>
-
 					</div>
 
 				</div>
@@ -93,19 +93,18 @@
 								{% endif %}
 							{% endif %}
 						{% endfor %}
-						/////////////
-						{{ chargeATM }}
-						NRJ
-						{{ chargeNRJ }}
-						DECO
-						{{ chargeDECO }}
-						//////////////
+						<!--/////////////-->
+					<!--{{ chargeATM }}-->
+						<!--NRJ-->
+						<!--{{ chargeNRJ }}-->
+						<!--DECO-->
+						<!--{{ chargeDECO }}-->
+						<!--//////////////-->
 					{% endfor %}
 					<!--FIN du compteur-->
 
 					<!--container-->
 				</div>
-				<a href="{{ path('imput_new') }}">Ajoutez une imputation</a>
 			</div>
 		</div>
 		<!-- /.content -->
