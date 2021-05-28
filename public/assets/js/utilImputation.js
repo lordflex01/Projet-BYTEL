@@ -104,17 +104,17 @@ $("#btnRech").click(function () {
       //verifie si il ya une imputation pendant cette semaine pour les afficher dans l'ordre
       if (bool2 == 1) {
         var L = $(
-          '<th><input type="number" min="0" max="1" step="0.25" class="form-control-imput" value=' +
+          '<td><input type="number" min="0" max="1" step="0.25" class="form-control-imput" value=' +
           H[0] +
-          '></th><th><input type="number" min="0" max="1" step="0.25" class="form-control-imput" value=' +
+          '></td><td><input type="number" min="0" max="1" step="0.25" class="form-control-imput" value=' +
           H[1] +
-          '></th><th><input type="number" min="0" max="1" step="0.25" class="form-control-imput" value=' +
+          '></td><td><input type="number" min="0" max="1" step="0.25" class="form-control-imput" value=' +
           H[2] +
-          '></th><th><input type="number" min="0" max="1" step="0.25" class="form-control-imput" value=' +
+          '></td><td><input type="number" min="0" max="1" step="0.25" class="form-control-imput" value=' +
           H[3] +
-          '></th><th><input type="number" min="0" max="1" step="0.25" class="form-control-imput" value=' +
+          '></td><td><input type="number" min="0" max="1" step="0.25" class="form-control-imput" value=' +
           H[4] +
-          '></th>'
+          '></td>'
         );
         $("#tableB").append(L
         );
@@ -126,11 +126,11 @@ $("#btnRech").click(function () {
           c = c + 1;
         }*/
         //TOTALE
-        $('#tableB').append('<th><input type="number" min="0" max="1" step="0.25" class="form-control-imput" value=' + t + '></th>');
+        $('#tableB').append('<td><input type="number" min="0" max="1" step="0.25" class="form-control-imput" value=' + t + '></td>');
         com = "";
         $.each(obj, function (key, value) {
           if (id == value.user && bool == 0) {
-            $('#tableB').append('<th><input style="max-width: 200px" type="text" class="form-control-imput" value=' + value.commentaire + '></th>');
+            $('#tableB').append('<td><input style="max-width: 200px" type="text" class="form-control-imput" value=' + value.commentaire + '></td>');
             bool = 1;
           }
         });
@@ -146,16 +146,17 @@ $("#btnRech").click(function () {
       $("#addScnt").click(function () {
 
         scntDiv.append(
-          '<tr><td><select class="form-control select2"><option>' + tache[0].libelle + '</option><option>' + tache[1].libelle + '</option><option>' + tache[2].libelle + '</option><option>' + tache[3].libelle + '</option></select></td>' +
+          '<tr><td><select class="form-control select2" id="name" style="width: 100%;"><option>' + tache[0].libelle + '</option><option>' + tache[1].libelle + '</option><option>' + tache[2].libelle + '</option><option>' + tache[3].libelle + '</option></select></td>' +
           '<td><input type="number" min="0" max="1" step="0.25" class="form-control-imput" value="0"></td>' +
           '<td><input type="number" min="0" max="1" step="0.25" class="form-control-imput" value="0"></td>' +
           '<td><input type="number" min="0" max="1" step="0.25" class="form-control-imput" value="0"></td>' +
           '<td><input type="number" min="0" max="1" step="0.25" class="form-control-imput" value="0"></td>' +
+          
           '<td><input type="number" min="0" max="1" step="0.25" class="form-control-imput" value="0"></td>' +
           '<td><input type="number" min="0" max="1" step="0.25" class="form-control-imput" value="0"></td>' +
           '<td><input type="text"  style="max-width: 200px" class="form-control-imput"></td>' +
-          '<td><i class="fa fa-trash" style="font-size: 16px;margin-top: 8px;color: #cc1919;"id="remScnt"></i></td>'
-        );
+          '<td><i class="fa fa-plus" style="font-size: 16px;margin-top: 8px;cursor:pointer;color: green;;"id="remScnt"></i></td>'+
+          '<td><i class="fa fa-trash" style="font-size: 16px;cursor:pointer;margin-top: 8px;color: #cc1919;"id="remScnt"></i></td></tr>');
         i++;
         return false;
         //DEBUT change
