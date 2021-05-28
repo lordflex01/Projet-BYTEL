@@ -376,3 +376,34 @@ for(i = 0; i < data.length; i++) {
   $('#name', e).html(student['name']);  
   $('#student').append(e);  
 }  
+
+var es = $(
+    '<tr><td><span>Code Projet</span></td><td style="width: 40px"><input type="number" min="0" max="1" step="0.25" class="form-control-imput"></td>' +
+      '<td  style="width: 40px"><input type="number" min="0" max="1" step="0.25" class="form-control-imput"></td>' +
+      '<td  style="width: 40px"><input type="number" min="0" max="1" step="0.25" class="form-control-imput"></td>' +
+      '<td  style="width: 40px"><input type="number" min="0" max="1" step="0.25" class="form-control-imput"></td>' +
+      '<td  style="width: 40px"><input type="number" min="0" max="1" step="0.25" class="form-control-imput"></td>' +
+      '<td style="width: 40px"><input type="number" min="0" max="1" step="0.25" class="form-control-imput"></td>' +
+      '<td  style="width: 40px"><input type="number" min="0" max="1" step="0.25" class="form-control-imput"></td>' +
+      ' <td  style="width: 40px;color:red"><input type="number" min="0" max="1" step="0.25" class="form-control-imput"></td></tr>'
+  );
+  
+ let parseDates = (inp) => {
+    let year = parseInt(inp.slice(0, 4), 10);
+    let week = parseInt(inp.slice(6), 10);
+    
+    let day = (1 + (week - 1) * 7); // 1st of January + 7 days for each week
+    
+    let dayOffset = new Date(year, 0, 1).getDay(); // we need to know at what day of the week the year start
+    
+    dayOffset--; // depending on what day you want the week to start increment or decrement this value. This should make the week start on a monday
+    
+    let days = [];
+    for (let i = 0; i < 7; i++)  // do this 7 times, once for every day
+    days.push(new Date(year, 0, day - dayOffset + i));
+     // add a new Date object to the array with an offset of i days relative to the first day of the week
+    return days;
+    }
+    let week = document.querySelector('#date-input');
+    let dates = parseDates(week.value);
+    alert(dates);
