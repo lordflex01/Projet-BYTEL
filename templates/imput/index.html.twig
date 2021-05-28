@@ -36,12 +36,12 @@
 									{% endfor %}
 								</select>
 
-						</div>
+							</div>
 						</div>
 						<div class="col-sm-3">
 
 							<div class="input-group">
-								<input type="week"  id="date-input" class="form-control" name="month"/>
+								<input type="week" id="date-input" class="form-control" name="month"/>
 							</div>
 						</div>
 						<div class="col-sm-2">
@@ -75,6 +75,33 @@
 						</table>
 					</div>
 
+					<!--DEBUT du compteur-->
+					{% for code_projet in code_projets %}
+						{% set chargeATM = code_projet.chageJH %}
+						{% set chargeNRJ = code_projet.chageNRJ %}
+						{% set chargeDECO = code_projet.chageDECO %}
+
+						{% for dateV in dateVs %}
+							{% if code_projet.libelle == dateV.tache.codeprojet.libelle %}
+								{% set chargeATM = chargeATM - dateV.valeur %}
+								{% if dateV.imput.user.projet.libelle == "NRJ" %}
+									{% set chargeNRJ = chargeNRJ - dateV.valeur %}
+								{% endif %}
+
+								{% if dateV.imput.user.projet.libelle == "DECO" %}
+									{% set chargeDECO = chargeDECO - dateV.valeur %}
+								{% endif %}
+							{% endif %}
+						{% endfor %}
+						<!--/////////////-->
+					<!--{{ chargeATM }}-->
+						<!--NRJ-->
+						<!--{{ chargeNRJ }}-->
+						<!--DECO-->
+						<!--{{ chargeDECO }}-->
+						<!--//////////////-->
+					{% endfor %}
+					<!--FIN du compteur-->
 
 					<!--container-->
 				</div>
