@@ -48,8 +48,10 @@ $("#btnRech").click(function () {
   var date = $("#date-input").val().split("-");
   week = date[1];
   year = date[0];
+
   var id = $("#name").val();
   $("#idCard").html(week);
+
   $.ajax({
     url: "/imput",
     type: "POST",
@@ -146,35 +148,38 @@ $("#btnRech").click(function () {
       $("#addScnt").click(function () {
 
         scntDiv.append(
-          '<tr><td><select class="form-control select2" id="name" style="width: 100%;"><option>' + tache[0].libelle + '</option><option>' + tache[1].libelle + '</option><option>' + tache[2].libelle + '</option><option>' + tache[3].libelle + '</option></select></td>' +
-          '<td><input type="number" min="0" max="1" step="0.25" class="form-control-imput" value="0"></td>' +
-          '<td><input type="number" min="0" max="1" step="0.25" class="form-control-imput" value="0"></td>' +
-          '<td><input type="number" min="0" max="1" step="0.25" class="form-control-imput" value="0"></td>' +
-          '<td><input type="number" min="0" max="1" step="0.25" class="form-control-imput" value="0"></td>' +
-          
-          '<td><input type="number" min="0" max="1" step="0.25" class="form-control-imput" value="0"></td>' +
-          '<td><input type="number" min="0" max="1" step="0.25" class="form-control-imput" value="0"></td>' +
-          '<td><input type="text"  style="max-width: 200px" class="form-control-imput"></td>' +
-          '<td><i class="fa fa-plus" style="font-size: 16px;margin-top: 8px;cursor:pointer;color: green;;"id="remScnt"></i></td>'+
+          '<tr><td><select class="form-control select2" id="codeP" style="width: 100%;"><option>' + tache[0].libelle + '</option><option>' + tache[1].libelle + '</option><option>' + tache[2].libelle + '</option><option>' + tache[3].libelle + '</option></select></td>' +
+          '<td><input type="number" id="i1" min="0" max="1" step="0.25" class="form-control-imput" value="0"></td>' +
+          '<td><input type="number" id="i2"  min="0" max="1" step="0.25" class="form-control-imput" value="0"></td>' +
+          '<td><input type="number" id="i3"  min="0" max="1" step="0.25" class="form-control-imput" value="0"></td>' +
+          '<td><input type="number" id="i4" min="0" max="1" step="0.25" class="form-control-imput" value="0"></td>' +
+          '<td><input type="number" id="i5" min="0" max="1" step="0.25" class="form-control-imput" value="0"></td>' +
+          '<td><input type="number"   min="0" max="1" step="0.25" class="form-control-imput" value="0"></td>' +
+          '<td><input type="text"  id="i6"  style="max-width: 200px" class="form-control-imput"></td>' +
+          '<td><i class="fa fa-plus" id="addCode" style="font-size: 16px;margin-top: 8px;cursor:pointer;color: green;"></i></td>'+
           '<td><i class="fa fa-trash" style="font-size: 16px;cursor:pointer;margin-top: 8px;color: #cc1919;"id="remScnt"></i></td></tr>');
         i++;
         return false;
-        //DEBUT change
-
-        $(document).on('eventChange', (L) => {
-          /* let url = `/apii/${e.event.id
-             }/edit`
-           let donnees = {
-             "valeur": e.event.title
-           }
-           let xhr = new XMLHttpRequest
-           xhr.open("PUT", url)
-           xhr.send(JSON.stringify(donnees))*/
-        }
-
-        )
-        //FIN Changes
       });
+
+      $(document).on('click', '#addCode', function () {
+       
+        var selected = $('#codeP option:selected');
+        var str1 = $("#i1").val();
+        var str2 = $("#i2").val();
+        var str3 = $("#i3").val();
+        var str4 = $("#i4").val();
+        var str5 = $("#i5").val();
+        var str6 = $("#i6").val();
+        alert(" If you want text ==>"  + selected.html() + "input 1 : "+str1+
+        "input 2 " +str2+
+        "input 3 " +str3+
+        "input 4 " +str4+
+        "input 5 " +str5+
+        "input 6 " +str6
+        ); 
+
+    });
       $(document).on('click', '#remScnt', function () {
         if (i > 2) {
           $(this).closest('tr').remove();
@@ -189,3 +194,5 @@ $("#btnRech").click(function () {
     },
   });
 });
+
+
