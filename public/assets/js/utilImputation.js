@@ -177,15 +177,6 @@ $(document).ready(function () {
             "</option><option value= " + tache[3].id + ">" +
             tache[3].libelle +
             "</option></select></td>" +
-            '<td><select class="form-control select2" id="codeP" style="width: 100%;"><option value = ' + tache[0].id + '>' +
-            tache[0].libelle +
-            "</option><option value= " + tache[1].id + ">" +
-            tache[1].libelle +
-            "</option><option value= " + tache[2].id + ">" +
-            tache[2].libelle +
-            "</option><option value= " + tache[3].id + ">" +
-            tache[3].libelle +
-            "</option></select></td>" +
             '<td><input type="number" id="i1" min="0" max="1" step="0.25" class="form-control-imput" value="0"></td>' +
             '<td><input type="number" id="i2"  min="0" max="1" step="0.25" class="form-control-imput" value="0"></td>' +
             '<td><input type="number" id="i3"  min="0" max="1" step="0.25" class="form-control-imput" value="0"></td>' +

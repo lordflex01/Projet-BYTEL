@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Imput;
 use App\Entity\DateV;
 use App\Entity\Taches;
+use App\Entity\User;
 use App\Form\ImputType;
 use App\Repository\DateVRepository;
 use App\Repository\ImputRepository;
@@ -16,6 +17,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use App\Repository\UserRepository;
+use DateTime;
 
 /**
  * @Route("/imput")
@@ -77,60 +79,78 @@ class ImputController extends AbstractController
     /**
      * @Route("/apii/new", name="api_new", methods={"GET","POST"})
      */
-    public function apinew(DateV $dateV, Request $request)
+    public function apinew(TachesRepository $tachesrepository, UserRepository $userRepository, Request $request)
     {
 
         //on recupère les données
         $donnees = json_decode($request->getContent());
+        //Declaration
+        $userlistes = $userRepository->findAll();
+        $tachelistes = $tachesrepository->findAll();
+        $imput = new Imput;
+        $tache = new Taches;
+        $user = new User;
+        //connaitre le user
+        foreach ($userlistes as $userliste) {
+            if ($donnees->user == $userliste->getId())
+                $user = $userliste;
+        }
+        //connaitre la tache
+        foreach ($tachelistes as $tacheliste) {
+            if ($donnees->tache == $tacheliste->getId())
+                $tache = $tacheliste;
+        }
+        //création de l'imput
+        $imput->setUser($user);
+        $imput->setCommentaire($donnees->Commentaires);
 
-        //on hydrate l'objet avec les données
-        $dateV->setValeur($donnees->valeur);
-        $dateV->setDate($donnees->valeur);
-        $dateV->setValeur($donnees->valeur);
-        $dateV->setValeur($donnees->valeur);
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($imput);
+        //Création des donnée
+        for ($i = 0; $i < 5; $i++) {
+            $dateV = new DateV;
+            //on hydrate l'objet avec les données
+            $dateV->setImput($imput);
+            $dateV->setValeur($donnees->valeur[$i]);
+            $dateV->setDate(new DateTime($donnees->date[$i + 1]));
+            $dateV->setTache($tache);
+
+            $em->persist($dateV);
+        }
+
+        $em->flush();
+
+        $code = 200;
+        return new Response('Imputation Valide');
+        //return $this->redirectToRoute('imput_index');
     }
 
     /**
      * @Route("/apii/{id}/edit", name="api_imput_edit", methods={"PUT"})
      */
-    public function majEvent(?DateV $dateV, Request $request)
+    public function apiedit(TachesRepository $tachesrepository, DateVRepository $dateVRepository, Request $request)
     {
 
         //on recupère les données
         $donnees = json_decode($request->getContent());
 
-        if (
-            isset($donnees->valeur) && !empty($donnees->valeur)
+        //Declaration
+        $dateVlistes = $dateVRepository->findAll();
+        $i = 0;
 
-        ) {
-            //les données sont complètes
-            //on initialise un code
-            $code = 200;
-
-            //On vérifie si l'id existe
-            if (!$dateV) {
-                //on instancie un rendez vous
-                $dateV = new Imput;
-                //on change de code
-                $code = 201;
+        $em = $this->getDoctrine()->getManager();
+        //Debut du traitement
+        foreach ($dateVlistes as $dateVliste) {
+            $dateV = new DateV;
+            $dateV = $dateVliste;
+            if ($donnees->id == $dateVliste->getImput()->getId() && $donnees->valeur[$i] != $dateVliste->getValeur()) {
+                $dateV->setValeur($donnees->valeur[$i]);
+                $em->persist($dateV);
             }
-            //on hydrate l'objet avec les données
-            $dateV->setValeur($donnees->valeur);
-
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($dateV);
-            $em->flush();
-
-            //on retourne le code
-            return new Response('Ok', $code);
-        } else {
-            //les données sont incomplètes
-            return new Response('Données incomplètes', 404);
+            $i++;
         }
-
-        return $this->render('imput/index.html.twig', [
-            'dateV' => $dateV,
-        ]);
+        $em->flush();
+        return new Response('Ok');
     }
 
     /**
@@ -197,6 +217,7 @@ class ImputController extends AbstractController
             $tache = $tachesRepository->findAll();
             foreach ($tache as $taches) {
                 $tacheliste[] = [
+                    'id' => $taches->getId(),
                     'libelle' => $taches->getLibelle(),
                 ];
             }
@@ -208,6 +229,7 @@ class ImputController extends AbstractController
                 $week = "W" . date("W", strtotime($dmy));
 
                 $imputation[] = [
+                    'id' => $dateV->getImput()->getId(),
                     'user' => $dateV->getImput()->getUser()->getId(),
                     'tache' => $dateV->getTache()->getLibelle(),
                     'commentaire' =>  $dateV->getImput()->getCommentaire(),
@@ -218,11 +240,6 @@ class ImputController extends AbstractController
                     'tacheliste' => $tacheliste,
                 ];
             }
-
-            $all[] = [
-                'imputation' => $imputation,
-                'tacheliste' => $tacheliste,
-            ];
 
             $data = json_encode($imputation);
 
