@@ -101,71 +101,56 @@ class ImputController extends AbstractController
                 $tache = $tacheliste;
         }
         //création de l'imput
-        $imput->setUser($this->container->get('security.token_storage')->getToken()->getUser());
+        $imput->setUser($user);
         $imput->setCommentaire($donnees->Commentaires);
 
-        //$em = $this->getDoctrine()->getManager();
-        //$em->persist($imput);
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($imput);
         //Création des donnée
         for ($i = 0; $i < 5; $i++) {
             $dateV = new DateV;
             //on hydrate l'objet avec les données
             $dateV->setImput($imput);
             $dateV->setValeur($donnees->valeur[$i]);
-            $dateV->setDate(new DateTime($donnees->date[$i]));
+            $dateV->setDate(new DateTime($donnees->date[$i + 1]));
             $dateV->setTache($tache);
 
-            //  $em->persist($dateV);
+            $em->persist($dateV);
         }
 
-        //  $em->flush();
+        $em->flush();
 
         $code = 200;
-        return new Response('Ok');
+        return new Response('Imputation Valide');
         //return $this->redirectToRoute('imput_index');
     }
 
     /**
      * @Route("/apii/{id}/edit", name="api_imput_edit", methods={"PUT"})
      */
-    public function apiedit(?DateV $dateV, Request $request)
+    public function apiedit(TachesRepository $tachesrepository, DateVRepository $dateVRepository, Request $request)
     {
 
         //on recupère les données
         $donnees = json_decode($request->getContent());
 
-        if (
-            isset($donnees->valeur) && !empty($donnees->valeur)
+        //Declaration
+        $dateVlistes = $dateVRepository->findAll();
+        $i = 0;
 
-        ) {
-            //les données sont complètes
-            //on initialise un code
-            $code = 200;
-
-            //On vérifie si l'id existe
-            if (!$dateV) {
-                //on instancie un rendez vous
-                $dateV = new Imput;
-                //on change de code
-                $code = 201;
+        $em = $this->getDoctrine()->getManager();
+        //Debut du traitement
+        foreach ($dateVlistes as $dateVliste) {
+            $dateV = new DateV;
+            $dateV = $dateVliste;
+            if ($donnees->id == $dateVliste->getImput()->getId() && $donnees->valeur[$i] != $dateVliste->getValeur()) {
+                $dateV->setValeur($donnees->valeur[$i]);
+                $em->persist($dateV);
             }
-            //on hydrate l'objet avec les données
-            $dateV->setValeur($donnees->valeur);
-
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($dateV);
-            $em->flush();
-
-            //on retourne le code
-            return new Response('Ok', $code);
-        } else {
-            //les données sont incomplètes
-            return new Response('Données incomplètes', 404);
+            $i++;
         }
-
-        return $this->render('imput/index.html.twig', [
-            'dateV' => $dateV,
-        ]);
+        $em->flush();
+        return new Response('Ok');
     }
 
     /**
