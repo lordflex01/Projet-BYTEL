@@ -407,3 +407,11 @@ var es = $(
     let week = document.querySelector('#date-input');
     let dates = parseDates(week.value);
     alert(dates);
+
+	$(document).on("click", "#remScnt", function () {
+  if (i > 2) {
+    $(this).closest("tr").remove();
+    i--;
+  }
+  return false;
+});
