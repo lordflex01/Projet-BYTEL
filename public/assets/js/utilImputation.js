@@ -67,7 +67,6 @@ $(document).ready(function () {
         var e = $(
           '<th><button id="addRow" type="button" class="btn btn-block btn-info btn-sm" style="width: 30px;margin-bottom: -7px;border-radius: 30px;"><i class="fa fa-plus"></i></button></th>' +
           "<th></th>" +
-          "<th></th>" +
           '<th style="width: 40px">Lun ' +
           days[0] +
           '</th><th  style="width: 40px">Mar ' +
@@ -129,7 +128,6 @@ $(document).ready(function () {
         if (bool2 == 1) {
           var L = $(
             "<td></td>" +
-            "<td></td>" +
             '<td><input id="m1" type="number" min="0" max="1" step="0.25" class="form-control-imput" value=' +
             H[0] +
             '></td><td><input id="m2" type="number" min="0" max="1" step="0.25" class="form-control-imput" value=' +
@@ -167,57 +165,47 @@ $(document).ready(function () {
 
         var scntDiv = $("#tableB");
         var i = $("#tableB tr").length + 1;
+        //liste des tache
         var tache = [];
         while (j < obj[0].tacheliste.length) {
           tache[j] = obj[0].tacheliste[j];
           j++;
         }
         tache;
+
+        //liste des code projet
+        let f = 0;
+        var codeP = [];
+        while (f < obj[0].codeprojetlist.length) {
+          codeP[f] = obj[0].codeprojetlist[f];
+          f++;
+        }
+        codeP;
+
         $("#addRow").click(function () {
           scntDiv.append(
-            '<tr><td><select class="form-control select2" id="codeP" style="width: 100%;">' +
+            '<tr><td><select class="form-control select2" id="codeP2" style="width: 100%;">' +
             "<option value = " +
-            tache[0].id +
+            codeP[0].id +
             ">" +
-            tache[0].libelle +
+            codeP[0].libelle +
             "</option>" +
             "<option value= " +
-            tache[1].id +
+            codeP[1].id +
             ">" +
-            tache[1].libelle +
+            codeP[1].libelle +
             "</option>" +
             "<option value= " +
-            tache[2].id +
+            codeP[2].id +
             ">" +
-            tache[2].libelle +
+            codeP[2].libelle +
             "</option>" +
             "<option value= " +
-            tache[3].id +
+            codeP[3].id +
             ">" +
-            tache[3].libelle +
+            codeP[3].libelle +
             "</option></select></td>" +
-            '<td><select class="form-control select2" id="codeP2" style="width: 100%;">' +
-            "<option value = " +
-            tache[0].id +
-            ">" +
-            tache[0].libelle +
-            "</option>" +
-            "<option value= " +
-            tache[1].id +
-            ">" +
-            tache[1].libelle +
-            "</option>" +
-            "<option value= " +
-            tache[2].id +
-            ">" +
-            tache[2].libelle +
-            "</option>" +
-            "<option value= " +
-            tache[3].id +
-            ">" +
-            tache[3].libelle +
-            "</option></select></td>" +
-            '<td><select class="form-control select2" id="codeP3" style="width: 100%;">' +
+            '<td><select class="form-control select2" id="codeP" style="width: 100%;">' +
             "<option value = " +
             tache[0].id +
             ">" +

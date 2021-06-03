@@ -209,7 +209,7 @@ class ImputController extends AbstractController
 
         return $this->redirectToRoute('imput_index');
     }
-    public function ajaxAction(TachesRepository $tachesRepository, Request $request, DateVRepository $dateVRepository)
+    public function ajaxAction(CodeProjetRepository $codeProjetRepository, TachesRepository $tachesRepository, Request $request, DateVRepository $dateVRepository)
     {
         $imputs = $this->getDoctrine()
             ->getRepository('App:Imput')
@@ -225,7 +225,7 @@ class ImputController extends AbstractController
                 );
                 $jsonData[$idx++] = $temp;
             }*/
-
+            //lieste des tache
             $tacheliste = [];
             $tache = $tachesRepository->findAll();
             foreach ($tache as $taches) {
@@ -234,6 +234,16 @@ class ImputController extends AbstractController
                     'libelle' => $taches->getLibelle(),
                 ];
             }
+            //liste des code projet
+            $codeprojetlist = [];
+            $codeP = $codeProjetRepository->findAll();
+            foreach ($codeP as $codePs) {
+                $codeprojetlist[] = [
+                    'id' => $codePs->getId(),
+                    'libelle' => $codePs->getLibelle(),
+                ];
+            }
+
             $imputation = [];
             $dateVs = $dateVRepository->findAll();
             foreach ($dateVs as $dateV) {
@@ -251,6 +261,7 @@ class ImputController extends AbstractController
                     'date' => $dateV->getDate(),
                     'valeur' => $dateV->getValeur(),
                     'tacheliste' => $tacheliste,
+                    'codeprojetlist' => $codeprojetlist,
                 ];
             }
 
