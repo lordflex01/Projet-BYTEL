@@ -167,7 +167,8 @@ $(document).ready(function () {
                             "></td>" + '<td><input id="com' + i + '" style="max-width: 200px" type="text" class="form-control-imput" value=' +
                             commentairelab[i] +
                             "></td>" +
-                            '<td><i class="fa fa-edit" id="editCode' + i + '" style="font-size: 16px;margin-top: 8px;cursor:pointer;color: #1586bc;"></i></td>' + "</tr>"
+                            '<td><i class="fa fa-edit" id="editCode' + i + '" style="font-size: 16px;margin-top: 8px;cursor:pointer;color: #1586bc;"></i></td>' +
+                            '<td><i class="fa fa-trash"  style="font-size: 16px;cursor:pointer;margin-top: 8px;color: #cc1919;"id="suppCode' + i + '"></i></td>' + "</tr>"
 
                         );
                         j = j + 5;
@@ -580,6 +581,139 @@ $(document).ready(function () {
         });
     });
     //FIN EDIT 4eme imputation
+
+    //DEBUT 1er suppression 
+    $(document).on("click", "#suppCode0", function () {
+        let str1 = $("#m1" + imputID[0] + "").val();
+        let str2 = $("#m2" + imputID[0] + "").val();
+        let str3 = $("#m3" + imputID[0] + "").val();
+        let str4 = $("#m4" + imputID[0] + "").val();
+        let str5 = $("#m5" + imputID[0] + "").val();
+        let valeur = [];
+        (valeur[0] = str1),
+            (valeur[1] = str2),
+            (valeur[2] = str3),
+            (valeur[3] = str4),
+            (valeur[4] = str5);
+        let test = {
+            imputID: imputID[0],
+        };
+
+        $.ajax({
+            url: `/apii/delete`,
+            type: "POST",
+            processData: false,
+            contentType: false,
+            data: JSON.stringify(test),
+            dataType: "json",
+            async: true,
+            success: function (data, status) { },
+            error: function (xhr, textStatus, errorThrown) {
+                alert(xhr.responseText);
+            },
+        });
+    });
+    //FIN 1er Suppression 
+
+    //DEBUT 2er suppression 
+    $(document).on("click", "#suppCode1", function () {
+        let str1 = $("#m1" + imputID[1] + "").val();
+        let str2 = $("#m2" + imputID[1] + "").val();
+        let str3 = $("#m3" + imputID[1] + "").val();
+        let str4 = $("#m4" + imputID[1] + "").val();
+        let str5 = $("#m5" + imputID[1] + "").val();
+        let valeur = [];
+        (valeur[0] = str1),
+            (valeur[1] = str2),
+            (valeur[2] = str3),
+            (valeur[3] = str4),
+            (valeur[4] = str5);
+        let test = {
+            imputID: imputID[1],
+        };
+
+        $.ajax({
+            url: `/apii/delete`,
+            type: "POST",
+            processData: false,
+            contentType: false,
+            data: JSON.stringify(test),
+            dataType: "json",
+            async: true,
+            success: function (data, status) { },
+            error: function (xhr, textStatus, errorThrown) {
+                alert(xhr.responseText);
+            },
+        });
+    });
+    //FIN 2er Suppression 
+
+    //DEBUT 3er suppression 
+    $(document).on("click", "#suppCode2", function () {
+        let str1 = $("#m1" + imputID[2] + "").val();
+        let str2 = $("#m2" + imputID[2] + "").val();
+        let str3 = $("#m3" + imputID[2] + "").val();
+        let str4 = $("#m4" + imputID[2] + "").val();
+        let str5 = $("#m5" + imputID[2] + "").val();
+        let valeur = [];
+        (valeur[0] = str1),
+            (valeur[1] = str2),
+            (valeur[2] = str3),
+            (valeur[3] = str4),
+            (valeur[4] = str5);
+        let test = {
+            imputID: imputID[2],
+        };
+
+        $.ajax({
+            url: `/apii/delete`,
+            type: "POST",
+            processData: false,
+            contentType: false,
+            data: JSON.stringify(test),
+            dataType: "json",
+            async: true,
+            success: function (data, status) { },
+            error: function (xhr, textStatus, errorThrown) {
+                alert(xhr.responseText);
+            },
+        });
+    });
+    //FIN 3er Suppression 
+
+    //DEBUT 4er suppression 
+    $(document).on("click", "#suppCode3", function () {
+        let str1 = $("#m1" + imputID[3] + "").val();
+        let str2 = $("#m2" + imputID[3] + "").val();
+        let str3 = $("#m3" + imputID[3] + "").val();
+        let str4 = $("#m4" + imputID[3] + "").val();
+        let str5 = $("#m5" + imputID[3] + "").val();
+        let valeur = [];
+        (valeur[0] = str1),
+            (valeur[1] = str2),
+            (valeur[2] = str3),
+            (valeur[3] = str4),
+            (valeur[4] = str5);
+        let test = {
+            imputID: imputID[3],
+        };
+
+        $.ajax({
+            url: `/apii/delete`,
+            type: "POST",
+            processData: false,
+            contentType: false,
+            data: JSON.stringify(test),
+            dataType: "json",
+            async: true,
+            success: function (data, status) { },
+            error: function (xhr, textStatus, errorThrown) {
+                alert(xhr.responseText);
+            },
+        });
+    });
+    //FIN 4er Suppression 
+
     $(document).on("click", "#suppCode", function () {
         alert("suppression");
     });

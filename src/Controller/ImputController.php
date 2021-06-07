@@ -189,6 +189,7 @@ class ImputController extends AbstractController
         }
         $entityManager->remove($imput);
         $entityManager->flush();
+        return new Response('Supression confirmé');
     }
 
     /**
