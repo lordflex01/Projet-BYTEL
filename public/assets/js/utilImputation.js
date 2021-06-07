@@ -15,6 +15,8 @@ function exportAll(type) {
     format: type,
   });
 }
+var imputID = 0;
+var H = [];
 $(document).ready(function () {
   $("#btnRech").click(function () {
     var parseDates = (inp) => {
@@ -64,22 +66,21 @@ $(document).ready(function () {
       success: function (data, status) {
         var e = $(
           '<th><button id="addRow" type="button" class="btn btn-block btn-info btn-sm" style="width: 30px;margin-bottom: -7px;border-radius: 30px;"><i class="fa fa-plus"></i></button></th>' +
-            "<th></th>" +
-            "<th></th>" +
-            '<th style="width: 40px">Lun ' +
-            days[0] +
-            '</th><th  style="width: 40px">Mar ' +
-            days[1] +
-            '</th><th  style="width: 40px">Mer ' +
-            days[2] +
-            '</th><th  style="width: 40px">Jeu ' +
-            days[3] +
-            "</th>" +
-            '<th  style="width: 40px">Vend ' +
-            days[4] +
-            "</th>" +
-            '<th  style="width: 40px;color:red">Total</th>' +
-            '<th  style="width: 40px;color:green">Commentaires</th></tr>'
+          "<th></th>" +
+          '<th style="width: 40px">Lun ' +
+          days[0] +
+          '</th><th  style="width: 40px">Mar ' +
+          days[1] +
+          '</th><th  style="width: 40px">Mer ' +
+          days[2] +
+          '</th><th  style="width: 40px">Jeu ' +
+          days[3] +
+          "</th>" +
+          '<th  style="width: 40px">Vend ' +
+          days[4] +
+          "</th>" +
+          '<th  style="width: 40px;color:red">Total</th>' +
+          '<th  style="width: 40px;color:green">Commentaires</th></tr>'
         );
 
         $("#entete").html("");
@@ -90,12 +91,13 @@ $(document).ready(function () {
         var c = 0;
         var t = 0;
         var j = 0;
+
         //bool = pour afficher une seul fois le commentaire
         var bool = 0;
         //bool2 = si il ya une imputation pendant cette semaine
         var bool2 = 0;
         var obj = jQuery.parseJSON(data);
-        var H = [];
+
         (H[0] = 0), (H[1] = 0), (H[2] = 0), (H[3] = 0), (H[4] = 0);
         $.each(obj, function (key, value) {
           m = value.date.date.split("-");
@@ -116,7 +118,7 @@ $(document).ready(function () {
                 t = t + value.valeur;
               }
             }
-
+            imputID = value.imputID;
             bool2 = 1;
             c = c + 1;
             a = value.tache;
@@ -126,18 +128,17 @@ $(document).ready(function () {
         if (bool2 == 1) {
           var L = $(
             "<td></td>" +
-              "<td></td>" +
-              '<td><input type="number" min="0" max="1" step="0.25" class="form-control-imput" value=' +
-              H[0] +
-              '></td><td><input type="number" min="0" max="1" step="0.25" class="form-control-imput" value=' +
-              H[1] +
-              '></td><td><input type="number" min="0" max="1" step="0.25" class="form-control-imput" value=' +
-              H[2] +
-              '></td><td><input type="number" min="0" max="1" step="0.25" class="form-control-imput" value=' +
-              H[3] +
-              '></td><td><input type="number" min="0" max="1" step="0.25" class="form-control-imput" value=' +
-              H[4] +
-              "></td>"
+            '<td><input id="m1" type="number" min="0" max="1" step="0.25" class="form-control-imput" value=' +
+            H[0] +
+            '></td><td><input id="m2" type="number" min="0" max="1" step="0.25" class="form-control-imput" value=' +
+            H[1] +
+            '></td><td><input id="m3" type="number" min="0" max="1" step="0.25" class="form-control-imput" value=' +
+            H[2] +
+            '></td><td><input id="m4" type="number" min="0" max="1" step="0.25" class="form-control-imput" value=' +
+            H[3] +
+            '></td><td><input id="m5" type="number" min="0" max="1" step="0.25" class="form-control-imput" value=' +
+            H[4] +
+            "></td>"
           );
           $("#tableB").append(L);
         }
@@ -152,10 +153,10 @@ $(document).ready(function () {
           $.each(obj, function (key, value) {
             if (id == value.user && bool == 0) {
               $("#tableB").append(
-                '<td><input style="max-width: 200px" type="text" class="form-control-imput" value=' +
-                  value.commentaire +
-                  "></td>" +
-                  '<td><i class="fa fa-edit" id="editCode" style="font-size: 16px;margin-top: 8px;cursor:pointer;color: #1586bc;"></i></td>'
+                '<td><input id="com" style="max-width: 200px" type="text" class="form-control-imput" value=' +
+                value.commentaire +
+                "></td>" +
+                '<td><i class="fa fa-edit" id="editCode" style="font-size: 16px;margin-top: 8px;cursor:pointer;color: #1586bc;"></i></td>'
               );
               bool = 1;
             }
@@ -164,86 +165,76 @@ $(document).ready(function () {
 
         var scntDiv = $("#tableB");
         var i = $("#tableB tr").length + 1;
+        //liste des tache
         var tache = [];
         while (j < obj[0].tacheliste.length) {
           tache[j] = obj[0].tacheliste[j];
           j++;
         }
         tache;
+
+        //liste des code projet
+        let f = 0;
+        var codeP = [];
+        while (f < obj[0].codeprojetlist.length) {
+          codeP[f] = obj[0].codeprojetlist[f];
+          f++;
+        }
+        codeP;
+
         $("#addRow").click(function () {
           scntDiv.append(
-            '<tr><td><select class="form-control select2" id="codeP" style="width: 100%;">' +
-              "<option value = " +
-              tache[0].id +
-              ">" +
-              tache[0].libelle +
-              "</option>" +
-              "<option value= " +
-              tache[1].id +
-              ">" +
-              tache[1].libelle +
-              "</option>" +
-              "<option value= " +
-              tache[2].id +
-              ">" +
-              tache[2].libelle +
-              "</option>" +
-              "<option value= " +
-              tache[3].id +
-              ">" +
-              tache[3].libelle +
-              "</option></select></td>" +
-              '<td><select class="form-control select2" id="codeP" style="width: 100%;">' +
-              "<option value = " +
-              tache[0].id +
-              ">" +
-              tache[0].libelle +
-              "</option>" +
-              "<option value= " +
-              tache[1].id +
-              ">" +
-              tache[1].libelle +
-              "</option>" +
-              "<option value= " +
-              tache[2].id +
-              ">" +
-              tache[2].libelle +
-              "</option>" +
-              "<option value= " +
-              tache[3].id +
-              ">" +
-              tache[3].libelle +
-              "</option></select></td>" +
-              '<td><select class="form-control select2" id="codeP" style="width: 100%;">' +
-              "<option value = " +
-              tache[0].id +
-              ">" +
-              tache[0].libelle +
-              "</option>" +
-              "<option value= " +
-              tache[1].id +
-              ">" +
-              tache[1].libelle +
-              "</option>" +
-              "<option value= " +
-              tache[2].id +
-              ">" +
-              tache[2].libelle +
-              "</option>" +
-              "<option value= " +
-              tache[3].id +
-              ">" +
-              tache[3].libelle +
-              "</option></select></td>" +
-              '<td><input type="number" id="i1" min="0" max="1" step="0.25" class="form-control-imput" value="0"></td>' +
-              '<td><input type="number" id="i2"  min="0" max="1" step="0.25" class="form-control-imput" value="0"></td>' +
-              '<td><input type="number" id="i3"  min="0" max="1" step="0.25" class="form-control-imput" value="0"></td>' +
-              '<td><input type="number" id="i4" min="0" max="1" step="0.25" class="form-control-imput" value="0"></td>' +
-              '<td><input type="number" id="i5" min="0" max="1" step="0.25" class="form-control-imput" value="0"></td>' +
-              '<td><input type="number" min="0" max="1" step="0.25" class="form-control-imput" value="0"></td>' +
-              '<td><input type="text"  id="i6"  style="max-width: 200px" class="form-control-imput"></td>' +
-              '<td><i class="fa fa-plus" id="addCode" style="font-size: 16px;margin-top: 8px;cursor:pointer;color: green;"></i></td>' +
-              '<td><i class="fa fa-trash" id="suppCode" style="font-size: 16px;cursor:pointer;margin-top: 8px;color: #cc1919;"id="remScnt"></i></td></tr>'
+            '<tr><td><select class="form-control select2" id="codeP2" style="width: 100%;">' +
+            "<option value = " +
+            codeP[0].id +
+            ">" +
+            codeP[0].libelle +
+            "</option>" +
+            "<option value= " +
+            codeP[1].id +
+            ">" +
+            codeP[1].libelle +
+            "</option>" +
+            "<option value= " +
+            codeP[2].id +
+            ">" +
+            codeP[2].libelle +
+            "</option>" +
+            "<option value= " +
+            codeP[3].id +
+            ">" +
+            codeP[3].libelle +
+            "</option></select></td>" +
+            '<td><select class="form-control select2" id="codeP" style="width: 100%;">' +
+            "<option value = " +
+            tache[0].id +
+            ">" +
+            tache[0].libelle +
+            "</option>" +
+            "<option value= " +
+            tache[1].id +
+            ">" +
+            tache[1].libelle +
+            "</option>" +
+            "<option value= " +
+            tache[2].id +
+            ">" +
+            tache[2].libelle +
+            "</option>" +
+            "<option value= " +
+            tache[3].id +
+            ">" +
+            tache[3].libelle +
+            "</option></select></td>" +
+            '<td><input type="number" id="i1" min="0" max="1" step="0.25" class="form-control-imput" value="0"></td>' +
+            '<td><input type="number" id="i2"  min="0" max="1" step="0.25" class="form-control-imput" value="0"></td>' +
+            '<td><input type="number" id="i3"  min="0" max="1" step="0.25" class="form-control-imput" value="0"></td>' +
+            '<td><input type="number" id="i4" min="0" max="1" step="0.25" class="form-control-imput" value="0"></td>' +
+            '<td><input type="number" id="i5" min="0" max="1" step="0.25" class="form-control-imput" value="0"></td>' +
+            '<td><input type="number" min="0" max="1" step="0.25" class="form-control-imput" value="0"></td>' +
+            '<td><input type="text"  id="i6"  style="max-width: 200px" class="form-control-imput"></td>' +
+            '<td><i class="fa fa-plus" id="addCode" style="font-size: 16px;margin-top: 8px;cursor:pointer;color: green;"></i></td>' +
+            '<td><i class="fa fa-trash" id="suppCode" style="font-size: 16px;cursor:pointer;margin-top: 8px;color: #cc1919;"id="remScnt"></i></td></tr>'
           );
           i++;
           return false;
@@ -307,9 +298,41 @@ $(document).ready(function () {
       data: JSON.stringify(test),
       dataType: "json",
       async: true,
-      success: function (data, status) {},
+      success: function (data, status) { },
       error: function (xhr, textStatus, errorThrown) {
         alert(xhr.responseText);
+      },
+    });
+  });
+  $(document).on("click", "#editCode", function () {
+
+    let Commentaires = $("#com").val();
+    let str1 = $("#m1").val();
+    let str2 = $("#m2").val();
+    let str3 = $("#m3").val();
+    let str4 = $("#m4").val();
+    let str5 = $("#m5").val();
+    let valeur = [];
+    (valeur[0] = str1),
+      (valeur[1] = str2),
+      (valeur[2] = str3),
+      (valeur[3] = str4),
+      (valeur[4] = str5);
+    let test = {
+      'imputID': imputID,
+      'valeur': valeur,
+      'Commentaires': Commentaires,
+    }
+
+    $.ajax({
+      url: `/apii/edit`,
+      type: "POST",
+      processData: false,
+      contentType: false,
+      data: JSON.stringify(test),
+      dataType: "json",
+      async: true,
+      success: function (data, status) {
       },
     });
   });

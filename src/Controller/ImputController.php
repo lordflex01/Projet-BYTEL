@@ -112,7 +112,7 @@ class ImputController extends AbstractController
             //on hydrate l'objet avec les données
             $dateV->setImput($imput);
             $dateV->setValeur($donnees->valeur[$i]);
-            $dateV->setDate(new DateTime($donnees->date[$i + 1]));
+            $dateV->setDate(new DateTime($donnees->date[$i]));
             $dateV->setTache($tache);
 
             $em->persist($dateV);
@@ -121,12 +121,12 @@ class ImputController extends AbstractController
         $em->flush();
 
         $code = 200;
-        return new Response('Imputation Valide');
+        return new Response('Imputation confirmé');
         //return $this->redirectToRoute('imput_index');
     }
 
     /**
-     * @Route("/apii/{id}/edit", name="api_imput_edit", methods={"PUT"})
+     * @Route("/apii/edit", name="api_imput_edit", methods={"PUT"})
      */
     public function apiedit(TachesRepository $tachesrepository, DateVRepository $dateVRepository, Request $request)
     {
@@ -137,20 +137,33 @@ class ImputController extends AbstractController
         //Declaration
         $dateVlistes = $dateVRepository->findAll();
         $i = 0;
-
+        //Bool pour voir si on a changer deja le commantaire
+        $bool = 0;
         $em = $this->getDoctrine()->getManager();
         //Debut du traitement
         foreach ($dateVlistes as $dateVliste) {
-            $dateV = new DateV;
             $dateV = $dateVliste;
-            if ($donnees->id == $dateVliste->getImput()->getId() && $donnees->valeur[$i] != $dateVliste->getValeur()) {
+            //editer la date valeur
+            if ($donnees->imputID == $dateVliste->getImput()->getId() && $donnees->valeur[$i] != $dateVliste->getValeur()) {
+                $dateV = new DateV;
+                $dateV = $dateVliste;
                 $dateV->setValeur($donnees->valeur[$i]);
                 $em->persist($dateV);
             }
+            //edit le commenataire
+            if ($donnees->imputID == $dateVliste->getImput()->getId() && $donnees->Commentaires != $dateVliste->getImput()->getCommentaire() && $bool == 0) {
+                $imput = new Imput;
+                $imput = $dateV->getImput();
+                $imput->setCommentaire($donnees->Commentaires);
+                $em->persist($imput);
+                $bool = 1;
+            }
             $i++;
+            if ($i == 5)
+                $i = 0;
         }
         $em->flush();
-        return new Response('Ok');
+        return new Response('Modification confirmé');
     }
 
     /**
@@ -196,7 +209,7 @@ class ImputController extends AbstractController
 
         return $this->redirectToRoute('imput_index');
     }
-    public function ajaxAction(TachesRepository $tachesRepository, Request $request, DateVRepository $dateVRepository)
+    public function ajaxAction(CodeProjetRepository $codeProjetRepository, TachesRepository $tachesRepository, Request $request, DateVRepository $dateVRepository)
     {
         $imputs = $this->getDoctrine()
             ->getRepository('App:Imput')
@@ -212,7 +225,7 @@ class ImputController extends AbstractController
                 );
                 $jsonData[$idx++] = $temp;
             }*/
-
+            //lieste des tache
             $tacheliste = [];
             $tache = $tachesRepository->findAll();
             foreach ($tache as $taches) {
@@ -221,6 +234,16 @@ class ImputController extends AbstractController
                     'libelle' => $taches->getLibelle(),
                 ];
             }
+            //liste des code projet
+            $codeprojetlist = [];
+            $codeP = $codeProjetRepository->findAll();
+            foreach ($codeP as $codePs) {
+                $codeprojetlist[] = [
+                    'id' => $codePs->getId(),
+                    'libelle' => $codePs->getLibelle(),
+                ];
+            }
+
             $imputation = [];
             $dateVs = $dateVRepository->findAll();
             foreach ($dateVs as $dateV) {
@@ -229,7 +252,7 @@ class ImputController extends AbstractController
                 $week = "W" . date("W", strtotime($dmy));
 
                 $imputation[] = [
-                    'id' => $dateV->getImput()->getId(),
+                    'imputID' => $dateV->getImput()->getId(),
                     'user' => $dateV->getImput()->getUser()->getId(),
                     'tache' => $dateV->getTache()->getLibelle(),
                     'commentaire' =>  $dateV->getImput()->getCommentaire(),
@@ -238,6 +261,7 @@ class ImputController extends AbstractController
                     'date' => $dateV->getDate(),
                     'valeur' => $dateV->getValeur(),
                     'tacheliste' => $tacheliste,
+                    'codeprojetlist' => $codeprojetlist,
                 ];
             }
 

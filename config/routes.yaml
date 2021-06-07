@@ -10,9 +10,13 @@ api:
     path: /api/{id}/edit
     controller: App\Controller\ImputationController::apiedit
 
-apii:
+apiinew:
     path: /apii/new
     controller: App\Controller\ImputController::apinew
+
+apiiedit:
+    path: /apii/edit
+    controller: App\Controller\ImputController::apiedit
 user:
     path: /user
     controller: App\Controller\UserController::user
