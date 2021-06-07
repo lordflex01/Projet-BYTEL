@@ -389,6 +389,11 @@ $(document).ready(function () {
         var week = document.querySelector("#date-input");
         var dates = parseDates(week.value);
         let selected = $("#codeP option:selected");
+        dates[0].setHours(dates[0].getHours() + 2);
+        dates[1].setHours(dates[1].getHours() + 2);
+        dates[2].setHours(dates[2].getHours() + 2);
+        dates[3].setHours(dates[3].getHours() + 2);
+        dates[4].setHours(dates[4].getHours() + 2);
         let str1 = $("#i1").val();
         let str2 = $("#i2").val();
         let str3 = $("#i3").val();
@@ -424,7 +429,7 @@ $(document).ready(function () {
         });
     });
 
-    //DEBUT EDIT première imputation
+    //DEBUT EDIT 1er imputation
     $(document).on("click", "#editCode0", function () {
 
         let Commentaires = $("#com0").val();
@@ -460,9 +465,9 @@ $(document).ready(function () {
             },
         });
     });
-    //FIN EDIT première imputation
+    //FIN EDIT 1er imputation
 
-    //DEBUT EDIT première imputation
+    //DEBUT EDIT 2eme imputation
     $(document).on("click", "#editCode1", function () {
 
         let Commentaires = $("#com1").val();
@@ -498,9 +503,9 @@ $(document).ready(function () {
             },
         });
     });
-    //FIN EDIT première imputation
+    //FIN EDIT 2eme imputation
 
-    //DEBUT EDIT première imputation
+    //DEBUT EDIT 3eme imputation
     $(document).on("click", "#editCode2", function () {
 
         let Commentaires = $("#com2").val();
@@ -536,9 +541,9 @@ $(document).ready(function () {
             },
         });
     });
-    //FIN EDIT première imputation
+    //FIN EDIT 3eme imputation
 
-    //DEBUT EDIT première imputation
+    //DEBUT EDIT 4eme imputation
     $(document).on("click", "#editCode3", function () {
 
         let Commentaires = $("#com3").val();
@@ -574,7 +579,7 @@ $(document).ready(function () {
             },
         });
     });
-    //FIN EDIT première imputation
+    //FIN EDIT 4eme imputation
     $(document).on("click", "#suppCode", function () {
         alert("suppression");
     });

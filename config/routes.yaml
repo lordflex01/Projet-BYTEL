@@ -17,6 +17,11 @@ apiinew:
 apiiedit:
     path: /apii/edit
     controller: App\Controller\ImputController::apiedit
+
+apiidelete:
+    path: /apii/delete
+    controller: App\Controller\ImputController::apidelete
+    
 user:
     path: /user
     controller: App\Controller\UserController::user
