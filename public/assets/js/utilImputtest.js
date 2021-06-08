@@ -55,6 +55,7 @@ $(document).ready(function () {
                 var e = $(
                     '<th><button id="addRow" type="button" class="btn btn-block btn-info btn-sm" style="width: 30px;margin-bottom: -7px;border-radius: 30px;"><i class="fa fa-plus"></i></button></th>' +
                     "<th></th>" +
+                    "<th></th>" +
                     '<th style="width: 40px">Lun ' +
                     days[0] +
                     '</th><th  style="width: 40px">Mar ' +
@@ -140,7 +141,7 @@ $(document).ready(function () {
                     for (let i = 0; i < nombreimputation; i++) {
                         var LLL = $(
 
-                            "<tr><td></td>" + "<td><span>Code Projet: " + codprojettableau[i] + "</span></td>" + '<td><input id="m1' + imputID[i] + '" type="number" min="0" max="1" step="0.25" class="form-control-imput" value=' +
+                            "<tr><td></td>" + "<th></th>" + "<td><span>Code Projet: " + codprojettableau[i] + "</span></td>" + '<td><input id="m1' + imputID[i] + '" type="number" min="0" max="1" step="0.25" class="form-control-imput" value=' +
                             H[0 + j] +
                             '></td><td><input id="m2' + imputID[i] + '" type="number" min="0" max="1" step="0.25" class="form-control-imput" value=' +
                             H[1 + j] +
@@ -292,7 +293,7 @@ $(document).ready(function () {
 
                 $("#addRow").click(function () {
                     scntDiv.append(
-                        '<tr><td><select class="form-control select2" id="codeP2" style="width: 100%;">' +
+                        '<tr><th></th><td><select class="form-control select2" id="codeP2" style="width: 100%;">' +
                         "<option value = " +
                         codeP[0].id +
                         ">" +
@@ -703,9 +704,9 @@ $(document).ready(function () {
         });
     });
     //FIN 4er Suppression 
-   //supprimer une ligne
+    //supprimer une ligne
     $(document).on("click", "#suppRow", function () {
         $(this).closest("tr").remove();
-      });
-   
+    });
+
 });
