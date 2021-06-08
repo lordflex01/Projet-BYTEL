@@ -82,7 +82,7 @@
 						{% set chargeDECO = code_projet.chageDECO %}
 
 						{% for dateV in dateVs %}
-							{% if code_projet.libelle == dateV.tache.codeprojet.libelle %}
+							{% if code_projet.libelle == dateV.codeprojet.libelle %}
 								{% set chargeATM = chargeATM - dateV.valeur %}
 								{% if dateV.imput.user.projet.libelle == "NRJ" %}
 									{% set chargeNRJ = chargeNRJ - dateV.valeur %}

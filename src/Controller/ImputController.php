@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\CodeProjet;
 use App\Entity\Imput;
 use App\Entity\DateV;
 use App\Entity\Taches;
@@ -79,7 +80,7 @@ class ImputController extends AbstractController
     /**
      * @Route("/apii/new", name="api_new", methods={"GET","POST"})
      */
-    public function apinew(TachesRepository $tachesrepository, UserRepository $userRepository, Request $request)
+    public function apinew(CodeProjetRepository $codeProjetRepository, TachesRepository $tachesrepository, UserRepository $userRepository, Request $request)
     {
 
         //on recupère les données
@@ -87,9 +88,11 @@ class ImputController extends AbstractController
         //Declaration
         $userlistes = $userRepository->findAll();
         $tachelistes = $tachesrepository->findAll();
+        $codeprojetlistes = $codeProjetRepository->findAll();
         $imput = new Imput;
         $tache = new Taches;
         $user = new User;
+        $codeP = new CodeProjet;
         //connaitre le user
         foreach ($userlistes as $userliste) {
             if ($donnees->user == $userliste->getId())
@@ -100,6 +103,12 @@ class ImputController extends AbstractController
             if ($donnees->tache == $tacheliste->getId())
                 $tache = $tacheliste;
         }
+        //connaitre le codeprojet
+        foreach ($codeprojetlistes as $codeprojetliste) {
+            if ($donnees->codeprojet == $codeprojetliste->getId())
+                $codeP = $codeprojetliste;
+        }
+
         //création de l'imput
         $imput->setUser($user);
         $imput->setCommentaire($donnees->Commentaires);
@@ -114,6 +123,7 @@ class ImputController extends AbstractController
             $dateV->setValeur($donnees->valeur[$i]);
             $dateV->setDate(new DateTime($donnees->date[$i]));
             $dateV->setTache($tache);
+            $dateV->setCodeprojet($codeP);
 
             $em->persist($dateV);
         }
@@ -287,7 +297,7 @@ class ImputController extends AbstractController
                     'tache' => $dateV->getTache()->getLibelle(),
                     'commentaire' =>  $dateV->getImput()->getCommentaire(),
                     'week' => $week,
-                    'codeprojet' => $dateV->getTache()->getCodeprojet()->getLibelle(),
+                    'codeprojet' => $dateV->getCodeprojet()->getLibelle(),
                     'date' => $dateV->getDate(),
                     'valeur' => $dateV->getValeur(),
                     'tacheliste' => $tacheliste,

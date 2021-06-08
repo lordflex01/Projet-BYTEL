@@ -90,6 +90,7 @@ $(document).ready(function () {
                 $("#tableB").html("");
 
                 var a = 0;
+                var b = 0;
                 var c = 0;
                 var t = [];
                 t[0] = 0;
@@ -116,8 +117,8 @@ $(document).ready(function () {
                     z = m[2].split(" ");
                     W = value.week;
                     //Condition pour remplire un tableau de code projet
-                    if (id == value.user && week == W) {
-                        if (a != value.tache) {
+                    if (id == value.user || week == W) {
+                        if (a != value.tache || b != value.codeprojet) {
                             nombresimputation++;
                             codprojettableau[nombresimputation - 1] = value.codeprojet;
                             commentairelab[nombresimputation - 1] = value.commentaire;
@@ -143,6 +144,7 @@ $(document).ready(function () {
                         }
                         bool2 = 1;
                         c = c + 1;
+                        b = value.codeprojet;
                         a = value.tache;
                     }
                 });
@@ -389,7 +391,8 @@ $(document).ready(function () {
         let id = $("#name").val();
         var week = document.querySelector("#date-input");
         var dates = parseDates(week.value);
-        let selected = $("#codeP option:selected");
+        let tacheselected = $("#codeP option:selected");
+        let codePselected = $("#codeP2 option:selected");
         dates[0].setHours(dates[0].getHours() + 2);
         dates[1].setHours(dates[1].getHours() + 2);
         dates[2].setHours(dates[2].getHours() + 2);
@@ -409,7 +412,8 @@ $(document).ready(function () {
             (valeur[3] = str4),
             (valeur[4] = str5);
         let test = {
-            tache: selected[0].value,
+            tache: tacheselected[0].value,
+            codeprojet: codePselected[0].value,
             valeur: valeur,
             Commentaires: Commentaires,
             date: dates,

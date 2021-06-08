@@ -7,6 +7,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use App\Entity\CodeProjet;
@@ -21,25 +22,10 @@ class TachesType extends AbstractType
                     'placeholder' => "Veuillez entrer votre nom de tache"
                 ]
             ])
-            ->add('description', ChoiceType::class, [
-                'required' => true,
-                'multiple' => false,
-                'expanded' => false,
-                'choices' => [
-                    'DEV/TU' => 'DEV/TU',
-                    'Cunit' => 'Cunit',
-                    'TC' => 'TC',
-                    'Réunion' => 'Réunion',
-                    'Cérémonie' => 'Cérémonie',
-                    'Conception' => 'Conception',
-                    'Tec lead' => 'Tec lead',
+            ->add('description', TextareaType::class, [
+                'attr' => [
+                    'placeholder' => "Veuillez entrer une description"
                 ],
-            ])
-            ->add('codeprojet', EntityType::class, [
-                'required' => true,
-                'multiple' => false,
-                'expanded' => false,
-                'class' => CodeProjet::class,
             ]);
     }
 

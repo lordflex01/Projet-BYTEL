@@ -37,6 +37,16 @@ class DateV
      */
     private $tache;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=CodeProjet::class, inversedBy="dateVs")
+     */
+    private $codeprojet;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Activite::class, inversedBy="dateVs")
+     */
+    private $activite;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -86,6 +96,30 @@ class DateV
     public function setTache(?Taches $tache): self
     {
         $this->tache = $tache;
+
+        return $this;
+    }
+
+    public function getCodeprojet(): ?CodeProjet
+    {
+        return $this->codeprojet;
+    }
+
+    public function setCodeprojet(?CodeProjet $codeprojet): self
+    {
+        $this->codeprojet = $codeprojet;
+
+        return $this;
+    }
+
+    public function getActivite(): ?Activite
+    {
+        return $this->activite;
+    }
+
+    public function setActivite(?Activite $activite): self
+    {
+        $this->activite = $activite;
 
         return $this;
     }

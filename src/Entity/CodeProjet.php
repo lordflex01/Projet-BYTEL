@@ -57,11 +57,6 @@ class CodeProjet
     private $DateF;
 
     /**
-     * @ORM\OneToMany(targetEntity=Taches::class, mappedBy="codeprojet", orphanRemoval=true)
-     */
-    private $taches;
-
-    /**
      * @ORM\OneToMany(targetEntity=Imputation::class, mappedBy="codeprojet")
      */
     private $imputations;
@@ -91,10 +86,15 @@ class CodeProjet
      */
     private $chageDECO;
 
+    /**
+     * @ORM\OneToMany(targetEntity=DateV::class, mappedBy="codeprojet")
+     */
+    private $dateVs;
+
     public function __construct()
     {
-        $this->taches = new ArrayCollection();
         $this->imputations = new ArrayCollection();
+        $this->dateVs = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -172,36 +172,6 @@ class CodeProjet
     public function setDateF(?\DateTimeInterface $DateF): self
     {
         $this->DateF = $DateF;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|Taches[]
-     */
-    public function getTaches(): Collection
-    {
-        return $this->taches;
-    }
-
-    public function addTach(Taches $tach): self
-    {
-        if (!$this->taches->contains($tach)) {
-            $this->taches[] = $tach;
-            $tach->setCodeprojet($this);
-        }
-
-        return $this;
-    }
-
-    public function removeTach(Taches $tach): self
-    {
-        if ($this->taches->removeElement($tach)) {
-            // set the owning side to null (unless already changed)
-            if ($tach->getCodeprojet() === $this) {
-                $tach->setCodeprojet(null);
-            }
-        }
 
         return $this;
     }
@@ -299,6 +269,36 @@ class CodeProjet
     public function setChageDECO(?float $chageDECO): self
     {
         $this->chageDECO = $chageDECO;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|DateV[]
+     */
+    public function getDateVs(): Collection
+    {
+        return $this->dateVs;
+    }
+
+    public function addDateV(DateV $dateV): self
+    {
+        if (!$this->dateVs->contains($dateV)) {
+            $this->dateVs[] = $dateV;
+            $dateV->setCodeprojet($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDateV(DateV $dateV): self
+    {
+        if ($this->dateVs->removeElement($dateV)) {
+            // set the owning side to null (unless already changed)
+            if ($dateV->getCodeprojet() === $this) {
+                $dateV->setCodeprojet(null);
+            }
+        }
 
         return $this;
     }

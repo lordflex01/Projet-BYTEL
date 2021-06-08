@@ -2,15 +2,15 @@
 
 namespace App\Entity;
 
-use App\Repository\TachesRepository;
+use App\Repository\ActiviteRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass=TachesRepository::class)
+ * @ORM\Entity(repositoryClass=ActiviteRepository::class)
  */
-class Taches
+class Activite
 {
     /**
      * @ORM\Id
@@ -30,7 +30,7 @@ class Taches
     private $description;
 
     /**
-     * @ORM\OneToMany(targetEntity=DateV::class, mappedBy="tache")
+     * @ORM\OneToMany(targetEntity=DateV::class, mappedBy="activite")
      */
     private $dateVs;
 
@@ -68,14 +68,6 @@ class Taches
         return $this;
     }
 
-    public function __toString()
-    {
-        // to show the name of the Category in the select
-        return $this->libelle;
-        // to show the id of the Category in the select
-        // return $this->id;
-    }
-
     /**
      * @return Collection|DateV[]
      */
@@ -88,7 +80,7 @@ class Taches
     {
         if (!$this->dateVs->contains($dateV)) {
             $this->dateVs[] = $dateV;
-            $dateV->setTache($this);
+            $dateV->setActivite($this);
         }
 
         return $this;
@@ -98,8 +90,8 @@ class Taches
     {
         if ($this->dateVs->removeElement($dateV)) {
             // set the owning side to null (unless already changed)
-            if ($dateV->getTache() === $this) {
-                $dateV->setTache(null);
+            if ($dateV->getActivite() === $this) {
+                $dateV->setActivite(null);
             }
         }
 

@@ -18,18 +18,13 @@
 					<!-- form start -->
 						<form>
 							<div class="card-body"> <div class="form-group">
-								<label for="{{form.codeprojet.vars.id}}">Code du projet</label>
-								{{form_widget( form.codeprojet)}}
-								{% do form.codeprojet.setRendered %}
-							</div>
-							<div class="form-group">
 								<label for="{{form.libelle.vars.id}}">Jira n°</label>
 								{{form_widget( form.libelle)}}
 								{{form_errors(form.libelle)}}
 								{% do form.libelle.setRendered %}
 							</div>
 							<div class="form-group">
-								<label for="{{form.description.vars.id}}">Activité</label>
+								<label for="{{form.description.vars.id}}">Description</label>
 								{{form_widget( form.description)}}
 								{% do form.description.setRendered %}
 							</div>
