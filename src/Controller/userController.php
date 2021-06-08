@@ -18,7 +18,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
  * @IsGranted("ROLE_ADMIN")
  * @Route("/user")
  */
-class userController extends AbstractController
+class UserController extends AbstractController
 {
 
     /**

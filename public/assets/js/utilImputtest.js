@@ -354,7 +354,7 @@ $(document).ready(function () {
                         '<td><input type="number" min="0" max="1" step="0.25" class="form-control-imput" value="0"></td>' +
                         '<td><input type="text"  id="i6"  style="max-width: 200px" class="form-control-imput"></td>' +
                         '<td><i class="fa fa-plus" id="addCode" style="font-size: 16px;margin-top: 8px;cursor:pointer;color: green;"></i></td>' +
-                        '<td><i class="fa fa-trash" id="suppCode" style="font-size: 16px;cursor:pointer;margin-top: 8px;color: #cc1919;"id="remScnt"></i></td></tr>'
+                        '<td><i class="fa fa-trash" id="suppRow" style="font-size: 16px;cursor:pointer;margin-top: 8px;color: #cc1919;></i></td></tr>'
                     );
                     i++;
                     return false;
@@ -714,7 +714,7 @@ $(document).ready(function () {
     });
     //FIN 4er Suppression 
 
-    $(document).on("click", "#suppCode", function () {
+    $(document).on("click", "#suppRow", function () {
         alert("suppression");
     });
 });
