@@ -7,9 +7,11 @@ use App\Entity\Imput;
 use App\Entity\DateV;
 use App\Entity\Taches;
 use App\Entity\User;
+use App\Entity\Activite;
 use App\Form\ImputType;
 use App\Repository\DateVRepository;
 use App\Repository\ImputRepository;
+use App\Repository\ActiviteRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use App\Repository\CodeProjetRepository;
 use App\Repository\TachesRepository;
@@ -80,7 +82,7 @@ class ImputController extends AbstractController
     /**
      * @Route("/apii/new", name="api_new", methods={"GET","POST"})
      */
-    public function apinew(CodeProjetRepository $codeProjetRepository, TachesRepository $tachesrepository, UserRepository $userRepository, Request $request)
+    public function apinew(ActiviteRepository $activiteRepository, CodeProjetRepository $codeProjetRepository, TachesRepository $tachesrepository, UserRepository $userRepository, Request $request)
     {
 
         //on recupère les données
@@ -89,10 +91,12 @@ class ImputController extends AbstractController
         $userlistes = $userRepository->findAll();
         $tachelistes = $tachesrepository->findAll();
         $codeprojetlistes = $codeProjetRepository->findAll();
+        $activitelistes = $activiteRepository->findAll();
         $imput = new Imput;
         $tache = new Taches;
         $user = new User;
         $codeP = new CodeProjet;
+        $activite = new Activite;
         //connaitre le user
         foreach ($userlistes as $userliste) {
             if ($donnees->user == $userliste->getId())
@@ -107,6 +111,11 @@ class ImputController extends AbstractController
         foreach ($codeprojetlistes as $codeprojetliste) {
             if ($donnees->codeprojet == $codeprojetliste->getId())
                 $codeP = $codeprojetliste;
+        }
+        //connaitre l'activite
+        foreach ($activitelistes as $activiteliste) {
+            if ($donnees->activite == $activiteliste->getId())
+                $activite = $activiteliste;
         }
 
         //création de l'imput
@@ -124,6 +133,7 @@ class ImputController extends AbstractController
             $dateV->setDate(new DateTime($donnees->date[$i]));
             $dateV->setTache($tache);
             $dateV->setCodeprojet($codeP);
+            $dateV->setActivite($activite);
 
             $em->persist($dateV);
         }
@@ -241,9 +251,10 @@ class ImputController extends AbstractController
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($imput);
             $entityManager->flush();
-        }return $this->redirectToRoute('imput_index');
+        }
+        return $this->redirectToRoute('imput_index');
     }
-    public function ajaxAction(CodeProjetRepository $codeProjetRepository, TachesRepository $tachesRepository, Request $request, DateVRepository $dateVRepository)
+    public function ajaxAction(ActiviteRepository $activiteRepository, CodeProjetRepository $codeProjetRepository, TachesRepository $tachesRepository, Request $request, DateVRepository $dateVRepository)
     {
         $imputs = $this->getDoctrine()
             ->getRepository('App:Imput')
@@ -278,6 +289,16 @@ class ImputController extends AbstractController
                 ];
             }
 
+            //liste des code projet
+            $activitelist = [];
+            $activite = $activiteRepository->findAll();
+            foreach ($activite as $activites) {
+                $activitelist[] = [
+                    'id' => $activites->getId(),
+                    'libelle' => $activites->getLibelle(),
+                ];
+            }
+
             $imputation = [];
             $dateVs = $dateVRepository->findAll();
             foreach ($dateVs as $dateV) {
@@ -296,6 +317,7 @@ class ImputController extends AbstractController
                     'valeur' => $dateV->getValeur(),
                     'tacheliste' => $tacheliste,
                     'codeprojetlist' => $codeprojetlist,
+                    'activitelist' => $activitelist,
                 ];
             }
 

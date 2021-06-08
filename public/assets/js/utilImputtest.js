@@ -141,7 +141,7 @@ $(document).ready(function () {
                     for (let i = 0; i < nombreimputation; i++) {
                         var LLL = $(
 
-                            "<tr><td></td>" + "<th></th>" + "<td><span>Code Projet: " + codprojettableau[i] + "</span></td>" + '<td><input id="m1' + imputID[i] + '" type="number" min="0" max="1" step="0.25" class="form-control-imput" value=' +
+                            "<tr><td></td>" + "<td></td>" + "<td><span>Code Projet: " + codprojettableau[i] + "</span></td>" + '<td><input id="m1' + imputID[i] + '" type="number" min="0" max="1" step="0.25" class="form-control-imput" value=' +
                             H[0 + j] +
                             '></td><td><input id="m2' + imputID[i] + '" type="number" min="0" max="1" step="0.25" class="form-control-imput" value=' +
                             H[1 + j] +
@@ -291,9 +291,18 @@ $(document).ready(function () {
                 }
                 codeP;
 
+                //liste des activité
+                let act = 0;
+                var activite = [];
+                while (act < obj[0].activitelist.length) {
+                    activite[act] = obj[0].activitelist[act];
+                    act++;
+                }
+                activite;
+
                 $("#addRow").click(function () {
                     scntDiv.append(
-                        '<tr><th></th><td><select class="form-control select2" id="codeP2" style="width: 100%;">' +
+                        '<tr><td><select class="form-control select2" id="codeP2" style="width: 100%;">' +
                         "<option value = " +
                         codeP[0].id +
                         ">" +
@@ -334,6 +343,26 @@ $(document).ready(function () {
                         tache[3].id +
                         ">" +
                         tache[3].libelle +
+                        "</option></select></td>" + '<td><select class="form-control select2" id="activite" style="width: 100%;">' +
+                        "<option value = " +
+                        activite[0].id +
+                        ">" +
+                        activite[0].libelle +
+                        "</option>" +
+                        "<option value= " +
+                        activite[1].id +
+                        ">" +
+                        activite[1].libelle +
+                        "</option>" +
+                        "<option value= " +
+                        activite[2].id +
+                        ">" +
+                        activite[2].libelle +
+                        "</option>" +
+                        "<option value= " +
+                        activite[3].id +
+                        ">" +
+                        activite[3].libelle +
                         "</option></select></td>" +
                         '<td><input type="number" id="i1" min="0" max="1" step="0.25" class="form-control-imput" value="0"></td>' +
                         '<td><input type="number" id="i2"  min="0" max="1" step="0.25" class="form-control-imput" value="0"></td>' +
@@ -380,6 +409,7 @@ $(document).ready(function () {
         var dates = parseDates(week.value);
         let tacheselected = $("#codeP option:selected");
         let codePselected = $("#codeP2 option:selected");
+        let activiteselected = $("#activite option:selected");
         dates[0].setHours(dates[0].getHours() + 2);
         dates[1].setHours(dates[1].getHours() + 2);
         dates[2].setHours(dates[2].getHours() + 2);
@@ -399,6 +429,7 @@ $(document).ready(function () {
             (valeur[3] = str4),
             (valeur[4] = str5);
         let test = {
+            activite: activiteselected[0].value,
             tache: tacheselected[0].value,
             codeprojet: codePselected[0].value,
             valeur: valeur,
