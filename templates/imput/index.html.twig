@@ -47,20 +47,16 @@
 						<div class="col-sm-2">
 							<button type="button" id="btnRech" class="btn btn-block btn-info">Rechercher</button>
 						</div>
-						<div class="col-sm-3">
-							<div class="btn-group">
-								<button type="button" class="btn btn-info btn-flat">Exporter vers</button>
-								<button type="button" class="btn btn-info btn-flat dropdown-toggle dropdown-icon" data-toggle="dropdown">
-									<span class="sr-only">Toggle Dropdown</span>
-								</button>
-								<div class="dropdown-menu" role="menu">
-									<a class="dropdown-item" onclick="exportAll('csv');" href="javascript://">CSV</a>
-									<a class="dropdown-item" onclick="exportAll('txt');" href="javascript://">TXT</a>
-									<a class="dropdown-item" onclick="exportAll('xls');" href="javascript://">XLS</a>
-									<a class="dropdown-item" onclick="exportAll('sql');" href="javascript://">SQL</a>
-								</div>
-							</div>
+
+						<div class="col-1">
+
+                  <button type="button" class="btn btn-outline-secondary btn-block" id="save"><i class="fa fa-save"></i></button>
 						</div>
+						<div>
+
+							<button type="button" class="btn btn-outline-secondary btn-block" id="export" >CSV</button>
+						</div>
+
 					</div>
 
 				</div>
@@ -106,28 +102,6 @@
 					<!--container-->
 				</div>
 
-				
-				<div class="modal fade" id="modal-default">
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h4 class="modal-title">Default Modal</h4>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <div class="modal-body">
-              <p>One fine body&hellip;</p>
-            </div>
-            <div class="modal-footer justify-content-between">
-              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-              <button type="button" id="save" class="btn btn-primary">Save changes</button>
-            </div>
-          </div>
-          <!-- /.modal-content -->
-        </div>
-        <!-- /.modal-dialog -->
-      </div>
 
 			</div>
 		</div>
