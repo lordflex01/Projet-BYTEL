@@ -68,21 +68,8 @@
 				<!-- Right navbar links -->
 				<ul class="navbar-nav ml-auto">
 					<!-- Navbar Search -->
-
-
-					<!-- Messages Dropdown Menu -->
-						<li class="nav-item dropdown"> <a class="nav-link" data-toggle="dropdown" href="#">
-							<i class="far fa-comments"></i>
-							<span class="badge badge-danger navbar-badge"></span>
-						</a>
-						<div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-							<div class="dropdown-divider"></div>
-							<a href="#" class="dropdown-item dropdown-footer">Voir tous les messages</a>
-						</div>
-					</li>
 					<!-- Notifications Dropdown Menu -->
-					<li class="nav-item dropdown">
-						<a class="nav-link" data-toggle="dropdown" href="#">
+						<li class="nav-item dropdown"> <a class="nav-link" data-toggle="dropdown" href="#">
 							<i class="far fa-bell"></i>
 							<span class="badge badge-warning navbar-badge"></span>
 						</a>
@@ -209,10 +196,10 @@
 								</li>
 							</li>
 							<li class="nav-item">
-								{% if app.request.uri  == 'https://127.0.0.1:8000/imputation/' %}
-									<a href="/imputation" class="nav-link active">
+								{% if app.request.uri  == 'https://127.0.0.1:8000/imput/' %}
+									<a href="/imput" class="nav-link active">
 									{% else %}
-										<a href="/imputation" class="nav-link">
+										<a href="/imput" class="nav-link">
 										{% endif %}
 										<i class="nav-icon fas fa-calendar-check"></i>
 										<p>
@@ -250,45 +237,7 @@
 									{% endif %}
 								</li>
 							</li>
-							<li class="nav-item">
-								{% if app.request.uri  == 'https://127.0.0.1:8000/calendar' %}
-									<a href="/calendar" class="nav-link active">
-									{% else %}
-										<a href="/calendar" class="nav-link">
-										{% endif %}
-										<i class="nav-icon far fa-calendar-alt"></i>
-										<p>
-											Planification
-										</p>
-									</a>
-								</li>
-							</li>
-							<li class="nav-item">
-								{% if app.request.uri  == 'https://127.0.0.1:8000/imput' %}
-									<a href="/imput" class="nav-link active">
-									{% else %}
-										<a href="/imput" class="nav-link">
-										{% endif %}
-										<i class="nav-icon far fa-envelope-open"></i>
-										<p>
-											Imput
-										</p>
-									</a>
-								</li>
-							</li>
-							<li class="nav-item">
-								{% if app.request.uri  == 'https://127.0.0.1:8000/contact' %}
-									<a href="/contact" class="nav-link active">
-									{% else %}
-										<a href="/contact" class="nav-link">
-										{% endif %}
-										<i class="nav-icon far fa-envelope-open"></i>
-										<p>
-											Contact
-										</p>
-									</a>
-								</li>
-							</li>
+
 						</ul>
 					</nav>
 					<!-- /.sidebar-menu -->
@@ -308,8 +257,8 @@
 				<script src="{{asset ("assets/js/AdminLTE.js")}}"></script>
 				<!-- AdminLTE for demo purposes -->
 				<script src="{{asset ("assets/js/demo.js")}}"></script>
-				<!-- Bootstrap 4 
-																				<script src="{{asset ("assets/plugins/bootstrap/js/bootstrap.js")}}"></script>-->
+				<!-- select 2 -->
+				<script src="{{asset ("assets/plugins/select2/js/select2.full.min.js")}}"></script>
 				<!-- overlayScrollbars -->
 				<script src="{{asset ("assets/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js")}}"></script>
 
@@ -317,13 +266,40 @@
 				<script src="{{asset ("assets/plugins/chart.js/Chart.min.js")}}"></script>
 				<!-- AdminLTE dashboard demo (This is only for demo purposes) -->
 				<script src="{{asset ("assets/js/pages/dashboard3.js")}}"></script>
-				<!-- select 2 -->
-				<script src="{{asset ("assets/plugins/select2/js/select2.full.min.js")}}"></script>
-				<!-- Export -->
-				<script src="{{asset ("assets/js/tableExport.js")}}"></script>
+				
+				
 				<!-- Imputation -->
 				<script src="{{asset ("assets/js/utilImputtest.js")}}"></script>
+				<!-- datatable -->
+				<script src="{{asset ("/assets/js/datatable/jquery.dataTable.min.js")}}"></script>
 
+				<link rel="stylesheet" href="{{asset ("/assets/css/datatable/buttons.bootstrap4.min.css")}}">
+				<link rel="stylesheet" href="{{asset ("/assets/css/datatable/dataTables.bootstrap4.min.css")}}">
+				<link rel="stylesheet" href="{{asset ("/assets/css/datatable/responsive.bootstrap4.min.css")}}">
+
+
+					<!-- <script src="{{asset ("/assets/js/datatable/buttons.bootstrap4.min.js")}}"></script>
+				<script src="{{asset ("/assets/js/datatable/buttons.html5.min.js")}}"></script>
+				<script src="{{asset ("/assets/js/datatable/jquery.min.js")}}"></script>
+				 -->
+
+				<script src="{{asset ("/assets/js/datatable/buttons.colVis.min.js")}}"></script>
+				<script src="{{asset ("/assets/js/datatable/buttons.print.min.js")}}"></script>
+				<script src="{{asset ("/assets/js/datatable/dataTables.bootstrap4.min.js")}}"></script>
+				<script src="{{asset ("/assets/js/datatable/dataTables.buttons.min.js")}}"></script>
+				<script src="{{asset ("/assets/js/datatable/dataTables.responsive.min.js")}}"></script>
+
+				<script src="{{asset ("assets/js/admin.js")}}"></script>
+				<script src="{{asset ("/assets/js/datatable/jszip.min.js")}}"></script>
+				<script src="{{asset ("/assets/js/datatable/pdfmake.min.js")}}"></script>
+				<script src="{{asset ("/assets/js/datatable/responsive.bootstrap4.min.js")}}"></script>
+				<script src="{{asset ("/assets/js/datatable/vfs_fonts.js")}}"></script>
+
+				<script>
+					$(function () {
+$("#example1").DataTable({"responsive": true, "lengthChange": true, "autoWidth": false}).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+});
+				</script>
 
 			{% endblock %}
 		</body>

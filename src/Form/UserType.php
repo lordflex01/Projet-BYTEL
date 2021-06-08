@@ -31,7 +31,7 @@ class UserType extends AbstractType
 
             ->add('email', TextType::class, [
                 'attr' => [
-                    'placeholder' => "xxxxx@capgemini.com"
+                    'placeholder' => "xxxxx@yyyy.zzzz"
                 ]
             ])
             ->add('roles', ChoiceType::class, [
@@ -39,7 +39,7 @@ class UserType extends AbstractType
                 'multiple' => false,
                 'expanded' => true,
                 'choices' => [
-                    'Utilisateur' => 'ROLE_USER',
+                    'Collaborateur' => 'ROLE_USER',
                     'Administrateur' => 'ROLE_ADMIN',
                 ],
             ])
@@ -53,7 +53,7 @@ class UserType extends AbstractType
             ])
             ->add('username', TextType::class, [
                 'attr' => [
-                    'placeholder' => "Veuillez entrer votre nom d'utilisateur"
+                    'placeholder' => "Veuillez entrer votre nom "
                 ]
             ])
             ->add('projet', EntityType::class, [

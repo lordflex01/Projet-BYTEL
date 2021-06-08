@@ -7,17 +7,15 @@
 			<div class="container-fluid">
 				<div class="row mb-2">
 					<div class="col-sm-6">
-						<h1 class="m-0" style="font-size:19px">Liste des Taches</h1>
+						<h1 class="m-0" style="font-size:19px">Liste des Tâches</h1>
 					</div>
 					<div class="col-sm-6">
 						<ol class="breadcrumb float-sm-right">
+
 							<li class="breadcrumb-item">
-								<a href="/index">Accueil</a>
+								<a href="/projet">Projets</a>
 							</li>
-							<li class="breadcrumb-item">
-								<a href="/projet">Projet</a>
-							</li>
-							<li class="breadcrumb-item active">Taches</li>
+							<li class="breadcrumb-item active">Tâches</li>
 						</ol>
 					</div>
 				</div>
@@ -30,7 +28,7 @@
 			<!-- Default box -->
 			<div class="card">
 				<div class="card-header">
-					<h3 class="card-title">Taches</h3>
+					<h3 class="card-title">Tâches</h3>
 
 					<div class="card-tools">
 						<button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
@@ -43,7 +41,7 @@
 
 					{% if is_granted('ROLE_ADMIN') %}
 						<div style="float:right;">
-							<a class="btn btn-primary" href="{{ path('taches_new') }}">Ajouter une nouvelle tache</a>
+							<a class="btn btn-primary" href="{{ path('taches_new') }}">Ajouter une nouvelle tâche</a>
 						</div>
 					{% endif %}
 				</div>
@@ -51,7 +49,7 @@
 					<table class="table table-striped projects">
 						<thead>
 							<tr>
-								<th style="width: 1%">
+								<th>
 									#
 								</th>
 								<th style="width: 30%">
@@ -60,7 +58,9 @@
 								<th>
 									Description
 								</th>
-								<th style="width: 20%"></th>
+								<th>
+									Actions
+								</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -76,7 +76,7 @@
 										{{ tach.description }}
 									</td>
 
-									<td class="project-actions text-right">
+									<td>
 										{% if is_granted('ROLE_ADMIN') %}
 											<a class="btn btn-info btn-sm" href="{{ path('taches_edit', {'id': tach.id}) }}">
 												<i class="fas fa-pencil-alt"></i>
@@ -109,7 +109,7 @@
 				<th>Id</th>
 				<th>Libelle</th>
 				<th>Description</th>
-				<th>actions</th>
+				<th>Actions</th>
 			</tr>
 		</thead>
 		<tbody>

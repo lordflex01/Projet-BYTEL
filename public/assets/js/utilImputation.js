@@ -146,8 +146,8 @@ $(document).ready(function () {
           //TOTALE
           $("#tableB").append(
             '<td><input type="number" min="0" max="1" step="0.25" class="form-control-imput" value=' +
-            t +
-            "></td>"
+              t +
+              "></td>"
           );
           com = "";
           $.each(obj, function (key, value) {
@@ -334,6 +334,62 @@ $(document).ready(function () {
       async: true,
       success: function (data, status) {
       },
+    });
+  });
+  $(document).on("click", "#editCode", function () {
+    var parseDates = (inp) => {
+      let year = parseInt(inp.slice(0, 4), 10);
+      let week = parseInt(inp.slice(6), 10);
+
+      let day = 1 + (week - 0) * 7; // 1st of January + 7 days for each week
+
+      let dayOffset = new Date(year, 0, 1).getDay(); // we need to know at what day of the week the year start
+
+      dayOffset--; // depending on what day you want the week to start increment or decrement this value. This should make the week start on a monday
+
+      let days = [];
+      for (
+        let i = 0;
+        i < 7;
+        i++ // do this 7 times, once for every day
+      )
+        days.push(new Date(year, 0, day - dayOffset + i));
+      // add a new Date object to the array with an offset of i days relative to the first day of the week
+      return days;
+    };
+    let id = $("#name").val();
+    var week = document.querySelector("#date-input");
+    var dates = parseDates(week.value);
+    let selected = $("#codeP option:selected");
+    let str1 = $("#i1").val();
+    let str2 = $("#i2").val();
+    let str3 = $("#i3").val();
+    let str4 = $("#i4").val();
+    let str5 = $("#i5").val();
+    let Commentaires = $("#i6").val();
+
+    let valeur = [];
+    (valeur[0] = str1),
+      (valeur[1] = str2),
+      (valeur[2] = str3),
+      (valeur[3] = str4),
+      (valeur[4] = str5);
+    let test = {
+      tache: selected[0].value,
+      valeur: valeur,
+      Commentaires: Commentaires,
+      date: dates,
+      user: id,
+    };
+    $.ajax({
+      url: `/apii/new`,
+      type: "POST",
+      processData: false,
+      contentType: false,
+      data: JSON.stringify(test),
+      dataType: "json",
+      async: true,
+      success: function (data, status) {},
       error: function (xhr, textStatus, errorThrown) {
         alert(xhr.responseText);
       },
