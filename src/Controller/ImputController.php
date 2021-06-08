@@ -165,6 +165,32 @@ class ImputController extends AbstractController
         $em->flush();
         return new Response('Modification confirmé');
     }
+    /**
+     * @Route("/apii/delete", name="api_imput_delete", methods={"PUT"})
+     */
+    public function apidelete(DateVRepository $dateVRepository, Request $request)
+    {
+
+        //on recupère les données
+        $donnees = json_decode($request->getContent());
+
+        //Declaration
+        $dateVlistes = $dateVRepository->findAll();
+        $entityManager = $this->getDoctrine()->getManager();
+
+        foreach ($dateVlistes as $dateVliste) {
+            if ($donnees->imputID == $dateVliste->getImput()->getId()) {
+                $dateV = new DateV;
+                $imput = new Imput;
+                $dateV = $dateVliste;
+                $imput = $dateVliste->getImput();
+                $entityManager->remove($dateV);
+            }
+        }
+        $entityManager->remove($imput);
+        $entityManager->flush();
+        return new Response('Supression confirmé');
+    }
 
     /**
      * @Route("/{id}", name="imput_show", methods={"GET"})
@@ -206,7 +232,11 @@ class ImputController extends AbstractController
             $entityManager->remove($imput);
             $entityManager->flush();
         }
-
+        ////::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+        ////::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+        ////::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+        ////::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+        ////::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
         return $this->redirectToRoute('imput_index');
     }
     public function ajaxAction(CodeProjetRepository $codeProjetRepository, TachesRepository $tachesRepository, Request $request, DateVRepository $dateVRepository)
