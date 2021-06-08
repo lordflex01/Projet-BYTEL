@@ -699,9 +699,9 @@ $(document).ready(function () {
         });
     });
     //FIN 4er Suppression 
-
+   //supprimer une ligne
     $(document).on("click", "#suppRow", function () {
         $(this).closest("tr").remove();
       });
-      //sup
+   
 });
