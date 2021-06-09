@@ -1,4 +1,41 @@
 {{ form_start(form) }}
-    {{ form_widget(form) }}
-    <button class="btn">{{ button_label|default('Save') }}</button>
-{{ form_end(form) }}
+<!-- Main content -->
+<section
+	class="content">
+
+	<!--{{ dump() }}-->
+	<div class="container-fluid">
+		<div
+			class="row">
+			<!-- left column -->
+			<div
+				class="col-md-12">
+				<!-- general form elements -->
+				<div class="card card-primary">
+
+
+					<!-- /.card-header -->
+					<!-- form start -->
+						<form>
+							<div class="card-body"> <div class="form-group">
+								<label for="{{form.libelle.vars.id}}">libelle</label>
+								{{form_widget( form.libelle)}}
+								{{form_errors(form.libelle)}}
+								{% do form.libelle.setRendered %}
+							</div>
+							<div class="form-group">
+								<label for="{{form.description.vars.id}}">Description</label>
+								{{form_widget( form.description)}}
+								{% do form.description.setRendered %}
+							</div>
+						</div>
+						<!-- /.card-body -->
+						<div class=" card-footer">
+							<button type="submit" class="btn btn-success swalDefaultSuccess">{{ button_label|default('Ajouter') }}</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+	{{ form_end(form) }}

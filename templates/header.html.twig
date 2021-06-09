@@ -209,7 +209,7 @@
 								</li>
 							</li>
 							<li class="nav-item">
-								{% if app.request.uri  == 'https://127.0.0.1:8000/projet/' %}
+								{% if app.request.uri  == 'https://127.0.0.1:8000/projet' %}
 									<a href="/projet" class="nav-link active">
 									{% else %}
 										<a href="/projet" class="nav-link">
@@ -217,9 +217,38 @@
 										<i class="nav-icon fas fa-tasks"></i>
 										<p>
 											Projets
+											<i class="right fas fa-angle-left"></i>
 										</p>
 									</a>
+									<ul class="nav nav-treeview">
+									<li class="nav-item">
+											<a href="/projet" class="nav-link active">
+												<i class="far 	fa-circle nav-icon"></i>
+												<p>Détails Projets</p>
+											</a>
+										</li>
+										<li class="nav-item">
+											<a href="/code/projet/" class="nav-link">
+												<i class="far 	fa-circle nav-icon"></i>
+												<p>Code Projets</p>
+											</a>
+										</li>
+										<li class="nav-item">
+											<a href="/taches" class="nav-link">
+												<i class="far fa-circle nav-icon"></i>
+												<p>Tâches</p>
+											</a>
+										</li>
+										<li class="nav-item">
+											<a href="/activite" class="nav-link">
+												<i class="far fa-circle nav-icon"></i>
+												<p>Activitées</p>
+											</a>
+										</li>
+
+									</ul>
 								</li>
+							</li>
 								<!-- Menu utilisateur avec condition  !-->
 								{% if is_granted('ROLE_ADMIN') %}
 									<li class="nav-item">

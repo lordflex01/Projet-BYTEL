@@ -9,7 +9,11 @@
 					<div class="col-sm-6">
 						<h1 class="m-0" style="font-size:19px">Liste des projets</h1>
 					</div>
-					
+					<div class="col-sm-6">
+						{% if is_granted('ROLE_ADMIN') %}
+						<a class="btn btn-primary" style="float: right;" href="{{ path('projet_new') }}">Ajouter un nouveau projet</a>
+							{% endif %}
+					</div>
 				</div>
 			</div>
 			<!-- /.container-fluid -->
@@ -31,11 +35,6 @@
 						</button>
 					</div>
 
-					{% if is_granted('ROLE_ADMIN') %}
-						<div style="float:right;">
-							<a class="btn btn-primary" href="{{ path('projet_new') }}">Ajouter un nouveau projet</a>
-						</div>
-					{% endif %}
 				</div>
 				<div class="card-body p-0">
 					<table class="table table-striped projects">
