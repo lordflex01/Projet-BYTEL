@@ -9,9 +9,9 @@
 					<div class="col-sm-6">
 						<h1 class="m-0" style="font-size:19px">Liste des activitées</h1>
 					</div>
-					<div class="col-sm-6" style="float:right">
+					<div class="col-sm-6">
 						{% if is_granted('ROLE_ADMIN') %}
-							<a class="btn btn-primary" href="{{ path('activite_new') }}">Ajouter une nouvelle activitée</a>
+							<a class="btn btn-primary" style="float: right;" href="{{ path('activite_new') }}">Ajouter une nouvelle activitée</a>
 						{% endif %}
 					</div>
 				</div>
