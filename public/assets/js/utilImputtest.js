@@ -5,6 +5,7 @@ var imputID = [];
 imputID[0] = 0;
 var H = [];
 var nombresimputation = 0;
+var compteurligneajout = 0;
 $(document).ready(function () {
     $("#btnRech").click(function () {
         var parseDates = (inp) => {
@@ -76,6 +77,7 @@ $(document).ready(function () {
                 $("#entete").append(e);
                 $("#tableB").html("");
 
+                compteurligneajout = 0;
                 var a = 0;
                 var b = 0;
                 var c = 0;
@@ -104,7 +106,7 @@ $(document).ready(function () {
                     z = m[2].split(" ");
                     W = value.week;
                     //Condition pour remplire un tableau de code projet
-                    if (id == value.user || week == W) {
+                    if (id == value.user && week == W) {
                         if (a != value.tache || b != value.codeprojet) {
                             nombresimputation++;
                             codprojettableau[nombresimputation - 1] = value.codeprojet;
@@ -300,9 +302,11 @@ $(document).ready(function () {
                 }
                 activite;
 
+
                 $("#addRow").click(function () {
+                    compteurligneajout++;
                     scntDiv.append(
-                        '<tr><td><select class="form-control select2" id="codeP2" style="width: 100%;">' +
+                        '<tr><td><select class="form-control select2" id="codeP' + compteurligneajout + '" style="width: 100%;">' +
                         "<option value = " +
                         codeP[0].id +
                         ">" +
@@ -323,7 +327,7 @@ $(document).ready(function () {
                         ">" +
                         codeP[3].libelle +
                         "</option></select></td>" +
-                        '<td><select class="form-control select2" id="codeP" style="width: 100%;">' +
+                        '<td><select class="form-control select2" id="tache' + compteurligneajout + '" style="width: 100%;">' +
                         "<option value = " +
                         tache[0].id +
                         ">" +
@@ -343,7 +347,7 @@ $(document).ready(function () {
                         tache[3].id +
                         ">" +
                         tache[3].libelle +
-                        "</option></select></td>" + '<td><select class="form-control select2" id="activite" style="width: 100%;">' +
+                        "</option></select></td>" + '<td><select class="form-control select2" id="activite' + compteurligneajout + '" style="width: 100%;">' +
                         "<option value = " +
                         activite[0].id +
                         ">" +
@@ -364,13 +368,13 @@ $(document).ready(function () {
                         ">" +
                         activite[3].libelle +
                         "</option></select></td>" +
-                        '<td><input type="number" id="i1" min="0" max="1" step="0.25" class="form-control-imput" value="0"></td>' +
-                        '<td><input type="number" id="i2"  min="0" max="1" step="0.25" class="form-control-imput" value="0"></td>' +
-                        '<td><input type="number" id="i3"  min="0" max="1" step="0.25" class="form-control-imput" value="0"></td>' +
-                        '<td><input type="number" id="i4" min="0" max="1" step="0.25" class="form-control-imput" value="0"></td>' +
-                        '<td><input type="number" id="i5" min="0" max="1" step="0.25" class="form-control-imput" value="0"></td>' +
+                        '<td><input type="number" id="i1' + compteurligneajout + '" min="0" max="1" step="0.25" class="form-control-imput" value="0"></td>' +
+                        '<td><input type="number" id="i2' + compteurligneajout + '"  min="0" max="1" step="0.25" class="form-control-imput" value="0"></td>' +
+                        '<td><input type="number" id="i3' + compteurligneajout + '"  min="0" max="1" step="0.25" class="form-control-imput" value="0"></td>' +
+                        '<td><input type="number" id="i4' + compteurligneajout + '" min="0" max="1" step="0.25" class="form-control-imput" value="0"></td>' +
+                        '<td><input type="number" id="i5' + compteurligneajout + '" min="0" max="1" step="0.25" class="form-control-imput" value="0"></td>' +
                         '<td><input type="number" min="0" max="1" step="0.25" class="form-control-imput" value="0"></td>' +
-                        '<td><input type="text"  id="i6"  style="max-width: 200px" class="form-control-imput"></td>' +
+                        '<td><input type="text"  id="i6' + compteurligneajout + '"  style="max-width: 200px" class="form-control-imput"></td>' +
                         '<td><i class="fa fa-plus" id="addCode" style="font-size: 16px;margin-top: 8px;cursor:pointer;color: green;"></i></td>' +
                         '<td><i class="fa fa-trash" id="suppRow" style="font-size: 16px;cursor:pointer;margin-top: 8px;color: #cc1919;"></i></td></tr>'
                     );
@@ -383,7 +387,7 @@ $(document).ready(function () {
             },
         });
     });
-    $(document).on("click", "#addCode", function () {
+    $(document).on("click", "#save", function () {
         var parseDates = (inp) => {
             let year = parseInt(inp.slice(0, 4), 10);
             let week = parseInt(inp.slice(6), 10);
@@ -404,45 +408,56 @@ $(document).ready(function () {
             // add a new Date object to the array with an offset of i days relative to the first day of the week
             return days;
         };
-        let id = $("#name").val();
-        var week = document.querySelector("#date-input");
-        var dates = parseDates(week.value);
-        let tacheselected = $("#codeP option:selected");
-        let codePselected = $("#codeP2 option:selected");
-        let activiteselected = $("#activite option:selected");
-        dates[0].setHours(dates[0].getHours() + 2);
-        dates[1].setHours(dates[1].getHours() + 2);
-        dates[2].setHours(dates[2].getHours() + 2);
-        dates[3].setHours(dates[3].getHours() + 2);
-        dates[4].setHours(dates[4].getHours() + 2);
-        let str1 = $("#i1").val();
-        let str2 = $("#i2").val();
-        let str3 = $("#i3").val();
-        let str4 = $("#i4").val();
-        let str5 = $("#i5").val();
-        let Commentaires = $("#i6").val();
+        var tableauimputation = [];
+        for (let i = 1; i <= compteurligneajout; i++) {
+            let id = $("#name").val();
+            var week = document.querySelector("#date-input");
+            var dates = parseDates(week.value);
+            let tacheselected = $("#tache" + i + " option:selected");
+            let codePselected = $("#codeP" + i + " option:selected");
+            let activiteselected = $("#activite" + i + " option:selected");
+            dates[0].setHours(dates[0].getHours() + 2);
+            dates[1].setHours(dates[1].getHours() + 2);
+            dates[2].setHours(dates[2].getHours() + 2);
+            dates[3].setHours(dates[3].getHours() + 2);
+            dates[4].setHours(dates[4].getHours() + 2);
+            let str1 = $("#i1" + i + "").val();
+            let str2 = $("#i2" + i + "").val();
+            let str3 = $("#i3" + i + "").val();
+            let str4 = $("#i4" + i + "").val();
+            let str5 = $("#i5" + i + "").val();
+            let Commentaires = $("#i6" + i + "").val();
 
-        let valeur = [];
-        (valeur[0] = str1),
-            (valeur[1] = str2),
-            (valeur[2] = str3),
-            (valeur[3] = str4),
-            (valeur[4] = str5);
-        let test = {
-            activite: activiteselected[0].value,
-            tache: tacheselected[0].value,
-            codeprojet: codePselected[0].value,
-            valeur: valeur,
-            Commentaires: Commentaires,
-            date: dates,
-            user: id,
+            let valeur = [];
+            (valeur[0] = str1),
+                (valeur[1] = str2),
+                (valeur[2] = str3),
+                (valeur[3] = str4),
+                (valeur[4] = str5);
+            let ligneimputation = {
+                activite: activiteselected[0].value,
+                tache: tacheselected[0].value,
+                codeprojet: codePselected[0].value,
+                valeur: valeur,
+                Commentaires: Commentaires,
+                date: dates,
+                user: id,
+            };
+
+
+            tableauimputation[i - 1] = ligneimputation;
+        }
+
+        var data = {
+            tableauimput: tableauimputation,
+            nbr: compteurligneajout,
         };
         $.ajax({
             url: `/apii/new`,
             type: "POST",
             processData: false,
             contentType: false,
-            data: JSON.stringify(test),
+            data: JSON.stringify(data),
             dataType: "json",
             async: true,
             success: function (data, status) { },
@@ -737,6 +752,7 @@ $(document).ready(function () {
     //FIN 4er Suppression 
     //supprimer une ligne
     $(document).on("click", "#suppRow", function () {
+        compteurligneajout--;
         $(this).closest("tr").remove();
     });
 
