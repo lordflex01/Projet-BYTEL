@@ -30,3 +30,6 @@ imput:
     path: /imput
     controller: App\Controller\ImputController::ajaxAction
 
+export:
+    path: /export
+    controller: App\Controller\ImputController::exportAction
