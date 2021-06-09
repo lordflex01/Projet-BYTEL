@@ -1,11 +1,31 @@
-<!DOCTYPE html>
-
-<title>New Activite</title>
-
+{% extends 'header.html.twig' %}
 {% block body %}
-    <h1>Create new Activite</h1>
+	<!-- Content Wrapper. Contains page content -->
+	<div
+		class="content-wrapper">
+		<!-- Content Header (Page header) -->
+		<div class="content-header">
+			<div class="container-fluid">
+				<div class="row mb-2">
+					<div class="col-sm-6">
+						<h1 class="m-0" style="font-size:19px">Ajouter une nouvelle activitée</h1>
+					</div>
+					<div class="col-sm-6">
+						<ol class="breadcrumb float-sm-right">
 
-    {{ include('activite/_form.html.twig') }}
+							<li class="breadcrumb-item">
+								<a href="/activite">Activitées</a>
+							</li>
+							<li class="breadcrumb-item active">Nouvelle Activitée</li>
+						</ol>
+					</div>
+				</div>
+				<!-- /.row -->
+			</div>
+			<!-- /.container-fluid -->
+		</div>
+		<!-- /.content-header -->
+		{{ include('activite/_form.html.twig') }}
 
-    <a href="{{ path('activite_index') }}">back to list</a>
+	</div>
 {% endblock %}
