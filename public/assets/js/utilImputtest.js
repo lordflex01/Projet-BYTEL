@@ -54,8 +54,9 @@ $(document).ready(function () {
             success: function (data, status) {
                 var e = $(
                     '<th><button id="addRow" type="button" class="btn btn-block btn-info btn-sm" style="width: 30px;margin-bottom: -7px;border-radius: 30px;"><i class="fa fa-plus"></i></button></th>' +
-                    "<th></th>" +
-                    "<th></th>" +
+                    "<th>Code Projet</th>" +
+                    "<th>Tâches</th>" +
+                    "<th>Activitées</th>" +
                     '<th style="width: 40px">Lun ' +
                     days[0] +
                     '</th><th  style="width: 40px">Mar ' +
@@ -141,7 +142,7 @@ $(document).ready(function () {
                     for (let i = 0; i < nombreimputation; i++) {
                         var LLL = $(
 
-                            "<tr><td></td>" + "<th></th>" + "<td><span>Code Projet: " + codprojettableau[i] + "</span></td>" + '<td><input id="m1' + imputID[i] + '" type="number" min="0" max="1" step="0.25" class="form-control-imput" value=' +
+                            "<tr><td></td>" + "<th></th>" + "<th></th>" + "<td><span>" + codprojettableau[i] + "</span></td>" + '<td><input id="m1' + imputID[i] + '" type="number" min="0" max="1" step="0.25" class="form-control-imput" value=' +
                             H[0 + j] +
                             '></td><td><input id="m2' + imputID[i] + '" type="number" min="0" max="1" step="0.25" class="form-control-imput" value=' +
                             H[1 + j] +
@@ -313,6 +314,27 @@ $(document).ready(function () {
                         codeP[3].id +
                         ">" +
                         codeP[3].libelle +
+                        "</option></select></td>" +
+                        '<td><select class="form-control select2" id="codeP" style="width: 100%;">' +
+                        "<option value = " +
+                        tache[0].id +
+                        ">" +
+                        tache[0].libelle +
+                        "</option>" +
+                        "<option value= " +
+                        tache[1].id +
+                        ">" +
+                        tache[1].libelle +
+                        "</option>" +
+                        "<option value= " +
+                        tache[2].id +
+                        ">" +
+                        tache[2].libelle +
+                        "</option>" +
+                        "<option value= " +
+                        tache[3].id +
+                        ">" +
+                        tache[3].libelle +
                         "</option></select></td>" +
                         '<td><select class="form-control select2" id="codeP" style="width: 100%;">' +
                         "<option value = " +
