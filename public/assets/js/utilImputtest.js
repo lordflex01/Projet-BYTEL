@@ -54,10 +54,9 @@ $(document).ready(function () {
             async: true,
             success: function (data, status) {
                 var e = $(
-                    '<th><button id="addRow" type="button" class="btn btn-block btn-info btn-sm" style="width: 30px;margin-bottom: -7px;border-radius: 30px;"><i class="fa fa-plus"></i></button></th>' +
-                    "<th>Code Projet</th>" +
-                    "<th>Tâches</th>" +
-                    "<th>Activitées</th>" +
+                    '<th><button id="addRow" type="button" class="btn btn-block btn-info btn-sm" style="width: 30px;"><i class="fa fa-plus"></i></button></th>' +
+                    '<th></th>'+
+                    '<th></th>'+
                     '<th style="width: 40px">Lun ' +
                     days[0] +
                     '</th><th  style="width: 40px">Mar ' +
@@ -144,7 +143,8 @@ $(document).ready(function () {
                     for (let i = 0; i < nombreimputation; i++) {
                         var LLL = $(
 
-                            "<tr><td></td>" + "<td></td>" + "<td><span>Code Projet: " + codprojettableau[i] + "</span></td>" + '<td><input id="m1' + imputID[i] + '" type="number" min="0" max="1" step="0.25" class="form-control-imput" value=' +
+                            "<tr><td><span>Code Projet: " + codprojettableau[i] + "</span></td>" + 
+                            '<td><input id="m1' + imputID[i] + '" type="number" min="0" max="1" step="0.25" class="form-control-imput" value=' +
                             H[0 + j] +
                             '></td><td><input id="m2' + imputID[i] + '" type="number" min="0" max="1" step="0.25" class="form-control-imput" value=' +
                             H[1 + j] +
@@ -167,114 +167,7 @@ $(document).ready(function () {
                         $("#tableB").append(LLL);
                     }
 
-                    /*
-                                        //une seul imputation cette semaine
-                                        var LL1 = $(
-                                            "<tr><td></td>" + "<td><span>Code Projet: " + codprojettableau[0] + "</span></td>" + '<td><input id="m1" type="number" min="0" max="1" step="0.25" class="form-control-imput" value=' +
-                                            H[0] +
-                                            '></td><td><input id="m2" type="number" min="0" max="1" step="0.25" class="form-control-imput" value=' +
-                                            H[1] +
-                                            '></td><td><input id="m3" type="number" min="0" max="1" step="0.25" class="form-control-imput" value=' +
-                                            H[2] +
-                                            '></td><td><input id="m4" type="number" min="0" max="1" step="0.25" class="form-control-imput" value=' +
-                                            H[3] +
-                                            '></td><td><input id="m5" type="number" min="0" max="1" step="0.25" class="form-control-imput" value=' +
-                                            H[4] +
-                                            "></td>" + '<td><input type="number" min="0" max="1" step="0.25" class="form-control-imput" value=' +
-                                            t[0] +
-                                            "></td>" + '<td><input id="com" style="max-width: 200px" type="text" class="form-control-imput" value=' +
-                                            commentairelab[0] +
-                                            "></td>" +
-                                            '<td><i class="fa fa-edit" id="editCode" style="font-size: 16px;margin-top: 8px;cursor:pointer;color: #1586bc;"></i></td>' + "</tr>"
-                    
-                                        );
-                                        //deux imputation cette semaine
-                                        var LL2 = $("<tr><td></td>" + "<td><span>Code Projet: " + codprojettableau[1] + "</span></td>" + '<td><input id="m1" type="number" min="0" max="1" step="0.25" class="form-control-imput" value=' +
-                                            H[0 + 5] +
-                                            '></td><td><input id="m2" type="number" min="0" max="1" step="0.25" class="form-control-imput" value=' +
-                                            H[1 + 5] +
-                                            '></td><td><input id="m3" type="number" min="0" max="1" step="0.25" class="form-control-imput" value=' +
-                                            H[2 + 5] +
-                                            '></td><td><input id="m4" type="number" min="0" max="1" step="0.25" class="form-control-imput" value=' +
-                                            H[3 + 5] +
-                                            '></td><td><input id="m5" type="number" min="0" max="1" step="0.25" class="form-control-imput" value=' +
-                                            H[4 + 5] +
-                                            "></td>" + '<td><input type="number" min="0" max="1" step="0.25" class="form-control-imput" value=' +
-                                            t[1] +
-                                            "></td>" + '<td><input id="com" style="max-width: 200px" type="text" class="form-control-imput" value=' +
-                                            commentairelab[1] +
-                                            "></td>" +
-                                            '<td><i class="fa fa-edit" id="editCode" style="font-size: 16px;margin-top: 8px;cursor:pointer;color: #1586bc;"></i></td>' + "</tr>");
-                    
-                                        var LL3 = $("<tr><td></td>" + "<td><span>Code Projet: " + codprojettableau[2] + "</span></td>" + '<td><input id="m1" type="number" min="0" max="1" step="0.25" class="form-control-imput" value=' +
-                                            H[0 + 10] +
-                                            '></td><td><input id="m2" type="number" min="0" max="1" step="0.25" class="form-control-imput" value=' +
-                                            H[1 + 10] +
-                                            '></td><td><input id="m3" type="number" min="0" max="1" step="0.25" class="form-control-imput" value=' +
-                                            H[2 + 10] +
-                                            '></td><td><input id="m4" type="number" min="0" max="1" step="0.25" class="form-control-imput" value=' +
-                                            H[3 + 10] +
-                                            '></td><td><input id="m5" type="number" min="0" max="1" step="0.25" class="form-control-imput" value=' +
-                                            H[4 + 10] +
-                                            "></td>" + '<td><input type="number" min="0" max="1" step="0.25" class="form-control-imput" value=' +
-                                            t[2] +
-                                            "></td>" + '<td><input id="com" style="max-width: 200px" type="text" class="form-control-imput" value=' +
-                                            commentairelab[2] +
-                                            "></td>" +
-                                            '<td><i class="fa fa-edit" id="editCode" style="font-size: 16px;margin-top: 8px;cursor:pointer;color: #1586bc;"></i></td>' + "</tr>");
-                    
-                                        var LL4 = $("<tr><td></td>" + "<td><span>Code Projet: " + codprojettableau[3] + "</span></td>" + '<td><input id="m1" type="number" min="0" max="1" step="0.25" class="form-control-imput" value=' +
-                                            H[0 + 15] +
-                                            '></td><td><input id="m2" type="number" min="0" max="1" step="0.25" class="form-control-imput" value=' +
-                                            H[1 + 15] +
-                                            '></td><td><input id="m3" type="number" min="0" max="1" step="0.25" class="form-control-imput" value=' +
-                                            H[2 + 15] +
-                                            '></td><td><input id="m4" type="number" min="0" max="1" step="0.25" class="form-control-imput" value=' +
-                                            H[3 + 15] +
-                                            '></td><td><input id="m5" type="number" min="0" max="1" step="0.25" class="form-control-imput" value=' +
-                                            H[4 + 15] +
-                                            "></td>" + '<td><input type="number" min="0" max="1" step="0.25" class="form-control-imput" value=' +
-                                            t[3] +
-                                            "></td>" + '<td><input id="com" style="max-width: 200px" type="text" class="form-control-imput" value=' +
-                                            commentairelab[3] +
-                                            "></td>" +
-                                            '<td><i class="fa fa-edit" id="editCode" style="font-size: 16px;margin-top: 8px;cursor:pointer;color: #1586bc;"></i></td>' + "</tr>");
-                    
-                                        $("#tableB").append(LL1);
-                                        if (nombresimputation == 2) {
-                                            $("#tableB").append(LL2);
-                                        }
-                                        if (nombresimputation == 3) {
-                                            $("#tableB").append(LL2);
-                                            $("#tableB").append(LL3);
-                                        }
-                                        if (nombresimputation == 4) {
-                                            $("#tableB").append(LL2);
-                                            $("#tableB").append(LL3);
-                                            $("#tableB").append(LL4);
-                                        }*/
                 }
-                /* if (c > 0) {
-                     //TOTALE
-                     $("#tableB").append(
-                         '<td><input type="number" min="0" max="1" step="0.25" class="form-control-imput" value=' +
-                         t +
-                         "></td>"
-                     );
-                     com = "";
-                     $.each(obj, function (key, value) {
-                         if (id == value.user && bool == 0) {
-                             $("#tableB").append(
-                                 '<td><input id="com" style="max-width: 200px" type="text" class="form-control-imput" value=' +
-                                 value.commentaire +
-                                 "></td>" +
-                                 '<td><i class="fa fa-edit" id="editCode" style="font-size: 16px;margin-top: 8px;cursor:pointer;color: #1586bc;"></i></td>'
-                             );
-                             bool = 1;
-                         }
-                     });
-                 }*/
-
                 var scntDiv = $("#tableB");
                 var i = $("#tableB tr").length + 1;
                 //liste des tache
