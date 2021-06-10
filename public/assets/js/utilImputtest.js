@@ -55,8 +55,8 @@ $(document).ready(function () {
             success: function (data, status) {
                 var e = $(
                     '<th><button id="addRow" type="button" class="btn btn-block btn-info btn-sm" style="width: 30px;margin-bottom: -7px;border-radius: 30px;"><i class="fa fa-plus"></i></button></th>' +
-                    "<th></th>" +
-                    "<th></th>" +
+                    "<th>Code projet</th>" +
+                    "<th>Tache</th>" +
                     '<th style="width: 40px">Lun ' +
                     days[0] +
                     '</th><th  style="width: 40px">Mar ' +
@@ -92,6 +92,7 @@ $(document).ready(function () {
                 var obj = jQuery.parseJSON(data);
                 nombresimputation = 0;
                 let codprojettableau = [];
+                let tacheteableau = [];
                 let nmbdedatV = 0;
                 let commentairelab = [];
                 let totalconteur = 0;
@@ -110,6 +111,7 @@ $(document).ready(function () {
                         if (a != value.tache || b != value.codeprojet) {
                             nombresimputation++;
                             codprojettableau[nombresimputation - 1] = value.codeprojet;
+                            tacheteableau[[nombresimputation - 1]] = value.tache;
                             commentairelab[nombresimputation - 1] = value.commentaire;
                             /*$("#tableB").append(
                                 "<td><span>Code Projet: " + value.codeprojet + "</span></td>"
@@ -143,7 +145,7 @@ $(document).ready(function () {
                     for (let i = 0; i < nombreimputation; i++) {
                         var LLL = $(
 
-                            "<tr><td></td>" + "<td></td>" + "<td><span>Code Projet: " + codprojettableau[i] + "</span></td>" + '<td><input id="m1' + imputID[i] + '" type="number" min="0" max="1" step="0.25" class="form-control-imput" value=' +
+                            "<tr><td></td>" + "<td><span>" + codprojettableau[i] + "</span></td>" + "<td><span>" + tacheteableau[i] + "</span></td>" + '<td><input id="m1' + imputID[i] + '" type="number" min="0" max="1" step="0.25" class="form-control-imput" value=' +
                             H[0 + j] +
                             '></td><td><input id="m2' + imputID[i] + '" type="number" min="0" max="1" step="0.25" class="form-control-imput" value=' +
                             H[1 + j] +
@@ -409,6 +411,9 @@ $(document).ready(function () {
             return days;
         };
         var tableauimputation = [];
+        var tabcumuleimput = [];
+        tabcumuleimput[0] = 0, tabcumuleimput[1] = 0, tabcumuleimput[2] = 0, tabcumuleimput[3] = 0, tabcumuleimput[4] = 0;
+
         for (let i = 1; i <= compteurligneajout; i++) {
             let id = $("#name").val();
             var week = document.querySelector("#date-input");
@@ -434,6 +439,12 @@ $(document).ready(function () {
                 (valeur[2] = str3),
                 (valeur[3] = str4),
                 (valeur[4] = str5);
+            (tabcumuleimput[0] = tabcumuleimput[0] + parseFloat(valeur[0])),
+                (tabcumuleimput[1] = tabcumuleimput[1] + parseFloat(valeur[1])),
+                (tabcumuleimput[2] = tabcumuleimput[2] + parseFloat(valeur[2])),
+                (tabcumuleimput[3] = tabcumuleimput[3] + parseFloat(valeur[3])),
+                (tabcumuleimput[4] = tabcumuleimput[4] + parseFloat(valeur[4]));
+
             let ligneimputation = {
                 activite: activiteselected[0].value,
                 tache: tacheselected[0].value,
@@ -442,6 +453,7 @@ $(document).ready(function () {
                 Commentaires: Commentaires,
                 date: dates,
                 user: id,
+                tabcumuleimput: tabcumuleimput,
             };
 
 
