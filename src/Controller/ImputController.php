@@ -94,8 +94,23 @@ class ImputController extends AbstractController
         $codeprojetlistes = $codeProjetRepository->findAll();
         $activitelistes = $activiteRepository->findAll();
         $code = 200;
+
+        if ($donnees->nbr > 1) {
+            for ($j = 0; $j < $donnees->nbr; $j++) {
+                for ($d = $j + 1; $d < $donnees->nbr; $d++) {
+                    if (
+                        $donnees->tableauimput[$j]->tache == $donnees->tableauimput[$d]->tache &&
+                        $donnees->tableauimput[$j]->codeprojet == $donnees->tableauimput[$d]->codeprojet
+                    ) {
+                        $code = 201;
+                    }
+                }
+            }
+        }
+
         //Boucle pour ajoutez plusieur imputation
         for ($j = 0; $j < $donnees->nbr; $j++) {
+
             $imput = new Imput;
             $tache = new Taches;
             $user = new User;
@@ -123,16 +138,47 @@ class ImputController extends AbstractController
             }
             //condition sur l'existance des code
             foreach ($dateVlistes as $dateVliste) {
-                $datetest = new DateTime($donnees->tableauimput[$j]->date[1]);
-                $datecomp = new DateTime($dateVliste->getDate());
+                $datetest1 = new DateTime($donnees->tableauimput[$j]->date[0]);
+                $datetest = $datetest1->format('Y-m-d');
+                $datecomp = $dateVliste->getDate()->format('Y-m-d');
                 if (
-                    $donnees->tableauimput[$j]->activite == $dateVliste->getActivite()->getId() &&
+                    $donnees->tableauimput[$j]->tache == $dateVliste->getTache()->getId() &&
                     $donnees->tableauimput[$j]->codeprojet == $dateVliste->getCodeprojet()->getId() &&
-                    $datetest == $datecomp
+                    date($datetest) == date($datecomp)
                 ) {
                     $code = 201;
                 }
             }
+            //Condition pour voir si les imputation depasse 1
+            $cm = 0;
+            $totalbase = [];
+            $totalbase[0] = $donnees->tableauimput[$j]->tabcumuleimput[0];
+            $totalbase[1] = $donnees->tableauimput[$j]->tabcumuleimput[1];
+            $totalbase[2] = $donnees->tableauimput[$j]->tabcumuleimput[2];
+            $totalbase[3] = $donnees->tableauimput[$j]->tabcumuleimput[3];
+            $totalbase[4] = $donnees->tableauimput[$j]->tabcumuleimput[4];
+            foreach ($dateVlistes as $dateVliste) {
+                $datetest1 = new DateTime($donnees->tableauimput[$j]->date[$cm]);
+                $datetest = $datetest1->format('Y-m-d');
+                $datecomp = $dateVliste->getDate()->format('Y-m-d');
+
+                if (
+                    date($datetest) == date($datecomp) &&
+                    $donnees->tableauimput[$j]->user == $dateVliste->getImput()->getUser()->getId()
+                ) {
+                    $totalbase[$cm] = $totalbase[$cm] + $dateVliste->getValeur();
+                    $cm++;
+                }
+                if ($cm == 5) {
+                    $cm = 0;
+                }
+            }
+
+            for ($ver = 0; $ver < 5; $ver++) {
+                if ($totalbase[$ver] > 1)
+                    $code = 202;
+            }
+
 
             //création de l'imput
             $imput->setUser($user);
@@ -155,10 +201,12 @@ class ImputController extends AbstractController
             }
         }
         if ($code == 201) {
-            return new Response('un des couples tache et code projet existe deja');
+            return new Response('Un des couples tache et code projet existe deja', $code);
+        } else if ($code == 202) {
+            return new Response('Une des imputation est supperieur a 1 dans une meme journée', $code);
         } else {
             //$em->flush();
-            return new Response('Imputation confirmé');
+            return new Response('Imputation confirmé', $code);
         }
         //return $this->redirectToRoute('imput_index');
     }
