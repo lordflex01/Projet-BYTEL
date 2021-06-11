@@ -10,13 +10,10 @@
 						<h1 class="m-0" style="font-size:19px">Liste des Tâches</h1>
 					</div>
 					<div class="col-sm-6">
-						<ol class="breadcrumb float-sm-right">
-
-							<li class="breadcrumb-item">
-								<a href="/projet">Projets</a>
-							</li>
-							<li class="breadcrumb-item active">Tâches</li>
-						</ol>
+						{% if is_granted('ROLE_ADMIN') %}
+							<a class="btn btn-primary" style="float:right;" href="{{ path('taches_new') }}">Ajouter une nouvelle tâche</a>
+					
+					{% endif %}
 					</div>
 				</div>
 			</div>
@@ -39,11 +36,7 @@
 						</button>
 					</div>
 
-					{% if is_granted('ROLE_ADMIN') %}
-						<div style="float:right;">
-							<a class="btn btn-primary" href="{{ path('taches_new') }}">Ajouter une nouvelle tâche</a>
-						</div>
-					{% endif %}
+					
 				</div>
 				<div class="card-body p-0">
 					<table class="table table-striped projects">

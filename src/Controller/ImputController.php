@@ -395,4 +395,36 @@ class ImputController extends AbstractController
             return $this->render('imput/index.html.twig');
         }
     }
+
+    /**
+     * @Route("/export", name="export-csv" )
+     */
+
+    public function exportAction(Request $request)
+    {
+        $donnees = json_decode($request->getContent());
+        $list = array(
+            //these are the columns
+            array('Firstname', 'Lastname',),
+            //these are the rows
+            array('Andrei', 'Boar'),
+            array('John', 'Doe')
+        );
+
+        $fp = fopen('php://temp', 'w+');
+        foreach ($list as $fields) {
+            fputcsv($fp, $fields);
+        }
+
+        rewind($fp);
+        $response = new Response(stream_get_contents($fp));
+        fclose($fp);
+
+        $response->headers->set('Content-Type', 'text/csv');
+        $response->headers->set('Content-Disposition', 'attachment; filename="testing.csv"');
+
+        return $response;
+    }
 }
+
+
