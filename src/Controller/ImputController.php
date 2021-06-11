@@ -205,7 +205,7 @@ class ImputController extends AbstractController
         } else if ($code == 202) {
             return new Response('Une des imputation est supperieur a 1 dans une meme journée', $code);
         } else {
-            //$em->flush();
+            $em->flush();
             return new Response('Imputation confirmé', $code);
         }
         //return $this->redirectToRoute('imput_index');
