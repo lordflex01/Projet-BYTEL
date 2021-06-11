@@ -55,8 +55,9 @@ $(document).ready(function () {
             success: function (data, status) {
                 var e = $(
                     '<th><button id="addRow" type="button" class="btn btn-block btn-info btn-sm" style="width: 30px;"><i class="fa fa-plus"></i></button></th>' +
-                    "<th>Code projet</th>" +
-                    "<th>Tache</th>" +
+                    '<th>Code Projet</th>'+
+                    '<th>Tâches</th>'+
+                    '<th>Activitées</th>'+
                     '<th style="width: 40px">Lun ' +
                     days[0] +
                     '</th><th  style="width: 40px">Mar ' +
@@ -145,7 +146,7 @@ $(document).ready(function () {
                     for (let i = 0; i < nombreimputation; i++) {
                         var LLL = $(
 
-                            "<tr><td><span>Code Projet: " + codprojettableau[i] + "</span></td>" + 
+                            "<tr><td></td><td><span>"+ codprojettableau[i] + "</span></td>" + "<td></td>"+ "<td></td>"+
                             '<td><input id="m1' + imputID[i] + '" type="number" min="0" max="1" step="0.25" class="form-control-imput" value=' +
                             H[0 + j] +
                             '></td><td><input id="m2' + imputID[i] + '" type="number" min="0" max="1" step="0.25" class="form-control-imput" value=' +
@@ -202,7 +203,7 @@ $(document).ready(function () {
                 $("#addRow").click(function () {
                     compteurligneajout++;
                     scntDiv.append(
-                        '<tr><td><select class="form-control select2" id="codeP' + compteurligneajout + '" style="width: 100%;">' +
+                        '<tr><td></td><td><select class="form-control select2" id="codeP' + compteurligneajout + '" style="width: 100%;">' +
                         "<option value = " +
                         codeP[0].id +
                         ">" +
@@ -269,10 +270,9 @@ $(document).ready(function () {
                         '<td><input type="number" id="i3' + compteurligneajout + '"  min="0" max="1" step="0.25" class="form-control-imput" value="0"></td>' +
                         '<td><input type="number" id="i4' + compteurligneajout + '" min="0" max="1" step="0.25" class="form-control-imput" value="0"></td>' +
                         '<td><input type="number" id="i5' + compteurligneajout + '" min="0" max="1" step="0.25" class="form-control-imput" value="0"></td>' +
-                        '<td><input type="number" min="0" max="1" step="0.25" class="form-control-imput" value="0"></td>' +
+                        '<td></td>'+
                         '<td><input type="text"  id="i6' + compteurligneajout + '"  style="max-width: 200px" class="form-control-imput"></td>' +
-                        '<td><i class="fa fa-plus" id="addCode" style="font-size: 16px;margin-top: 8px;cursor:pointer;color: green;"></i></td>' +
-                        '<td><i class="fa fa-trash" id="suppRow" style="font-size: 16px;cursor:pointer;margin-top: 8px;color: #cc1919;"></i></td></tr>'
+                       '<td><i class="fa fa-trash" id="suppRow" style="font-size: 16px;cursor:pointer;margin-top: 8px;color: #cc1919;"></i></td></tr>'
                     );
                     i++;
                     return false;
