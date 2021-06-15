@@ -206,9 +206,10 @@ class ImputController extends AbstractController
             return new Response('Une des imputation est supperieur a 1 dans une meme journée', $code);
         } else {
             //$em->flush();
-            return new Response('Imputation confirmé', $code);
+            $this->addFlash('success', 'done');
+           
         }
-        //return $this->redirectToRoute('imput_index');
+        return $this->redirectToRoute('imput_index');
     }
 
     /**
@@ -249,7 +250,8 @@ class ImputController extends AbstractController
                 $i = 0;
         }
         $em->flush();
-        return new Response('Modification confirmé');
+        return new Response('Modification confirmée');
+        
     }
     /**
      * @Route("/apii/delete", name="api_imput_delete", methods={"PUT"})

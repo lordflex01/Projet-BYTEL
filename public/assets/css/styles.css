@@ -599,7 +599,7 @@ pre code {
   flex-wrap: wrap;
   margin-right: -7.5px;
   margin-left: -7.5px;
-  background: #f1f1f1;
+ /*background: #f1f1f1;*/
   padding: 10px;
 }
 .no-gutters {
@@ -2102,11 +2102,7 @@ pre code {
 .form-control-imput {
   display: block;
     max-width: 60px;
-<<<<<<< HEAD
-    max-height: calc(2rem + -5px);
-=======
     max-height: calc(3rem + -5px);
->>>>>>> 319dc783881b69922d5905c77bf329f45598502b
     padding: 1.375rem -0.25rem;
     font-size: 14px;
     font-weight: 400;
@@ -5118,7 +5114,7 @@ input[type="button"].btn-block {
 }
 .card-footer {
   padding: 0.7em 1.25rem;
-  background-color: #e4eaed;
+  background-color: #F1F1f1;
   border-top: 0 solid rgba(0, 0, 0, 0.125);
 }
 .card-footer-index {

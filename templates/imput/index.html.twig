@@ -55,8 +55,8 @@
 							</button>
 						</div>
 						<div>
-						<a href="{{ path('export') }}" class="btn btn-outline-secondary btn-block">CSV</a>
-							
+							<a href="{{ path('export') }}" class="btn btn-outline-secondary btn-block">CSV</a>
+
 						</div>
 
 					</div>
@@ -70,42 +70,52 @@
 						<table class="table" id="firm_table">
 							<thead id="entete"></thead>
 							<tbody id="tableB"></tbody>
+							<tfoot id="footTable"></tfoot>
 						</table>
-					</div>
+						
+					</div> 
+{% if app.session.flashBag.has('success') %}
+        <div class="alert alert-success">
+            {% for msg in app.session.flashBag.get('success') %}
+                {{ msg }}
+            {% endfor %}
+        </div>
+    {% endif %} 
+ 
 
-					<!--DEBUT du compteur-->
-					{% for code_projet in code_projets %}
-						{% set chargeATM = code_projet.chageJH %}
-						{% set chargeNRJ = code_projet.chageNRJ %}
-						{% set chargeDECO = code_projet.chageDECO %}
+				<!--DEBUT du compteur-->
+				{% for code_projet in code_projets %}
+					{% set chargeATM = code_projet.chageJH %}
+					{% set chargeNRJ = code_projet.chageNRJ %}
+					{% set chargeDECO = code_projet.chageDECO %}
 
-						{% for dateV in dateVs %}
-							{% if code_projet.libelle == dateV.codeprojet.libelle %}
-								{% set chargeATM = chargeATM - dateV.valeur %}
-								{% if dateV.imput.user.projet.libelle == "NRJ" %}
-									{% set chargeNRJ = chargeNRJ - dateV.valeur %}
-								{% endif %}
-
-								{% if dateV.imput.user.projet.libelle == "DECO" %}
-									{% set chargeDECO = chargeDECO - dateV.valeur %}
-								{% endif %}
+					{% for dateV in dateVs %}
+						{% if code_projet.libelle == dateV.codeprojet.libelle %}
+							{% set chargeATM = chargeATM - dateV.valeur %}
+							{% if dateV.imput.user.projet.libelle == "NRJ" %}
+								{% set chargeNRJ = chargeNRJ - dateV.valeur %}
 							{% endif %}
-						{% endfor %}
-						<!--/////////////-->
-					<!--{{ chargeATM }}-->
-						<!--NRJ-->
-						<!--{{ chargeNRJ }}-->
-						<!--DECO-->
-						<!--{{ chargeDECO }}-->
-						<!--//////////////-->
+
+							{% if dateV.imput.user.projet.libelle == "DECO" %}
+								{% set chargeDECO = chargeDECO - dateV.valeur %}
+							{% endif %}
+						{% endif %}
 					{% endfor %}
-					<!--FIN du compteur-->
+					<!--/////////////-->
+				<!--{{ chargeATM }}-->
+					<!--NRJ-->
+					<!--{{ chargeNRJ }}-->
+					<!--DECO-->
+					<!--{{ chargeDECO }}-->
+					<!--//////////////-->
+				{% endfor %}
+				<!--FIN du compteur-->
 
-					<!--container-->
-				</div>
-
-
+				<!--container-->
 			</div>
+
+
 		</div>
-		<!-- /.content -->
-	</div><!-- /.content-wrapper --><!-- Main Footer -->{% endblock %}
+	</div>
+	<!-- /.content -->
+</div><!-- /.content-wrapper --><!-- Main Footer -->{% endblock %}
