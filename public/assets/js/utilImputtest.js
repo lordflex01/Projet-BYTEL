@@ -162,7 +162,6 @@ $(document).ready(function () {
                             "></td>" + '<td><input id="com' + i + '" style="max-width: 200px" type="text" class="form-control-imput" value=' +
                             commentairelab[i] +
                             "></td>" +
-                            '<td><i class="fa fa-edit" id="editCode' + i + '" style="font-size: 16px;margin-top: 8px;cursor:pointer;color: #1586bc;"></i></td>' +
                             '<td><i class="fa fa-trash"  style="font-size: 16px;cursor:pointer;margin-top: 8px;color: #cc1919;"id="suppCode' + i + '"></i></td>' + "</tr>"
 
                         );
@@ -428,11 +427,17 @@ $(document).ready(function () {
             data: JSON.stringify(data),
             dataType: "json",
             async: true,
-            success: function (data, status) { },
+            success: function (response) {
+                if (response == 200) {
+                    alert("Imputation confirmé");
+                    $("#btnRech").click();
+                }
+            },
             error: function (xhr, textStatus, errorThrown) {
                 alert(xhr.responseText);
             },
         });
+
 
     });
 
@@ -520,11 +525,15 @@ $(document).ready(function () {
             data: JSON.stringify(test),
             dataType: "json",
             async: true,
-            success: function (data, status) { },
+            success: function (response) {
+            },
             error: function (xhr, textStatus, errorThrown) {
                 alert(xhr.responseText);
             },
+
         });
+        $("#btnRech").click();
+
     });
     //FIN 1er Suppression 
 
@@ -558,6 +567,7 @@ $(document).ready(function () {
                 alert(xhr.responseText);
             },
         });
+        $("#btnRech").click();
     });
     //FIN 2er Suppression 
 
@@ -591,6 +601,7 @@ $(document).ready(function () {
                 alert(xhr.responseText);
             },
         });
+        $("#btnRech").click();
     });
     //FIN 3er Suppression 
 
@@ -624,6 +635,7 @@ $(document).ready(function () {
                 alert(xhr.responseText);
             },
         });
+        $("#btnRech").click();
     });
     //FIN 4er Suppression 
     //supprimer une ligne

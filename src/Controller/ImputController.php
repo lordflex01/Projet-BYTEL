@@ -130,7 +130,8 @@ class ImputController extends AbstractController
                 $code = 202;
         }
         if ($modif == 0) {
-            return new Response('Aucune nouvelle Modification');
+            $code = 0;
+            return new Response($code);
         } else if ($code == 202) {
             return new Response('Une des Modification est supperieur a 1 dans une meme journée', $code);
         } else {
@@ -267,11 +268,12 @@ class ImputController extends AbstractController
                 return new Response('Une des imputation est supperieur a 1 dans une meme journée', $code);
             } else {
                 // $em->flush();
-                return new Response('Imputation confirmé', $code);
+                return new Response($code);
             }
             //return $this->redirectToRoute('imput_index');
         }
-        return new Response('Aucune nouvelle imputation');
+        $code = 0;
+        return new Response($code);
     }
 
     /**
@@ -296,7 +298,7 @@ class ImputController extends AbstractController
             }
         }
         $entityManager->remove($imput);
-        $entityManager->flush();
+        //$entityManager->flush();
         return new Response('Supression confirmé');
     }
 
