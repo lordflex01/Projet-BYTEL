@@ -6,7 +6,6 @@ imputID[0] = 0;
 var H = [];
 var nombresimputation = 0;
 var compteurligneajout = 0;
-
 $(document).ready(function () {
   $("#btnRech").click(function () {
       var parseDates = (inp) => {
@@ -78,23 +77,6 @@ $(document).ready(function () {
               $("#entete").html("");
               $("#entete").append(e);
               $("#tableB").html("");
-
-              var footer 
-               = $(
-                '<tr><td></td>' +
-                '<td></td>' +
-                '<td></td>' +
-                '<td></td>' +
-                '<td style="width: 40px"></td>'+
-                '<td style="width: 40px"></td>'+
-                '<td style="width: 40px"></td>'+
-                '<td style="width: 40px"></td>'+
-                '<td style="width: 40px"></td>'+
-                '<td  style="width: 40px;color:red">FOOTER</td>' +
-                '<td  style="width: 40px;color:green"></td></tr>'
-            );
-            $("#footTable").html("");
-            $("#footTable").append(footer);
 
               compteurligneajout = 0;
               var a = 0;
@@ -180,7 +162,7 @@ $(document).ready(function () {
                           "></td>" + '<td><input id="com' + i + '" style="max-width: 200px" type="text" class="form-control-imput" value=' +
                           commentairelab[i] +
                           "></td>" +
-                         '<td><i class="fa fa-trash"  style="font-size: 16px;cursor:pointer;margin-top: 8px;color: #cc1919;"id="suppCode' + i + '"></i></td>' + "</tr>"
+                          '<td><i class="fa fa-trash"  style="font-size: 16px;cursor:pointer;margin-top: 8px;color: #cc1919;"id="suppCode' + i + '"></i></td>' + "</tr>"
 
                       );
                       j = j + 5;
@@ -446,17 +428,15 @@ $(document).ready(function () {
           dataType: "json",
           async: true,
           success: function (response) {
-            if (response == 200) {
-              var Toast = Swal.mixin({toast: true, position: 'top-end', showConfirmButton: false, timer: 6000});
-
-            Toast.fire({icon: 'success', title: " Imputation Confirmée . "})
-             $("#btnRech").click(); 
-          }
-          if (response == 201) {
-            alert("Un des couples tache et code projet existe deja");
-           
-        }
-
+              if (response == 200) {
+                  alert("Imputation confirmé");
+                  $("#btnRech").click();
+              }
+              if (response == 201) {
+                  alert("Un des couples tache et code projet existe deja");
+                 
+              }
+      
           },
           error: function (xhr, textStatus, errorThrown) {
               alert(xhr.responseText);
@@ -466,6 +446,64 @@ $(document).ready(function () {
 
   });
 
+  //DEBUT EDIT 1er imputation
+  $(document).on("click", "#editCode0", function () {
+
+      var tableaumodif = [];
+      var tabcumuleimputM = [];
+      tabcumuleimputM[0] = 0, tabcumuleimputM[1] = 0, tabcumuleimputM[2] = 0, tabcumuleimputM[3] = 0, tabcumuleimputM[4] = 0;
+
+      for (let i = 0; i < imputID.length; i++) {
+
+
+          let CommentairesM = $("#com" + i + "").val();
+          let str1M = $("#m1" + imputID[i] + "").val();
+          let str2M = $("#m2" + imputID[i] + "").val();
+          let str3M = $("#m3" + imputID[i] + "").val();
+          let str4M = $("#m4" + imputID[i] + "").val();
+          let str5M = $("#m5" + imputID[i] + "").val();
+          let valeurM = [];
+          (valeurM[0] = str1M),
+              (valeurM[1] = str2M),
+              (valeurM[2] = str3M),
+              (valeurM[3] = str4M),
+              (valeurM[4] = str5M);
+
+          (tabcumuleimputM[0] = tabcumuleimputM[0] + parseFloat(valeurM[0])),
+              (tabcumuleimputM[1] = tabcumuleimputM[1] + parseFloat(valeurM[1])),
+              (tabcumuleimputM[2] = tabcumuleimputM[2] + parseFloat(valeurM[2])),
+              (tabcumuleimputM[3] = tabcumuleimputM[3] + parseFloat(valeurM[3])),
+              (tabcumuleimputM[4] = tabcumuleimputM[4] + parseFloat(valeurM[4]));
+
+          var modification = {
+              'imputID': imputID[i],
+              'valeur': valeurM,
+              'Commentaires': CommentairesM,
+          };
+          tableaumodif[i] = modification;
+      }
+      var dataM = {
+          tableaumodif: tableaumodif,
+          nbrmodification: imputID.length,
+          tabcumuleimput: tabcumuleimputM,
+      }
+
+      $.ajax({
+          url: `/apii/edit`,
+          type: "POST",
+          processData: false,
+          contentType: false,
+          data: JSON.stringify(dataM),
+          dataType: "json",
+          async: true,
+          success: function (data, status) {
+          },
+          error: function (xhr, textStatus, errorThrown) {
+              alert(xhr.responseText);
+          },
+      });
+  });
+  //FIN EDIT 1er imputation
 
   //DEBUT 1er suppression 
   $(document).on("click", "#suppCode0", function () {
@@ -492,18 +530,15 @@ $(document).ready(function () {
           data: JSON.stringify(test),
           dataType: "json",
           async: true,
-          success: function (response) { 
-            var Toast = Swal.mixin({toast: true, position: 'top-end', showConfirmButton: false, timer: 6000});
-
-            Toast.fire({icon: 'success', title: " Suppression Confirmée . "})
-							
+          success: function (response) {
           },
           error: function (xhr, textStatus, errorThrown) {
               alert(xhr.responseText);
           },
-      });
 
+      });
       $("#btnRech").click();
+
   });
   //FIN 1er Suppression 
 
@@ -532,15 +567,12 @@ $(document).ready(function () {
           data: JSON.stringify(test),
           dataType: "json",
           async: true,
-          success: function (response) {var Toast = Swal.mixin({toast: true, position: 'top-end', showConfirmButton: false, timer: 6000});
-
-          Toast.fire({icon: 'success', title: " Suppression Confirmée . "})
-             },
+          success: function (data, status) { },
           error: function (xhr, textStatus, errorThrown) {
               alert(xhr.responseText);
           },
       });
-       $("#btnRech").click();
+      $("#btnRech").click();
   });
   //FIN 2er Suppression 
 
@@ -569,10 +601,7 @@ $(document).ready(function () {
           data: JSON.stringify(test),
           dataType: "json",
           async: true,
-          success: function (response) { var Toast = Swal.mixin({toast: true, position: 'top-end', showConfirmButton: false, timer: 6000});
-
-          Toast.fire({icon: 'success', title: " Suppression Confirmée . "})
-            },
+          success: function (data, status) { },
           error: function (xhr, textStatus, errorThrown) {
               alert(xhr.responseText);
           },
@@ -606,10 +635,7 @@ $(document).ready(function () {
           data: JSON.stringify(test),
           dataType: "json",
           async: true,
-          success: function (response) {var Toast = Swal.mixin({toast: true, position: 'top-end', showConfirmButton: false, timer: 6000});
-
-          Toast.fire({icon: 'success', title: " Suppression Confirmée . "})
-             },
+          success: function (data, status) { },
           error: function (xhr, textStatus, errorThrown) {
               alert(xhr.responseText);
           },

@@ -80,7 +80,8 @@ class ImputController extends AbstractController
                 $code = 202;
         }
         if ($modif == 0) {
-            return new Response('Aucune nouvelle Modification');
+            $code = 0;
+            return new Response($code);
         } else if ($code == 202) {
             return new Response('Une des Modification est supperieur a 1 dans une meme journée', $code);
         } else {
@@ -216,14 +217,13 @@ class ImputController extends AbstractController
             } else if ($code == 202) {
                 return new Response('Une des imputation est supperieur a 1 dans une meme journée', $code);
             } else {
-                 $em->flush();
+                // $em->flush();
                 return new Response($code);
             }
             //return $this->redirectToRoute('imput_index');
         }
         $code = 0;
         return new Response($code);
-
     }
 
     /**
@@ -248,7 +248,33 @@ class ImputController extends AbstractController
             }
         }
         $entityManager->remove($imput);
-        $entityManager->flush();
+        //$entityManager->flush();
+        return new Response('Supression confirmé');
+    }
+
+    /**
+     * @Route("/{id}", name="imput_show", methods={"GET"})
+     */
+    public function show(Imput $imput): Response
+    {
+        return $this->render('imput/show.html.twig', [
+            'imput' => $imput,
+        ]);
+    }
+
+    /**
+     * @Route("/{id}/edit", name="imput_edit", methods={"GET","POST"})
+     */
+    public function edit(Request $request, Imput $imput): Response
+    {
+        $form = $this->createForm(ImputType::class, $imput);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->getDoctrine()->getManager()->flush();
+
+            return $this->redirectToRoute('imput_index');
+        }
 
         return new Response(200);
     }
