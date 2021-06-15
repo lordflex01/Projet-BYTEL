@@ -55,9 +55,9 @@ $(document).ready(function () {
             success: function (data, status) {
                 var e = $(
                     '<th><button id="addRow" type="button" class="btn btn-block btn-info btn-sm" style="width: 30px;"><i class="fa fa-plus"></i></button></th>' +
-                    '<th>Code Projet</th>' +
-                    '<th>Tâches</th>' +
-                    '<th>Activitées</th>' +
+                    "<th>Code Projet</th>" +
+                    "<th>Tâches</th>" +
+                    "<th>Activitées</th>" +
                     '<th style="width: 40px">Lun ' +
                     days[0] +
                     '</th><th  style="width: 40px">Mar ' +
@@ -77,7 +77,22 @@ $(document).ready(function () {
                 $("#entete").html("");
                 $("#entete").append(e);
                 $("#tableB").html("");
+                var footer = $(
+                    '<tr><td></td>' +
+                    "<td></td>" +
+                    "<td></td>" +
+                    "<td></td>" +
+                    '<td style="width: 40px"></td>' +
+                    '<td style="width: 40px"></td>' +
+                    '<td style="width: 40px"></td>' +
+                    '<td style="width: 40px"></td>' +
+                    '<td style="width: 40px"></td>' +
+                    '<td  style="width: 40px;color:red">Total</td>' +
+                    '<td  style="width: 40px;color:green"></td></tr>'
+                );
 
+                // $("#footTable").html("");
+                //$("#footTable").append(footer);
                 compteurligneajout = 0;
                 var a = 0;
                 var b = 0;
@@ -115,8 +130,8 @@ $(document).ready(function () {
                             tacheteableau[[nombresimputation - 1]] = value.tache;
                             commentairelab[nombresimputation - 1] = value.commentaire;
                             /*$("#tableB").append(
-                                "<td><span>Code Projet: " + value.codeprojet + "</span></td>"
-                            );*/
+                                            "<td><span>Code Projet: " + value.codeprojet + "</span></td>"
+                                        );*/
                         }
                         //Rempli le tableau qui sera afficher avec les valeur dans l'ordre
                         for (let i = 0; i < 5; i++) {
@@ -130,7 +145,10 @@ $(document).ready(function () {
                                 nmbdedatV++;
                             }
                         }
-                        if (imputID[nombreimputation - 1] != value.imputID || nombreimputation == 0) {
+                        if (
+                            imputID[nombreimputation - 1] != value.imputID ||
+                            nombreimputation == 0
+                        ) {
                             imputID[nombreimputation] = value.imputID;
                             nombreimputation++;
                         }
@@ -145,30 +163,50 @@ $(document).ready(function () {
                     let j = 0;
                     for (let i = 0; i < nombreimputation; i++) {
                         var LLL = $(
-
-                            "<tr><td></td><td><span>" + codprojettableau[i] + "</span></td>" + "<td><span>" + tacheteableau[i] + "</span></td>" + "<td></td>" +
-                            '<td><input id="m1' + imputID[i] + '" type="number" min="0" max="1" step="0.25" class="form-control-imput" value=' +
+                            "<tr><td></td><td><span>" +
+                            codprojettableau[i] +
+                            "</span></td>" +
+                            "<td><span>" +
+                            tacheteableau[i] +
+                            "</span></td>" +
+                            "<td></td>" +
+                            '<td><input id="m1' +
+                            imputID[i] +
+                            '" type="number" min="0" max="1" step="0.25" class="form-control-imput" value=' +
                             H[0 + j] +
-                            '></td><td><input id="m2' + imputID[i] + '" type="number" min="0" max="1" step="0.25" class="form-control-imput" value=' +
+                            '></td><td><input id="m2' +
+                            imputID[i] +
+                            '" type="number" min="0" max="1" step="0.25" class="form-control-imput" value=' +
                             H[1 + j] +
-                            '></td><td><input id="m3' + imputID[i] + '" type="number" min="0" max="1" step="0.25" class="form-control-imput" value=' +
+                            '></td><td><input id="m3' +
+                            imputID[i] +
+                            '" type="number" min="0" max="1" step="0.25" class="form-control-imput" value=' +
                             H[2 + j] +
-                            '></td><td><input id="m4' + imputID[i] + '" type="number" min="0" max="1" step="0.25" class="form-control-imput" value=' +
+                            '></td><td><input id="m4' +
+                            imputID[i] +
+                            '" type="number" min="0" max="1" step="0.25" class="form-control-imput" value=' +
                             H[3 + j] +
-                            '></td><td><input id="m5' + imputID[i] + '" type="number" min="0" max="1" step="0.25" class="form-control-imput" value=' +
+                            '></td><td><input id="m5' +
+                            imputID[i] +
+                            '" type="number" min="0" max="1" step="0.25" class="form-control-imput" value=' +
                             H[4 + j] +
-                            "></td>" + '<td><input type="number" min="0" max="1" step="0.25" class="form-control-imput" value=' +
+                            "></td>" +
+                            '<td><input type="number" min="0" max="1" step="0.25" class="form-control-imput" value=' +
                             t[i] +
-                            "></td>" + '<td><input id="com' + i + '" style="max-width: 200px" type="text" class="form-control-imput" value=' +
+                            "></td>" +
+                            '<td><input id="com' +
+                            i +
+                            '" style="max-width: 200px" type="text" class="form-control-imput" value=' +
                             commentairelab[i] +
                             "></td>" +
-                            '<td><i class="fa fa-trash"  style="font-size: 16px;cursor:pointer;margin-top: 8px;color: #cc1919;"id="suppCode' + i + '"></i></td>' + "</tr>"
-
+                            '<td><i class="fa fa-trash"  style="font-size: 16px;cursor:pointer;margin-top: 8px;color: #cc1919;"id="suppCode' +
+                            i +
+                            '"></i></td>' +
+                            "</tr>"
                         );
                         j = j + 5;
                         $("#tableB").append(LLL);
                     }
-
                 }
                 var scntDiv = $("#tableB");
                 var i = $("#tableB tr").length + 1;
@@ -198,11 +236,12 @@ $(document).ready(function () {
                 }
                 activite;
 
-
                 $("#addRow").click(function () {
                     compteurligneajout++;
                     scntDiv.append(
-                        '<tr><td></td><td><select class="form-control select2" id="codeP' + compteurligneajout + '" style="width: 100%;">' +
+                        '<tr><td></td><td><select class="form-control select2" id="codeP' +
+                        compteurligneajout +
+                        '" style="width: 100%;">' +
                         "<option value = " +
                         codeP[0].id +
                         ">" +
@@ -223,7 +262,9 @@ $(document).ready(function () {
                         ">" +
                         codeP[3].libelle +
                         "</option></select></td>" +
-                        '<td><select class="form-control select2" id="tache' + compteurligneajout + '" style="width: 100%;">' +
+                        '<td><select class="form-control select2" id="tache' +
+                        compteurligneajout +
+                        '" style="width: 100%;">' +
                         "<option value = " +
                         tache[0].id +
                         ">" +
@@ -243,7 +284,10 @@ $(document).ready(function () {
                         tache[3].id +
                         ">" +
                         tache[3].libelle +
-                        "</option></select></td>" + '<td><select class="form-control select2" id="activite' + compteurligneajout + '" style="width: 100%;">' +
+                        "</option></select></td>" +
+                        '<td><select class="form-control select2" id="activite' +
+                        compteurligneajout +
+                        '" style="width: 100%;">' +
                         "<option value = " +
                         activite[0].id +
                         ">" +
@@ -264,13 +308,25 @@ $(document).ready(function () {
                         ">" +
                         activite[3].libelle +
                         "</option></select></td>" +
-                        '<td><input type="number" id="i1' + compteurligneajout + '" min="0" max="1" step="0.25" class="form-control-imput" value="0"></td>' +
-                        '<td><input type="number" id="i2' + compteurligneajout + '"  min="0" max="1" step="0.25" class="form-control-imput" value="0"></td>' +
-                        '<td><input type="number" id="i3' + compteurligneajout + '"  min="0" max="1" step="0.25" class="form-control-imput" value="0"></td>' +
-                        '<td><input type="number" id="i4' + compteurligneajout + '" min="0" max="1" step="0.25" class="form-control-imput" value="0"></td>' +
-                        '<td><input type="number" id="i5' + compteurligneajout + '" min="0" max="1" step="0.25" class="form-control-imput" value="0"></td>' +
-                        '<td></td>' +
-                        '<td><input type="text"  id="i6' + compteurligneajout + '"  style="max-width: 200px" class="form-control-imput"></td>' +
+                        '<td><input type="number" id="i1' +
+                        compteurligneajout +
+                        '" min="0" max="1" step="0.25" class="form-control-imput" value="0"></td>' +
+                        '<td><input type="number" id="i2' +
+                        compteurligneajout +
+                        '"  min="0" max="1" step="0.25" class="form-control-imput" value="0"></td>' +
+                        '<td><input type="number" id="i3' +
+                        compteurligneajout +
+                        '"  min="0" max="1" step="0.25" class="form-control-imput" value="0"></td>' +
+                        '<td><input type="number" id="i4' +
+                        compteurligneajout +
+                        '" min="0" max="1" step="0.25" class="form-control-imput" value="0"></td>' +
+                        '<td><input type="number" id="i5' +
+                        compteurligneajout +
+                        '" min="0" max="1" step="0.25" class="form-control-imput" value="0"></td>' +
+                        "<td></td>" +
+                        '<td><input type="text"  id="i6' +
+                        compteurligneajout +
+                        '"  style="max-width: 200px" class="form-control-imput"></td>' +
                         '<td><i class="fa fa-trash" id="suppRow" style="font-size: 16px;cursor:pointer;margin-top: 8px;color: #cc1919;"></i></td></tr>'
                     );
                     i++;
@@ -307,11 +363,13 @@ $(document).ready(function () {
         ///////////////////////////////////////////////////////////////////////////////////////////////
         var tableaumodif = [];
         var tabcumuleimputM = [];
-        tabcumuleimputM[0] = 0, tabcumuleimputM[1] = 0, tabcumuleimputM[2] = 0, tabcumuleimputM[3] = 0, tabcumuleimputM[4] = 0;
+        (tabcumuleimputM[0] = 0),
+            (tabcumuleimputM[1] = 0),
+            (tabcumuleimputM[2] = 0),
+            (tabcumuleimputM[3] = 0),
+            (tabcumuleimputM[4] = 0);
 
         for (let i = 0; i < imputID.length; i++) {
-
-
             let CommentairesM = $("#com" + i + "").val();
             let str1M = $("#m1" + imputID[i] + "").val();
             let str2M = $("#m2" + imputID[i] + "").val();
@@ -332,9 +390,9 @@ $(document).ready(function () {
                 (tabcumuleimputM[4] = tabcumuleimputM[4] + parseFloat(valeurM[4]));
 
             var modification = {
-                'imputID': imputID[i],
-                'valeur': valeurM,
-                'Commentaires': CommentairesM,
+                imputID: imputID[i],
+                valeur: valeurM,
+                Commentaires: CommentairesM,
             };
             tableaumodif[i] = modification;
         }
@@ -342,12 +400,16 @@ $(document).ready(function () {
             tableaumodif: tableaumodif,
             nbrmodification: imputID.length,
             tabcumuleimput: tabcumuleimputM,
-        }
+        };
         ///////////////////////////FIN MODIFICATION////////////////////////////////////////////////////
         ///////////////////////////////////////////////////////////////////////////////////////////////
         var tableauimputation = [];
         var tabcumuleimput = [];
-        tabcumuleimput[0] = 0, tabcumuleimput[1] = 0, tabcumuleimput[2] = 0, tabcumuleimput[3] = 0, tabcumuleimput[4] = 0;
+        (tabcumuleimput[0] = 0),
+            (tabcumuleimput[1] = 0),
+            (tabcumuleimput[2] = 0),
+            (tabcumuleimput[3] = 0),
+            (tabcumuleimput[4] = 0);
 
         for (let i = 1; i <= compteurligneajout; i++) {
             let id = $("#name").val();
@@ -389,9 +451,8 @@ $(document).ready(function () {
                 date: dates,
                 user: id,
                 tabcumuleimput: tabcumuleimput,
-                tabcumuleimputM: tabcumuleimputM
+                tabcumuleimputM: tabcumuleimputM,
             };
-
 
             tableauimputation[i - 1] = ligneimputation;
         }
@@ -400,7 +461,6 @@ $(document).ready(function () {
             tableauimput: tableauimputation,
             nbr: compteurligneajout,
         };
-
 
         //EDIT
         $.ajax({
@@ -411,7 +471,30 @@ $(document).ready(function () {
             data: JSON.stringify(dataM),
             dataType: "json",
             async: true,
-            success: function (data, status) {
+            success: function (response) {
+                if (response == 200) {
+                    var Toast = Swal.mixin({
+                        toast: true,
+                        position: "top-end",
+                        showConfirmButton: false,
+                        timer: 6000,
+                    });
+
+                    Toast.fire({ icon: "success", title: " Modification confirmée . " });
+
+                }
+                if (response == 202) {
+                    var Toast = Swal.mixin({
+                        toast: true,
+                        position: "top-end",
+                        showConfirmButton: false,
+                        timer: 6000,
+                    });
+
+                    Toast.fire({ icon: "error", title: " Une des modifications est > 1 dans une même journée . " });
+
+
+                }
             },
             error: function (xhr, textStatus, errorThrown) {
                 alert(xhr.responseText);
@@ -429,78 +512,46 @@ $(document).ready(function () {
             async: true,
             success: function (response) {
                 if (response == 200) {
-                    alert("Imputation confirmé");
+                    var Toast = Swal.mixin({
+                        toast: true,
+                        position: "top-end",
+                        showConfirmButton: false,
+                        timer: 6000,
+                    });
+
+                    Toast.fire({ icon: "success", title: " Imputation Confirmée . " });
                     $("#btnRech").click();
+                }
+                if (response == 201) {
+                    var Toast = Swal.mixin({
+                        toast: true,
+                        position: "top-end",
+                        showConfirmButton: false,
+                        timer: 6000,
+                    });
+
+                    Toast.fire({ icon: "error", title: " 'Un des couples têche et code projet existe deja . " });
+
+                }
+                if (response == 202) {
+                    var Toast = Swal.mixin({
+                        toast: true,
+                        position: "top-end",
+                        showConfirmButton: false,
+                        timer: 6000,
+                    });
+
+                    Toast.fire({ icon: "error", title: " Une des imputations est > 1 dans une même journée. " });
+
                 }
             },
             error: function (xhr, textStatus, errorThrown) {
                 alert(xhr.responseText);
             },
         });
-
-
     });
 
-    //DEBUT EDIT 1er imputation
-    $(document).on("click", "#editCode0", function () {
-
-        var tableaumodif = [];
-        var tabcumuleimputM = [];
-        tabcumuleimputM[0] = 0, tabcumuleimputM[1] = 0, tabcumuleimputM[2] = 0, tabcumuleimputM[3] = 0, tabcumuleimputM[4] = 0;
-
-        for (let i = 0; i < imputID.length; i++) {
-
-
-            let CommentairesM = $("#com" + i + "").val();
-            let str1M = $("#m1" + imputID[i] + "").val();
-            let str2M = $("#m2" + imputID[i] + "").val();
-            let str3M = $("#m3" + imputID[i] + "").val();
-            let str4M = $("#m4" + imputID[i] + "").val();
-            let str5M = $("#m5" + imputID[i] + "").val();
-            let valeurM = [];
-            (valeurM[0] = str1M),
-                (valeurM[1] = str2M),
-                (valeurM[2] = str3M),
-                (valeurM[3] = str4M),
-                (valeurM[4] = str5M);
-
-            (tabcumuleimputM[0] = tabcumuleimputM[0] + parseFloat(valeurM[0])),
-                (tabcumuleimputM[1] = tabcumuleimputM[1] + parseFloat(valeurM[1])),
-                (tabcumuleimputM[2] = tabcumuleimputM[2] + parseFloat(valeurM[2])),
-                (tabcumuleimputM[3] = tabcumuleimputM[3] + parseFloat(valeurM[3])),
-                (tabcumuleimputM[4] = tabcumuleimputM[4] + parseFloat(valeurM[4]));
-
-            var modification = {
-                'imputID': imputID[i],
-                'valeur': valeurM,
-                'Commentaires': CommentairesM,
-            };
-            tableaumodif[i] = modification;
-        }
-        var dataM = {
-            tableaumodif: tableaumodif,
-            nbrmodification: imputID.length,
-            tabcumuleimput: tabcumuleimputM,
-        }
-
-        $.ajax({
-            url: `/apii/edit`,
-            type: "POST",
-            processData: false,
-            contentType: false,
-            data: JSON.stringify(dataM),
-            dataType: "json",
-            async: true,
-            success: function (data, status) {
-            },
-            error: function (xhr, textStatus, errorThrown) {
-                alert(xhr.responseText);
-            },
-        });
-    });
-    //FIN EDIT 1er imputation
-
-    //DEBUT 1er suppression 
+    //DEBUT 1er suppression
     $(document).on("click", "#suppCode0", function () {
         let str1 = $("#m1" + imputID[0] + "").val();
         let str2 = $("#m2" + imputID[0] + "").val();
@@ -526,18 +577,25 @@ $(document).ready(function () {
             dataType: "json",
             async: true,
             success: function (response) {
+                var Toast = Swal.mixin({
+                    toast: true,
+                    position: "top-end",
+                    showConfirmButton: false,
+                    timer: 6000,
+                });
+
+                Toast.fire({ icon: "success", title: " Suppression Confirmée . " });
+                $("#btnRech").click();
             },
             error: function (xhr, textStatus, errorThrown) {
                 alert(xhr.responseText);
             },
-
         });
-        $("#btnRech").click();
 
     });
-    //FIN 1er Suppression 
+    //FIN 1er Suppression
 
-    //DEBUT 2er suppression 
+    //DEBUT 2er suppression
     $(document).on("click", "#suppCode1", function () {
         let str1 = $("#m1" + imputID[1] + "").val();
         let str2 = $("#m2" + imputID[1] + "").val();
@@ -562,16 +620,26 @@ $(document).ready(function () {
             data: JSON.stringify(test),
             dataType: "json",
             async: true,
-            success: function (data, status) { },
+            success: function (response) {
+                var Toast = Swal.mixin({
+                    toast: true,
+                    position: "top-end",
+                    showConfirmButton: false,
+                    timer: 6000,
+                });
+
+                Toast.fire({ icon: "success", title: " Suppression Confirmée . " });
+                $("#btnRech").click();
+            },
             error: function (xhr, textStatus, errorThrown) {
                 alert(xhr.responseText);
             },
         });
-        $("#btnRech").click();
-    });
-    //FIN 2er Suppression 
 
-    //DEBUT 3er suppression 
+    });
+    //FIN 2er Suppression
+
+    //DEBUT 3er suppression
     $(document).on("click", "#suppCode2", function () {
         let str1 = $("#m1" + imputID[2] + "").val();
         let str2 = $("#m2" + imputID[2] + "").val();
@@ -596,16 +664,26 @@ $(document).ready(function () {
             data: JSON.stringify(test),
             dataType: "json",
             async: true,
-            success: function (data, status) { },
+            success: function (response) {
+                var Toast = Swal.mixin({
+                    toast: true,
+                    position: "top-end",
+                    showConfirmButton: false,
+                    timer: 6000,
+                });
+
+                Toast.fire({ icon: "success", title: " Suppression Confirmée . " });
+                $("#btnRech").click();
+            },
             error: function (xhr, textStatus, errorThrown) {
                 alert(xhr.responseText);
             },
         });
-        $("#btnRech").click();
-    });
-    //FIN 3er Suppression 
 
-    //DEBUT 4er suppression 
+    });
+    //FIN 3er Suppression
+
+    //DEBUT 4er suppression
     $(document).on("click", "#suppCode3", function () {
         let str1 = $("#m1" + imputID[3] + "").val();
         let str2 = $("#m2" + imputID[3] + "").val();
@@ -630,18 +708,27 @@ $(document).ready(function () {
             data: JSON.stringify(test),
             dataType: "json",
             async: true,
-            success: function (data, status) { },
+            success: function (response) {
+                var Toast = Swal.mixin({
+                    toast: true,
+                    position: "top-end",
+                    showConfirmButton: false,
+                    timer: 6000,
+                });
+
+                Toast.fire({ icon: "success", title: " Suppression Confirmée . " });
+                $("#btnRech").click();
+            },
             error: function (xhr, textStatus, errorThrown) {
                 alert(xhr.responseText);
             },
         });
-        $("#btnRech").click();
+
     });
-    //FIN 4er Suppression 
+    //FIN 4er Suppression
     //supprimer une ligne
     $(document).on("click", "#suppRow", function () {
         compteurligneajout--;
         $(this).closest("tr").remove();
     });
-
 });
