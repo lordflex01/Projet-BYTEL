@@ -68,54 +68,56 @@
 
 					<div class="card-body p-0 table-responsive">
 						<table class="table" id="firm_table">
+
+						<!--	{% if app.session.flashBag.has('success') %}
+								<div class="alert alert-success">
+									{% for msg in app.session.flashBag.get('success') %}
+										{{ msg }}
+									{% endfor %}
+								</div>
+							{% endif %} -->
+
 							<thead id="entete"></thead>
 							<tbody id="tableB"></tbody>
 							<tfoot id="footTable"></tfoot>
 						</table>
-						
-					</div> 
-{% if app.session.flashBag.has('success') %}
-        <div class="alert alert-success">
-            {% for msg in app.session.flashBag.get('success') %}
-                {{ msg }}
-            {% endfor %}
-        </div>
-    {% endif %} 
- 
 
-				<!--DEBUT du compteur-->
-				{% for code_projet in code_projets %}
-					{% set chargeATM = code_projet.chageJH %}
-					{% set chargeNRJ = code_projet.chageNRJ %}
-					{% set chargeDECO = code_projet.chageDECO %}
+					</div>
 
-					{% for dateV in dateVs %}
-						{% if code_projet.libelle == dateV.codeprojet.libelle %}
-							{% set chargeATM = chargeATM - dateV.valeur %}
-							{% if dateV.imput.user.projet.libelle == "NRJ" %}
-								{% set chargeNRJ = chargeNRJ - dateV.valeur %}
+
+					<!--DEBUT du compteur-->
+					{% for code_projet in code_projets %}
+						{% set chargeATM = code_projet.chageJH %}
+						{% set chargeNRJ = code_projet.chageNRJ %}
+						{% set chargeDECO = code_projet.chageDECO %}
+
+						{% for dateV in dateVs %}
+							{% if code_projet.libelle == dateV.codeprojet.libelle %}
+								{% set chargeATM = chargeATM - dateV.valeur %}
+								{% if dateV.imput.user.projet.libelle == "NRJ" %}
+									{% set chargeNRJ = chargeNRJ - dateV.valeur %}
+								{% endif %}
+
+								{% if dateV.imput.user.projet.libelle == "DECO" %}
+									{% set chargeDECO = chargeDECO - dateV.valeur %}
+								{% endif %}
 							{% endif %}
-
-							{% if dateV.imput.user.projet.libelle == "DECO" %}
-								{% set chargeDECO = chargeDECO - dateV.valeur %}
-							{% endif %}
-						{% endif %}
+						{% endfor %}
+						<!--/////////////-->
+					<!--{{ chargeATM }}-->
+						<!--NRJ-->
+						<!--{{ chargeNRJ }}-->
+						<!--DECO-->
+						<!--{{ chargeDECO }}-->
+						<!--//////////////-->
 					{% endfor %}
-					<!--/////////////-->
-				<!--{{ chargeATM }}-->
-					<!--NRJ-->
-					<!--{{ chargeNRJ }}-->
-					<!--DECO-->
-					<!--{{ chargeDECO }}-->
-					<!--//////////////-->
-				{% endfor %}
-				<!--FIN du compteur-->
+					<!--FIN du compteur-->
 
-				<!--container-->
+					<!--container-->
+				</div>
+
+
 			</div>
-
-
 		</div>
-	</div>
-	<!-- /.content -->
-</div><!-- /.content-wrapper --><!-- Main Footer -->{% endblock %}
+		<!-- /.content -->
+	</div><!-- /.content-wrapper --><!-- Main Footer -->{% endblock %}

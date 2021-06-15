@@ -301,7 +301,7 @@
 
 
 			<!-- Imputation -->
-			<script src="{{asset ("assets/js/utilImputtest.js")}}"></script>
+			<script src="{{asset ("assets/js/utilImputation.js")}}"></script>
 			<!-- datatable -->
 			<script src="{{asset ("/assets/js/datatable/jquery.dataTable.min.js")}}"></script>
 
@@ -327,11 +327,7 @@
 				$(function () {
 $("#example1").DataTable({"responsive": true, "lengthChange": true, "autoWidth": false}).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
 });
-var Toast = Swal.mixin({toast: true, position: 'top-end', showConfirmButton: false, timer: 6000});
 
-$('.swalDefaultSuccess').click(function () {
-Toast.fire({icon: 'success', title: " L'élément a été bien ajouté. "})
-});
 $('.swalDefaultDelete').click(function () {
 Swal.fire({
 title: 'Êtes-vous sûr de bien vouloir supprimer cet élément ?',
