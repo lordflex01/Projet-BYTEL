@@ -432,11 +432,6 @@ $(document).ready(function () {
                   alert("Imputation confirmé");
                   $("#btnRech").click();
               }
-              if (response == 201) {
-                  alert("Un des couples tache et code projet existe deja");
-                 
-              }
-      
           },
           error: function (xhr, textStatus, errorThrown) {
               alert(xhr.responseText);

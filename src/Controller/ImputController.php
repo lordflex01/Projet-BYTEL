@@ -27,7 +27,57 @@ use DateTime;
  */
 class ImputController extends AbstractController
 {
-    
+    /**
+     * @Route("/", name="imput_index", methods={"GET"})
+     */
+    public function index(CodeProjetRepository $codeProjetRepository, ImputRepository $imputRepository, UserRepository $userRepository, DateVRepository $dateVRepository): Response
+    {
+
+        $imputation = [];
+        $dateVs = $dateVRepository->findAll();
+        foreach ($dateVs as $dateV) {
+            $imputation[] = [
+                'user' => $dateV->getImput()->getUser()->getId(),
+                'tache' => $dateV->getTache()->getId(),
+                'date' => $dateV->getDate(),
+                'valeur' => $dateV->getValeur(),
+            ];
+        }
+
+        $data = json_encode($imputation);
+
+        return $this->render('imput/index.html.twig', [
+            'datas' => $data,
+            'imputs' => $imputRepository->findAll(),
+            'users' => $userRepository->findAll(),
+            'dateVs' => $dateVRepository->findAll(),
+            'code_projets' => $codeProjetRepository->findAll(),
+        ]);
+    }
+
+    /**
+     * @Route("/new", name="imput_new", methods={"GET","POST"})
+     */
+    public function new(Request $request): Response
+    {
+        $imput = new Imput();
+        $imput->setUser($this->container->get('security.token_storage')->getToken()->getUser());
+        $form = $this->createForm(ImputType::class, $imput);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($imput);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('imput_index');
+        }
+
+        return $this->render('imput/new.html.twig', [
+            'imput' => $imput,
+            'form' => $form->createView(),
+        ]);
+    }
     /**
      * @Route("/apii/edit", name="api_imput_edit", methods={"PUT"})
      */
@@ -85,7 +135,7 @@ class ImputController extends AbstractController
         } else if ($code == 202) {
             return new Response('Une des Modification est supperieur a 1 dans une meme journée', $code);
         } else {
-            $em->flush();
+            // $em->flush();
             return new Response('Modification confirmé', $code);
         }
     }
@@ -213,7 +263,7 @@ class ImputController extends AbstractController
                 }
             }
             if ($code == 201) {
-                return new Response($code);
+                return new Response('Un des couples tache et code projet existe deja', $code);
             } else if ($code == 202) {
                 return new Response('Une des imputation est supperieur a 1 dans une meme journée', $code);
             } else {
@@ -276,10 +326,24 @@ class ImputController extends AbstractController
             return $this->redirectToRoute('imput_index');
         }
 
-        return new Response(200);
+        return $this->render('imput/edit.html.twig', [
+            'imput' => $imput,
+            'form' => $form->createView(),
+        ]);
     }
 
-   
+    /**
+     * @Route("/{id}", name="imput_delete", methods={"DELETE"})
+     */
+    public function delete(Request $request, Imput $imput): Response
+    {
+        if ($this->isCsrfTokenValid('delete' . $imput->getId(), $request->request->get('_token'))) {
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->remove($imput);
+            $entityManager->flush();
+        }
+        return $this->redirectToRoute('imput_index');
+    }
     public function ajaxAction(ActiviteRepository $activiteRepository, CodeProjetRepository $codeProjetRepository, TachesRepository $tachesRepository, Request $request, DateVRepository $dateVRepository)
     {
         $imputs = $this->getDoctrine()
@@ -384,98 +448,5 @@ class ImputController extends AbstractController
         $response->headers->set('Content-Disposition', 'attachment; filename="testing.csv"');
 
         return $response;
-    }
-/**
-     * @Route("/", name="imput_index", methods={"GET"})
-     */
-    public function index(CodeProjetRepository $codeProjetRepository, ImputRepository $imputRepository, UserRepository $userRepository, DateVRepository $dateVRepository): Response
-    {
-
-        $imputation = [];
-        $dateVs = $dateVRepository->findAll();
-        foreach ($dateVs as $dateV) {
-            $imputation[] = [
-                'user' => $dateV->getImput()->getUser()->getId(),
-                'tache' => $dateV->getTache()->getId(),
-                'date' => $dateV->getDate(),
-                'valeur' => $dateV->getValeur(),
-            ];
-        }
-
-        $data = json_encode($imputation);
-
-        return $this->render('imput/index.html.twig', [
-            'datas' => $data,
-            'imputs' => $imputRepository->findAll(),
-            'users' => $userRepository->findAll(),
-            'dateVs' => $dateVRepository->findAll(),
-            'code_projets' => $codeProjetRepository->findAll(),
-        ]);
-    }
-
-    /**
-     * @Route("/new", name="imput_new", methods={"GET","POST"})
-     */
-    public function new(Request $request): Response
-    {
-        $imput = new Imput();
-        $imput->setUser($this->container->get('security.token_storage')->getToken()->getUser());
-        $form = $this->createForm(ImputType::class, $imput);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($imput);
-            $entityManager->flush();
-
-            return $this->redirectToRoute('imput_index');
-        }
-
-        return $this->render('imput/new.html.twig', [
-            'imput' => $imput,
-            'form' => $form->createView(),
-        ]);
-    }
-     /**
-     * @Route("/{id}", name="imput_show", methods={"GET"})
-     */
-    public function show(Imput $imput): Response
-    {
-        return $this->render('imput/show.html.twig', [
-            'imput' => $imput,
-        ]);
-    }
-
-    /**
-     * @Route("/{id}/edit", name="imput_edit", methods={"GET","POST"})
-     */
-    public function edit(Request $request, Imput $imput): Response
-    {
-        $form = $this->createForm(ImputType::class, $imput);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
-
-            return $this->redirectToRoute('imput_index');
-        }
-
-        return $this->render('imput/edit.html.twig', [
-            'imput' => $imput,
-            'form' => $form->createView(),
-        ]);
-    }
-
-    /**
-     * @Route("/{id}", name="imput_delete", methods={"DELETE"})
-     */
-    public function delete(Request $request, Imput $imput): Response
-    {
-        if ($this->isCsrfTokenValid('delete' . $imput->getId(), $request->request->get('_token'))) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->remove($imput);
-            $entityManager->flush();
-        }
-        return $this->redirectToRoute('imput_index');
     }
 }
