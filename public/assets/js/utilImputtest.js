@@ -55,9 +55,9 @@ $(document).ready(function () {
             success: function (data, status) {
                 var e = $(
                     '<th><button id="addRow" type="button" class="btn btn-block btn-info btn-sm" style="width: 30px;"><i class="fa fa-plus"></i></button></th>' +
-                    '<th>Code Projet</th>'+
-                    '<th>Tâches</th>'+
-                    '<th>Activitées</th>'+
+                    '<th>Code Projet</th>' +
+                    '<th>Tâches</th>' +
+                    '<th>Activitées</th>' +
                     '<th style="width: 40px">Lun ' +
                     days[0] +
                     '</th><th  style="width: 40px">Mar ' +
@@ -146,7 +146,7 @@ $(document).ready(function () {
                     for (let i = 0; i < nombreimputation; i++) {
                         var LLL = $(
 
-                            "<tr><td></td><td><span>"+ codprojettableau[i] + "</span></td>" + "<td></td>"+ "<td></td>"+
+                            "<tr><td></td><td><span>" + codprojettableau[i] + "</span></td>" + "<td><span>" + tacheteableau[i] + "</span></td>" + "<td></td>" +
                             '<td><input id="m1' + imputID[i] + '" type="number" min="0" max="1" step="0.25" class="form-control-imput" value=' +
                             H[0 + j] +
                             '></td><td><input id="m2' + imputID[i] + '" type="number" min="0" max="1" step="0.25" class="form-control-imput" value=' +
@@ -270,9 +270,9 @@ $(document).ready(function () {
                         '<td><input type="number" id="i3' + compteurligneajout + '"  min="0" max="1" step="0.25" class="form-control-imput" value="0"></td>' +
                         '<td><input type="number" id="i4' + compteurligneajout + '" min="0" max="1" step="0.25" class="form-control-imput" value="0"></td>' +
                         '<td><input type="number" id="i5' + compteurligneajout + '" min="0" max="1" step="0.25" class="form-control-imput" value="0"></td>' +
-                        '<td></td>'+
+                        '<td></td>' +
                         '<td><input type="text"  id="i6' + compteurligneajout + '"  style="max-width: 200px" class="form-control-imput"></td>' +
-                       '<td><i class="fa fa-trash" id="suppRow" style="font-size: 16px;cursor:pointer;margin-top: 8px;color: #cc1919;"></i></td></tr>'
+                        '<td><i class="fa fa-trash" id="suppRow" style="font-size: 16px;cursor:pointer;margin-top: 8px;color: #cc1919;"></i></td></tr>'
                     );
                     i++;
                     return false;
@@ -304,6 +304,48 @@ $(document).ready(function () {
             // add a new Date object to the array with an offset of i days relative to the first day of the week
             return days;
         };
+        ////////////////////////////DEBUT MODIFICATION/////////////////////////////////////////////////
+        ///////////////////////////////////////////////////////////////////////////////////////////////
+        var tableaumodif = [];
+        var tabcumuleimputM = [];
+        tabcumuleimputM[0] = 0, tabcumuleimputM[1] = 0, tabcumuleimputM[2] = 0, tabcumuleimputM[3] = 0, tabcumuleimputM[4] = 0;
+
+        for (let i = 0; i < imputID.length; i++) {
+
+
+            let CommentairesM = $("#com" + i + "").val();
+            let str1M = $("#m1" + imputID[i] + "").val();
+            let str2M = $("#m2" + imputID[i] + "").val();
+            let str3M = $("#m3" + imputID[i] + "").val();
+            let str4M = $("#m4" + imputID[i] + "").val();
+            let str5M = $("#m5" + imputID[i] + "").val();
+            let valeurM = [];
+            (valeurM[0] = str1M),
+                (valeurM[1] = str2M),
+                (valeurM[2] = str3M),
+                (valeurM[3] = str4M),
+                (valeurM[4] = str5M);
+
+            (tabcumuleimputM[0] = tabcumuleimputM[0] + parseFloat(valeurM[0])),
+                (tabcumuleimputM[1] = tabcumuleimputM[1] + parseFloat(valeurM[1])),
+                (tabcumuleimputM[2] = tabcumuleimputM[2] + parseFloat(valeurM[2])),
+                (tabcumuleimputM[3] = tabcumuleimputM[3] + parseFloat(valeurM[3])),
+                (tabcumuleimputM[4] = tabcumuleimputM[4] + parseFloat(valeurM[4]));
+
+            var modification = {
+                'imputID': imputID[i],
+                'valeur': valeurM,
+                'Commentaires': CommentairesM,
+            };
+            tableaumodif[i] = modification;
+        }
+        var dataM = {
+            tableaumodif: tableaumodif,
+            nbrmodification: imputID.length,
+            tabcumuleimput: tabcumuleimputM,
+        }
+        ///////////////////////////FIN MODIFICATION////////////////////////////////////////////////////
+        ///////////////////////////////////////////////////////////////////////////////////////////////
         var tableauimputation = [];
         var tabcumuleimput = [];
         tabcumuleimput[0] = 0, tabcumuleimput[1] = 0, tabcumuleimput[2] = 0, tabcumuleimput[3] = 0, tabcumuleimput[4] = 0;
@@ -348,6 +390,7 @@ $(document).ready(function () {
                 date: dates,
                 user: id,
                 tabcumuleimput: tabcumuleimput,
+                tabcumuleimputM: tabcumuleimputM
             };
 
 
@@ -358,6 +401,25 @@ $(document).ready(function () {
             tableauimput: tableauimputation,
             nbr: compteurligneajout,
         };
+
+
+        //EDIT
+        $.ajax({
+            url: `/apii/edit`,
+            type: "POST",
+            processData: false,
+            contentType: false,
+            data: JSON.stringify(dataM),
+            dataType: "json",
+            async: true,
+            success: function (data, status) {
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                alert(xhr.responseText);
+            },
+        });
+
+        //NEW
         $.ajax({
             url: `/apii/new`,
             type: "POST",
@@ -371,27 +433,49 @@ $(document).ready(function () {
                 alert(xhr.responseText);
             },
         });
+
     });
 
     //DEBUT EDIT 1er imputation
     $(document).on("click", "#editCode0", function () {
 
-        let Commentaires = $("#com0").val();
-        let str1 = $("#m1" + imputID[0] + "").val();
-        let str2 = $("#m2" + imputID[0] + "").val();
-        let str3 = $("#m3" + imputID[0] + "").val();
-        let str4 = $("#m4" + imputID[0] + "").val();
-        let str5 = $("#m5" + imputID[0] + "").val();
-        let valeur = [];
-        (valeur[0] = str1),
-            (valeur[1] = str2),
-            (valeur[2] = str3),
-            (valeur[3] = str4),
-            (valeur[4] = str5);
-        let test = {
-            'imputID': imputID[0],
-            'valeur': valeur,
-            'Commentaires': Commentaires,
+        var tableaumodif = [];
+        var tabcumuleimputM = [];
+        tabcumuleimputM[0] = 0, tabcumuleimputM[1] = 0, tabcumuleimputM[2] = 0, tabcumuleimputM[3] = 0, tabcumuleimputM[4] = 0;
+
+        for (let i = 0; i < imputID.length; i++) {
+
+
+            let CommentairesM = $("#com" + i + "").val();
+            let str1M = $("#m1" + imputID[i] + "").val();
+            let str2M = $("#m2" + imputID[i] + "").val();
+            let str3M = $("#m3" + imputID[i] + "").val();
+            let str4M = $("#m4" + imputID[i] + "").val();
+            let str5M = $("#m5" + imputID[i] + "").val();
+            let valeurM = [];
+            (valeurM[0] = str1M),
+                (valeurM[1] = str2M),
+                (valeurM[2] = str3M),
+                (valeurM[3] = str4M),
+                (valeurM[4] = str5M);
+
+            (tabcumuleimputM[0] = tabcumuleimputM[0] + parseFloat(valeurM[0])),
+                (tabcumuleimputM[1] = tabcumuleimputM[1] + parseFloat(valeurM[1])),
+                (tabcumuleimputM[2] = tabcumuleimputM[2] + parseFloat(valeurM[2])),
+                (tabcumuleimputM[3] = tabcumuleimputM[3] + parseFloat(valeurM[3])),
+                (tabcumuleimputM[4] = tabcumuleimputM[4] + parseFloat(valeurM[4]));
+
+            var modification = {
+                'imputID': imputID[i],
+                'valeur': valeurM,
+                'Commentaires': CommentairesM,
+            };
+            tableaumodif[i] = modification;
+        }
+        var dataM = {
+            tableaumodif: tableaumodif,
+            nbrmodification: imputID.length,
+            tabcumuleimput: tabcumuleimputM,
         }
 
         $.ajax({
@@ -399,7 +483,7 @@ $(document).ready(function () {
             type: "POST",
             processData: false,
             contentType: false,
-            data: JSON.stringify(test),
+            data: JSON.stringify(dataM),
             dataType: "json",
             async: true,
             success: function (data, status) {
@@ -410,120 +494,6 @@ $(document).ready(function () {
         });
     });
     //FIN EDIT 1er imputation
-
-    //DEBUT EDIT 2eme imputation
-    $(document).on("click", "#editCode1", function () {
-
-        let Commentaires = $("#com1").val();
-        let str1 = $("#m1" + imputID[1] + "").val();
-        let str2 = $("#m2" + imputID[1] + "").val();
-        let str3 = $("#m3" + imputID[1] + "").val();
-        let str4 = $("#m4" + imputID[1] + "").val();
-        let str5 = $("#m5" + imputID[1] + "").val();
-        let valeur = [];
-        (valeur[0] = str1),
-            (valeur[1] = str2),
-            (valeur[2] = str3),
-            (valeur[3] = str4),
-            (valeur[4] = str5);
-        let test = {
-            'imputID': imputID[1],
-            'valeur': valeur,
-            'Commentaires': Commentaires,
-        }
-
-        $.ajax({
-            url: `/apii/edit`,
-            type: "POST",
-            processData: false,
-            contentType: false,
-            data: JSON.stringify(test),
-            dataType: "json",
-            async: true,
-            success: function (data, status) {
-            },
-            error: function (xhr, textStatus, errorThrown) {
-                alert(xhr.responseText);
-            },
-        });
-    });
-    //FIN EDIT 2eme imputation
-
-    //DEBUT EDIT 3eme imputation
-    $(document).on("click", "#editCode2", function () {
-
-        let Commentaires = $("#com2").val();
-        let str1 = $("#m1" + imputID[2] + "").val();
-        let str2 = $("#m2" + imputID[2] + "").val();
-        let str3 = $("#m3" + imputID[2] + "").val();
-        let str4 = $("#m4" + imputID[2] + "").val();
-        let str5 = $("#m5" + imputID[2] + "").val();
-        let valeur = [];
-        (valeur[0] = str1),
-            (valeur[1] = str2),
-            (valeur[2] = str3),
-            (valeur[3] = str4),
-            (valeur[4] = str5);
-        let test = {
-            'imputID': imputID[2],
-            'valeur': valeur,
-            'Commentaires': Commentaires,
-        }
-
-        $.ajax({
-            url: `/apii/edit`,
-            type: "POST",
-            processData: false,
-            contentType: false,
-            data: JSON.stringify(test),
-            dataType: "json",
-            async: true,
-            success: function (data, status) {
-            },
-            error: function (xhr, textStatus, errorThrown) {
-                alert(xhr.responseText);
-            },
-        });
-    });
-    //FIN EDIT 3eme imputation
-
-    //DEBUT EDIT 4eme imputation
-    $(document).on("click", "#editCode3", function () {
-
-        let Commentaires = $("#com3").val();
-        let str1 = $("#m1" + imputID[3] + "").val();
-        let str2 = $("#m2" + imputID[3] + "").val();
-        let str3 = $("#m3" + imputID[3] + "").val();
-        let str4 = $("#m4" + imputID[3] + "").val();
-        let str5 = $("#m5" + imputID[3] + "").val();
-        let valeur = [];
-        (valeur[0] = str1),
-            (valeur[1] = str2),
-            (valeur[2] = str3),
-            (valeur[3] = str4),
-            (valeur[4] = str5);
-        let test = {
-            'imputID': imputID[3],
-            'valeur': valeur,
-            'Commentaires': Commentaires,
-        }
-
-        $.ajax({
-            url: `/apii/edit`,
-            type: "POST",
-            processData: false,
-            contentType: false,
-            data: JSON.stringify(test),
-            dataType: "json",
-            async: true,
-            success: function (data, status) {
-            },
-            error: function (xhr, textStatus, errorThrown) {
-                alert(xhr.responseText);
-            },
-        });
-    });
-    //FIN EDIT 4eme imputation
 
     //DEBUT 1er suppression 
     $(document).on("click", "#suppCode0", function () {
