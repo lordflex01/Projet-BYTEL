@@ -31,9 +31,22 @@
 							<div class="form-group">
 								<select class="form-control select2" id="name" style="width: 100%;">
 
-									{% for user in users %}
-										<option value='{{ user.id }}'>{{ user.username }}</option>
-									{% endfor %}
+									{% if app.user.roles == ["ROLE_USER"] %}
+
+										<select class="form-control select2" id="name" style="width: 100%;" disabled>
+											<option value='{{ app.user.id }}'>{{ app.user.username }}</option>
+										</select>
+
+									{% else %}
+
+										<select class="form-control select2" id="name" style="width: 100%;">
+											{% for user in users %}
+												<option value='{{ user.id }}'>{{ user.username }}</option>
+											{% endfor %}
+										</select>
+									{% endif %}
+
+
 								</select>
 
 							</div>
@@ -67,15 +80,16 @@
 				<div class="card">
 
 					<div class="card-body p-0 table-responsive">
-						<table class="table" id="firm_table">
+						<table
+							class="table" id="firm_table">
 
-						<!--	{% if app.session.flashBag.has('success') %}
-								<div class="alert alert-success">
-									{% for msg in app.session.flashBag.get('success') %}
-										{{ msg }}
-									{% endfor %}
-								</div>
-							{% endif %} -->
+							<!--	{% if app.session.flashBag.has('success') %}
+															<div class="alert alert-success">
+																{% for msg in app.session.flashBag.get('success') %}
+																	{{ msg }}
+																{% endfor %}
+															</div>
+														{% endif %} -->
 
 							<thead id="entete"></thead>
 							<tbody id="tableB"></tbody>
@@ -83,12 +97,6 @@
 						</table>
 
 					</div>
-					<select title="select" size="10">
-  <option title="volvo" value="volvo">Volvo</option>
-  <option title="saab" value="saab">Saab</option>
-  <option title="opel" value="opel">Opel</option>
-  <option title="audi" value="audi">Audi</option>
-</select>
 
 					<!--DEBUT du compteur-->
 					{% for code_projet in code_projets %}

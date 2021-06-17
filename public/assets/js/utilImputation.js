@@ -56,7 +56,7 @@ $(document).ready(function () {
           '<th><button id="addRow" type="button" class="btn btn-block btn-info btn-sm" style="width: 30px;"><i class="fa fa-plus"></i></button></th>' +
             "<th>Code Projet</th>" +
             "<th>Tâches</th>" +
-            "<th>Activitées</th>" +
+            "<th></th>" +
             '<th style="width: 40px">Lun ' +
             days[0] +
             '</th><th  style="width: 40px">Mar ' +
