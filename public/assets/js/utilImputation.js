@@ -78,7 +78,6 @@ $(document).ready(function () {
         $("#entete").append(e);
         $("#tableB").html("");
 
-
         compteurligneajout = 0;
         var a = 0;
         var b = 0;
@@ -223,43 +222,43 @@ $(document).ready(function () {
         activite;
 
         var footer = $(
-          '<tr><td></td>' +
+          "<tr><td></td>" +
             "<td><span style='width: 40px;color:red;font-weight:bold'>Total</span></td>" +
             "<td></td>" +
             "<td></td>" +
-            '<td style="width: 40px"><input type=text" class="form-control-imput"  id="totalCol"></td>'+
-            '<td style="width: 40px"><input type="text" class="form-control-imput" id="totalCol"></td>'+
-            '<td style="width: 40px"><input type="text" class="form-control-imput" id="totalCol"></td>'+
-            '<td style="width: 40px"><input type="text" class="form-control-imput" id="totalCol"></td>'+
-            '<td style="width: 40px"><input type="text" class="form-control-imput" id="totalCol"></td>'+
+            '<td style="width: 40px"><input type=text" class="form-control-imput"  id="totalCol"></td>' +
+            '<td style="width: 40px"><input type="text" class="form-control-imput" id="totalCol"></td>' +
+            '<td style="width: 40px"><input type="text" class="form-control-imput" id="totalCol"></td>' +
+            '<td style="width: 40px"><input type="text" class="form-control-imput" id="totalCol"></td>' +
+            '<td style="width: 40px"><input type="text" class="form-control-imput" id="totalCol"></td>' +
             '<td  style="width: 40px;color:red"></td>' +
             '<td  style="width: 40px;color:green"></td></tr>'
         );
 
-      // $("#footTable").html("");
-       //$("#footTable").append(footer);
+        // $("#footTable").html("");
+        //$("#footTable").append(footer);
         $("#addRow").click(function () {
           compteurligneajout++;
           scntDiv.append(
-            '<tr><td></td><td><select class="form-control select2" id="codeP' +
+            '<tr><td></td><td><select class="form-control select2"  id="codeP' +
               compteurligneajout +
               '" style="width: 100%;">' +
-              "<option value = " +
+              "<option title='Option 1' value = " +
               codeP[0].id +
               ">" +
               codeP[0].libelle +
               "</option>" +
-              "<option value= " +
+              "<option title='Option 2' value= " +
               codeP[1].id +
               ">" +
               codeP[1].libelle +
               "</option>" +
-              "<option value= " +
+              "<option title='Option 3' value= " +
               codeP[2].id +
               ">" +
               codeP[2].libelle +
               "</option>" +
-              "<option value= " +
+              "<option title='Option 4' value= " +
               codeP[3].id +
               ">" +
               codeP[3].libelle +
@@ -329,7 +328,8 @@ $(document).ready(function () {
               '<td><input type="text"  id="i6' +
               compteurligneajout +
               '"  style="max-width: 200px" class="form-control-imput"></td>' +
-              '<td><i class="fa fa-trash" id="suppRow" style="font-size: 16px;cursor:pointer;margin-top: 8px;color: #cc1919;"></i></td></tr>'
+              '<td><i class="fa fa-trash" id="suppRow" style="font-size: 16px;cursor:pointer;margin-top: 8px;color: #cc1919;"></i></td></tr>' +
+              '<p class="tooltip"></p>'
           );
           i++;
           return false;
@@ -337,14 +337,16 @@ $(document).ready(function () {
 
         //calculer le total ligne
         $(document).on("click", ".form-control-imput", function () {
-          var $tr = $(this).closest('tr'); 
+          var $tr = $(this).closest("tr");
           var tot = 0;
-          $('.form-control-imput', $tr).each(function() { 
-            tot += Number($(this).val()) || 0; 
+          $(".form-control-imput", $tr).each(function () {
+            tot += Number($(this).val()) || 0;
           });
-          $("input[name='totalRow']", $tr).val(tot); 
-        }) 
-  
+          $("input[name='totalRow']", $tr).val(tot);
+        });
+
+        //tooltip option
+
       },
       error: function (xhr, textStatus, errorThrown) {
         alert(xhr.responseText);
@@ -494,7 +496,6 @@ $(document).ready(function () {
           });
 
           Toast.fire({ icon: "success", title: " Modification confirmée . " });
-         
         }
         if (response == 202) {
           var Toast = Swal.mixin({
@@ -504,9 +505,10 @@ $(document).ready(function () {
             timer: 6000,
           });
 
-          Toast.fire({ icon: "error", title: " Une des modifications est > 1 dans une même journée . " });
-          
-
+          Toast.fire({
+            icon: "error",
+            title: " Une des modifications est > 1 dans une même journée . ",
+          });
         }
       },
       error: function (xhr, textStatus, errorThrown) {
@@ -543,8 +545,10 @@ $(document).ready(function () {
             timer: 6000,
           });
 
-          Toast.fire({ icon: "error", title: " 'Un des couples têche et code projet existe deja . " });
-         
+          Toast.fire({
+            icon: "error",
+            title: " 'Un des couples têche et code projet existe deja . ",
+          });
         }
         if (response == 202) {
           var Toast = Swal.mixin({
@@ -554,8 +558,10 @@ $(document).ready(function () {
             timer: 6000,
           });
 
-          Toast.fire({ icon: "error", title: " Une des imputations est > 1 dans une même journée. " });
-          
+          Toast.fire({
+            icon: "error",
+            title: " Une des imputations est > 1 dans une même journée. ",
+          });
         }
       },
       error: function (xhr, textStatus, errorThrown) {
@@ -604,7 +610,6 @@ $(document).ready(function () {
         alert(xhr.responseText);
       },
     });
-   
   });
   //FIN 1er Suppression
 
@@ -648,7 +653,6 @@ $(document).ready(function () {
         alert(xhr.responseText);
       },
     });
- 
   });
   //FIN 2er Suppression
 
@@ -692,7 +696,6 @@ $(document).ready(function () {
         alert(xhr.responseText);
       },
     });
-   
   });
   //FIN 3er Suppression
 
@@ -736,7 +739,6 @@ $(document).ready(function () {
         alert(xhr.responseText);
       },
     });
-  
   });
   //FIN 4er Suppression
   //supprimer une ligne
@@ -744,4 +746,9 @@ $(document).ready(function () {
     compteurligneajout--;
     $(this).closest("tr").remove();
   });
+});
+
+$(function () {
+  $(document).tooltip({items:"select,option",position:{ my: "left top", at: "left bottom"}
+  }); 
 });
