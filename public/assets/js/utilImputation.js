@@ -39,7 +39,6 @@ $(document).ready(function () {
       days[i] = w[2];
     }
 
-    //alert(days);
     var date = $("#date-input").val().split("-");
     week = date[1];
     year = date[0];
@@ -77,7 +76,7 @@ $(document).ready(function () {
         $("#entete").html("");
         $("#entete").append(e);
         $("#tableB").html("");
-
+        
         compteurligneajout = 0;
         var a = 0;
         var b = 0;
@@ -237,100 +236,53 @@ $(document).ready(function () {
 
         // $("#footTable").html("");
         //$("#footTable").append(footer);
+
         $("#addRow").click(function () {
           compteurligneajout++;
-          scntDiv.append(
-            '<tr><td></td><td><select class="form-control select2"  id="codeP' +
-              compteurligneajout +
-              '" style="width: 100%;">' +
-              "<option title='Option 1' value = " +
-              codeP[0].id +
-              ">" +
-              codeP[0].libelle +
-              "</option>" +
-              "<option title='Option 2' value= " +
-              codeP[1].id +
-              ">" +
-              codeP[1].libelle +
-              "</option>" +
-              "<option title='Option 3' value= " +
-              codeP[2].id +
-              ">" +
-              codeP[2].libelle +
-              "</option>" +
-              "<option title='Option 4' value= " +
-              codeP[3].id +
-              ">" +
-              codeP[3].libelle +
-              "</option></select></td>" +
-              '<td><select class="form-control select2" id="tache' +
-              compteurligneajout +
-              '" style="width: 100%;">' +
-              "<option value = " +
-              tache[0].id +
-              ">" +
-              tache[0].libelle +
-              "</option>" +
-              "<option value= " +
-              tache[1].id +
-              ">" +
-              tache[1].libelle +
-              "</option>" +
-              "<option value= " +
-              tache[2].id +
-              ">" +
-              tache[2].libelle +
-              "</option>" +
-              "<option value= " +
-              tache[3].id +
-              ">" +
-              tache[3].libelle +
-              "</option></select></td>" +
-              '<td><select class="form-control select2" id="activite' +
-              compteurligneajout +
-              '" style="width: 100%;">' +
-              "<option value = " +
-              activite[0].id +
-              ">" +
-              activite[0].libelle +
-              "</option>" +
-              "<option value= " +
-              activite[1].id +
-              ">" +
-              activite[1].libelle +
-              "</option>" +
-              "<option value= " +
-              activite[2].id +
-              ">" +
-              activite[2].libelle +
-              "</option>" +
-              "<option value= " +
-              activite[3].id +
-              ">" +
-              activite[3].libelle +
-              "</option></select></td>" +
-              '<td><input type="number" id="i1' +
-              compteurligneajout +
-              '" min="0" max="1" step="0.25" class="form-control-imput" value="0"></td>' +
-              '<td><input type="number" id="i2' +
-              compteurligneajout +
-              '"  min="0" max="1" step="0.25" class="form-control-imput" value="0"></td>' +
-              '<td><input type="number" id="i3' +
-              compteurligneajout +
-              '"  min="0" max="1" step="0.25" class="form-control-imput" value="0"></td>' +
-              '<td><input type="number" id="i4' +
-              compteurligneajout +
-              '" min="0" max="1" step="0.25" class="form-control-imput" value="0"></td>' +
-              '<td><input type="number" id="i5' +
-              compteurligneajout +
-              '" min="0" max="1" step="0.25" class="form-control-imput" value="0"></td>' +
-              '<td><input type="text" class="form-control-total"  name="totalRow" readonly></td>' +
-              '<td><input type="text"  id="i6' +
-              compteurligneajout +
-              '"  style="max-width: 200px" class="form-control-imput"></td>' +
-              '<td><i class="fa fa-trash" id="suppRow" style="font-size: 16px;cursor:pointer;margin-top: 8px;color: #cc1919;"></i></td></tr>' +
-              '<p class="tooltip"></p>'
-          );
+          var add =
+            '<tr><td></td><td><select class="form-control select2" id="codeP' +
+            compteurligneajout +
+            '" style="width: 100%;">';
+          for (liste = 0; liste < codeP.length; liste++) {
+            add += "<option value = " + codeP[liste].id + ">" + codeP[liste].libelle + "</option>";
+          }
+          add += "</select></td>" +
+            '<td><select class="form-control select2" id="tache' +
+            compteurligneajout +
+            '" style="width: 100%;">';
+          for (liste = 0; liste < tache.length; liste++) {
+            add += "<option value = " + tache[liste].id + ">" + tache[liste].libelle + "</option>";
+          }
+          add += "</select></td>" +
+            '<td><select class="form-control select2" id="activite' +
+            compteurligneajout +
+            '" style="width: 100%;">';
+          for (liste = 0; liste < activite.length; liste++) {
+            add += "<option value = " + activite[liste].id + ">" + activite[liste].libelle + "</option>";
+          }
+          add += "</select></td>" +
+            '<td><input type="number" id="i1' +
+            compteurligneajout +
+            '" min="0" max="1" step="0.25" class="form-control-imput" value="0"></td>' +
+            '<td><input type="number" id="i2' +
+            compteurligneajout +
+            '"  min="0" max="1" step="0.25" class="form-control-imput" value="0"></td>' +
+            '<td><input type="number" id="i3' +
+            compteurligneajout +
+            '"  min="0" max="1" step="0.25" class="form-control-imput" value="0"></td>' +
+            '<td><input type="number" id="i4' +
+            compteurligneajout +
+            '" min="0" max="1" step="0.25" class="form-control-imput" value="0"></td>' +
+            '<td><input type="number" id="i5' +
+            compteurligneajout +
+            '" min="0" max="1" step="0.25" class="form-control-imput" value="0"></td>' +
+            "<td><input type='text' name='totalRow' class='form-control-total'></td>" +
+            '<td><input type="text"  id="i6' +
+            compteurligneajout +
+            '"  style="max-width: 200px" class="form-control-imput"></td>' +
+            '<td><i class="fa fa-trash" id="suppRow" style="font-size: 16px;cursor:pointer;margin-top: 8px;color: #cc1919;"></i></td></tr>';
+ 
+          scntDiv.append(add);
           i++;
           return false;
         });
@@ -505,10 +457,9 @@ $(document).ready(function () {
             timer: 6000,
           });
 
-          Toast.fire({
-            icon: "error",
-            title: " Une des modifications est > 1 dans une même journée . ",
-          });
+          Toast.fire({ icon: "error", title: " Une des modifications est > 1 dans une même journée . " });
+
+
         }
       },
       error: function (xhr, textStatus, errorThrown) {
@@ -545,10 +496,8 @@ $(document).ready(function () {
             timer: 6000,
           });
 
-          Toast.fire({
-            icon: "error",
-            title: " 'Un des couples têche et code projet existe deja . ",
-          });
+          Toast.fire({ icon: "error", title: " 'Un des couples têche et code projet existe deja . " });
+
         }
         if (response == 202) {
           var Toast = Swal.mixin({
@@ -558,10 +507,8 @@ $(document).ready(function () {
             timer: 6000,
           });
 
-          Toast.fire({
-            icon: "error",
-            title: " Une des imputations est > 1 dans une même journée. ",
-          });
+          Toast.fire({ icon: "error", title: " Une des imputations est > 1 dans une même journée. " });
+
         }
       },
       error: function (xhr, textStatus, errorThrown) {
@@ -610,6 +557,7 @@ $(document).ready(function () {
         alert(xhr.responseText);
       },
     });
+
   });
   //FIN 1er Suppression
 
@@ -653,6 +601,7 @@ $(document).ready(function () {
         alert(xhr.responseText);
       },
     });
+
   });
   //FIN 2er Suppression
 
@@ -696,6 +645,7 @@ $(document).ready(function () {
         alert(xhr.responseText);
       },
     });
+
   });
   //FIN 3er Suppression
 
@@ -739,6 +689,7 @@ $(document).ready(function () {
         alert(xhr.responseText);
       },
     });
+
   });
   //FIN 4er Suppression
   //supprimer une ligne
