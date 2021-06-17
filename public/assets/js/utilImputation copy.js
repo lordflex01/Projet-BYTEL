@@ -236,8 +236,8 @@ $(document).ready(function () {
             '<td  style="width: 40px;color:green"></td></tr>'
         );
 
-      // $("#footTable").html("");
-       //$("#footTable").append(footer);
+       $("#footTable").html("");
+       $("#footTable").append(footer);
         $("#addRow").click(function () {
           compteurligneajout++;
           scntDiv.append(
@@ -744,4 +744,61 @@ $(document).ready(function () {
     compteurligneajout--;
     $(this).closest("tr").remove();
   });
+});
+
+
+$(document).ready(function(){
+  $(".saisie").each(function() {
+      $(this).keyup(function(){
+      calculateTotal($(this).parent().index());
+      });
+  });
+});
+
+function calculateTotal(index)
+{
+ var total = 0;
+  $('table tr td').filter(function(){
+      if($(this).index()==index)
+      {
+      total += parseFloat($(this).find('.saisie').val())||0;
+      }
+  }
+  );
+  $('table tr td.totalCol:eq('+index+')').html(total);
+}
+/////////////////////////////
+$('.form-control-imput').each(function() { 
+  calculateTotal($(this).parent().index());
+});
+function calculateTotal(index)
+{
+ var total = 0;
+  $('table tr td').filter(function(){
+      if($(this).index()==index)
+      {
+      total += parseFloat($(this).find('.form-control-imput').val())||0;
+      }
+  }
+  );
+  $('table tr td#totalCol:eq('+index+')').html(total);
+}
+
+//calculer le total colonne
+$(document).on("click", ".form-control-imput", function () {
+  $('.form-control-imput').each(function() { 
+    calculateTotal($(this).parent().index());
+  });
+  function calculateTotal(index)
+  {
+    var total = 0;
+    $('table tr td').filter(function(){
+      if($(this).index()==index)
+      {
+      total += parseFloat($(this).find('.form-control-imput').val())||0;
+      }
+  }
+  );
+  $('#totalCol:eq('+index+')').html(total);
+  }
 });

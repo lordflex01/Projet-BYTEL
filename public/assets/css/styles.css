@@ -2116,7 +2116,23 @@ pre code {
     box-shadow: inset 0 0 0 rgb(0 0 0 / 0%);
     transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 }
-
+.form-control-total {
+  display: block;
+    max-width: 60px;
+    max-height: calc(3rem + -5px);
+    padding: 1.375rem -0.25rem;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #495057;
+    padding: 4px;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1.5px dashed #d2d6db;
+    border-radius: 0.25rem;
+    box-shadow: inset 0 0 0 rgb(0 0 0 / 0%);
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
 @media (prefers-reduced-motion: reduce) {
   .form-control {
     transition: none;
@@ -2147,7 +2163,13 @@ pre code {
   outline: 0;
   box-shadow: inset 0 0 0 rgba(0, 0, 0, 0);
 }
-
+.form-control-total:focus {
+  color: #495057;
+  background-color: #fff;
+  border-color: #17a2b8;
+  outline: 0;
+  box-shadow: inset 0 0 0 rgba(0, 0, 0, 0);
+}
 .form-control::-webkit-input-placeholder {
   color: #939ba2;
   opacity: 1;
