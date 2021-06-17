@@ -12,8 +12,8 @@
 					<div class="col-sm-6">
 						{% if is_granted('ROLE_ADMIN') %}
 							<a class="btn btn-primary" style="float:right;" href="{{ path('taches_new') }}">Ajouter une nouvelle tâche</a>
-					
-					{% endif %}
+
+						{% endif %}
 					</div>
 				</div>
 			</div>
@@ -36,7 +36,7 @@
 						</button>
 					</div>
 
-					
+
 				</div>
 				<div class="card-body p-0">
 					<table class="table table-striped projects">
@@ -51,9 +51,11 @@
 								<th>
 									Description
 								</th>
-								<th>
-									Actions
-								</th>
+								{% if is_granted('ROLE_ADMIN') %}
+									<th>
+										Actions
+									</th>
+								{% endif %}
 							</tr>
 						</thead>
 						<tbody>

@@ -29,20 +29,20 @@
 					<div class="rowT">
 						<div class="col-sm-4">
 							<div class="form-group">
-							{% if app.user.roles == ["ROLE_USER"] %}
+								{% if app.user.roles == ["ROLE_USER"] %}
 
-								<select class="form-control select2" id="name" style="width: 100%;" disabled>
-									<option value='{{ app.user.id }}'>{{ app.user.username }}</option>
-								</select>
+									<select class="form-control select2" id="name" style="width: 100%;" disabled>
+										<option value='{{ app.user.id }}'>{{ app.user.username }}</option>
+									</select>
 
-							{% else %}
+								{% else %}
 
-								<select class="form-control select2" id="name" style="width: 100%;">
-									{% for user in users %}
-										<option value='{{ user.id }}'>{{ user.username }}</option>
-									{% endfor %}
-								</select>
-							{% endif %}
+									<select class="form-control select2" id="name" style="width: 100%;">
+										{% for user in users %}
+											<option value='{{ user.id }}'>{{ user.username }}</option>
+										{% endfor %}
+									</select>
+								{% endif %}
 
 							</div>
 						</div>
@@ -63,8 +63,8 @@
 							</button>
 						</div>
 						<div>
-						<a href="{{ path('export') }}" class="btn btn-outline-secondary btn-block">CSV</a>
-							
+							<a href="{{ path('export') }}" class="btn btn-outline-secondary btn-block">CSV</a>
+
 						</div>
 
 					</div>
@@ -75,10 +75,22 @@
 				<div class="card">
 
 					<div class="card-body p-0 table-responsive">
-						<table class="table" id="firm_table">
+						<table
+							class="table" id="firm_table">
+
+							<!--	{% if app.session.flashBag.has('success') %}
+																						<div class="alert alert-success">
+																							{% for msg in app.session.flashBag.get('success') %}
+																								{{ msg }}
+																							{% endfor %}
+																						</div>
+																					{% endif %} -->
+
 							<thead id="entete"></thead>
 							<tbody id="tableB"></tbody>
+							<tfoot id="footTable"></tfoot>
 						</table>
+
 					</div>
 
 					<!--DEBUT du compteur-->

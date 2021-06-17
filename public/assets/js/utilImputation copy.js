@@ -39,6 +39,7 @@ $(document).ready(function () {
       days[i] = w[2];
     }
 
+    //alert(days);
     var date = $("#date-input").val().split("-");
     week = date[1];
     year = date[0];
@@ -54,28 +55,29 @@ $(document).ready(function () {
       success: function (data, status) {
         var e = $(
           '<th><button id="addRow" type="button" class="btn btn-block btn-info btn-sm" style="width: 30px;"><i class="fa fa-plus"></i></button></th>' +
-          "<th>Code Projet</th>" +
-          "<th>Tâches</th>" +
-          "<th></th>" +
-          '<th style="width: 40px">Lun ' +
-          days[0] +
-          '</th><th  style="width: 40px">Mar ' +
-          days[1] +
-          '</th><th  style="width: 40px">Mer ' +
-          days[2] +
-          '</th><th  style="width: 40px">Jeu ' +
-          days[3] +
-          "</th>" +
-          '<th  style="width: 40px">Vend ' +
-          days[4] +
-          "</th>" +
-          '<th  style="width: 40px;color:red">Total</th>' +
-          '<th  style="width: 40px;color:green">Commentaires</th></tr>'
+            "<th>Code Projet</th>" +
+            "<th>Tâches</th>" +
+            "<th>Activitées</th>" +
+            '<th style="width: 40px">Lun ' +
+            days[0] +
+            '</th><th  style="width: 40px">Mar ' +
+            days[1] +
+            '</th><th  style="width: 40px">Mer ' +
+            days[2] +
+            '</th><th  style="width: 40px">Jeu ' +
+            days[3] +
+            "</th>" +
+            '<th  style="width: 40px">Vend ' +
+            days[4] +
+            "</th>" +
+            '<th  style="width: 40px;color:red">Total</th>' +
+            '<th  style="width: 40px;color:green">Commentaires</th></tr>'
         );
 
         $("#entete").html("");
         $("#entete").append(e);
         $("#tableB").html("");
+
 
         compteurligneajout = 0;
         var a = 0;
@@ -148,45 +150,45 @@ $(document).ready(function () {
           for (let i = 0; i < nombreimputation; i++) {
             var LLL = $(
               "<tr><td></td><td><span>" +
-              codprojettableau[i] +
-              "</span></td>" +
-              "<td><span>" +
-              tacheteableau[i] +
-              "</span></td>" +
-              "<td></td>" +
-              '<td><input id="m1' +
-              imputID[i] +
-              '" type="number" min="0" max="1" step="0.25" class="form-control-imput" value=' +
-              H[0 + j] +
-              '></td><td><input id="m2' +
-              imputID[i] +
-              '" type="number" min="0" max="1" step="0.25" class="form-control-imput" value=' +
-              H[1 + j] +
-              '></td><td><input id="m3' +
-              imputID[i] +
-              '" type="number" min="0" max="1" step="0.25" class="form-control-imput" value=' +
-              H[2 + j] +
-              '></td><td><input id="m4' +
-              imputID[i] +
-              '" type="number" min="0" max="1" step="0.25" class="form-control-imput" value=' +
-              H[3 + j] +
-              '></td><td><input id="m5' +
-              imputID[i] +
-              '" type="number" min="0" max="1" step="0.25" class="form-control-imput" value=' +
-              H[4 + j] +
-              "></td>" +
-              '<td><input type="text" min="0" max="1" step="0.25" name="totalRow" class="form-control-total" value=' +
-              t[i] +
-              "></td>" +
-              '<td><input id="com' +
-              i +
-              '" style="max-width: 200px" type="text" class="form-control-imput" value=' +
-              commentairelab[i] +
-              "></td>" +
-              '<td><i class="fa fa-trash"  style="font-size: 16px;cursor:pointer;margin-top: 8px;color: #cc1919;"id="suppCode' +
-              i +
-              '"></i></td>' +
-              "</tr>"
+                codprojettableau[i] +
+                "</span></td>" +
+                "<td><span>" +
+                tacheteableau[i] +
+                "</span></td>" +
+                "<td></td>" +
+                '<td><input id="m1' +
+                imputID[i] +
+                '" type="number" min="0" max="1" step="0.25" class="form-control-imput" value=' +
+                H[0 + j] +
+                '></td><td><input id="m2' +
+                imputID[i] +
+                '" type="number" min="0" max="1" step="0.25" class="form-control-imput" value=' +
+                H[1 + j] +
+                '></td><td><input id="m3' +
+                imputID[i] +
+                '" type="number" min="0" max="1" step="0.25" class="form-control-imput" value=' +
+                H[2 + j] +
+                '></td><td><input id="m4' +
+                imputID[i] +
+                '" type="number" min="0" max="1" step="0.25" class="form-control-imput" value=' +
+                H[3 + j] +
+                '></td><td><input id="m5' +
+                imputID[i] +
+                '" type="number" min="0" max="1" step="0.25" class="form-control-imput" value=' +
+                H[4 + j] +
+                "></td>" +
+                '<td><input type="text" min="0" max="1" step="0.25" name="totalRow" class="form-control-total" value=' +
+                t[i] +
+                "></td>" +
+                '<td><input id="com' +
+                i +
+                '" style="max-width: 200px" type="text" class="form-control-imput" value=' +
+                commentairelab[i] +
+                "></td>" +
+                '<td><i class="fa fa-trash"  style="font-size: 16px;cursor:pointer;margin-top: 8px;color: #cc1919;"id="suppCode' +
+                i +
+                '"></i></td>' +
+                "</tr>"
             );
             j = j + 5;
             $("#tableB").append(LLL);
@@ -221,84 +223,128 @@ $(document).ready(function () {
         activite;
 
         var footer = $(
-          "<tr><td></td>" +
-          "<td><span style='width: 40px;color:red;font-weight:bold'>Total</span></td>" +
-          "<td></td>" +
-          "<td></td>" +
-          '<td style="width: 40px"><input type=text" class="form-control-imput"  id="totalCol"></td>' +
-          '<td style="width: 40px"><input type="text" class="form-control-imput" id="totalCol"></td>' +
-          '<td style="width: 40px"><input type="text" class="form-control-imput" id="totalCol"></td>' +
-          '<td style="width: 40px"><input type="text" class="form-control-imput" id="totalCol"></td>' +
-          '<td style="width: 40px"><input type="text" class="form-control-imput" id="totalCol"></td>' +
-          '<td  style="width: 40px;color:red"></td>' +
-          '<td  style="width: 40px;color:green"></td></tr>'
+          '<tr><td></td>' +
+            "<td><span style='width: 40px;color:red;font-weight:bold'>Total</span></td>" +
+            "<td></td>" +
+            "<td></td>" +
+            '<td style="width: 40px"><input type=text" class="form-control-imput"  id="totalCol"></td>'+
+            '<td style="width: 40px"><input type="text" class="form-control-imput" id="totalCol"></td>'+
+            '<td style="width: 40px"><input type="text" class="form-control-imput" id="totalCol"></td>'+
+            '<td style="width: 40px"><input type="text" class="form-control-imput" id="totalCol"></td>'+
+            '<td style="width: 40px"><input type="text" class="form-control-imput" id="totalCol"></td>'+
+            '<td  style="width: 40px;color:red"></td>' +
+            '<td  style="width: 40px;color:green"></td></tr>'
         );
 
-        // $("#footTable").html("");
-        //$("#footTable").append(footer);
-
+       $("#footTable").html("");
+       $("#footTable").append(footer);
         $("#addRow").click(function () {
           compteurligneajout++;
-          var add =
+          scntDiv.append(
             '<tr><td></td><td><select class="form-control select2" id="codeP' +
-            compteurligneajout +
-            '" style="width: 100%;">';
-          for (liste = 0; liste < codeP.length; liste++) {
-            add += "<option value = " + codeP[liste].id + ">" + codeP[liste].libelle + "</option>";
-          }
-          add += "</select></td>" +
-            '<td><select class="form-control select2" id="tache' +
-            compteurligneajout +
-            '" style="width: 100%;">';
-          for (liste = 0; liste < tache.length; liste++) {
-            add += "<option value = " + tache[liste].id + ">" + tache[liste].libelle + "</option>";
-          }
-          add += "</select></td>" +
-            '<td><select class="form-control select2" id="activite' +
-            compteurligneajout +
-            '" style="width: 100%;">';
-          for (liste = 0; liste < activite.length; liste++) {
-            add += "<option value = " + activite[liste].id + ">" + activite[liste].libelle + "</option>";
-          }
-          add += "</select></td>" +
-            '<td><input type="number" id="i1' +
-            compteurligneajout +
-            '" min="0" max="1" step="0.25" class="form-control-imput" value="0"></td>' +
-            '<td><input type="number" id="i2' +
-            compteurligneajout +
-            '"  min="0" max="1" step="0.25" class="form-control-imput" value="0"></td>' +
-            '<td><input type="number" id="i3' +
-            compteurligneajout +
-            '"  min="0" max="1" step="0.25" class="form-control-imput" value="0"></td>' +
-            '<td><input type="number" id="i4' +
-            compteurligneajout +
-            '" min="0" max="1" step="0.25" class="form-control-imput" value="0"></td>' +
-            '<td><input type="number" id="i5' +
-            compteurligneajout +
-            '" min="0" max="1" step="0.25" class="form-control-imput" value="0"></td>' +
-            "<td><input type='text' name='totalRow' class='form-control-total'></td>" +
-            '<td><input type="text"  id="i6' +
-            compteurligneajout +
-            '"  style="max-width: 200px" class="form-control-imput"></td>' +
-            '<td><i class="fa fa-trash" id="suppRow" style="font-size: 16px;cursor:pointer;margin-top: 8px;color: #cc1919;"></i></td></tr>';
-
-          scntDiv.append(add);
+              compteurligneajout +
+              '" style="width: 100%;">' +
+              "<option value = " +
+              codeP[0].id +
+              ">" +
+              codeP[0].libelle +
+              "</option>" +
+              "<option value= " +
+              codeP[1].id +
+              ">" +
+              codeP[1].libelle +
+              "</option>" +
+              "<option value= " +
+              codeP[2].id +
+              ">" +
+              codeP[2].libelle +
+              "</option>" +
+              "<option value= " +
+              codeP[3].id +
+              ">" +
+              codeP[3].libelle +
+              "</option></select></td>" +
+              '<td><select class="form-control select2" id="tache' +
+              compteurligneajout +
+              '" style="width: 100%;">' +
+              "<option value = " +
+              tache[0].id +
+              ">" +
+              tache[0].libelle +
+              "</option>" +
+              "<option value= " +
+              tache[1].id +
+              ">" +
+              tache[1].libelle +
+              "</option>" +
+              "<option value= " +
+              tache[2].id +
+              ">" +
+              tache[2].libelle +
+              "</option>" +
+              "<option value= " +
+              tache[3].id +
+              ">" +
+              tache[3].libelle +
+              "</option></select></td>" +
+              '<td><select class="form-control select2" id="activite' +
+              compteurligneajout +
+              '" style="width: 100%;">' +
+              "<option value = " +
+              activite[0].id +
+              ">" +
+              activite[0].libelle +
+              "</option>" +
+              "<option value= " +
+              activite[1].id +
+              ">" +
+              activite[1].libelle +
+              "</option>" +
+              "<option value= " +
+              activite[2].id +
+              ">" +
+              activite[2].libelle +
+              "</option>" +
+              "<option value= " +
+              activite[3].id +
+              ">" +
+              activite[3].libelle +
+              "</option></select></td>" +
+              '<td><input type="number" id="i1' +
+              compteurligneajout +
+              '" min="0" max="1" step="0.25" class="form-control-imput" value="0"></td>' +
+              '<td><input type="number" id="i2' +
+              compteurligneajout +
+              '"  min="0" max="1" step="0.25" class="form-control-imput" value="0"></td>' +
+              '<td><input type="number" id="i3' +
+              compteurligneajout +
+              '"  min="0" max="1" step="0.25" class="form-control-imput" value="0"></td>' +
+              '<td><input type="number" id="i4' +
+              compteurligneajout +
+              '" min="0" max="1" step="0.25" class="form-control-imput" value="0"></td>' +
+              '<td><input type="number" id="i5' +
+              compteurligneajout +
+              '" min="0" max="1" step="0.25" class="form-control-imput" value="0"></td>' +
+              '<td><input type="text" class="form-control-total"  name="totalRow" readonly></td>' +
+              '<td><input type="text"  id="i6' +
+              compteurligneajout +
+              '"  style="max-width: 200px" class="form-control-imput"></td>' +
+              '<td><i class="fa fa-trash" id="suppRow" style="font-size: 16px;cursor:pointer;margin-top: 8px;color: #cc1919;"></i></td></tr>'
+          );
           i++;
           return false;
         });
 
         //calculer le total ligne
         $(document).on("click", ".form-control-imput", function () {
-          var $tr = $(this).closest("tr");
+          var $tr = $(this).closest('tr'); 
           var tot = 0;
-          $(".form-control-imput", $tr).each(function () {
-            tot += Number($(this).val()) || 0;
+          $('.form-control-imput', $tr).each(function() { 
+            tot += Number($(this).val()) || 0; 
           });
-          $("input[name='totalRow']", $tr).val(tot);
-        });
-
-        //tooltip option
-
+          $("input[name='totalRow']", $tr).val(tot); 
+        }) 
+  
       },
       error: function (xhr, textStatus, errorThrown) {
         alert(xhr.responseText);
@@ -448,6 +494,7 @@ $(document).ready(function () {
           });
 
           Toast.fire({ icon: "success", title: " Modification confirmée . " });
+         
         }
         if (response == 202) {
           var Toast = Swal.mixin({
@@ -458,7 +505,7 @@ $(document).ready(function () {
           });
 
           Toast.fire({ icon: "error", title: " Une des modifications est > 1 dans une même journée . " });
-
+          
 
         }
       },
@@ -497,7 +544,7 @@ $(document).ready(function () {
           });
 
           Toast.fire({ icon: "error", title: " 'Un des couples têche et code projet existe deja . " });
-
+         
         }
         if (response == 202) {
           var Toast = Swal.mixin({
@@ -508,7 +555,7 @@ $(document).ready(function () {
           });
 
           Toast.fire({ icon: "error", title: " Une des imputations est > 1 dans une même journée. " });
-
+          
         }
       },
       error: function (xhr, textStatus, errorThrown) {
@@ -557,7 +604,7 @@ $(document).ready(function () {
         alert(xhr.responseText);
       },
     });
-
+   
   });
   //FIN 1er Suppression
 
@@ -601,7 +648,7 @@ $(document).ready(function () {
         alert(xhr.responseText);
       },
     });
-
+ 
   });
   //FIN 2er Suppression
 
@@ -645,7 +692,7 @@ $(document).ready(function () {
         alert(xhr.responseText);
       },
     });
-
+   
   });
   //FIN 3er Suppression
 
@@ -689,7 +736,7 @@ $(document).ready(function () {
         alert(xhr.responseText);
       },
     });
-
+  
   });
   //FIN 4er Suppression
   //supprimer une ligne
@@ -697,4 +744,61 @@ $(document).ready(function () {
     compteurligneajout--;
     $(this).closest("tr").remove();
   });
+});
+
+
+$(document).ready(function(){
+  $(".saisie").each(function() {
+      $(this).keyup(function(){
+      calculateTotal($(this).parent().index());
+      });
+  });
+});
+
+function calculateTotal(index)
+{
+ var total = 0;
+  $('table tr td').filter(function(){
+      if($(this).index()==index)
+      {
+      total += parseFloat($(this).find('.saisie').val())||0;
+      }
+  }
+  );
+  $('table tr td.totalCol:eq('+index+')').html(total);
+}
+/////////////////////////////
+$('.form-control-imput').each(function() { 
+  calculateTotal($(this).parent().index());
+});
+function calculateTotal(index)
+{
+ var total = 0;
+  $('table tr td').filter(function(){
+      if($(this).index()==index)
+      {
+      total += parseFloat($(this).find('.form-control-imput').val())||0;
+      }
+  }
+  );
+  $('table tr td#totalCol:eq('+index+')').html(total);
+}
+
+//calculer le total colonne
+$(document).on("click", ".form-control-imput", function () {
+  $('.form-control-imput').each(function() { 
+    calculateTotal($(this).parent().index());
+  });
+  function calculateTotal(index)
+  {
+    var total = 0;
+    $('table tr td').filter(function(){
+      if($(this).index()==index)
+      {
+      total += parseFloat($(this).find('.form-control-imput').val())||0;
+      }
+  }
+  );
+  $('#totalCol:eq('+index+')').html(total);
+  }
 });

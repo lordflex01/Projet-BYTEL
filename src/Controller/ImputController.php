@@ -135,7 +135,7 @@ class ImputController extends AbstractController
         } else if ($code == 202) {
             return new Response($code);
         } else {
-            //$em->flush();
+            $em->flush();
             return new Response($code);
         }
     }
@@ -267,7 +267,7 @@ class ImputController extends AbstractController
             } else if ($code == 202) {
                 return new Response($code);
             } else {
-                //$em->flush();
+                $em->flush();
                 return new Response($code);
             }
             //return $this->redirectToRoute('imput_index');
@@ -298,7 +298,7 @@ class ImputController extends AbstractController
             }
         }
         $entityManager->remove($imput);
-        //$entityManager->flush();
+        $entityManager->flush();
         return new Response(200);
     }
 

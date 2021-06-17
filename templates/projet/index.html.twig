@@ -55,7 +55,9 @@
 								<th>
 									Statut
 								</th>
-								<th>Actions</th>
+								{% if is_granted('ROLE_ADMIN') %}
+									<th>Actions</th>
+								{% endif %}
 							</tr>
 						</thead>
 						<tbody>
