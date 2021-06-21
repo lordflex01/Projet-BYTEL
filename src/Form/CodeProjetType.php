@@ -47,6 +47,11 @@ class CodeProjetType extends AbstractType
                     'placeholder' => "Veuillez entrer le budget de DECO"
                 ]
             ])
+            ->add('budgetCLOE', TextType::class, [
+                'attr' => [
+                    'placeholder' => "Veuillez entrer le budget de CLOE"
+                ]
+            ])
             ->add('chageJH', TextType::class, [
                 'attr' => [
                     'placeholder' => "Veuillez entrer la charge en jour-homme"
@@ -60,6 +65,11 @@ class CodeProjetType extends AbstractType
             ->add('chageDECO', TextType::class, [
                 'attr' => [
                     'placeholder' => "Veuillez entrer la charge en jour-homme pour le projet DECO"
+                ]
+            ])
+            ->add('chargeCLOE', TextType::class, [
+                'attr' => [
+                    'placeholder' => "Veuillez entrer la charge en jour-homme pour le projet CLOE"
                 ]
             ])
             ->add('dateD', DateType::class, [

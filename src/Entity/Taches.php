@@ -34,6 +34,16 @@ class Taches
      */
     private $dateVs;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $domaine;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=CodeProjet::class, inversedBy="tache")
+     */
+    private $codeProjet;
+
     public function __construct()
     {
         $this->dateVs = new ArrayCollection();
@@ -102,6 +112,30 @@ class Taches
                 $dateV->setTache(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getDomaine(): ?string
+    {
+        return $this->domaine;
+    }
+
+    public function setDomaine(?string $domaine): self
+    {
+        $this->domaine = $domaine;
+
+        return $this;
+    }
+
+    public function getCodeProjet(): ?CodeProjet
+    {
+        return $this->codeProjet;
+    }
+
+    public function setCodeProjet(?CodeProjet $codeProjet): self
+    {
+        $this->codeProjet = $codeProjet;
 
         return $this;
     }

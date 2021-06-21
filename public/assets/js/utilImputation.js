@@ -56,7 +56,7 @@ $(document).ready(function () {
           '<th><button id="addRow" type="button" class="btn btn-block btn-info btn-sm" style="width: 30px;"><i class="fa fa-plus"></i></button></th>' +
           "<th>Code Projet</th>" +
           "<th>Tâches</th>" +
-          "<th></th>" +
+          "<th>Activiter</th>" +
           '<th style="width: 40px">Lun ' +
           days[0] +
           '</th><th  style="width: 40px">Mar ' +
@@ -93,6 +93,7 @@ $(document).ready(function () {
         nombresimputation = 0;
         let codprojettableau = [];
         let tacheteableau = [];
+        let activitetableau = [];
         let nmbdedatV = 0;
         let commentairelab = [];
         let totalconteur = 0;
@@ -112,6 +113,7 @@ $(document).ready(function () {
               nombresimputation++;
               codprojettableau[nombresimputation - 1] = value.codeprojet;
               tacheteableau[[nombresimputation - 1]] = value.tache;
+              activitetableau[nombresimputation - 1] = value.activite;
               commentairelab[nombresimputation - 1] = value.commentaire;
               /*$("#tableB").append(
                               "<td><span>Code Projet: " + value.codeprojet + "</span></td>"
@@ -153,7 +155,7 @@ $(document).ready(function () {
               "<td><span>" +
               tacheteableau[i] +
               "</span></td>" +
-              "<td></td>" +
+              "<td>" + activitetableau[i] + "</td>" +
               '<td><input id="m1' +
               imputID[i] +
               '" type="number" min="0" max="1" step="0.25" class="form-control-imput" value=' +

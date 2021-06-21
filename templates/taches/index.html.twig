@@ -51,6 +51,12 @@
 								<th>
 									Description
 								</th>
+								<th>
+									Code Projet
+								</th>
+								<th>
+									Domaine
+								</th>
 								{% if is_granted('ROLE_ADMIN') %}
 									<th>
 										Actions
@@ -69,6 +75,12 @@
 									</td>
 									<td>
 										{{ tach.description }}
+									</td>
+									<td>
+										{{ tach.codeprojet }}
+									</td>
+									<td>
+										{{ tach.domaine }}
 									</td>
 
 									<td>

@@ -91,10 +91,26 @@ class CodeProjet
      */
     private $dateVs;
 
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    private $budgetCLOE;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    private $chargeCLOE;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Taches::class, mappedBy="codeProjet")
+     */
+    private $tache;
+
     public function __construct()
     {
         $this->imputations = new ArrayCollection();
         $this->dateVs = new ArrayCollection();
+        $this->tache = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -297,6 +313,60 @@ class CodeProjet
             // set the owning side to null (unless already changed)
             if ($dateV->getCodeprojet() === $this) {
                 $dateV->setCodeprojet(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getBudgetCLOE(): ?float
+    {
+        return $this->budgetCLOE;
+    }
+
+    public function setBudgetCLOE(?float $budgetCLOE): self
+    {
+        $this->budgetCLOE = $budgetCLOE;
+
+        return $this;
+    }
+
+    public function getChargeCLOE(): ?float
+    {
+        return $this->chargeCLOE;
+    }
+
+    public function setChargeCLOE(?float $chargeCLOE): self
+    {
+        $this->chargeCLOE = $chargeCLOE;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Taches[]
+     */
+    public function getTache(): Collection
+    {
+        return $this->tache;
+    }
+
+    public function addTache(Taches $tache): self
+    {
+        if (!$this->tache->contains($tache)) {
+            $this->tache[] = $tache;
+            $tache->setCodeProjet($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTache(Taches $tache): self
+    {
+        if ($this->tache->removeElement($tache)) {
+            // set the owning side to null (unless already changed)
+            if ($tache->getCodeProjet() === $this) {
+                $tache->setCodeProjet(null);
             }
         }
 

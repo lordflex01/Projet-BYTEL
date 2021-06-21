@@ -26,6 +26,22 @@ class TachesType extends AbstractType
                 'attr' => [
                     'placeholder' => "Veuillez entrer une description"
                 ],
+            ])
+            ->add('domaine', ChoiceType::class, [
+                'required' => true,
+                'multiple' => false,
+                'expanded' => true,
+                'choices' => [
+                    'NRJ' => 'NRJ',
+                    'DECO' => 'DECO',
+                    'CLOE' => 'CLOE',
+                ],
+            ])
+            ->add('codeprojet', EntityType::class, [
+                'required' => true,
+                'multiple' => false,
+                'expanded' => false,
+                'class' => CodeProjet::class,
             ]);
     }
 
