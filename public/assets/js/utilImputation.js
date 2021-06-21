@@ -698,8 +698,3 @@ $(document).ready(function () {
     $(this).closest("tr").remove();
   });
 });
-
-$(function () {
-  $(document).tooltip({items:"select,option",position:{ my: "left top", at: "left bottom"}
-  }); 
-});
