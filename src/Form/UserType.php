@@ -34,6 +34,11 @@ class UserType extends AbstractType
                     'placeholder' => "xxxxx@yyyy.zzzz"
                 ]
             ])
+            ->add('salaire', TextType::class, [
+                'attr' => [
+                    'placeholder' => "Veuillez entrer le salaire journalier du collaborateur"
+                ]
+            ])
             ->add('roles', ChoiceType::class, [
                 'required' => true,
                 'multiple' => false,

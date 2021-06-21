@@ -11,8 +11,8 @@
 					</div>
 					<div class="col-sm-6">
 						{% if is_granted('ROLE_ADMIN') %}
-						<a class="btn btn-primary" style="float: right;" href="{{ path('projet_new') }}">Ajouter un nouveau projet</a>
-							{% endif %}
+							<a class="btn btn-primary" style="float: right;" href="{{ path('projet_new') }}">Ajouter un nouveau projet</a>
+						{% endif %}
 					</div>
 				</div>
 			</div>
@@ -55,7 +55,9 @@
 								<th>
 									Statut
 								</th>
-								<th>Actions</th>
+								{% if is_granted('ROLE_ADMIN') %}
+									<th>Actions</th>
+								{% endif %}
 							</tr>
 						</thead>
 						<tbody>
@@ -73,8 +75,7 @@
 										{{ projet.description }}
 									</td>
 									<td>
-										<a href="{{ path('code_projet_index') }}">Code projet
-											{{ projet.libelle }}</a>
+										<a href="{{ path('code_projet_index') }}">Code projet</a>
 
 									</td>
 									{% if projet.statut == 'yes' %}

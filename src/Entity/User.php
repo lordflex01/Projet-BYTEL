@@ -85,6 +85,11 @@ class User implements UserInterface
      */
     private $imputs;
 
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    private $Salaire;
+
     public function __construct()
     {
         $this->imputations = new ArrayCollection();
@@ -296,6 +301,18 @@ class User implements UserInterface
                 $imput->setUser(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getSalaire(): ?float
+    {
+        return $this->Salaire;
+    }
+
+    public function setSalaire(?float $Salaire): self
+    {
+        $this->Salaire = $Salaire;
 
         return $this;
     }

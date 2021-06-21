@@ -54,29 +54,29 @@ $(document).ready(function () {
       success: function (data, status) {
         var e = $(
           '<th><button id="addRow" type="button" class="btn btn-block btn-info btn-sm" style="width: 30px;"><i class="fa fa-plus"></i></button></th>' +
-            "<th>Code Projet</th>" +
-            "<th>Tâches</th>" +
-            "<th></th>" +
-            '<th style="width: 40px">Lun ' +
-            days[0] +
-            '</th><th  style="width: 40px">Mar ' +
-            days[1] +
-            '</th><th  style="width: 40px">Mer ' +
-            days[2] +
-            '</th><th  style="width: 40px">Jeu ' +
-            days[3] +
-            "</th>" +
-            '<th  style="width: 40px">Vend ' +
-            days[4] +
-            "</th>" +
-            '<th  style="width: 40px;color:red">Total</th>' +
-            '<th  style="width: 40px;color:green">Commentaires</th></tr>'
+          "<th>Code Projet</th>" +
+          "<th>Tâches</th>" +
+          "<th>Activiter</th>" +
+          '<th style="width: 40px">Lun ' +
+          days[0] +
+          '</th><th  style="width: 40px">Mar ' +
+          days[1] +
+          '</th><th  style="width: 40px">Mer ' +
+          days[2] +
+          '</th><th  style="width: 40px">Jeu ' +
+          days[3] +
+          "</th>" +
+          '<th  style="width: 40px">Vend ' +
+          days[4] +
+          "</th>" +
+          '<th  style="width: 40px;color:red">Total</th>' +
+          '<th  style="width: 40px;color:green">Commentaires</th></tr>'
         );
 
         $("#entete").html("");
         $("#entete").append(e);
         $("#tableB").html("");
-        
+
         compteurligneajout = 0;
         var a = 0;
         var b = 0;
@@ -93,6 +93,7 @@ $(document).ready(function () {
         nombresimputation = 0;
         let codprojettableau = [];
         let tacheteableau = [];
+        let activitetableau = [];
         let nmbdedatV = 0;
         let commentairelab = [];
         let totalconteur = 0;
@@ -112,6 +113,7 @@ $(document).ready(function () {
               nombresimputation++;
               codprojettableau[nombresimputation - 1] = value.codeprojet;
               tacheteableau[[nombresimputation - 1]] = value.tache;
+              activitetableau[nombresimputation - 1] = value.activite;
               commentairelab[nombresimputation - 1] = value.commentaire;
               /*$("#tableB").append(
                               "<td><span>Code Projet: " + value.codeprojet + "</span></td>"
@@ -148,45 +150,45 @@ $(document).ready(function () {
           for (let i = 0; i < nombreimputation; i++) {
             var LLL = $(
               "<tr><td></td><td><span>" +
-                codprojettableau[i] +
-                "</span></td>" +
-                "<td><span>" +
-                tacheteableau[i] +
-                "</span></td>" +
-                "<td></td>" +
-                '<td><input id="m1' +
-                imputID[i] +
-                '" type="number" min="0" max="1" step="0.25" class="form-control-imput" value=' +
-                H[0 + j] +
-                '></td><td><input id="m2' +
-                imputID[i] +
-                '" type="number" min="0" max="1" step="0.25" class="form-control-imput" value=' +
-                H[1 + j] +
-                '></td><td><input id="m3' +
-                imputID[i] +
-                '" type="number" min="0" max="1" step="0.25" class="form-control-imput" value=' +
-                H[2 + j] +
-                '></td><td><input id="m4' +
-                imputID[i] +
-                '" type="number" min="0" max="1" step="0.25" class="form-control-imput" value=' +
-                H[3 + j] +
-                '></td><td><input id="m5' +
-                imputID[i] +
-                '" type="number" min="0" max="1" step="0.25" class="form-control-imput" value=' +
-                H[4 + j] +
-                "></td>" +
-                '<td><input type="text" min="0" max="1" step="0.25" name="totalRow" class="form-control-total" value=' +
-                t[i] +
-                "></td>" +
-                '<td><input id="com' +
-                i +
-                '" style="max-width: 200px" type="text" class="form-control-imput" value=' +
-                commentairelab[i] +
-                "></td>" +
-                '<td><i class="fa fa-trash"  style="font-size: 16px;cursor:pointer;margin-top: 8px;color: #cc1919;"id="suppCode' +
-                i +
-                '"></i></td>' +
-                "</tr>"
+              codprojettableau[i] +
+              "</span></td>" +
+              "<td><span>" +
+              tacheteableau[i] +
+              "</span></td>" +
+              "<td>" + activitetableau[i] + "</td>" +
+              '<td><input id="m1' +
+              imputID[i] +
+              '" type="number" min="0" max="1" step="0.25" class="form-control-imput" value=' +
+              H[0 + j] +
+              '></td><td><input id="m2' +
+              imputID[i] +
+              '" type="number" min="0" max="1" step="0.25" class="form-control-imput" value=' +
+              H[1 + j] +
+              '></td><td><input id="m3' +
+              imputID[i] +
+              '" type="number" min="0" max="1" step="0.25" class="form-control-imput" value=' +
+              H[2 + j] +
+              '></td><td><input id="m4' +
+              imputID[i] +
+              '" type="number" min="0" max="1" step="0.25" class="form-control-imput" value=' +
+              H[3 + j] +
+              '></td><td><input id="m5' +
+              imputID[i] +
+              '" type="number" min="0" max="1" step="0.25" class="form-control-imput" value=' +
+              H[4 + j] +
+              "></td>" +
+              '<td><input type="text" min="0" max="1" step="0.25" name="totalRow" class="form-control-total" value=' +
+              t[i] +
+              "></td>" +
+              '<td><input id="com' +
+              i +
+              '" style="max-width: 200px" type="text" class="form-control-imput" value=' +
+              commentairelab[i] +
+              "></td>" +
+              '<td><i class="fa fa-trash"  style="font-size: 16px;cursor:pointer;margin-top: 8px;color: #cc1919;"id="suppCode' +
+              i +
+              '"></i></td>' +
+              "</tr>"
             );
             j = j + 5;
             $("#tableB").append(LLL);
@@ -222,16 +224,16 @@ $(document).ready(function () {
 
         var footer = $(
           "<tr><td></td>" +
-            "<td><span style='width: 40px;color:red;font-weight:bold'>Total</span></td>" +
-            "<td></td>" +
-            "<td></td>" +
-            '<td style="width: 40px"><input type=text" class="form-control-imput"  id="totalCol"></td>' +
-            '<td style="width: 40px"><input type="text" class="form-control-imput" id="totalCol"></td>' +
-            '<td style="width: 40px"><input type="text" class="form-control-imput" id="totalCol"></td>' +
-            '<td style="width: 40px"><input type="text" class="form-control-imput" id="totalCol"></td>' +
-            '<td style="width: 40px"><input type="text" class="form-control-imput" id="totalCol"></td>' +
-            '<td  style="width: 40px;color:red"></td>' +
-            '<td  style="width: 40px;color:green"></td></tr>'
+          "<td><span style='width: 40px;color:red;font-weight:bold'>Total</span></td>" +
+          "<td></td>" +
+          "<td></td>" +
+          '<td style="width: 40px"><input type=text" class="form-control-imput"  id="totalCol"></td>' +
+          '<td style="width: 40px"><input type="text" class="form-control-imput" id="totalCol"></td>' +
+          '<td style="width: 40px"><input type="text" class="form-control-imput" id="totalCol"></td>' +
+          '<td style="width: 40px"><input type="text" class="form-control-imput" id="totalCol"></td>' +
+          '<td style="width: 40px"><input type="text" class="form-control-imput" id="totalCol"></td>' +
+          '<td  style="width: 40px;color:red"></td>' +
+          '<td  style="width: 40px;color:green"></td></tr>'
         );
 
         // $("#footTable").html("");
@@ -281,7 +283,7 @@ $(document).ready(function () {
             compteurligneajout +
             '"  style="max-width: 200px" class="form-control-imput"></td>' +
             '<td><i class="fa fa-trash" id="suppRow" style="font-size: 16px;cursor:pointer;margin-top: 8px;color: #cc1919;"></i></td></tr>';
- 
+
           scntDiv.append(add);
           i++;
           return false;

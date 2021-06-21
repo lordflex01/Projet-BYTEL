@@ -400,6 +400,7 @@ class ImputController extends AbstractController
                     'imputID' => $dateV->getImput()->getId(),
                     'user' => $dateV->getImput()->getUser()->getId(),
                     'tache' => $dateV->getTache()->getLibelle(),
+                    'activite' => $dateV->getActivite()->getLibelle(),
                     'commentaire' =>  $dateV->getImput()->getCommentaire(),
                     'week' => $week,
                     'codeprojet' => $dateV->getCodeprojet()->getLibelle(),

@@ -28,6 +28,16 @@
 								{{form_widget( form.description)}}
 								{% do form.description.setRendered %}
 							</div>
+							<div class="form-group">
+								<label for="{{form.codeprojet.vars.id}}">Code Projet</label>
+								{{form_widget( form.codeprojet)}}
+								{% do form.codeprojet.setRendered %}
+							</div>
+							<div class="form-group">
+								<label for="{{form.domaine.vars.id}}">Domaine</label>
+								{{form_widget( form.domaine)}}
+								{% do form.domaine.setRendered %}
+							</div>
 						</div>
 						<!-- /.card-body -->
 						<div class=" card-footer">
