@@ -430,7 +430,7 @@ class ImputController extends AbstractController
         $donnees = json_decode($request->getContent());
         $list = array(
             //these are the columns
-            array('Firstname', 'Lastname',),
+            array('CENTRE_DE_COUT_RESSOURCE', 'STRUCTURE_BT_RESSOURCE','INTERNE_/_EXTERNE','NOM_RESSOURCE',),
             //these are the rows
             array('Andrei', 'Boar'),
             array('John', 'Doe')

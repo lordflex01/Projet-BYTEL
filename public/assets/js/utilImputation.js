@@ -54,23 +54,23 @@ $(document).ready(function () {
       success: function (data, status) {
         var e = $(
           '<th><button id="addRow" type="button" class="btn btn-block btn-info btn-sm" style="width: 30px;"><i class="fa fa-plus"></i></button></th>' +
-          "<th>Code Projet</th>" +
-          "<th>Tâches</th>" +
-          "<th>Activiter</th>" +
-          '<th style="width: 40px">Lun ' +
-          days[0] +
-          '</th><th  style="width: 40px">Mar ' +
-          days[1] +
-          '</th><th  style="width: 40px">Mer ' +
-          days[2] +
-          '</th><th  style="width: 40px">Jeu ' +
-          days[3] +
-          "</th>" +
-          '<th  style="width: 40px">Vend ' +
-          days[4] +
-          "</th>" +
-          '<th  style="width: 40px;color:red">Total</th>' +
-          '<th  style="width: 40px;color:green">Commentaires</th></tr>'
+            "<th>Code Projet</th>" +
+            "<th>Tâches</th>" +
+            "<th>Activitées</th>" +
+            '<th style="width: 40px">Lun ' +
+            days[0] +
+            '</th><th  style="width: 40px">Mar ' +
+            days[1] +
+            '</th><th  style="width: 40px">Mer ' +
+            days[2] +
+            '</th><th  style="width: 40px">Jeu ' +
+            days[3] +
+            "</th>" +
+            '<th  style="width: 40px">Vend ' +
+            days[4] +
+            "</th>" +
+            '<th  style="width: 40px;color:red">Total</th>' +
+            '<th  style="width: 40px;color:green">Commentaires</th></tr>'
         );
 
         $("#entete").html("");
@@ -150,45 +150,47 @@ $(document).ready(function () {
           for (let i = 0; i < nombreimputation; i++) {
             var LLL = $(
               "<tr><td></td><td><span>" +
-              codprojettableau[i] +
-              "</span></td>" +
-              "<td><span>" +
-              tacheteableau[i] +
-              "</span></td>" +
-              "<td>" + activitetableau[i] + "</td>" +
-              '<td><input id="m1' +
-              imputID[i] +
-              '" type="number" min="0" max="1" step="0.25" class="form-control-imput" value=' +
-              H[0 + j] +
-              '></td><td><input id="m2' +
-              imputID[i] +
-              '" type="number" min="0" max="1" step="0.25" class="form-control-imput" value=' +
-              H[1 + j] +
-              '></td><td><input id="m3' +
-              imputID[i] +
-              '" type="number" min="0" max="1" step="0.25" class="form-control-imput" value=' +
-              H[2 + j] +
-              '></td><td><input id="m4' +
-              imputID[i] +
-              '" type="number" min="0" max="1" step="0.25" class="form-control-imput" value=' +
-              H[3 + j] +
-              '></td><td><input id="m5' +
-              imputID[i] +
-              '" type="number" min="0" max="1" step="0.25" class="form-control-imput" value=' +
-              H[4 + j] +
-              "></td>" +
-              '<td><input type="text" min="0" max="1" step="0.25" name="totalRow" class="form-control-total" value=' +
-              t[i] +
-              "></td>" +
-              '<td><input id="com' +
-              i +
-              '" style="max-width: 200px" type="text" class="form-control-imput" value=' +
-              commentairelab[i] +
-              "></td>" +
-              '<td><i class="fa fa-trash"  style="font-size: 16px;cursor:pointer;margin-top: 8px;color: #cc1919;"id="suppCode' +
-              i +
-              '"></i></td>' +
-              "</tr>"
+                codprojettableau[i] +
+                "</span></td>" +
+                "<td><span>" +
+                tacheteableau[i] +
+                "</span></td>" +
+                "<td>" +
+                activitetableau[i] +
+                "</td>" +
+                '<td><input id="m1' +
+                imputID[i] +
+                '" type="number" min="0" max="1" step="0.25" class="form-control-imput" value=' +
+                H[0 + j] +
+                '></td><td><input id="m2' +
+                imputID[i] +
+                '" type="number" min="0" max="1" step="0.25" class="form-control-imput" value=' +
+                H[1 + j] +
+                '></td><td><input id="m3' +
+                imputID[i] +
+                '" type="number" min="0" max="1" step="0.25" class="form-control-imput" value=' +
+                H[2 + j] +
+                '></td><td><input id="m4' +
+                imputID[i] +
+                '" type="number" min="0" max="1" step="0.25" class="form-control-imput" value=' +
+                H[3 + j] +
+                '></td><td><input id="m5' +
+                imputID[i] +
+                '" type="number" min="0" max="1" step="0.25" class="form-control-imput" value=' +
+                H[4 + j] +
+                "></td>" +
+                '<td><input type="text" min="0" max="1" step="0.25" name="totalRow" class="form-control-total" value=' +
+                t[i] +
+                "></td>" +
+                '<td><input id="com' +
+                i +
+                '" style="max-width: 200px" type="text" class="form-control-imput" value=' +
+                commentairelab[i] +
+                "></td>" +
+                '<td><i class="fa fa-trash"  style="font-size: 16px;cursor:pointer;margin-top: 8px;color: #cc1919;"id="suppCode' +
+                i +
+                '"></i></td>' +
+                "</tr>"
             );
             j = j + 5;
             $("#tableB").append(LLL);
@@ -224,16 +226,16 @@ $(document).ready(function () {
 
         var footer = $(
           "<tr><td></td>" +
-          "<td><span style='width: 40px;color:red;font-weight:bold'>Total</span></td>" +
-          "<td></td>" +
-          "<td></td>" +
-          '<td style="width: 40px"><input type=text" class="form-control-imput"  id="totalCol"></td>' +
-          '<td style="width: 40px"><input type="text" class="form-control-imput" id="totalCol"></td>' +
-          '<td style="width: 40px"><input type="text" class="form-control-imput" id="totalCol"></td>' +
-          '<td style="width: 40px"><input type="text" class="form-control-imput" id="totalCol"></td>' +
-          '<td style="width: 40px"><input type="text" class="form-control-imput" id="totalCol"></td>' +
-          '<td  style="width: 40px;color:red"></td>' +
-          '<td  style="width: 40px;color:green"></td></tr>'
+            "<td><span style='width: 40px;color:red;font-weight:bold'>Total</span></td>" +
+            "<td></td>" +
+            "<td></td>" +
+            '<td style="width: 40px"><input type=text" class="form-control-imput"  id="totalCol"></td>' +
+            '<td style="width: 40px"><input type="text" class="form-control-imput" id="totalCol"></td>' +
+            '<td style="width: 40px"><input type="text" class="form-control-imput" id="totalCol"></td>' +
+            '<td style="width: 40px"><input type="text" class="form-control-imput" id="totalCol"></td>' +
+            '<td style="width: 40px"><input type="text" class="form-control-imput" id="totalCol"></td>' +
+            '<td  style="width: 40px;color:red"></td>' +
+            '<td  style="width: 40px;color:green"></td></tr>'
         );
 
         // $("#footTable").html("");
@@ -242,27 +244,45 @@ $(document).ready(function () {
         $("#addRow").click(function () {
           compteurligneajout++;
           var add =
-            '<tr><td></td><td><select class="form-control select2" id="codeP' +
+            '<tr><td></td><td><select  class="form-control select2" id="codeP' +
             compteurligneajout +
-            '" style="width: 100%;">';
+            '" style="width: 100%;"><option>--Select--</option>';
           for (liste = 0; liste < codeP.length; liste++) {
-            add += "<option value = " + codeP[liste].id + ">" + codeP[liste].libelle + "</option>";
+            add +=
+              "<option value = " +
+              codeP[liste].id +
+              ">" +
+              codeP[liste].libelle +
+              "</option>";
           }
-          add += "</select></td>" +
-            '<td><select class="form-control select2" id="tache' +
+          add +=
+            "</select></td>" +
+            '<td><select  class="form-control select2" id="tache' +
             compteurligneajout +
-            '" style="width: 100%;">';
+            '" style="width: 100%;"><option>--Select--</option>';
           for (liste = 0; liste < tache.length; liste++) {
-            add += "<option value = " + tache[liste].id + ">" + tache[liste].libelle + "</option>";
+            add +=
+              "<option value = " +
+              tache[liste].id +
+              ">" +
+              tache[liste].libelle +
+              "</option>";
           }
-          add += "</select></td>" +
+          add +=
+            "</select></td>" +
             '<td><select class="form-control select2" id="activite' +
             compteurligneajout +
-            '" style="width: 100%;">';
+            '" style="width: 100%;"><option>--Select--</option>';
           for (liste = 0; liste < activite.length; liste++) {
-            add += "<option value = " + activite[liste].id + ">" + activite[liste].libelle + "</option>";
+            add +=
+              "<option value = " +
+              activite[liste].id +
+              ">" +
+              activite[liste].libelle +
+              "</option>";
           }
-          add += "</select></td>" +
+          add +=
+            "</select></td>" +
             '<td><input type="number" id="i1' +
             compteurligneajout +
             '" min="0" max="1" step="0.25" class="form-control-imput" value="0"></td>' +
@@ -300,7 +320,6 @@ $(document).ready(function () {
         });
 
         //tooltip option
-
       },
       error: function (xhr, textStatus, errorThrown) {
         alert(xhr.responseText);
@@ -459,9 +478,10 @@ $(document).ready(function () {
             timer: 6000,
           });
 
-          Toast.fire({ icon: "error", title: " Une des modifications est > 1 dans une même journée . " });
-
-
+          Toast.fire({
+            icon: "error",
+            title: " Une des modifications est > 1 dans une même journée . ",
+          });
         }
       },
       error: function (xhr, textStatus, errorThrown) {
@@ -498,8 +518,10 @@ $(document).ready(function () {
             timer: 6000,
           });
 
-          Toast.fire({ icon: "error", title: " 'Un des couples têche et code projet existe deja . " });
-
+          Toast.fire({
+            icon: "error",
+            title: " 'Un des couples têche et code projet existe deja . ",
+          });
         }
         if (response == 202) {
           var Toast = Swal.mixin({
@@ -509,8 +531,10 @@ $(document).ready(function () {
             timer: 6000,
           });
 
-          Toast.fire({ icon: "error", title: " Une des imputations est > 1 dans une même journée. " });
-
+          Toast.fire({
+            icon: "error",
+            title: " Une des imputations est > 1 dans une même journée. ",
+          });
         }
       },
       error: function (xhr, textStatus, errorThrown) {
@@ -559,7 +583,6 @@ $(document).ready(function () {
         alert(xhr.responseText);
       },
     });
-
   });
   //FIN 1er Suppression
 
@@ -603,7 +626,6 @@ $(document).ready(function () {
         alert(xhr.responseText);
       },
     });
-
   });
   //FIN 2er Suppression
 
@@ -647,7 +669,6 @@ $(document).ready(function () {
         alert(xhr.responseText);
       },
     });
-
   });
   //FIN 3er Suppression
 
@@ -691,7 +712,6 @@ $(document).ready(function () {
         alert(xhr.responseText);
       },
     });
-
   });
   //FIN 4er Suppression
   //supprimer une ligne
