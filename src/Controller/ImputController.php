@@ -428,34 +428,37 @@ class ImputController extends AbstractController
     public function exportAction(DateVRepository $dateVRepository, ImputRepository $imputRepository, Request $request)
     {
         $donnees = json_decode($request->getContent());
+
         $dateVs = $dateVRepository->findAll();
-        $imput = $imputRepository->findAll();
-        $date = date('Y-m-d H:i:s');
         $tabexport = [];
         $i = 0;
-        $semaine = 0;
         $compteurDateV = 0;
         $Timputsemaine = 0;
+
+        $jour = new DateTime($donnees->dates[0]);
+        $jourj = $jour->format('Y-m-d');
         foreach ($dateVs as $dateV) {
-            //incremente pour afficher la dernier DateV pour recuperer le total
-            $compteurDateV++;
-            $Timputsemaine += $dateV->getValeur();
-            //condition pour ajoutez la ligne de l'export avec les information
-            if ($compteurDateV == 5) {
-                $tabexport[$i] = array(
-                    'D00550', 'Pole Digital B2B', 'Interne', $dateV->getImput()->getUser()->getUsername(),
-                    $dateV->getImput()->getUser()->getEmail(), $dateV->getTache()->getDomaine(), $dateV->getImput()->getUser()->getPoste(),
-                    '', '', '', '', '', $dateV->getCodeprojet()->getLibelle(), $dateV->getCodeprojet()->getDescription(),
-                    $dateV->getTache()->getLibelle(), $dateV->getActivite()->getLibelle(), '', $dateV->getDate()->format('Y-m-d'), 'Present',
-                    $dateV->getDate()->format('Y-m-d'), $Timputsemaine, $dateV->getImput()->getCommentaire(), '', 'N° de semaine',
-                    $dateV->getImput()->getUser()->getSalaire(), 'somme des cout', 'DEBUT charge', '', '', '', ''
-                );
-                $compteurDateV = 0;
-                $i++;
-                $Timputsemaine = 0;
+            $jourbase = $dateV->getDate()->format('Y-m-d');
+            if (date($jourj) == date($jourbase) || $compteurDateV != 0) {
+                //incremente pour afficher la dernier DateV pour recuperer le total
+                $compteurDateV++;
+                $Timputsemaine += $dateV->getValeur();
+                //condition pour ajoutez la ligne de l'export avec les information
+                if ($compteurDateV == 5) {
+                    $tabexport[$i] = array(
+                        'D00550', 'Pole Digital B2B', 'Interne', $dateV->getImput()->getUser()->getUsername(),
+                        $dateV->getImput()->getUser()->getEmail(), $dateV->getTache()->getDomaine(), $dateV->getImput()->getUser()->getPoste(),
+                        '', '', '', '', '', $dateV->getCodeprojet()->getLibelle(), $dateV->getCodeprojet()->getDescription(),
+                        $dateV->getTache()->getLibelle(), $dateV->getActivite()->getLibelle(), '', $donnees->year, 'Present',
+                        $jourj, $Timputsemaine, $dateV->getImput()->getCommentaire(), '', $donnees->week,
+                        $dateV->getImput()->getUser()->getSalaire(), 'somme des cout', 'DEBUT charge', '', '', '', ''
+                    );
+                    $compteurDateV = 0;
+                    $i++;
+                    $Timputsemaine = 0;
+                }
             }
         }
-
 
         $list = array(
             //these are the columns
@@ -467,15 +470,13 @@ class ImputController extends AbstractController
                 'COMMENT_MOIS', 'no_semaine', 'Coût unitaire', 'Montant', 'Charge DEV', 'Charge Testeur', 'Charge Analyste',
                 'Charge Pilotage', 'Charge architecte'
             ),
-            $tabexport[0],
-            $tabexport[1],
-            $tabexport[2],
-            $tabexport[3],
-            $tabexport[4],
             //these are the rows
-            array('Andrei', 'Boar'),
-            array('John', 'Doe')
+            // array('Andrei', 'Boar'),
+            //array('John', 'Doe')
         );
+        for ($j = 0; $j < $i; $j++) {
+            $list[$j + 1] = $tabexport[$j];
+        }
 
         $fp = fopen('php://temp', 'w+');
         foreach ($list as $fields) {

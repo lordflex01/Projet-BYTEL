@@ -25,8 +25,10 @@ class CodeProjetType extends AbstractType
             ])
             ->add('description', TextType::class, [
                 'attr' => [
-                    'placeholder' => "Veuillez entrer une description"
-                ]
+                    'placeholder' => "Veuillez entrer une description",
+
+                ],
+
             ])
             ->add('statut', CheckboxType::class, [
                 'label_attr' => ['class' => 'switch-custom'],
@@ -35,42 +37,48 @@ class CodeProjetType extends AbstractType
             ->add('budget', IntegerType::class, [
                 'attr' => [
                     'placeholder' => "Veuillez entrer votre budget"
-                ]
+                ],
             ])
             ->add('budgetNRJ', TextType::class, [
                 'attr' => [
                     'placeholder' => "Veuillez entrer le budget d'NRJ"
-                ]
+                ],
+                'required' => false,
             ])
             ->add('budgetDECO', TextType::class, [
                 'attr' => [
                     'placeholder' => "Veuillez entrer le budget de DECO"
-                ]
+                ],
+                'required' => false,
             ])
             ->add('budgetCLOE', TextType::class, [
                 'attr' => [
                     'placeholder' => "Veuillez entrer le budget de CLOE"
-                ]
+                ],
+                'required' => false,
             ])
             ->add('chageJH', TextType::class, [
                 'attr' => [
                     'placeholder' => "Veuillez entrer la charge en jour-homme"
-                ]
+                ],
             ])
             ->add('chageNRJ', TextType::class, [
                 'attr' => [
                     'placeholder' => "Veuillez entrer la charge en jour-homme pour le projet NRJ"
-                ]
+                ],
+                'required' => false,
             ])
             ->add('chageDECO', TextType::class, [
                 'attr' => [
                     'placeholder' => "Veuillez entrer la charge en jour-homme pour le projet DECO"
-                ]
+                ],
+                'required' => false,
             ])
             ->add('chargeCLOE', TextType::class, [
                 'attr' => [
                     'placeholder' => "Veuillez entrer la charge en jour-homme pour le projet CLOE"
-                ]
+                ],
+                'required' => false,
             ])
             ->add('dateD', DateType::class, [
                 'widget' => 'single_text',

@@ -56,7 +56,7 @@ $(document).ready(function () {
           '<th><button id="addRow" type="button" class="btn btn-block btn-info btn-sm" style="width: 30px;"><i class="fa fa-plus"></i></button></th>' +
           "<th>Code Projet</th>" +
           "<th>Tâches</th>" +
-          "<th>Activiter</th>" +
+          "<th>Activitées</th>" +
           '<th style="width: 40px">Lun ' +
           days[0] +
           '</th><th  style="width: 40px">Mar ' +
@@ -155,7 +155,9 @@ $(document).ready(function () {
               "<td><span>" +
               tacheteableau[i] +
               "</span></td>" +
-              "<td>" + activitetableau[i] + "</td>" +
+              "<td>" +
+              activitetableau[i] +
+              "</td>" +
               '<td><input id="m1' +
               imputID[i] +
               '" type="number" min="0" max="1" step="0.25" class="form-control-imput" value=' +
@@ -242,27 +244,45 @@ $(document).ready(function () {
         $("#addRow").click(function () {
           compteurligneajout++;
           var add =
-            '<tr><td></td><td><select class="form-control select2" id="codeP' +
+            '<tr><td></td><td><select  class="form-control select2" id="codeP' +
             compteurligneajout +
-            '" style="width: 100%;">';
+            '" style="width: 100%;"><option>--Select--</option>';
           for (liste = 0; liste < codeP.length; liste++) {
-            add += "<option value = " + codeP[liste].id + ">" + codeP[liste].libelle + "</option>";
+            add +=
+              "<option value = " +
+              codeP[liste].id +
+              ">" +
+              codeP[liste].libelle +
+              "</option>";
           }
-          add += "</select></td>" +
-            '<td><select class="form-control select2" id="tache' +
+          add +=
+            "</select></td>" +
+            '<td><select  class="form-control select2" id="tache' +
             compteurligneajout +
-            '" style="width: 100%;">';
+            '" style="width: 100%;"><option>--Select--</option>';
           for (liste = 0; liste < tache.length; liste++) {
-            add += "<option value = " + tache[liste].id + ">" + tache[liste].libelle + "</option>";
+            add +=
+              "<option value = " +
+              tache[liste].id +
+              ">" +
+              tache[liste].libelle +
+              "</option>";
           }
-          add += "</select></td>" +
+          add +=
+            "</select></td>" +
             '<td><select class="form-control select2" id="activite' +
             compteurligneajout +
-            '" style="width: 100%;">';
+            '" style="width: 100%;"><option>--Select--</option>';
           for (liste = 0; liste < activite.length; liste++) {
-            add += "<option value = " + activite[liste].id + ">" + activite[liste].libelle + "</option>";
+            add +=
+              "<option value = " +
+              activite[liste].id +
+              ">" +
+              activite[liste].libelle +
+              "</option>";
           }
-          add += "</select></td>" +
+          add +=
+            "</select></td>" +
             '<td><input type="number" id="i1' +
             compteurligneajout +
             '" min="0" max="1" step="0.25" class="form-control-imput" value="0"></td>' +
@@ -300,7 +320,6 @@ $(document).ready(function () {
         });
 
         //tooltip option
-
       },
       error: function (xhr, textStatus, errorThrown) {
         alert(xhr.responseText);
@@ -459,9 +478,10 @@ $(document).ready(function () {
             timer: 6000,
           });
 
-          Toast.fire({ icon: "error", title: " Une des modifications est > 1 dans une même journée . " });
-
-
+          Toast.fire({
+            icon: "error",
+            title: " Une des modifications est > 1 dans une même journée . ",
+          });
         }
       },
       error: function (xhr, textStatus, errorThrown) {
@@ -498,8 +518,10 @@ $(document).ready(function () {
             timer: 6000,
           });
 
-          Toast.fire({ icon: "error", title: " 'Un des couples têche et code projet existe deja . " });
-
+          Toast.fire({
+            icon: "error",
+            title: " 'Un des couples têche et code projet existe deja . ",
+          });
         }
         if (response == 202) {
           var Toast = Swal.mixin({
@@ -509,8 +531,10 @@ $(document).ready(function () {
             timer: 6000,
           });
 
-          Toast.fire({ icon: "error", title: " Une des imputations est > 1 dans une même journée. " });
-
+          Toast.fire({
+            icon: "error",
+            title: " Une des imputations est > 1 dans une même journée. ",
+          });
         }
       },
       error: function (xhr, textStatus, errorThrown) {
@@ -559,7 +583,6 @@ $(document).ready(function () {
         alert(xhr.responseText);
       },
     });
-
   });
   //FIN 1er Suppression
 
@@ -603,7 +626,6 @@ $(document).ready(function () {
         alert(xhr.responseText);
       },
     });
-
   });
   //FIN 2er Suppression
 
@@ -647,7 +669,6 @@ $(document).ready(function () {
         alert(xhr.responseText);
       },
     });
-
   });
   //FIN 3er Suppression
 
@@ -691,12 +712,76 @@ $(document).ready(function () {
         alert(xhr.responseText);
       },
     });
-
   });
   //FIN 4er Suppression
   //supprimer une ligne
   $(document).on("click", "#suppRow", function () {
     compteurligneajout--;
     $(this).closest("tr").remove();
+  });
+});
+//////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////Fonction Export/////////////////////////////////////////////////////
+$(document).ready(function () {
+  $("#export").click(function () {
+    var parseDates = (inp) => {
+      let year = parseInt(inp.slice(0, 4), 10);
+      let week = parseInt(inp.slice(6), 10);
+
+      let day = 1 + (week - 0) * 7; // 1st of January + 7 days for each week
+
+      let dayOffset = new Date(year, 0, 1).getDay(); // we need to know at what day of the week the year start
+
+      dayOffset--; // depending on what day you want the week to start increment or decrement this value. This should make the week start on a monday
+
+      let days = [];
+      for (
+        let i = 0;
+        i < 7;
+        i++ // do this 7 times, once for every day
+      )
+        days.push(new Date(year, 0, day - dayOffset + i));
+      // add a new Date object to the array with an offset of i days relative to the first day of the week
+      return days;
+    };
+    var week = document.querySelector("#date-input");
+    var dates = parseDates(week.value);
+    let days = [];
+    let Z;
+    let w;
+    for (let i = 0; i < 7; i++) {
+      Z = dates[i].toString();
+      w = Z.split(" ");
+      days[i] = w[2];
+    }
+
+    var date = $("#date-input").val().split("-");
+    week = date[1];
+    year = date[0];
+    day = dates[0];
+
+    $("#idCard").html(week);
+    dates[0].setHours(dates[0].getHours() + 2);
+    let data = {
+      week: week,
+      year: year,
+      dates: dates,
+
+    }
+
+    $.ajax({
+      url: `/export`,
+      type: "POST",
+      processData: false,
+      contentType: false,
+      data: JSON.stringify(data),
+      dataType: "json",
+      async: true,
+      success: function (response) {
+      },
+      error: function (xhr, textStatus, errorThrown) {
+        alert(xhr.responseText);
+      },
+    });
   });
 });
