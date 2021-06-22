@@ -425,12 +425,53 @@ class ImputController extends AbstractController
      * @Route("/export", name="export-csv" )
      */
 
-    public function exportAction(Request $request)
+    public function exportAction(DateVRepository $dateVRepository, ImputRepository $imputRepository, Request $request)
     {
         $donnees = json_decode($request->getContent());
+        $dateVs = $dateVRepository->findAll();
+        $imput = $imputRepository->findAll();
+        $date = date('Y-m-d H:i:s');
+        $tabexport = [];
+        $i = 0;
+        $semaine = 0;
+        $compteurDateV = 0;
+        $Timputsemaine = 0;
+        foreach ($dateVs as $dateV) {
+            //incremente pour afficher la dernier DateV pour recuperer le total
+            $compteurDateV++;
+            $Timputsemaine += $dateV->getValeur();
+            //condition pour ajoutez la ligne de l'export avec les information
+            if ($compteurDateV == 5) {
+                $tabexport[$i] = array(
+                    'D00550', 'Pole Digital B2B', 'Interne', $dateV->getImput()->getUser()->getUsername(),
+                    $dateV->getImput()->getUser()->getEmail(), $dateV->getTache()->getDomaine(), $dateV->getImput()->getUser()->getPoste(),
+                    '', '', '', '', '', $dateV->getCodeprojet()->getLibelle(), $dateV->getCodeprojet()->getDescription(),
+                    $dateV->getTache()->getLibelle(), $dateV->getActivite()->getLibelle(), '', $dateV->getDate()->format('Y-m-d'), 'Present',
+                    $dateV->getDate()->format('Y-m-d'), $Timputsemaine, $dateV->getImput()->getCommentaire(), '', 'N° de semaine',
+                    $dateV->getImput()->getUser()->getSalaire(), 'somme des cout', 'DEBUT charge', '', '', '', ''
+                );
+                $compteurDateV = 0;
+                $i++;
+                $Timputsemaine = 0;
+            }
+        }
+
+
         $list = array(
             //these are the columns
-            array('Firstname', 'Lastname',),
+            array(
+                'CENTRE_DE_COUT_RESSOURCE', 'STRUCTURE_BT_RESSOURCE', 'INTERNE_/_EXTERNE', 'NOM_RESSOURCE',
+                'LOGIN_RESSOURCE', 'RESSOURCE_CS_RESSOURCE', 'RESSOURCE_CS_FOURNISSEUR', 'TYPE_DE_PROJET', 'NOM_PROJET',
+                'CC_PORTEUR_PROJET', 'STATUT_PROJET', 'CHEF_DE_PROJET', 'CODE_TACHE', 'DESCRIPTION_TACHE', 'JIRA',
+                'TYPE_ACTIVITE', 'ID-MOE', 'ANNEE', 'TYPE_IMPUTATION', 'SEMAINE', 'TOTAL', 'COMMENT_SEMAINE',
+                'COMMENT_MOIS', 'no_semaine', 'Coût unitaire', 'Montant', 'Charge DEV', 'Charge Testeur', 'Charge Analyste',
+                'Charge Pilotage', 'Charge architecte'
+            ),
+            $tabexport[0],
+            $tabexport[1],
+            $tabexport[2],
+            $tabexport[3],
+            $tabexport[4],
             //these are the rows
             array('Andrei', 'Boar'),
             array('John', 'Doe')
