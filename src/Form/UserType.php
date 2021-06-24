@@ -39,6 +39,11 @@ class UserType extends AbstractType
                     'placeholder' => "Veuillez entrer le coût journalier du collaborateur"
                 ]
             ])
+            ->add('capit', TextType::class, [
+                'attr' => [
+                    'placeholder' => "Veuillez entrer le code CAPIT du collaborateur"
+                ]
+            ])
             ->add('roles', ChoiceType::class, [
                 'required' => true,
                 'multiple' => false,

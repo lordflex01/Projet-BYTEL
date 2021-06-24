@@ -454,7 +454,7 @@ class ImputController extends AbstractController
                     $semaine = substr($donnees->week, 1);
                     $tabexport[$i] = array(
                         'D00550', 'Pole Digital B2B', 'Interne', $dateV->getImput()->getUser()->getUsername(),
-                        $dateV->getImput()->getUser()->getEmail(), $dateV->getTache()->getDomaine(), $dateV->getImput()->getUser()->getPoste(),
+                        $dateV->getImput()->getUser()->getCapit(), $dateV->getTache()->getDomaine(), $dateV->getImput()->getUser()->getPoste(),
                         '', '', '', '', '', $dateV->getCodeprojet()->getLibelle(), $dateV->getCodeprojet()->getDescription(),
                         $dateV->getTache()->getLibelle(), $dateV->getActivite()->getLibelle(), '', $donnees->year, 'Present',
                         $jour->format('d/m/Y 00:00'), $Timputsemainefr, $dateV->getImput()->getCommentaire(), '', $semaine,
