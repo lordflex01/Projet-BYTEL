@@ -783,8 +783,8 @@ $(document).ready(function () {
         
       },
       error: function (xhr, textStatus, errorThrown) {
-        let filename = 'data.csv';
-                let csvFile = new Blob([xhr.responseText], { type: "text/csv" });
+                 let filename = 'data.csv';
+                let csvFile = new Blob(["\uFEFF"+xhr.responseText], { type: "text/csv" });
                 let downloadLink = document.createElement("a");
                 downloadLink.download = filename;
                 downloadLink.href = window.URL.createObjectURL(csvFile);
@@ -793,4 +793,12 @@ $(document).ready(function () {
       },
     });
   });
+});
+
+var drop2 = $("select[name=drop2] option"); // the collection of initial options
+$("select[name=drop1]").change(function(){
+    var drop1selected = parseInt(this.value); //get drop1 's selected value
+  alert(drop1selected); $("select[name=drop2]").html(drop2).find('option').filter(function(){
+       return parseInt(this.value) < drop1selected;
+    }).remove();
 });
