@@ -107,7 +107,7 @@ Swal.fire('Supprimé!', "L'élément a été bien supprimé ", 'success')
 								<th>Description</th>
 								<th>Statut</th>
 								<th>Budget</th>
-								<th>Charges</th>
+								<th>Ch J/H </th>
 								<th>Date</th>
 								{% if is_granted('ROLE_ADMIN') %}
 									<th>Actions</th>
@@ -152,16 +152,15 @@ Swal.fire('Supprimé!', "L'élément a été bien supprimé ", 'success')
 											{% set budg = 0 %}
 										{% endif %}
 										{{ code_projet.budget|number_format(0) }}
-										€ au total
+										€
 										<div>
 
 											<span class="float-left badge bg-info">{{budg|number_format(0)}}
-												€ restant</span>
+												€ restants </span>
 										</div>
 									</td>
 									<td>
 										{{ code_projet.chageJH|number_format(0) }}
-										J/H
 
 									</td>
 									<td>
@@ -182,7 +181,7 @@ Swal.fire('Supprimé!', "L'élément a été bien supprimé ", 'success')
 										</div>
 										<small>
 											{{jourRestant}}
-											jours restant
+											jours restants
 										</small>
 									</td>
 									{% if is_granted('ROLE_ADMIN') %}

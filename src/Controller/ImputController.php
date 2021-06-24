@@ -470,9 +470,6 @@ class ImputController extends AbstractController
                 'COMMENT_MOIS', 'no_semaine', 'Coût unitaire', 'Montant', 'Charge DEV', 'Charge Testeur', 'Charge Analyste',
                 'Charge Pilotage', 'Charge architecte'
             ),
-            //these are the rows
-            // array('Andrei', 'Boar'),
-            //array('John', 'Doe')
         );
         for ($j = 0; $j < $i; $j++) {
             $list[$j + 1] = $tabexport[$j];
@@ -487,7 +484,7 @@ class ImputController extends AbstractController
         $response = new Response(stream_get_contents($fp));
         fclose($fp);
 
-        $response->headers->set('Content-Type', 'text/csv');
+        $response->headers->set('Content-Type', 'text/csv','charset=UTF-8');
         $response->headers->set('Content-Disposition', 'attachment; filename="testing.csv"');
 
         return $response;

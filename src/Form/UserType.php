@@ -36,7 +36,7 @@ class UserType extends AbstractType
             ])
             ->add('salaire', TextType::class, [
                 'attr' => [
-                    'placeholder' => "Veuillez entrer le salaire journalier du collaborateur"
+                    'placeholder' => "Veuillez entrer le coût journalier du collaborateur"
                 ]
             ])
             ->add('roles', ChoiceType::class, [

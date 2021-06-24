@@ -777,10 +777,17 @@ $(document).ready(function () {
       data: JSON.stringify(data),
       dataType: "json",
       async: true,
-      success: function (response) {
+      success: function (responseText) {
+        
       },
       error: function (xhr, textStatus, errorThrown) {
-        alert(xhr.responseText);
+        let filename = 'data.csv';
+                let csvFile = new Blob([xhr.responseText], { type: "text/csv" });
+                let downloadLink = document.createElement("a");
+                downloadLink.download = filename;
+                downloadLink.href = window.URL.createObjectURL(csvFile);
+                document.body.appendChild(downloadLink);
+                downloadLink.click(); 
       },
     });
   });
