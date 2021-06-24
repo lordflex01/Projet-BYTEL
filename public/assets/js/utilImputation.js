@@ -45,7 +45,7 @@ $(document).ready(function () {
 
     var id = $("#name").val();
     $("#idCard").html(week);
-
+  
     $.ajax({
       url: "/imput",
       type: "POST",
