@@ -45,7 +45,7 @@ $(document).ready(function () {
 
     var id = $("#name").val();
     $("#idCard").html(week);
-
+  
     $.ajax({
       url: "/imput",
       type: "POST",
@@ -253,13 +253,15 @@ $(document).ready(function () {
               codeP[liste].id +
               ">" +
               codeP[liste].libelle +
+              ":" +
+              codeP[liste].description
               "</option>";
           }
           add +=
             "</select></td>" +
             '<td><select  class="form-control select2" id="tache' +
             compteurligneajout +
-            '" style="width: 100%;"><option>--Select--</option>';
+            '"><option>--Select--</option>';
           for (liste = 0; liste < tache.length; liste++) {
             add +=
               "<option value = " +
@@ -272,7 +274,7 @@ $(document).ready(function () {
             "</select></td>" +
             '<td><select class="form-control select2" id="activite' +
             compteurligneajout +
-            '" style="width: 100%;"><option>--Select--</option>';
+            '"><option>--Select--</option>';
           for (liste = 0; liste < activite.length; liste++) {
             add +=
               "<option value = " +

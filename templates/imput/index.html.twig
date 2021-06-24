@@ -62,10 +62,17 @@
 								<i class="fa fa-save"></i>
 							</button>
 						</div>
-						<div>
-							<a type="button" class="btn btn-outline-secondary btn-block" id="export">CSV</a>
-
-						</div>
+						
+						 <div class="btn-group">
+                    <button type="button" class="btn btn-outline-secondary">Exporter</button>
+                    <button type="button" class="btn btn-outline-secondary btn-block dropdown-toggle dropdown-icon" data-toggle="dropdown">
+                      <span class="sr-only">Toggle Dropdown</span>
+                    </button>
+                    <div class="dropdown-menu" role="menu">
+                      <a class="dropdown-item" type="button" id="export">CSV/sem</a>
+                      <a class="dropdown-item" type="button" id="exportMois">CSV/mois</a>
+                    </div>
+                  </div>
 
 					</div>
 

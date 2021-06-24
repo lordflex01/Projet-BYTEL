@@ -377,6 +377,7 @@ class ImputController extends AbstractController
                 $codeprojetlist[] = [
                     'id' => $codePs->getId(),
                     'libelle' => $codePs->getLibelle(),
+                    'description' => $codePs->getDescription(),
                 ];
             }
 
