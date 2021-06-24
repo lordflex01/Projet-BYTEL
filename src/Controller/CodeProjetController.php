@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\CodeProjet;
 use App\Form\CodeProjetType;
 use App\Repository\CodeProjetRepository;
+use App\Repository\TachesRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Request;
@@ -52,10 +53,11 @@ class CodeProjetController extends AbstractController
     /**
      * @Route("/{id}", name="code_projet_show", methods={"GET"})
      */
-    public function show(CodeProjet $codeProjet): Response
+    public function show(TachesRepository $tachesRepository, CodeProjet $codeProjet): Response
     {
         return $this->render('code_projet/show.html.twig', [
             'code_projet' => $codeProjet,
+            'taches' => $tachesRepository->findAll(),
         ]);
     }
 

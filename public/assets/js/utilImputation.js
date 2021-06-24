@@ -45,7 +45,7 @@ $(document).ready(function () {
 
     var id = $("#name").val();
     $("#idCard").html(week);
-  
+
     $.ajax({
       url: "/imput",
       type: "POST",
@@ -255,7 +255,7 @@ $(document).ready(function () {
               codeP[liste].libelle +
               ":" +
               codeP[liste].description
-              "</option>";
+            "</option>";
           }
           add +=
             "</select></td>" +
@@ -780,16 +780,16 @@ $(document).ready(function () {
       dataType: "json",
       async: true,
       success: function (responseText) {
-        
+
       },
       error: function (xhr, textStatus, errorThrown) {
-                 let filename = 'data.csv';
-                let csvFile = new Blob(["\uFEFF"+xhr.responseText], { type: "text/csv" });
-                let downloadLink = document.createElement("a");
-                downloadLink.download = filename;
-                downloadLink.href = window.URL.createObjectURL(csvFile);
-                document.body.appendChild(downloadLink);
-                downloadLink.click(); 
+        let filename = 'data.csv';
+        let csvFile = new Blob(["\uFEFF" + xhr.responseText], { type: "text/csv" });
+        let downloadLink = document.createElement("a");
+        downloadLink.download = filename;
+        downloadLink.href = window.URL.createObjectURL(csvFile);
+        document.body.appendChild(downloadLink);
+        downloadLink.click();
       },
     });
   });

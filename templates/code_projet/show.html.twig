@@ -1,46 +1,113 @@
-<!DOCTYPE html>
-
-<title>CodeProjet</title>
+{% extends 'header.html.twig' %}
 
 {% block body %}
-    <h1>CodeProjet</h1>
+	<div
+		class="content-wrapper">
+		<!-- Content Header (Page header) -->
+		<section class="content-header">
+			<div class="container-fluid">
+				<div class="row mb-2">
+					<div class="col-sm-6">
+						<h1 class="m-0" style="font-size:19px">Liste des Tâches</h1>
+					</div>
+					<div class="col-sm-6">
+						{% if is_granted('ROLE_ADMIN') %}
+							<a class="btn btn-primary" style="float:right;" href="{{ path('taches_new') }}">Ajouter une nouvelle tâche</a>
 
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ code_projet.id }}</td>
-            </tr>
-            <tr>
-                <th>Libelle</th>
-                <td>{{ code_projet.libelle }}</td>
-            </tr>
-            <tr>
-                <th>Description</th>
-                <td>{{ code_projet.description }}</td>
-            </tr>
-            <tr>
-                <th>Statut</th>
-                <td>{{ code_projet.statut ? 'Yes' : 'No' }}</td>
-            </tr>
-            <tr>
-                <th>Budget</th>
-                <td>{{ code_projet.budget }}</td>
-            </tr>
-            <tr>
-                <th>DateD</th>
-                <td>{{ code_projet.dateD ? code_projet.dateD|date('Y-m-d') : '' }}</td>
-            </tr>
-            <tr>
-                <th>DateF</th>
-                <td>{{ code_projet.DateF ? code_projet.DateF|date('Y-m-d') : '' }}</td>
-            </tr>
-        </tbody>
-    </table>
+						{% endif %}
+					</div>
+				</div>
+			</div>
+			<!-- /.container-fluid -->
+		</section>
+		<section
+			class="content">
 
-    <a href="{{ path('code_projet_index') }}">back to list</a>
+			<!-- Default box -->
+			<div class="card">
+				<div class="card-header">
+					<h3 class="card-title">Tâches</h3>
 
-    <a href="{{ path('code_projet_edit', {'id': code_projet.id}) }}">edit</a>
+					<div class="card-tools">
+						<button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+							<i class="fas fa-minus"></i>
+						</button>
+						<button type="button" class="btn btn-tool" data-card-widget="remove" title="Remove">
+							<i class="fas fa-times"></i>
+						</button>
+					</div>
 
-    {{ include('code_projet/_delete_form.html.twig') }}
+
+				</div>
+				<div class="card-body p-0">
+					<table class="table table-striped projects">
+						<thead>
+							<tr>
+								<th>
+									#
+								</th>
+								<th style="width: 30%">
+									Jira
+								</th>
+								<th>
+									Description
+								</th>
+								<th>
+									Code Projet
+								</th>
+								<th>
+									Domaine
+								</th>
+								{% if is_granted('ROLE_ADMIN') %}
+									<th>
+										Actions
+									</th>
+								{% endif %}
+							</tr>
+						</thead>
+						<tbody>
+							{% for tach in taches %}
+								{% if  code_projet.id  ==  tach.codeprojet.id  %}
+									<tr>
+										<td>
+											#
+										</td>
+										<td>
+											{{ tach.libelle }}
+										</td>
+										<td>
+											{{ tach.description }}
+										</td>
+										<td>
+											{{ tach.codeprojet }}
+										</td>
+										<td>
+											{{ tach.domaine }}
+										</td>
+
+										<td>
+											{% if is_granted('ROLE_ADMIN') %}
+												<a class="btn btn-info btn-sm" href="{{ path('taches_edit', {'id': tach.id}) }}">
+													<i class="fas fa-pencil-alt"></i>
+												</a>
+												<a class="btn">
+													{{ include('taches/_delete_form.html.twig') }}
+												</a>
+											{% endif %}
+										</td>
+
+									</tr>
+								{% endif %}
+							{% endfor %}
+
+						</tbody>
+					</table>
+				</div>
+				<!-- /.card-body -->
+			</div>
+			<!-- /.card -->
+		</section>
+		<!-- /.content -->
+	</div>
+
 {% endblock %}
