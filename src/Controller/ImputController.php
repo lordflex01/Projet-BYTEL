@@ -135,7 +135,7 @@ class ImputController extends AbstractController
         } else if ($code == 202) {
             return new Response($code);
         } else {
-            $em->flush();
+            //$em->flush();
             return new Response($code);
         }
     }
@@ -203,10 +203,11 @@ class ImputController extends AbstractController
                     $datetest = $datetest1->format('Y-m-d');
                     $datecomp = $dateVliste->getDate()->format('Y-m-d');
                     if (
+                        $donnees->tableauimput[$j]->user == $dateVliste->getImput()->getUser()->getId() &&
                         $donnees->tableauimput[$j]->tache == $dateVliste->getTache()->getId() &&
                         $donnees->tableauimput[$j]->codeprojet == $dateVliste->getCodeprojet()->getId() &&
-                        date($datetest) == date($datecomp) &&
-                        $donnees->tableauimput[$j]->user == $dateVliste->getImput()->getUser()->getId()
+                        $donnees->tableauimput[$j]->activite == $dateVliste->getActivite()->getId() &&
+                        date($datetest) == date($datecomp)
                     ) {
                         $code = 201;
                     }
@@ -267,7 +268,7 @@ class ImputController extends AbstractController
             } else if ($code == 202) {
                 return new Response($code);
             } else {
-                $em->flush();
+                //$em->flush();
                 return new Response($code);
             }
             //return $this->redirectToRoute('imput_index');
@@ -427,7 +428,9 @@ class ImputController extends AbstractController
 
     public function exportAction(DateVRepository $dateVRepository, ImputRepository $imputRepository, Request $request)
     {
+
         $donnees = json_decode($request->getContent());
+
 
         $dateVs = $dateVRepository->findAll();
         $tabexport = [];
@@ -445,12 +448,15 @@ class ImputController extends AbstractController
                 $Timputsemaine += $dateV->getValeur();
                 //condition pour ajoutez la ligne de l'export avec les information
                 if ($compteurDateV == 5) {
+                    //rendre le nombre format française
+                    $Timputsemainefr = number_format($Timputsemaine, 2, ',', ' ');
+                    $semaine = substr($donnees->week, 1);
                     $tabexport[$i] = array(
                         'D00550', 'Pole Digital B2B', 'Interne', $dateV->getImput()->getUser()->getUsername(),
                         $dateV->getImput()->getUser()->getEmail(), $dateV->getTache()->getDomaine(), $dateV->getImput()->getUser()->getPoste(),
                         '', '', '', '', '', $dateV->getCodeprojet()->getLibelle(), $dateV->getCodeprojet()->getDescription(),
                         $dateV->getTache()->getLibelle(), $dateV->getActivite()->getLibelle(), '', $donnees->year, 'Present',
-                        $jourj, $Timputsemaine, $dateV->getImput()->getCommentaire(), '', $donnees->week,
+                        $jour->format('d/m/Y 00:00'), $Timputsemainefr, $dateV->getImput()->getCommentaire(), '', $semaine,
                         $dateV->getImput()->getUser()->getSalaire(), 'somme des cout', 'DEBUT charge', '', '', '', ''
                     );
                     $compteurDateV = 0;
@@ -470,9 +476,6 @@ class ImputController extends AbstractController
                 'COMMENT_MOIS', 'no_semaine', 'Coût unitaire', 'Montant', 'Charge DEV', 'Charge Testeur', 'Charge Analyste',
                 'Charge Pilotage', 'Charge architecte'
             ),
-            //these are the rows
-            // array('Andrei', 'Boar'),
-            //array('John', 'Doe')
         );
         for ($j = 0; $j < $i; $j++) {
             $list[$j + 1] = $tabexport[$j];
@@ -487,7 +490,7 @@ class ImputController extends AbstractController
         $response = new Response(stream_get_contents($fp));
         fclose($fp);
 
-        $response->headers->set('Content-Type', 'text/csv');
+        $response->headers->set('Content-Type', 'text/csv', 'charset=UTF-8');
         $response->headers->set('Content-Disposition', 'attachment; filename="testing.csv"');
 
         return $response;

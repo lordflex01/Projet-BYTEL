@@ -1,49 +1,49 @@
 {% extends 'header.html.twig' %}
 {% block javascripts %}
-<!-- jQuery -->
-<script src="{{asset ("assets/plugins/jquery/jquery.min.js")}}"></script>
-<!-- Bootstrap 4 -->
-<script src="{{asset ("assets/plugins/bootstrap/js/bootstrap.bundle.min.js")}}"></script>
-<!-- script page -->
-<script src="{{asset ("assets/js/AdminLTE.js")}}"></script>
-<!-- AdminLTE for demo purposes -->
-<script src="{{asset ("assets/js/demo.js")}}"></script>
-<!-- select 2 -->
-<script src="{{asset ("assets/plugins/select2/js/select2.full.min.js")}}"></script>
-<!-- overlayScrollbars -->
-<script src="{{asset ("assets/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js")}}"></script>
+	<!-- jQuery -->
+	<script src="{{asset ("assets/plugins/jquery/jquery.min.js")}}"></script>
+	<!-- Bootstrap 4 -->
+	<script src="{{asset ("assets/plugins/bootstrap/js/bootstrap.bundle.min.js")}}"></script>
+	<!-- script page -->
+	<script src="{{asset ("assets/js/AdminLTE.js")}}"></script>
+	<!-- AdminLTE for demo purposes -->
+	<script src="{{asset ("assets/js/demo.js")}}"></script>
+	<!-- select 2 -->
+	<script src="{{asset ("assets/plugins/select2/js/select2.full.min.js")}}"></script>
+	<!-- overlayScrollbars -->
+	<script src="{{asset ("assets/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js")}}"></script>
 
-<!-- OPTIONAL SCRIPTS -->
-<script src="{{asset ("assets/plugins/chart.js/Chart.min.js")}}"></script>
-<!-- AdminLTE dashboard demo (This is only for demo purposes) -->
-<script src="{{asset ("assets/js/pages/dashboard3.js")}}"></script>
+	<!-- OPTIONAL SCRIPTS -->
+	<script src="{{asset ("assets/plugins/chart.js/Chart.min.js")}}"></script>
+	<!-- AdminLTE dashboard demo (This is only for demo purposes) -->
+	<script src="{{asset ("assets/js/pages/dashboard3.js")}}"></script>
 
 
-<!-- Imputation -->
-<script src="{{asset ("assets/js/utilImputation.js")}}"></script>
-<!-- datatable -->
-<script src="{{asset ("/assets/js/datatable/jquery.dataTable.min codeP.js")}}"></script>
+	<!-- Imputation -->
+	<script src="{{asset ("assets/js/utilImputation.js")}}"></script>
+	<!-- datatable -->
+	<script src="{{asset ("/assets/js/datatable/jquery.dataTable.min codeP.js")}}"></script>
 
-<link rel="stylesheet" href="{{asset ("/assets/css/datatable/buttons.bootstrap4.min.css")}}">
-<link rel="stylesheet" href="{{asset ("/assets/css/datatable/dataTables.bootstrap4.min.css")}}">
-<link rel="stylesheet" href="{{asset ("/assets/css/datatable/responsive.bootstrap4.min.css")}}">
+	<link rel="stylesheet" href="{{asset ("/assets/css/datatable/buttons.bootstrap4.min.css")}}">
+	<link rel="stylesheet" href="{{asset ("/assets/css/datatable/dataTables.bootstrap4.min.css")}}">
+	<link rel="stylesheet" href="{{asset ("/assets/css/datatable/responsive.bootstrap4.min.css")}}">
 
-<script src="{{asset ("/assets/js/datatable/buttons.colVis.min.js")}}"></script>
-<script src="{{asset ("/assets/js/datatable/buttons.print.min.js")}}"></script>
-<script src="{{asset ("/assets/js/datatable/dataTables.bootstrap4.min.js")}}"></script>
-<script src="{{asset ("/assets/js/datatable/dataTables.buttons.min.js")}}"></script>
-<script src="{{asset ("/assets/js/datatable/dataTables.responsive.min.js")}}"></script>
-<script src="{{asset ("/assets/js/datatable/jszip.min.js")}}"></script>
-<script src="{{asset ("/assets/js/datatable/pdfmake.min.js")}}"></script>
-<script src="{{asset ("/assets/js/datatable/responsive.bootstrap4.min.js")}}"></script>
-<script src="{{asset ("/assets/js/datatable/vfs_fonts.js")}}"></script>
+	<script src="{{asset ("/assets/js/datatable/buttons.colVis.min.js")}}"></script>
+	<script src="{{asset ("/assets/js/datatable/buttons.print.min.js")}}"></script>
+	<script src="{{asset ("/assets/js/datatable/dataTables.bootstrap4.min.js")}}"></script>
+	<script src="{{asset ("/assets/js/datatable/dataTables.buttons.min.js")}}"></script>
+	<script src="{{asset ("/assets/js/datatable/dataTables.responsive.min.js")}}"></script>
+	<script src="{{asset ("/assets/js/datatable/jszip.min.js")}}"></script>
+	<script src="{{asset ("/assets/js/datatable/pdfmake.min.js")}}"></script>
+	<script src="{{asset ("/assets/js/datatable/responsive.bootstrap4.min.js")}}"></script>
+	<script src="{{asset ("/assets/js/datatable/vfs_fonts.js")}}"></script>
 
-<!-- SweetAlert2 -->
-<script src="{{asset ("/assets/plugins/sweetalert2/sweetalert2.min.js")}}"></script>
-<!-- TOAST -->
-<script src="{{asset ("/assets/plugins/toastr/toastr.min.js")}}"></script>
-<script>
-	$(function () {
+	<!-- SweetAlert2 -->
+	<script src="{{asset ("/assets/plugins/sweetalert2/sweetalert2.min.js")}}"></script>
+	<!-- TOAST -->
+	<script src="{{asset ("/assets/plugins/toastr/toastr.min.js")}}"></script>
+	<script>
+		$(function () {
 $("#example1").DataTable({"responsive": true, "lengthChange": true, "autoWidth": false}).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
 });
 
@@ -61,7 +61,8 @@ Swal.fire('Supprimé!', "L'élément a été bien supprimé ", 'success')
 }
 })
 });
-</script>{% endblock %}
+	</script>
+{% endblock %}
 {% block body %}
 	<div
 		class="content-wrapper">
@@ -72,12 +73,12 @@ Swal.fire('Supprimé!', "L'élément a été bien supprimé ", 'success')
 					<div class="col-sm-6">
 						<h1 class="m-0" style="font-size:19px">Liste des code projets</h1>
 					</div>
-						<div class="col-sm-6">
+					<div class="col-sm-6">
 						{% if is_granted('ROLE_ADMIN') %}
-						<a class="btn btn-default" style="float:right;" href="{{ path('taches_index') }}">Consulter les tâches</a>
-							{% endif %}
+							<a class="btn btn-default" style="float:right;" href="{{ path('taches_index') }}">Consulter les tâches</a>
+						{% endif %}
 					</div>
-					
+
 				</div>
 			</div>
 			<!-- /.container-fluid -->
@@ -92,12 +93,12 @@ Swal.fire('Supprimé!', "L'élément a été bien supprimé ", 'success')
 				<div class="card-body">
 
 					{% if is_granted('ROLE_ADMIN') %}
-					
+
 						<div>
-						<a class="btn btn-primary" style="float:right;" href="{{ path('code_projet_new') }}">Ajouter un nouveau code projet</a>
-							
-		
-	</div>
+							<a class="btn btn-primary" style="float:right;" href="{{ path('code_projet_new') }}">Ajouter un nouveau code projet</a>
+
+
+						</div>
 					{% endif %}
 					<table id="example1" class="table table-bordered table-striped">
 						<thead>
@@ -107,8 +108,9 @@ Swal.fire('Supprimé!', "L'élément a été bien supprimé ", 'success')
 								<th>Description</th>
 								<th>Statut</th>
 								<th>Budget</th>
-								<th>Charges</th>
+								<th>Ch J/H</th>
 								<th>Date</th>
+								<th>Jira</th>
 								{% if is_granted('ROLE_ADMIN') %}
 									<th>Actions</th>
 								{% endif %}
@@ -152,16 +154,16 @@ Swal.fire('Supprimé!', "L'élément a été bien supprimé ", 'success')
 											{% set budg = 0 %}
 										{% endif %}
 										{{ code_projet.budget|number_format(0) }}
-										€ au total
+										€
 										<div>
 
 											<span class="float-left badge bg-info">{{budg|number_format(0)}}
-												€ restant</span>
+												€ restants
+											</span>
 										</div>
 									</td>
 									<td>
 										{{ code_projet.chageJH|number_format(0) }}
-										J/H
 
 									</td>
 									<td>
@@ -182,8 +184,11 @@ Swal.fire('Supprimé!', "L'élément a été bien supprimé ", 'success')
 										</div>
 										<small>
 											{{jourRestant}}
-											jours restant
+											jours restants
 										</small>
+									</td>
+									<td>
+										<a href="{{ path('code_projet_show', {'id': code_projet.id}) }}">{{ number }}</a>
 									</td>
 									{% if is_granted('ROLE_ADMIN') %}
 										<td class="project-actions text-right">

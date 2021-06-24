@@ -41,7 +41,7 @@ class TachesController extends AbstractController
             $entityManager->persist($tach);
             $entityManager->flush();
 
-            return $this->redirectToRoute('taches_index');
+            return $this->redirectToRoute('code_projet_index');
         }
 
         return $this->render('taches/new.html.twig', [
@@ -71,7 +71,7 @@ class TachesController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirectToRoute('taches_index');
+            return $this->redirectToRoute('code_projet_index');
         }
 
         return $this->render('taches/edit.html.twig', [

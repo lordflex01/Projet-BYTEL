@@ -777,7 +777,8 @@ $(document).ready(function () {
       data: JSON.stringify(data),
       dataType: "json",
       async: true,
-      success: function (response) {
+      success: function (responseText) {
+
       },
       error: function (xhr, textStatus, errorThrown) {
         let filename = 'data.csv';
