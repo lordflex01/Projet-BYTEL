@@ -244,7 +244,7 @@ $(document).ready(function () {
         $("#addRow").click(function () {
           compteurligneajout++;
           var add =
-            '<tr><td></td><td><select  class="form-control select2" id="codeP' +
+            '<tr><td></td><td><select name="select1" class="form-control select2" id="codeP' +
             compteurligneajout +
             '" style="width: 100%;"><option>--Select--</option>';
           for (liste = 0; liste < codeP.length; liste++) {
@@ -259,7 +259,7 @@ $(document).ready(function () {
           }
           add +=
             "</select></td>" +
-            '<td><select  class="form-control select2" id="tache' +
+            '<td><select name="select2" class="form-control select2" id="tache' +
             compteurligneajout +
             '"><option>--Select--</option>';
           for (liste = 0; liste < tache.length; liste++) {
@@ -322,6 +322,10 @@ $(document).ready(function () {
         });
 
         //tooltip option
+        $("#codeP option:selected").click(function(){ //get drop1 's selected value
+          alert("tt");
+        });
+
       },
       error: function (xhr, textStatus, errorThrown) {
         alert(xhr.responseText);
@@ -795,10 +799,14 @@ $(document).ready(function () {
   });
 });
 
-var drop2 = $("select[name=drop2] option"); // the collection of initial options
-$("select[name=drop1]").change(function(){
+
+
+
+var drop2 = $("select[name=select2] option"); // the collection of initial options
+$("select[name=select1]").change(function(){
     var drop1selected = parseInt(this.value); //get drop1 's selected value
-  alert(drop1selected); $("select[name=drop2]").html(drop2).find('option').filter(function(){
-       return parseInt(this.value) < drop1selected;
+  alert(drop1selected);
+$("select[name=select2]").html(drop2).find('option').filter(function(){
+       return parseInt(this.value) > drop1selected;
     }).remove();
 });
