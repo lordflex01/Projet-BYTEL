@@ -43,6 +43,11 @@
 								{% do form.username.setRendered %}
 							</div>
 							<div class="form-group">
+								<label for="{{form.capit.vars.id}}">Code CAPIT</label>
+								{{form_widget( form.capit)}}
+								{% do form.capit.setRendered %}
+							</div>
+							<div class="form-group">
 								<label for="{{form.site.vars.id}}">Site</label>
 								{{form_widget( form.site)}}
 								{% do form.site.setRendered %}

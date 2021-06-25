@@ -106,6 +106,46 @@ class CodeProjet
      */
     private $tache;
 
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    private $budgetConsomme;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    private $budgetNRJConsomme;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    private $budgetDECOConsomme;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    private $budgetCLOEConsomme;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    private $chargeConsomme;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    private $chargeNRJConsomme;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    private $chargeDECOConsomme;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    private $chargeCLOEConsomme;
+
     public function __construct()
     {
         $this->imputations = new ArrayCollection();
@@ -369,6 +409,102 @@ class CodeProjet
                 $tache->setCodeProjet(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getBudgetConsomme(): ?float
+    {
+        return $this->budgetConsomme;
+    }
+
+    public function setBudgetConsomme(?float $budgetConsomme): self
+    {
+        $this->budgetConsomme = $budgetConsomme;
+
+        return $this;
+    }
+
+    public function getBudgetNRJConsomme(): ?float
+    {
+        return $this->budgetNRJConsomme;
+    }
+
+    public function setBudgetNRJConsomme(?float $budgetNRJConsomme): self
+    {
+        $this->budgetNRJConsomme = $budgetNRJConsomme;
+
+        return $this;
+    }
+
+    public function getBudgetDECOConsomme(): ?float
+    {
+        return $this->budgetDECOConsomme;
+    }
+
+    public function setBudgetDECOConsomme(?float $budgetDECOConsomme): self
+    {
+        $this->budgetDECOConsomme = $budgetDECOConsomme;
+
+        return $this;
+    }
+
+    public function getBudgetCLOEConsomme(): ?float
+    {
+        return $this->budgetCLOEConsomme;
+    }
+
+    public function setBudgetCLOEConsomme(?float $budgetCLOEConsomme): self
+    {
+        $this->budgetCLOEConsomme = $budgetCLOEConsomme;
+
+        return $this;
+    }
+
+    public function getChargeConsomme(): ?float
+    {
+        return $this->chargeConsomme;
+    }
+
+    public function setChargeConsomme(?float $chargeConsomme): self
+    {
+        $this->chargeConsomme = $chargeConsomme;
+
+        return $this;
+    }
+
+    public function getChargeNRJConsomme(): ?float
+    {
+        return $this->chargeNRJConsomme;
+    }
+
+    public function setChargeNRJConsomme(?float $chargeNRJConsomme): self
+    {
+        $this->chargeNRJConsomme = $chargeNRJConsomme;
+
+        return $this;
+    }
+
+    public function getChargeDECOConsomme(): ?float
+    {
+        return $this->chargeDECOConsomme;
+    }
+
+    public function setChargeDECOConsomme(?float $chargeDECOConsomme): self
+    {
+        $this->chargeDECOConsomme = $chargeDECOConsomme;
+
+        return $this;
+    }
+
+    public function getChargeCLOEConsomme(): ?float
+    {
+        return $this->chargeCLOEConsomme;
+    }
+
+    public function setChargeCLOEConsomme(?float $chargeCLOEConsomme): self
+    {
+        $this->chargeCLOEConsomme = $chargeCLOEConsomme;
 
         return $this;
     }

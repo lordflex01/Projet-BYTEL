@@ -90,6 +90,11 @@ class User implements UserInterface
      */
     private $Salaire;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $capit;
+
     public function __construct()
     {
         $this->imputations = new ArrayCollection();
@@ -313,6 +318,18 @@ class User implements UserInterface
     public function setSalaire(?float $Salaire): self
     {
         $this->Salaire = $Salaire;
+
+        return $this;
+    }
+
+    public function getCapit(): ?string
+    {
+        return $this->capit;
+    }
+
+    public function setCapit(?string $capit): self
+    {
+        $this->capit = $capit;
 
         return $this;
     }
