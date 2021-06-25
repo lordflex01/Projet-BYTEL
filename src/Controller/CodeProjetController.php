@@ -35,6 +35,15 @@ class CodeProjetController extends AbstractController
         $codeProjet = new CodeProjet();
         $form = $this->createForm(CodeProjetType::class, $codeProjet);
         $form->handleRequest($request);
+        $codeProjet->setBudgetConsomme(0);
+        $codeProjet->setBudgetNRJConsomme(0);
+        $codeProjet->setBudgetDECOConsomme(0);
+        $codeProjet->setBudgetCLOEConsomme(0);
+        $codeProjet->setChargeConsomme(0);
+        $codeProjet->setChargeNRJConsomme(0);
+        $codeProjet->setChargeDECOConsomme(0);
+        $codeProjet->setChargeCLOEConsomme(0);
+
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager = $this->getDoctrine()->getManager();

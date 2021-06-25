@@ -177,6 +177,7 @@ class ImputController extends AbstractController
                 $user = new User;
                 $codeP = new CodeProjet;
                 $activite = new Activite;
+                $charge_imput = 0;
                 //connaitre le user
                 foreach ($userlistes as $userliste) {
                     if ($donnees->tableauimput[$j]->user == $userliste->getId())
@@ -220,22 +221,6 @@ class ImputController extends AbstractController
                 $totalbase[2] = $donnees->tableauimput[$j]->tabcumuleimput[2] + $donnees->tableauimput[$j]->tabcumuleimputM[2];
                 $totalbase[3] = $donnees->tableauimput[$j]->tabcumuleimput[3] + $donnees->tableauimput[$j]->tabcumuleimputM[3];
                 $totalbase[4] = $donnees->tableauimput[$j]->tabcumuleimput[4] + $donnees->tableauimput[$j]->tabcumuleimputM[4];
-                /*foreach ($dateVlistes as $dateVliste) {
-                    $datetest1 = new DateTime($donnees->tableauimput[$j]->date[$cm]);
-                    $datetest = $datetest1->format('Y-m-d');
-                    $datecomp = $dateVliste->getDate()->format('Y-m-d');
-
-                    if (
-                        date($datetest) == date($datecomp) &&
-                        $donnees->tableauimput[$j]->user == $dateVliste->getImput()->getUser()->getId()
-                    ) {
-                        $totalbase[$cm] = $totalbase[$cm] + $dateVliste->getValeur();
-                        $cm++;
-                    }
-                    if ($cm == 5) {
-                        $cm = 0;
-                    }
-                }*/
 
                 for ($ver = 0; $ver < 5; $ver++) {
                     if ($totalbase[$ver] > 1)
@@ -259,16 +244,41 @@ class ImputController extends AbstractController
                     $dateV->setTache($tache);
                     $dateV->setCodeprojet($codeP);
                     $dateV->setActivite($activite);
-
+                    $charge_imput += $donnees->tableauimput[$j]->valeur[$i];
                     $em->persist($dateV);
                 }
+                //Ajout des charge et budget consomé
+                $budgetFinale = $codeP->getBudgetConsomme() + ($charge_imput * $user->getSalaire());
+                $chargeFinale =  $codeP->getChargeConsomme() + $charge_imput;
+                $codeP->setChargeConsomme($chargeFinale);
+                $codeP->setBudgetConsomme($budgetFinale);
+                if ($tache->getDomaine() == "NRJ") {
+                    $budgetFinale = $codeP->getBudgetNRJConsomme() + ($charge_imput * $user->getSalaire());
+                    $chargeFinale =  $codeP->getChargeNRJConsomme() + $charge_imput;
+                    $codeP->setChargeNRJConsomme($chargeFinale);
+                    $codeP->setBudgetNRJConsomme($budgetFinale);
+                }
+                if ($tache->getDomaine() == "DECO") {
+                    $budgetFinale = $codeP->getBudgetDECOConsomme() + ($charge_imput * $user->getSalaire());
+                    $chargeFinale =  $codeP->getChargeDECOConsomme() + $charge_imput;
+                    $codeP->setChargeDECOConsomme($chargeFinale);
+                    $codeP->setBudgetDECOConsomme($budgetFinale);
+                }
+                if ($tache->getDomaine() == "CLOE") {
+                    $budgetFinale = $codeP->getBudgetCLOEConsomme() + ($charge_imput * $user->getSalaire());
+                    $chargeFinale =  $codeP->getChargeCLOEConsomme() + $charge_imput;
+                    $codeP->setChargeCLOEConsomme($chargeFinale);
+                    $codeP->setBudgetCLOEConsomme($budgetFinale);
+                }
+
+                $em->persist($codeP);
             }
             if ($code == 201) {
                 return new Response($code);
             } else if ($code == 202) {
                 return new Response($code);
             } else {
-                //$em->flush();
+                $em->flush();
                 return new Response($code);
             }
             //return $this->redirectToRoute('imput_index');
@@ -449,6 +459,11 @@ class ImputController extends AbstractController
                 $Timputsemaine += $dateV->getValeur();
                 //condition pour ajoutez la ligne de l'export avec les information
                 if ($compteurDateV == 5) {
+                    //condition pour savoir si il est present ou abs
+                    if ($dateV->getCodeprojet() == "Absent")
+                        $p = "Absent";
+                    else
+                        $p = "Présent";
                     //rendre le nombre format française
                     $Timputsemainefr = number_format($Timputsemaine, 2, ',', ' ');
                     $semaine = substr($donnees->week, 1);
@@ -456,9 +471,10 @@ class ImputController extends AbstractController
                         'D00550', 'Pole Digital B2B', 'Interne', $dateV->getImput()->getUser()->getUsername(),
                         $dateV->getImput()->getUser()->getCapit(), $dateV->getTache()->getDomaine(), $dateV->getImput()->getUser()->getPoste(),
                         '', '', '', '', '', $dateV->getCodeprojet()->getLibelle(), $dateV->getCodeprojet()->getDescription(),
-                        $dateV->getTache()->getLibelle(), $dateV->getActivite()->getLibelle(), '', $donnees->year, 'Present',
+                        $dateV->getTache()->getLibelle(), $dateV->getActivite()->getLibelle(), '', $donnees->year, $p,
                         $jour->format('d/m/Y 00:00'), $Timputsemainefr, $dateV->getImput()->getCommentaire(), '', $semaine,
-                        $dateV->getImput()->getUser()->getSalaire(), 'somme des cout', 'DEBUT charge', '', '', '', ''
+                        $dateV->getImput()->getUser()->getSalaire(), $dateV->getCodeprojet()->getBudgetConsomme(),
+                        $dateV->getCodeprojet()->getChargeConsomme(), 'DEBUT charge', '', '', '', ''
                     );
                     $compteurDateV = 0;
                     $i++;
@@ -474,7 +490,7 @@ class ImputController extends AbstractController
                 'LOGIN_RESSOURCE', 'RESSOURCE_CS_RESSOURCE', 'RESSOURCE_CS_FOURNISSEUR', 'TYPE_DE_PROJET', 'NOM_PROJET',
                 'CC_PORTEUR_PROJET', 'STATUT_PROJET', 'CHEF_DE_PROJET', 'CODE_TACHE', 'DESCRIPTION_TACHE', 'JIRA',
                 'TYPE_ACTIVITE', 'ID-MOE', 'ANNEE', 'TYPE_IMPUTATION', 'SEMAINE', 'TOTAL', 'COMMENT_SEMAINE',
-                'COMMENT_MOIS', 'no_semaine', 'Coût unitaire', 'Montant', 'Charge DEV', 'Charge Testeur', 'Charge Analyste',
+                'COMMENT_MOIS', 'no_semaine', 'Coût unitaire', 'Montant', 'Charge', 'Charge DEV', 'Charge Testeur', 'Charge Analyste',
                 'Charge Pilotage', 'Charge architecte'
             ),
         );
