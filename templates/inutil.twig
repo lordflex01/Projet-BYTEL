@@ -479,3 +479,15 @@ function calculateSum() {
     });
     $("#sum").html(sum.toFixed(2));
 }
+
+
+
+ $(document).on("change", "select[name='select1']", function () {
+          if ($(this).data('options') === undefined) {
+            /*Taking an array of all options-2 and kind of embedding it on the select1*/
+            $(this).data('options', $('select[name=select2] option').clone());
+          }
+          var id = $(this).val();
+          var options = $(this).data('options').filter('[value=' + id + ']');
+          $('select[name=select2]').html(options);
+        });

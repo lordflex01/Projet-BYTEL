@@ -54,23 +54,23 @@ $(document).ready(function () {
       success: function (data, status) {
         var e = $(
           '<th><button id="addRow" type="button" class="btn btn-block btn-info btn-sm" style="width: 30px;"><i class="fa fa-plus"></i></button></th>' +
-          "<th>Code Projet</th>" +
-          "<th>Tâches</th>" +
-          "<th>Activitées</th>" +
-          '<th style="width: 40px">Lun ' +
-          days[0] +
-          '</th><th  style="width: 40px">Mar ' +
-          days[1] +
-          '</th><th  style="width: 40px">Mer ' +
-          days[2] +
-          '</th><th  style="width: 40px">Jeu ' +
-          days[3] +
-          "</th>" +
-          '<th  style="width: 40px">Vend ' +
-          days[4] +
-          "</th>" +
-          '<th  style="width: 40px;color:red">Total</th>' +
-          '<th  style="width: 40px;color:green">Commentaires</th></tr>'
+            "<th>Code Projet</th>" +
+            "<th>Tâches</th>" +
+            "<th>Activitées</th>" +
+            '<th style="width: 40px">Lun ' +
+            days[0] +
+            '</th><th  style="width: 40px">Mar ' +
+            days[1] +
+            '</th><th  style="width: 40px">Mer ' +
+            days[2] +
+            '</th><th  style="width: 40px">Jeu ' +
+            days[3] +
+            "</th>" +
+            '<th  style="width: 40px">Vend ' +
+            days[4] +
+            "</th>" +
+            '<th  style="width: 40px;color:red">Total</th>' +
+            '<th  style="width: 40px;color:green">Commentaires</th></tr>'
         );
 
         $("#entete").html("");
@@ -150,47 +150,47 @@ $(document).ready(function () {
           for (let i = 0; i < nombreimputation; i++) {
             var LLL = $(
               "<tr><td></td><td><span>" +
-              codprojettableau[i] +
-              "</span></td>" +
-              "<td><span>" +
-              tacheteableau[i] +
-              "</span></td>" +
-              "<td>" +
-              activitetableau[i] +
-              "</td>" +
-              '<td><input id="m1' +
-              imputID[i] +
-              '" type="number" min="0" max="1" step="0.25" class="form-control-imput" value=' +
-              H[0 + j] +
-              '></td><td><input id="m2' +
-              imputID[i] +
-              '" type="number" min="0" max="1" step="0.25" class="form-control-imput" value=' +
-              H[1 + j] +
-              '></td><td><input id="m3' +
-              imputID[i] +
-              '" type="number" min="0" max="1" step="0.25" class="form-control-imput" value=' +
-              H[2 + j] +
-              '></td><td><input id="m4' +
-              imputID[i] +
-              '" type="number" min="0" max="1" step="0.25" class="form-control-imput" value=' +
-              H[3 + j] +
-              '></td><td><input id="m5' +
-              imputID[i] +
-              '" type="number" min="0" max="1" step="0.25" class="form-control-imput" value=' +
-              H[4 + j] +
-              "></td>" +
-              '<td><input type="text" min="0" max="1" step="0.25" name="totalRow" class="form-control-total" value=' +
-              t[i] +
-              "></td>" +
-              '<td><input id="com' +
-              i +
-              '" style="max-width: 200px" type="text" class="form-control-imput" value=' +
-              commentairelab[i] +
-              "></td>" +
-              '<td><i class="fa fa-trash"  style="font-size: 16px;cursor:pointer;margin-top: 8px;color: #cc1919;"id="suppCode' +
-              i +
-              '"></i></td>' +
-              "</tr>"
+                codprojettableau[i] +
+                "</span></td>" +
+                "<td><span>" +
+                tacheteableau[i] +
+                "</span></td>" +
+                "<td>" +
+                activitetableau[i] +
+                "</td>" +
+                '<td><input id="m1' +
+                imputID[i] +
+                '" type="number" min="0" max="1" step="0.25" class="form-control-imput" value=' +
+                H[0 + j] +
+                '></td><td><input id="m2' +
+                imputID[i] +
+                '" type="number" min="0" max="1" step="0.25" class="form-control-imput" value=' +
+                H[1 + j] +
+                '></td><td><input id="m3' +
+                imputID[i] +
+                '" type="number" min="0" max="1" step="0.25" class="form-control-imput" value=' +
+                H[2 + j] +
+                '></td><td><input id="m4' +
+                imputID[i] +
+                '" type="number" min="0" max="1" step="0.25" class="form-control-imput" value=' +
+                H[3 + j] +
+                '></td><td><input id="m5' +
+                imputID[i] +
+                '" type="number" min="0" max="1" step="0.25" class="form-control-imput" value=' +
+                H[4 + j] +
+                "></td>" +
+                '<td><input type="text" min="0" max="1" step="0.25" name="totalRow" class="form-control-total" value=' +
+                t[i] +
+                "></td>" +
+                '<td><input id="com' +
+                i +
+                '" style="max-width: 200px" type="text" class="form-control-imput" value=' +
+                commentairelab[i] +
+                "></td>" +
+                '<td><i class="fa fa-trash"  style="font-size: 16px;cursor:pointer;margin-top: 8px;color: #cc1919;"id="suppCode' +
+                i +
+                '"></i></td>' +
+                "</tr>"
             );
             j = j + 5;
             $("#tableB").append(LLL);
@@ -226,16 +226,16 @@ $(document).ready(function () {
 
         var footer = $(
           "<tr><td></td>" +
-          "<td><span style='width: 40px;color:red;font-weight:bold'>Total</span></td>" +
-          "<td></td>" +
-          "<td></td>" +
-          '<td style="width: 40px"><input type=text" class="form-control-imput"  id="totalCol"></td>' +
-          '<td style="width: 40px"><input type="text" class="form-control-imput" id="totalCol"></td>' +
-          '<td style="width: 40px"><input type="text" class="form-control-imput" id="totalCol"></td>' +
-          '<td style="width: 40px"><input type="text" class="form-control-imput" id="totalCol"></td>' +
-          '<td style="width: 40px"><input type="text" class="form-control-imput" id="totalCol"></td>' +
-          '<td  style="width: 40px;color:red"></td>' +
-          '<td  style="width: 40px;color:green"></td></tr>'
+            "<td><span style='width: 40px;color:red;font-weight:bold'>Total</span></td>" +
+            "<td></td>" +
+            "<td></td>" +
+            '<td style="width: 40px"><input type=text" class="form-control-imput"  id="totalCol"></td>' +
+            '<td style="width: 40px"><input type="text" class="form-control-imput" id="totalCol"></td>' +
+            '<td style="width: 40px"><input type="text" class="form-control-imput" id="totalCol"></td>' +
+            '<td style="width: 40px"><input type="text" class="form-control-imput" id="totalCol"></td>' +
+            '<td style="width: 40px"><input type="text" class="form-control-imput" id="totalCol"></td>' +
+            '<td  style="width: 40px;color:red"></td>' +
+            '<td  style="width: 40px;color:green"></td></tr>'
         );
 
         // $("#footTable").html("");
@@ -244,7 +244,7 @@ $(document).ready(function () {
         $("#addRow").click(function () {
           compteurligneajout++;
           var add =
-            '<tr><td></td><td><select name="select1" class="form-control select2" id="codeP' +
+            '<tr><td></td><td><select onchange="remplirSelect2();" name="select1" class="form-control select2" id="codeP' +
             compteurligneajout +
             '" style="width: 100%;"><option>--Select--</option>';
           for (liste = 0; liste < codeP.length; liste++) {
@@ -254,8 +254,8 @@ $(document).ready(function () {
               ">" +
               codeP[liste].libelle +
               ":" +
-              codeP[liste].description
-            "</option>";
+              codeP[liste].description;
+            ("</option>");
           }
           add +=
             "</select></td>" +
@@ -320,12 +320,6 @@ $(document).ready(function () {
           });
           $("input[name='totalRow']", $tr).val(tot);
         });
-
-        //tooltip option
-        $("#codeP option:selected").click(function(){ //get drop1 's selected value
-          alert("tt");
-        });
-
       },
       error: function (xhr, textStatus, errorThrown) {
         alert(xhr.responseText);
@@ -772,8 +766,7 @@ $(document).ready(function () {
       week: week,
       year: year,
       dates: dates,
-
-    }
+    };
 
     $.ajax({
       url: `/export`,
@@ -783,12 +776,12 @@ $(document).ready(function () {
       data: JSON.stringify(data),
       dataType: "json",
       async: true,
-      success: function (responseText) {
-
-      },
+      success: function (responseText) {},
       error: function (xhr, textStatus, errorThrown) {
-        let filename = 'data.csv';
-        let csvFile = new Blob(["\uFEFF" + xhr.responseText], { type: "text/csv" });
+        let filename = "data.csv";
+        let csvFile = new Blob(["\uFEFF" + xhr.responseText], {
+          type: "text/csv",
+        });
         let downloadLink = document.createElement("a");
         downloadLink.download = filename;
         downloadLink.href = window.URL.createObjectURL(csvFile);
@@ -799,14 +792,25 @@ $(document).ready(function () {
   });
 });
 
+//////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////Fonction select2/////////////////////////////////////////////////////
 
-
-
-var drop2 = $("select[name=select2] option"); // the collection of initial options
-$("select[name=select1]").change(function(){
-    var drop1selected = parseInt(this.value); //get drop1 's selected value
-  alert(drop1selected);
-$("select[name=select2]").html(drop2).find('option').filter(function(){
-       return parseInt(this.value) > drop1selected;
-    }).remove();
-});
+function remplirSelect2() {
+  var id_select = $('select[name="select1"]').val();
+  let selectCode = {
+    id : id_select
+  }
+  $.ajax({
+    url: "/remplirSelect2",
+    type: "POST",
+    data: JSON.stringify(selectCode),
+    dataType: "json",
+    async: true,
+    success: function (json) {
+     alert(json)
+    },
+    error: function (xhr, textStatus, errorThrown) {
+      alert(xhr.responseText);
+    },
+  });
+}

@@ -33,3 +33,7 @@ imput:
 export:
     path: /export
     controller: App\Controller\ImputController::exportAction
+
+remplirSelect2:
+    path:  /remplirSelect2
+    controller: App\Controller\ImputController::remplirSelect2Action 
