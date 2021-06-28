@@ -798,16 +798,23 @@ $(document).ready(function () {
 function remplirSelect2() {
   var id_select = $('select[name="select1"]').val();
   let selectCode = {
-    id : id_select
-  }
+    id: id_select,
+  };
   $.ajax({
     url: "/remplirSelect2",
     type: "POST",
-    data: JSON.stringify(selectCode),
+    data: JSON.stringify(selectCode),
     dataType: "json",
     async: true,
-    success: function (json) {
-     alert(json)
+    success: function (response) {
+      let v = JSON.parse(response);
+      $('select[name="select2"]').html("");
+      $.each(v, function (index, value) {
+        // et  boucle sur la réponse contenu dans la variable passé à la function du success "json"
+        $('select[name="select2"]').append(
+          '<option value="' + value.id + '">' + value.libelle + "</option>"
+        );
+      });
     },
     error: function (xhr, textStatus, errorThrown) {
       alert(xhr.responseText);
