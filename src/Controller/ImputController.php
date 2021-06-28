@@ -106,8 +106,41 @@ class ImputController extends AbstractController
                 if ($donnees->tableaumodif[$j]->imputID == $dateVliste->getImput()->getId() && $donnees->tableaumodif[$j]->valeur[$i] != $dateVliste->getValeur()) {
                     $dateV = new DateV;
                     $dateV = $dateVliste;
+
+                    //les nouveaux calcules apres modification
+                    $codeP = new CodeProjet;
+                    $tache = new Taches;
+                    $charge = 0;
+                    $codeP = $dateVliste->getCodeprojet();
+                    $tache = $dateVliste->getTache();
+                    $charge = $donnees->tableaumodif[$j]->valeur[$i] - $dateVliste->getValeur();
+                    $chargeFinale = $codeP->getChargeConsomme() + $charge;
+                    $budgetFinale = $codeP->getBudgetConsomme() + ($charge * $dateVliste->getImput()->getUser()->getSalaire());
+                    $codeP->setBudgetConsomme($budgetFinale);
+                    $codeP->setChargeConsomme($chargeFinale);
+
+                    if ($tache->getDomaine() == "NRJ") {
+                        $budgetFinale = $codeP->getBudgetNRJConsomme() + ($charge * $dateVliste->getImput()->getUser()->getSalaire());
+                        $chargeFinale =  $codeP->getChargeNRJConsomme() + $charge;
+                        $codeP->setChargeNRJConsomme($chargeFinale);
+                        $codeP->setBudgetNRJConsomme($budgetFinale);
+                    }
+                    if ($tache->getDomaine() == "DECO") {
+                        $budgetFinale = $codeP->getBudgetDECOConsomme() + ($charge * $dateVliste->getImput()->getUser()->getSalaire());
+                        $chargeFinale =  $codeP->getChargeDECOConsomme() + $charge;
+                        $codeP->setChargeDECOConsomme($chargeFinale);
+                        $codeP->setBudgetDECOConsomme($budgetFinale);
+                    }
+                    if ($tache->getDomaine() == "CLOE") {
+                        $budgetFinale = $codeP->getBudgetCLOEConsomme() + ($charge * $dateVliste->getImput()->getUser()->getSalaire());
+                        $chargeFinale =  $codeP->getChargeCLOEConsomme() + $charge;
+                        $codeP->setChargeCLOEConsomme($chargeFinale);
+                        $codeP->setBudgetCLOEConsomme($budgetFinale);
+                    }
+                    //editer les valeur
                     $dateV->setValeur($donnees->tableaumodif[$j]->valeur[$i]);
                     $modif = 1;
+                    $em->persist($codeP);
                     $em->persist($dateV);
                 }
                 //edit le commenataire
@@ -135,7 +168,7 @@ class ImputController extends AbstractController
         } else if ($code == 202) {
             return new Response($code);
         } else {
-            //$em->flush();
+            $em->flush();
             return new Response($code);
         }
     }
@@ -436,7 +469,6 @@ class ImputController extends AbstractController
     /**
      * @Route("/export", name="export-csv" )
      */
-
     public function exportAction(DateVRepository $dateVRepository, ImputRepository $imputRepository, Request $request)
     {
 
@@ -454,6 +486,88 @@ class ImputController extends AbstractController
         foreach ($dateVs as $dateV) {
             $jourbase = $dateV->getDate()->format('Y-m-d');
             if (date($jourj) == date($jourbase) || $compteurDateV != 0) {
+                //incremente pour afficher la dernier DateV pour recuperer le total
+                $compteurDateV++;
+                $Timputsemaine += $dateV->getValeur();
+                //condition pour ajoutez la ligne de l'export avec les information
+                if ($compteurDateV == 5) {
+                    //condition pour savoir si il est present ou abs
+                    if ($dateV->getCodeprojet() == "Absent")
+                        $p = "Absent";
+                    else
+                        $p = "Présent";
+                    //rendre le nombre format française
+                    $Timputsemainefr = number_format($Timputsemaine, 2, ',', ' ');
+                    $semaine = substr($donnees->week, 1);
+                    $tabexport[$i] = array(
+                        'D00550', 'Pole Digital B2B', 'Interne', $dateV->getImput()->getUser()->getUsername(),
+                        $dateV->getImput()->getUser()->getCapit(), $dateV->getTache()->getDomaine(), $dateV->getImput()->getUser()->getPoste(),
+                        '', '', '', '', '', $dateV->getCodeprojet()->getLibelle(), $dateV->getCodeprojet()->getDescription(),
+                        $dateV->getTache()->getLibelle(), $dateV->getActivite()->getLibelle(), '', $donnees->year, $p,
+                        $jour->format('d/m/Y 00:00'), $Timputsemainefr, $dateV->getImput()->getCommentaire(), '', $semaine,
+                        $dateV->getImput()->getUser()->getSalaire(), $dateV->getCodeprojet()->getBudgetConsomme(),
+                        $dateV->getCodeprojet()->getChargeConsomme(), 'DEBUT charge', '', '', '', ''
+                    );
+                    $compteurDateV = 0;
+                    $i++;
+                    $Timputsemaine = 0;
+                }
+            }
+        }
+
+        $list = array(
+            //these are the columns
+            array(
+                'CENTRE_DE_COUT_RESSOURCE', 'STRUCTURE_BT_RESSOURCE', 'INTERNE_/_EXTERNE', 'NOM_RESSOURCE',
+                'LOGIN_RESSOURCE', 'RESSOURCE_CS_RESSOURCE', 'RESSOURCE_CS_FOURNISSEUR', 'TYPE_DE_PROJET', 'NOM_PROJET',
+                'CC_PORTEUR_PROJET', 'STATUT_PROJET', 'CHEF_DE_PROJET', 'CODE_TACHE', 'DESCRIPTION_TACHE', 'JIRA',
+                'TYPE_ACTIVITE', 'ID-MOE', 'ANNEE', 'TYPE_IMPUTATION', 'SEMAINE', 'TOTAL', 'COMMENT_SEMAINE',
+                'COMMENT_MOIS', 'no_semaine', 'Coût unitaire', 'Montant', 'Charge', 'Charge DEV', 'Charge Testeur', 'Charge Analyste',
+                'Charge Pilotage', 'Charge architecte'
+            ),
+        );
+        for ($j = 0; $j < $i; $j++) {
+            $list[$j + 1] = $tabexport[$j];
+        }
+
+        $fp = fopen('php://temp', 'w+');
+        foreach ($list as $fields) {
+            fputcsv($fp, $fields);
+        }
+
+        rewind($fp);
+        $response = new Response(stream_get_contents($fp));
+        fclose($fp);
+
+        $response->headers->set('Content-Type', 'text/csv', 'charset=UTF-8');
+        $response->headers->set('Content-Disposition', 'attachment; filename="testing.csv"');
+
+        return $response;
+    }
+
+    /**
+     * @Route("/export", name="export-csv" )
+     */
+
+    public function exportmoisAction(DateVRepository $dateVRepository, ImputRepository $imputRepository, Request $request)
+    {
+
+        $donnees = json_decode($request->getContent());
+
+
+        $dateVs = $dateVRepository->findAll();
+        $tabexport = [];
+        $i = 0;
+        $compteurDateV = 0;
+        $Timputsemaine = 0;
+
+        $jour = new DateTime($donnees->dates[0]);
+        $jourj = $jour->format('Y-m-d');
+        $moisEX = substr($jourj, 0, 3);
+        foreach ($dateVs as $dateV) {
+            $jourbase = $dateV->getDate()->format('Y-m-d');
+            $moisBase = substr($jourbase, 0, 3);
+            if ($moisEX == $moisBase || $compteurDateV != 0) {
                 //incremente pour afficher la dernier DateV pour recuperer le total
                 $compteurDateV++;
                 $Timputsemaine += $dateV->getValeur();

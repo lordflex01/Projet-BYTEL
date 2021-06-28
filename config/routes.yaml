@@ -33,3 +33,7 @@ imput:
 export:
     path: /export
     controller: App\Controller\ImputController::exportAction
+
+exportmois:
+    path: /exportmois
+    controller: App\Controller\ImputController::exportmoisAction
