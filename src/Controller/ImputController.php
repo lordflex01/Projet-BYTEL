@@ -560,41 +560,66 @@ class ImputController extends AbstractController
         $i = 0;
         $compteurDateV = 0;
         $Timputsemaine = 0;
+        $findemois = 0;
+        $moisverif = 0;
+        $moisverifin = 0;
 
         $jour = new DateTime($donnees->dates[0]);
         $jourj = $jour->format('Y-m-d');
-        $moisEX = substr($jourj, 0, 3);
+        $moisEX = substr($jourj, 0, 7);
         foreach ($dateVs as $dateV) {
+            $bool = 0;
             $jourbase = $dateV->getDate()->format('Y-m-d');
-            $moisBase = substr($jourbase, 0, 3);
-            if ($moisEX == $moisBase || $compteurDateV != 0) {
-                //incremente pour afficher la dernier DateV pour recuperer le total
-                $compteurDateV++;
+            $weekdatetime = new DateTime($jourbase);
+            $weeknumber = $weekdatetime->format("W");
+            $moisBase = substr($jourbase, 0, 7);
+            //condition sur le mois selectionner
+            if ($moisEX == $moisBase) {
+                $bool = 1;
+                $moisverif = 1;
                 $Timputsemaine += $dateV->getValeur();
-                //condition pour ajoutez la ligne de l'export avec les information
-                if ($compteurDateV == 5) {
-                    //condition pour savoir si il est present ou abs
-                    if ($dateV->getCodeprojet() == "Absent")
-                        $p = "Absent";
-                    else
-                        $p = "Présent";
-                    //rendre le nombre format française
-                    $Timputsemainefr = number_format($Timputsemaine, 2, ',', ' ');
-                    $semaine = substr($donnees->week, 1);
-                    $tabexport[$i] = array(
-                        'D00550', 'Pole Digital B2B', 'Interne', $dateV->getImput()->getUser()->getUsername(),
-                        $dateV->getImput()->getUser()->getCapit(), $dateV->getTache()->getDomaine(), $dateV->getImput()->getUser()->getPoste(),
-                        '', '', '', '', '', $dateV->getCodeprojet()->getLibelle(), $dateV->getCodeprojet()->getDescription(),
-                        $dateV->getTache()->getLibelle(), $dateV->getActivite()->getLibelle(), '', $donnees->year, $p,
-                        $jour->format('d/m/Y 00:00'), $Timputsemainefr, $dateV->getImput()->getCommentaire(), '', $semaine,
-                        $dateV->getImput()->getUser()->getSalaire(), $dateV->getCodeprojet()->getBudgetConsomme(),
-                        $dateV->getCodeprojet()->getChargeConsomme(), 'DEBUT charge', '', '', '', ''
-                    );
-                    $compteurDateV = 0;
-                    $i++;
-                    $Timputsemaine = 0;
-                }
             }
+            //condition pour la date de debut de semaine
+            if ($compteurDateV == 0)
+                $datedebutsemaine =  $dateV->getDate()->format('d/m/Y 00:00');
+
+            //Condition sur la fin du mois
+            if ($findemois == $dateV->getImput()->getId() && $moisEX != $moisBase && $moisverif == 1 && $moisverifin == 0) {
+                $compteurDateV = 4;
+                $moisverifin = 1;
+                $bool = 1;
+            }
+
+            //incremente pour afficher la dernier DateV pour recuperer le total
+            $compteurDateV++;
+
+            //condition pour ajoutez la ligne de l'export avec les information
+            if ($bool == 1  && $compteurDateV == 5) {
+                //condition pour savoir si il est present ou abs
+                if ($dateV->getCodeprojet() == "Absent")
+                    $p = "Absent";
+                else
+                    $p = "Présent";
+                //rendre le nombre format française
+                $Timputsemainefr = number_format($Timputsemaine, 2, ',', ' ');
+                //remplire la ligne d'export avec les information de chaque imput
+                $tabexport[$i] = array(
+                    'D00550', 'Pole Digital B2B', 'Interne', $dateV->getImput()->getUser()->getUsername(),
+                    $dateV->getImput()->getUser()->getCapit(), $dateV->getTache()->getDomaine(), $dateV->getImput()->getUser()->getPoste(),
+                    '', '', '', '', '', $dateV->getCodeprojet()->getLibelle(), $dateV->getCodeprojet()->getDescription(),
+                    $dateV->getTache()->getLibelle(), $dateV->getActivite()->getLibelle(), '', $donnees->year, $p,
+                    $datedebutsemaine, $Timputsemainefr, $dateV->getImput()->getCommentaire(), '', $weeknumber,
+                    $dateV->getImput()->getUser()->getSalaire(), $dateV->getCodeprojet()->getBudgetConsomme(),
+                    $dateV->getCodeprojet()->getChargeConsomme(), 'DEBUT charge', '', '', '', ''
+                );
+                $i++;
+                $Timputsemaine = 0;
+            }
+            //pour passer a une autre imputation
+            if ($compteurDateV == 5) {
+                $compteurDateV = 0;
+            }
+            $findemois = $dateV->getImput()->getId();
         }
 
         $list = array(
