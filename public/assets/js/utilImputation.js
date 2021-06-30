@@ -244,7 +244,7 @@ $(document).ready(function () {
         $("#addRow").click(function () {
           compteurligneajout++;
           var add =
-            '<tr><td></td><td><select  class="form-control select2" id="codeP' +
+            '<tr><td></td><td><select onchange="remplirSelect2();" name="select1" class="form-control select2" id="codeP' +
             compteurligneajout +
             '" style="width: 100%;"><option>--Select--</option>';
           for (liste = 0; liste < codeP.length; liste++) {
@@ -254,12 +254,12 @@ $(document).ready(function () {
               ">" +
               codeP[liste].libelle +
               ":" +
-              codeP[liste].description
-            "</option>";
+              codeP[liste].description;
+            ("</option>");
           }
           add +=
             "</select></td>" +
-            '<td><select  class="form-control select2" id="tache' +
+            '<td><select name="select2" class="form-control select2" id="tache' +
             compteurligneajout +
             '"><option>--Select--</option>';
           for (liste = 0; liste < tache.length; liste++) {
@@ -320,8 +320,6 @@ $(document).ready(function () {
           });
           $("input[name='totalRow']", $tr).val(tot);
         });
-
-        //tooltip option
       },
       error: function (xhr, textStatus, errorThrown) {
         alert(xhr.responseText);
@@ -768,8 +766,7 @@ $(document).ready(function () {
       week: week,
       year: year,
       dates: dates,
-
-    }
+    };
 
     $.ajax({
       url: `/export`,
@@ -779,12 +776,12 @@ $(document).ready(function () {
       data: JSON.stringify(data),
       dataType: "json",
       async: true,
-      success: function (responseText) {
-
-      },
+      success: function (responseText) { },
       error: function (xhr, textStatus, errorThrown) {
-        let filename = 'data.csv';
-        let csvFile = new Blob(["\uFEFF" + xhr.responseText], { type: "text/csv" });
+        let filename = "data.csv";
+        let csvFile = new Blob(["\uFEFF" + xhr.responseText], {
+          type: "text/csv",
+        });
         let downloadLink = document.createElement("a");
         downloadLink.download = filename;
         downloadLink.href = window.URL.createObjectURL(csvFile);
@@ -866,3 +863,33 @@ $(document).ready(function () {
     });
   });
 });
+
+//////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////Fonction select2/////////////////////////////////////////////////////
+
+function remplirSelect2() {
+  var id_select = $('select[name="select1"]').val();
+  let selectCode = {
+    id: id_select,
+  };
+  $.ajax({
+    url: "/remplirSelect2",
+    type: "POST",
+    data: JSON.stringify(selectCode),
+    dataType: "json",
+    async: true,
+    success: function (response) {
+      let v = JSON.parse(response);
+      $('select[name="select2"]').html("");
+      $.each(v, function (index, value) {
+        // et  boucle sur la réponse contenu dans la variable passé à la function du success "json"
+        $('select[name="select2"]').append(
+          '<option value="' + value.id + '">' + value.libelle + "</option>"
+        );
+      });
+    },
+    error: function (xhr, textStatus, errorThrown) {
+      alert(xhr.responseText);
+    },
+  });
+}

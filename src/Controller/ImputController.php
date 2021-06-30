@@ -390,20 +390,8 @@ class ImputController extends AbstractController
     }
     public function ajaxAction(ActiviteRepository $activiteRepository, CodeProjetRepository $codeProjetRepository, TachesRepository $tachesRepository, Request $request, DateVRepository $dateVRepository)
     {
-        $imputs = $this->getDoctrine()
-            ->getRepository('App:Imput')
-            ->findAll();
         if ($request->isXmlHttpRequest() || $request->query->get('showJson') == 1) {
-            /*  $jsonData = array();
-            $idx = 0;
-            foreach ($imputs as $imput) {
-                $temp = array(
-                    'tache' => $imput->getTache(),
-                    'user' => $imput->getUser(),
-                    'dateVs' => $imput->getDateVs(),
-                );
-                $jsonData[$idx++] = $temp;
-            }*/
+
             //lieste des tache
             $tacheliste = [];
             $tache = $tachesRepository->findAll();
@@ -650,5 +638,30 @@ class ImputController extends AbstractController
         $response->headers->set('Content-Disposition', 'attachment; filename="testing.csv"');
 
         return $response;
+    }
+
+    /**
+     * @Route("/remplirSelect2", name="remplirSelect2" )
+     */
+
+    public function remplirSelect2Action(TachesRepository $tachesRepository, Request $request)
+    {
+        //on recupère les données
+        $donnees = json_decode($request->getContent());
+
+            $tacheliste = [];
+            $tache = $tachesRepository->findAll();
+            foreach ($tache as $taches) {
+                if ($taches->getCodeProjet()->getId() ==  $donnees->id) {
+                    $tacheliste[] = [
+                        'id' => $taches->getId(),
+                        'libelle' => $taches->getLibelle(),
+                    ];
+                }
+            }
+        
+        $data = json_encode($tacheliste);
+
+        return new JsonResponse($data);
     }
 }

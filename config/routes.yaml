@@ -37,3 +37,6 @@ export:
 exportmois:
     path: /exportmois
     controller: App\Controller\ImputController::exportmoisAction
+remplirSelect2:
+    path:  /remplirSelect2
+    controller: App\Controller\ImputController::remplirSelect2Action 
