@@ -259,7 +259,7 @@ $(document).ready(function () {
           }
           add +=
             "</select></td>" +
-            '<td><select name="select2" class="form-control select2" id="tache' +
+            '<td><select name="select2" class="form-control-imputation select2" id="tache' +
             compteurligneajout +
             '"><option>--Select--</option>';
           for (liste = 0; liste < tache.length; liste++) {
@@ -272,7 +272,7 @@ $(document).ready(function () {
           }
           add +=
             "</select></td>" +
-            '<td><select class="form-control select2" id="activite' +
+            '<td><select class="form-control-imputation select2" id="activite' +
             compteurligneajout +
             '"><option>--Select--</option>';
           for (liste = 0; liste < activite.length; liste++) {
