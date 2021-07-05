@@ -529,8 +529,7 @@ class ImputController extends AbstractController
                         '', '', '', '', '', $dateV->getCodeprojet()->getLibelle(), $dateV->getCodeprojet()->getDescription(),
                         $dateV->getTache()->getLibelle(), $dateV->getActivite()->getLibelle(), '', $donnees->year, $p,
                         $jour->format('d/m/Y 00:00'), $Timputsemainefr, $dateV->getImput()->getCommentaire(), '', $semaine,
-                        $dateV->getImput()->getUser()->getSalaire(), $budgetfr, $dateV->getCodeprojet()->getBudgetNRJConsomme(),
-                        $T[0], $T[1], $T[2], $T[3], $T[4]
+                        $dateV->getImput()->getUser()->getSalaire(), $budgetfr, $T[0], $T[1], $T[2], $T[3], $T[4]
                     );
                     $compteurDateV = 0;
                     $i++;
@@ -610,8 +609,13 @@ class ImputController extends AbstractController
 
             //Condition sur la fin du mois
             if ($findemois == $dateV->getImput()->getId() && $moisEX != $moisBase && $moisverif == 1 && $moisverifin == 0 && $boolnext == 1) {
+                //garder la valeur du compteur
+                $retour = $compteurDateV;
+                //pour afficher le resumtat au milieux de la semaine vu que le mois est fini
                 $compteurDateV = 4;
+                //pour savoir qu'on a deja acceder a cette condition
                 $moisverifin = 1;
+                //pour savoir qu'on est deja passé par le mois choisi
                 $bool = 1;
             }
 
@@ -672,6 +676,9 @@ class ImputController extends AbstractController
                     $datedebutsemaine, $Timputsemainefr, $dateV->getImput()->getCommentaire(), '', $weeknumber,
                     $dateV->getImput()->getUser()->getSalaire(), $budgetfr, $T[0], $T[1], $T[2], $T[3], $T[4]
                 );
+                //si plusieur imputation sont dans une semaine qui chevauche deux mois
+                if ($moisverifin ==  1)
+                    $compteurDateV = $retour + 1;
                 $i++;
                 $Timputsemaine = 0;
             }
