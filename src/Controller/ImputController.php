@@ -484,6 +484,42 @@ class ImputController extends AbstractController
                         $p = "Absent";
                     else
                         $p = "Présent";
+
+                    //Charge en française
+                    if ($dateV->getImput()->getUser()->getPoste() == "Développeur") {
+                        $T[0] = number_format($Timputsemaine, 2, ',', ' ');
+                        $T[1] = 0;
+                        $T[2] = 0;
+                        $T[3] = 0;
+                        $T[4] = 0;
+                    } elseif ($dateV->getImput()->getUser()->getPoste() == "Testeur") {
+                        $T[0] = 0;
+                        $T[1] = number_format($Timputsemaine, 2, ',', ' ');
+                        $T[2] = 0;
+                        $T[3] = 0;
+                        $T[4] = 0;
+                    } elseif ($dateV->getImput()->getUser()->getPoste() == "Business analyste") {
+                        $T[0] = 0;
+                        $T[1] = 0;
+                        $T[2] = number_format($Timputsemaine, 2, ',', ' ');
+                        $T[3] = 0;
+                        $T[4] = 0;
+                    } elseif ($dateV->getImput()->getUser()->getPoste() == "Pilotage") {
+                        $T[0] = 0;
+                        $T[1] = 0;
+                        $T[2] = 0;
+                        $T[3] = number_format($Timputsemaine, 2, ',', ' ');
+                        $T[4] = 0;
+                    } elseif ($dateV->getImput()->getUser()->getPoste() == "Architecte") {
+                        $T[0] = 0;
+                        $T[1] = 0;
+                        $T[2] = 0;
+                        $T[3] = 0;
+                        $T[4] = number_format($Timputsemaine, 2, ',', ' ');
+                    }
+                    //Budget en franaçais
+                    $budgeten = $Timputsemaine * $dateV->getImput()->getUser()->getSalaire();
+                    $budgetfr = number_format($budgeten, 2, ',', ' ');
                     //rendre le nombre format française
                     $Timputsemainefr = number_format($Timputsemaine, 2, ',', ' ');
                     $semaine = substr($donnees->week, 1);
@@ -493,8 +529,8 @@ class ImputController extends AbstractController
                         '', '', '', '', '', $dateV->getCodeprojet()->getLibelle(), $dateV->getCodeprojet()->getDescription(),
                         $dateV->getTache()->getLibelle(), $dateV->getActivite()->getLibelle(), '', $donnees->year, $p,
                         $jour->format('d/m/Y 00:00'), $Timputsemainefr, $dateV->getImput()->getCommentaire(), '', $semaine,
-                        $dateV->getImput()->getUser()->getSalaire(), $dateV->getCodeprojet()->getBudgetConsomme(),
-                        $dateV->getCodeprojet()->getChargeConsomme(), 'DEBUT charge', '', '', '', ''
+                        $dateV->getImput()->getUser()->getSalaire(), $budgetfr, $dateV->getCodeprojet()->getBudgetNRJConsomme(),
+                        $T[0], $T[1], $T[2], $T[3], $T[4]
                     );
                     $compteurDateV = 0;
                     $i++;
@@ -510,8 +546,7 @@ class ImputController extends AbstractController
                 'LOGIN_RESSOURCE', 'RESSOURCE_CS_RESSOURCE', 'RESSOURCE_CS_FOURNISSEUR', 'TYPE_DE_PROJET', 'NOM_PROJET',
                 'CC_PORTEUR_PROJET', 'STATUT_PROJET', 'CHEF_DE_PROJET', 'CODE_TACHE', 'DESCRIPTION_TACHE', 'JIRA',
                 'TYPE_ACTIVITE', 'ID-MOE', 'ANNEE', 'TYPE_IMPUTATION', 'SEMAINE', 'TOTAL', 'COMMENT_SEMAINE',
-                'COMMENT_MOIS', 'no_semaine', 'Coût unitaire', 'Montant', 'Charge', 'Charge DEV', 'Charge Testeur', 'Charge Analyste',
-                'Charge Pilotage', 'Charge architecte'
+                'COMMENT_MOIS', 'no_semaine', 'Coût unitaire', 'Montant', 'Charge DEV', 'Charge Testeur', 'Charge Analyste', 'Charge Pilotage', 'Charge architecte'
             ),
         );
         for ($j = 0; $j < $i; $j++) {
@@ -551,6 +586,7 @@ class ImputController extends AbstractController
         $findemois = 0;
         $moisverif = 0;
         $moisverifin = 0;
+        $boolnext = 0;
 
         $jour = new DateTime($donnees->dates[0]);
         $jourj = $jour->format('Y-m-d');
@@ -564,6 +600,7 @@ class ImputController extends AbstractController
             //condition sur le mois selectionner
             if ($moisEX == $moisBase) {
                 $bool = 1;
+                $moisverifin = 0;
                 $moisverif = 1;
                 $Timputsemaine += $dateV->getValeur();
             }
@@ -572,7 +609,7 @@ class ImputController extends AbstractController
                 $datedebutsemaine =  $dateV->getDate()->format('d/m/Y 00:00');
 
             //Condition sur la fin du mois
-            if ($findemois == $dateV->getImput()->getId() && $moisEX != $moisBase && $moisverif == 1 && $moisverifin == 0) {
+            if ($findemois == $dateV->getImput()->getId() && $moisEX != $moisBase && $moisverif == 1 && $moisverifin == 0 && $boolnext == 1) {
                 $compteurDateV = 4;
                 $moisverifin = 1;
                 $bool = 1;
@@ -588,6 +625,42 @@ class ImputController extends AbstractController
                     $p = "Absent";
                 else
                     $p = "Présent";
+
+                //Charge en française
+                if ($dateV->getImput()->getUser()->getPoste() == "Développeur") {
+                    $T[0] = number_format($Timputsemaine, 2, ',', ' ');
+                    $T[1] = 0;
+                    $T[2] = 0;
+                    $T[3] = 0;
+                    $T[4] = 0;
+                } elseif ($dateV->getImput()->getUser()->getPoste() == "Testeur") {
+                    $T[0] = 0;
+                    $T[1] = number_format($Timputsemaine, 2, ',', ' ');
+                    $T[2] = 0;
+                    $T[3] = 0;
+                    $T[4] = 0;
+                } elseif ($dateV->getImput()->getUser()->getPoste() == "Business analyste") {
+                    $T[0] = 0;
+                    $T[1] = 0;
+                    $T[2] = number_format($Timputsemaine, 2, ',', ' ');
+                    $T[3] = 0;
+                    $T[4] = 0;
+                } elseif ($dateV->getImput()->getUser()->getPoste() == "Pilotage") {
+                    $T[0] = 0;
+                    $T[1] = 0;
+                    $T[2] = 0;
+                    $T[3] = number_format($Timputsemaine, 2, ',', ' ');
+                    $T[4] = 0;
+                } elseif ($dateV->getImput()->getUser()->getPoste() == "Architecte") {
+                    $T[0] = 0;
+                    $T[1] = 0;
+                    $T[2] = 0;
+                    $T[3] = 0;
+                    $T[4] = number_format($Timputsemaine, 2, ',', ' ');
+                }
+                //Budget en franaçais
+                $budgeten = $Timputsemaine * $dateV->getImput()->getUser()->getSalaire();
+                $budgetfr = number_format($budgeten, 2, ',', ' ');
                 //rendre le nombre format française
                 $Timputsemainefr = number_format($Timputsemaine, 2, ',', ' ');
                 //remplire la ligne d'export avec les information de chaque imput
@@ -597,8 +670,7 @@ class ImputController extends AbstractController
                     '', '', '', '', '', $dateV->getCodeprojet()->getLibelle(), $dateV->getCodeprojet()->getDescription(),
                     $dateV->getTache()->getLibelle(), $dateV->getActivite()->getLibelle(), '', $donnees->year, $p,
                     $datedebutsemaine, $Timputsemainefr, $dateV->getImput()->getCommentaire(), '', $weeknumber,
-                    $dateV->getImput()->getUser()->getSalaire(), $dateV->getCodeprojet()->getBudgetConsomme(),
-                    $dateV->getCodeprojet()->getChargeConsomme(), 'DEBUT charge', '', '', '', ''
+                    $dateV->getImput()->getUser()->getSalaire(), $budgetfr, $T[0], $T[1], $T[2], $T[3], $T[4]
                 );
                 $i++;
                 $Timputsemaine = 0;
@@ -608,6 +680,7 @@ class ImputController extends AbstractController
                 $compteurDateV = 0;
             }
             $findemois = $dateV->getImput()->getId();
+            $boolnext = $bool;
         }
 
         $list = array(
@@ -617,8 +690,8 @@ class ImputController extends AbstractController
                 'LOGIN_RESSOURCE', 'RESSOURCE_CS_RESSOURCE', 'RESSOURCE_CS_FOURNISSEUR', 'TYPE_DE_PROJET', 'NOM_PROJET',
                 'CC_PORTEUR_PROJET', 'STATUT_PROJET', 'CHEF_DE_PROJET', 'CODE_TACHE', 'DESCRIPTION_TACHE', 'JIRA',
                 'TYPE_ACTIVITE', 'ID-MOE', 'ANNEE', 'TYPE_IMPUTATION', 'SEMAINE', 'TOTAL', 'COMMENT_SEMAINE',
-                'COMMENT_MOIS', 'no_semaine', 'Coût unitaire', 'Montant', 'Charge', 'Charge DEV', 'Charge Testeur', 'Charge Analyste',
-                'Charge Pilotage', 'Charge architecte'
+                'COMMENT_MOIS', 'no_semaine', 'Coût unitaire', ' Montant', 'Charge DEV', 'Charge Testeur',
+                'Charge Analyste', 'Charge Pilotage', 'Charge architecte'
             ),
         );
         for ($j = 0; $j < $i; $j++) {
@@ -649,17 +722,17 @@ class ImputController extends AbstractController
         //on recupère les données
         $donnees = json_decode($request->getContent());
 
-            $tacheliste = [];
-            $tache = $tachesRepository->findAll();
-            foreach ($tache as $taches) {
-                if ($taches->getCodeProjet()->getId() ==  $donnees->id) {
-                    $tacheliste[] = [
-                        'id' => $taches->getId(),
-                        'libelle' => $taches->getLibelle(),
-                    ];
-                }
+        $tacheliste = [];
+        $tache = $tachesRepository->findAll();
+        foreach ($tache as $taches) {
+            if ($taches->getCodeProjet()->getId() ==  $donnees->id) {
+                $tacheliste[] = [
+                    'id' => $taches->getId(),
+                    'libelle' => $taches->getLibelle(),
+                ];
             }
-        
+        }
+
         $data = json_encode($tacheliste);
 
         return new JsonResponse($data);

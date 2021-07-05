@@ -157,14 +157,18 @@ Swal.fire('Supprimé!', "L'élément a été bien supprimé ", 'success')
 										€
 										<div>
 
-											<span class="float-left badge bg-info">{{budg|number_format(0)}}
-												€ restants
+											<span class="float-left badge bg-info"><!--{{budg|number_format(0)}}-->{{ code_projet.budgetConsomme }}
+												€ Consommé
 											</span>
 										</div>
 									</td>
 									<td>
 										{{ code_projet.chageJH|number_format(0) }}
-
+										<div>
+											<span class="float-left badge bg-info">{{ code_projet.chargeConsomme }}
+												Consommé
+											</span>
+										</div>
 									</td>
 									<td>
 										Du

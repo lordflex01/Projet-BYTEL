@@ -81,6 +81,8 @@ class UserType extends AbstractType
                     'Testeur' => 'Testeur',
                     'Business analyste' => 'Business analyste',
                     'Manager' => 'Manager',
+                    'Pilotage' => 'Pilotage',
+                    'Architecte' => 'Architecte',
                 ],
             ])
             ->add('site', TextType::class, [

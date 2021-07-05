@@ -778,7 +778,7 @@ $(document).ready(function () {
       async: true,
       success: function (responseText) { },
       error: function (xhr, textStatus, errorThrown) {
-        let filename = "data.csv";
+        let filename = "data_semaine.csv";
         let csvFile = new Blob(["\uFEFF" + xhr.responseText], {
           type: "text/csv",
         });
@@ -852,7 +852,7 @@ $(document).ready(function () {
 
       },
       error: function (xhr, textStatus, errorThrown) {
-        let filename = 'data.csv';
+        let filename = 'data_mois.csv';
         let csvFile = new Blob(["\uFEFF" + xhr.responseText], { type: "text/csv" });
         let downloadLink = document.createElement("a");
         downloadLink.download = filename;
