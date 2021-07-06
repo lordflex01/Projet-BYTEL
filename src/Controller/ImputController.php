@@ -323,22 +323,50 @@ class ImputController extends AbstractController
     /**
      * @Route("/apii/delete", name="api_imput_delete", methods={"PUT"})
      */
-    public function apidelete(DateVRepository $dateVRepository, Request $request)
+    public function apidelete(CodeProjetRepository $codeProjetRepository, DateVRepository $dateVRepository, Request $request)
     {
 
         //on recupère les données
         $donnees = json_decode($request->getContent());
 
         //Declaration
+        $codeprojet = $codeProjetRepository->findAll();
         $dateVlistes = $dateVRepository->findAll();
         $entityManager = $this->getDoctrine()->getManager();
         foreach ($dateVlistes as $dateVliste) {
             if ($donnees->imputID == $dateVliste->getImput()->getId()) {
+                $codeP = new CodeProjet;
                 $dateV = new DateV;
                 $imput = new Imput;
                 $dateV = $dateVliste;
                 $imput = $dateVliste->getImput();
                 $entityManager->remove($dateV);
+                //calcules avec soustraction des imputation
+                $codeP = $dateV->getCodeprojet();
+                $chargeC = $codeP->getChargeConsomme() - $dateV->getValeur();
+                $budgetC = $codeP->getBudgetConsomme() - ($dateV->getValeur() * $dateV->getImput()->getUser()->getSalaire());
+                $codeP->setChargeConsomme($chargeC);
+                $codeP->setBudgetConsomme($budgetC);
+
+                if ($dateV->getTache()->getDomaine() == "NRJ") {
+                    $budgetFinale = $codeP->getBudgetNRJConsomme() - ($dateV->getValeur() * $dateV->getImput()->getUser()->getSalaire());
+                    $chargeFinale =  $codeP->getChargeNRJConsomme() - $dateV->getValeur();
+                    $codeP->setChargeNRJConsomme($chargeFinale);
+                    $codeP->setBudgetNRJConsomme($budgetFinale);
+                }
+                if ($dateV->getTache()->getDomaine() == "DECO") {
+                    $budgetFinale = $codeP->getBudgetDECOConsomme() + ($dateV->getValeur() * $dateV->getImput()->getUser()->getSalaire());
+                    $chargeFinale =  $codeP->getChargeDECOConsomme() + $dateV->getValeur();
+                    $codeP->setChargeDECOConsomme($chargeFinale);
+                    $codeP->setBudgetDECOConsomme($budgetFinale);
+                }
+                if ($dateV->getTache()->getDomaine() == "CLOE") {
+                    $budgetFinale = $codeP->getBudgetCLOEConsomme() + ($dateV->getValeur() * $dateV->getImput()->getUser()->getSalaire());
+                    $chargeFinale =  $codeP->getChargeCLOEConsomme() + $dateV->getValeur();
+                    $codeP->setChargeCLOEConsomme($chargeFinale);
+                    $codeP->setBudgetCLOEConsomme($budgetFinale);
+                }
+                $entityManager->persist($codeP);
             }
         }
         $entityManager->remove($imput);

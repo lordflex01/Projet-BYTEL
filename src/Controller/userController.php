@@ -106,7 +106,7 @@ class UserController extends AbstractController
     /**
      * @Route("/{id}/edit", name="user_edit", methods={"GET","POST"})
      */
-    public function edit(Request $request, User $user): Response
+    public function edit(Request $request, UserRepository $userRepository, User $user, $id): Response
     {
         $form = $this->createForm(UserType::class, $user);
         $form->handleRequest($request);
@@ -120,7 +120,6 @@ class UserController extends AbstractController
             //on supprime l'entrée de la base
             $em = $this->getDoctrine()->getManager();
             $em->remove($img);
-            $em->flush();
 
             //On récupère les images transmises
             $image = $form->get('image')->getData();
@@ -135,7 +134,6 @@ class UserController extends AbstractController
             );
 
             //on stocke l'image dans la base de données (son nom)
-            $img = new Image();
             $img->setName($fichier);
             $user->setImage($img);
 
