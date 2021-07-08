@@ -40,3 +40,8 @@ exportmois:
 remplirSelect2:
     path:  /remplirSelect2
     controller: App\Controller\ImputController::remplirSelect2Action 
+
+statistique:
+    path: /statistique
+    controller: App\Controller\StatistiqueController::statistique
+
