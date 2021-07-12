@@ -22,9 +22,10 @@
 			</div>
 			<!-- /.container-fluid -->
 		</section>
+		{% set i = 0 %}
 		{% for code_projet in code_projets %}
 			<section class="content">
-				<div class="card card-primary">
+				<div class="card card-info">
 					<div class="card-header">
 						<h3 class="card-title">Charge et budget du
 							{{ code_projet.libelle }}:
@@ -150,7 +151,7 @@
 							<div class="col-md-6">
 								<div class="card card-secondary">
 									<div class="card-header">
-										<h3 class="card-title">Charge par proste</h3>
+										<h3 class="card-title">Charge par poste</h3>
 									</div>
 									<div class="card-body p-0">
 										<table class="table table-striped projects">
@@ -174,27 +175,28 @@
 												<tr>
 													<td>DEV</td>
 													<td></td>
-													<td></td>
+													<td>{{ dev[i] }}</td>
 													<td></td>
 												</tr>
 												<tr>
 													<td>Testeur</td>
 													<td></td>
-													<td></td>
+													<td>{{ testeur[i] }}</td>
 													<td></td>
 												</tr>
 												<tr>
-													<td>Analyste</td>
+													<td>analyste</td>
 													<td></td>
-													<td></td>
+													<td>{{ analyste[i] }}</td>
 													<td></td>
 												</tr>
 												<tr>
 													<td>Pilotage</td>
 													<td></td>
-													<td></td>
+													<td>{{ pilotage[i] }}</td>
 													<td></td>
 												</tr>
+												{% set i = i + 1 %}
 											</tbody>
 										</table>
 									</div>

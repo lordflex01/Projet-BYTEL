@@ -170,7 +170,7 @@
 							class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
 							<!-- Menu page de demarage avec condition  !-->
 							<li class="nav-item">
-								{% if app.request.uri  == 'https://127.0.0.1:8000/index' %}
+								{% if (app.request.uri  == 'https://127.0.0.1:8000/index') or (app.request.uri  == 'https://127.0.0.1:8000/statistique') %}
 									<a href="/index" class="nav-link active">
 									{% else %}
 										<a href="/index" class="nav-link">
@@ -183,7 +183,10 @@
 									</a>
 									<ul class="nav nav-treeview">
 										<li class="nav-item">
-											<a href="/statistique" class="nav-link active">
+									{% if app.request.uri  == 'https://127.0.0.1:8000/statistique' %}
+											<a href="/statistique" class="nav-link active">{% else %}
+											<a href="/statistique" class="nav-link">
+										{% endif %}
 												<i class="far 	fa-circle nav-icon"></i>
 												<p>Rapports / Statistiques</p>
 											</a>
@@ -212,8 +215,12 @@
 								</li>
 							</li>
 							{% if is_granted('ROLE_ADMIN') %}
-								<li class="nav-item">
-									<a href="/projet" class="nav-link">
+								{% if (app.request.uri  == 'https://127.0.0.1:8000/projet/') or (app.request.uri  == 'https://127.0.0.1:8000/code/projet/') or (app.request.uri  == 'https://127.0.0.1:8000/taches/') or (app.request.uri  == 'https://127.0.0.1:8000/activite/') %}
+								<li class="nav-item menu-open">
+									<a href="/projet" class="nav-link active">{% else %}
+									<li class="nav-item">
+										<a href="/projet" class="nav-link">
+										{% endif %}
 										<i class="nav-icon fas fa-tasks"></i>
 										<p>
 											Projets
@@ -222,25 +229,41 @@
 									</a>
 									<ul class="nav nav-treeview">
 										<li class="nav-item">
+											{% if app.request.uri  == 'https://127.0.0.1:8000/projet/' %}
 											<a href="/projet" class="nav-link active">
+											{% else %}
+										<a href="/projet" class="nav-link">
+										{% endif %}
 												<i class="far 	fa-circle nav-icon"></i>
 												<p>Détails Projets</p>
 											</a>
 										</li>
 										<li class="nav-item">
+										{% if app.request.uri  == 'https://127.0.0.1:8000/code/projet/' %}
+											<a href="/code/projet/" class="nav-link active">
+										{% else %}
 											<a href="/code/projet/" class="nav-link">
+										{% endif %}
 												<i class="far 	fa-circle nav-icon"></i>
 												<p>Code Projets</p>
 											</a>
 										</li>
 										<li class="nav-item">
+										{% if app.request.uri  == 'https://127.0.0.1:8000/taches/' %}
+											<a href="/taches" class="nav-link active">
+										{% else %}
 											<a href="/taches" class="nav-link">
+										{% endif %}
 												<i class="far fa-circle nav-icon"></i>
 												<p>Tâches</p>
 											</a>
 										</li>
 										<li class="nav-item">
+										{% if app.request.uri  == 'https://127.0.0.1:8000/activite/' %}
+											<a href="/activite" class="nav-link active">
+										{% else %}
 											<a href="/activite" class="nav-link">
+										{% endif %}
 												<i class="far fa-circle nav-icon"></i>
 												<p>Activitées</p>
 											</a>
