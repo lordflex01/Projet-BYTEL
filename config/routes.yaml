@@ -2,9 +2,9 @@
 #    path: /
 #    controller: App\Controller\DefaultController::index
 
-index:
-    path: /index
-    controller: App\Controller\indexController::index
+accueil:
+    path: /accueil
+    controller: App\Controller\IndexController::index
 
 api:
     path: /api/{id}/edit
@@ -37,6 +37,11 @@ export:
 exportmois:
     path: /exportmois
     controller: App\Controller\ImputController::exportmoisAction
+
+export_interval:
+    path: /exportinter
+    controller: App\Controller\ImputController::exportInterval
+    
 remplirSelect2:
     path:  /remplirSelect2
     controller: App\Controller\ImputController::remplirSelect2Action 
@@ -45,3 +50,30 @@ statistique:
     path: /statistique
     controller: App\Controller\StatistiqueController::statistique
 
+export-statistique:
+    path: /export-statistique
+    controller: App\Controller\StatistiqueController::statistique
+
+suivimputation:
+    path: /suivimputation
+    controller: App\Controller\SuivimputController::suivimputation
+
+Rechercheimput:
+    path: /suivimputation/recherche
+    controller: App\Controller\SuivimputController::ajaxAction
+
+upload:
+    path: /doUpload
+    controller: App\Controller\TachesController::uploadFile
+
+uploadIoda:
+    path: /upload-ioda
+    controller: App\Controller\ImputationController::upload
+
+suivimputationMois:
+    path: /suivmputationMois
+    controller: App\Controller\SuivimputController::suivImputationMois
+    
+envoirelance:
+    path: /envoyer_relance
+    controller: App\Controller\SuivimputController::envoiRelance

@@ -1,0 +1,30 @@
+- Mettre à jour la base de données : 
+    Voir dans le dossier migration, le fichier Version20231127101320.php
+
+- Créer un dossier accueil dans le dossier template et déplacer le fichier index.html.twig dans le dossier
+
+- Mettre à jour les fichiers :
+    Controller : ImputController, IndexController, SuiviImputController, UserController
+    Entity : User, Taches
+    Form : CodeProjetType, TachesType, UserType
+    Repository : DateVRepository
+
+- Mettre à jour les templates : 
+    activite : _form.html.twig, edit.html.twig, index.html.twig, new.html.twig
+    codeprojet : _form.html.twig, index.html.twig, show.html.twig
+    imput : _form.html.twig, index.html.twig, new.html.twig
+    imputation : index.html.twig
+    projet : _form.html.twig, index.html.twig
+    suvimput : suivi_mois.html.twig
+    taches : _form.html.html, index.html.twig, _formUp.html.twig, edit.html.twig, new.html.twig
+    user : _form.html.twig, new.html.twig, user.html.twig
+    header.html.twig
+
+- Installer Symfony Mailer si ce n'est pas déjà fait
+
+- Mettre à jour le fichier routes.yaml
+
+- Modifier le fichier AppCustomAuthenticator.php dans le dossier src/Security : 
+    Changer index par accueil
+
+- Configuer le dsn pour les mail dans le fichier .env (enlever localhost et mettre le serveur dsn de l'hébergeur)

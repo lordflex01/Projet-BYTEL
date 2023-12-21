@@ -1,22 +1,16 @@
 {% extends 'header.html.twig' %}
 
 {% block body %}
-	<div
-		class="content-wrapper">
+	<div class="content-wrapper">
 		<!-- Content Header (Page header) -->
 		<section class="content-header">
 			<div class="container-fluid">
 				<div class="row mb-2">
 					<div class="col-sm-6">
-						<h1>Statistique Projet</h1>
+						<h1>Statistiques Projet</h1>
 					</div>
 					<div class="col-sm-6">
-						<ol class="breadcrumb float-sm-right">
-							<li class="breadcrumb-item">
-								<a href="#">Acceil</a>
-							</li>
-							<li class="breadcrumb-item active">Statistique</li>
-						</ol>
+						<a class="btn btn-default" style="float:right;" href="{{ path('export-statistique') }}"> Exporter les statistiques &nbsp; <i class="fa fa-upload" aria-hidden="true" style="font-size:14px"></i></a>
 					</div>
 				</div>
 			</div>
@@ -161,38 +155,47 @@
 														#
 													</th>
 													<th>
-														Charges prévues en j/H
+														NRJ
 													</th>
 													<th>
-														Charges Consommées en j/H
+														DECO
 													</th>
 													<th>
-														Delta
+														CLOE
+													</th>
+													<th>
+														Total
 													</th>
 												</tr>
 											</thead>
 											<tbody>
 												<tr>
 													<td>DEV</td>
-													<td></td>
+													<td>{{ devNRJ[i] }}</td>
+													<td>{{ devDECO[i] }}</td>
+													<td>{{ devCLOE[i] }}</td>
 													<td>{{ dev[i] }}</td>
-													<td></td>
-												</tr>
+																									</tr>
 												<tr>
 													<td>Testeur</td>
-													<td></td>
+													<td>{{ testeurNRJ[i] }}</td>
+													<td>{{ testeurDECO[i] }}</td>
+													<td>{{ testeurCLOE[i] }}</td>
 													<td>{{ testeur[i] }}</td>
-													<td></td>
-												</tr>
+																									</tr>
 												<tr>
 													<td>analyste</td>
-													<td></td>
+													<td>{{ analysteNRJ[i] }}</td>
+													<td>{{ analysteDECO[i] }}</td>
+													<td>{{ analysteCLOE[i] }}</td>
 													<td>{{ analyste[i] }}</td>
 													<td></td>
 												</tr>
 												<tr>
 													<td>Pilotage</td>
-													<td></td>
+													<td>{{ pilotageNRJ[i] }}</td>
+													<td>{{ pilotageDECO[i] }}</td>
+													<td>{{ pilotageCLOE[i] }}</td>
 													<td>{{ pilotage[i] }}</td>
 													<td></td>
 												</tr>

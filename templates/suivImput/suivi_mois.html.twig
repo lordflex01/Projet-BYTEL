@@ -1,0 +1,91 @@
+{% extends 'header.html.twig' %}
+{% block javascripts %}
+	<script>
+	document.addEventListener("DOMContentLoaded", function() {
+		const sendReminderButton = document.getElementById('sendReminderButton');
+
+		if (sendReminderButton) {
+			sendReminderButton.addEventListener('click', function() {
+				// Effectuer une requête AJAX
+				fetch('/envoyer_relance', {
+					method: 'POST', // ou 'POST' selon votre configuration
+					headers: {
+						'Content-Type': 'application/json'
+						// Ajoutez d'autres en-têtes si nécessaire
+					},
+					// Ajoutez le corps de la requête si nécessaire
+				})
+				.then(response => {
+					if (response.ok) {
+						console.log("Email envoyé");
+					} else {
+						conosle.error("Echec envoi:");
+					}
+				})
+				.catch(error => {
+					// Gérer les erreurs de requête
+				});
+			});
+		}
+	});
+</script>
+{% endblock %}
+{% block body %}
+	<div class="content-wrapper">
+		<!-- Content Header (Page header) -->
+		<section class="content-header">
+			<div class="container-fluid">
+				<div class="row mb-2">
+					<div class="col-sm-6">
+						<h1>Suivi Imputation mensuel</h1>
+					</div>
+				</div>
+			</div>
+			<!-- /.container-fluid -->
+		</section>
+		{% set i = 0 %}
+		{% for userlist in userlisteTotal %}
+			<section class="content">
+				<div class="card card-info">
+					<div class="card-header">
+						<h3 class="card-title">
+							{{weeks[i]}}
+						</h3>
+						{% set i = i + 1 %}
+						<div class="card-tools">
+<button class="btn btn-primary" id="sendReminderButton">Envoyer des relances</button>
+							<button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+								<i class="fas fa-minus"></i>
+							</button>
+							<button type="button" class="btn btn-tool" data-card-widget="remove" title="Remove">
+								<i class="fas fa-times"></i>
+							</button>
+						</div>
+					</div>
+					<div class="card-body p-0">
+
+						<table class="table table-striped projects">
+							<thead>
+								<tr>
+									<th>Nom</th>
+									<th>Total imputation semaine</th>
+								</tr>
+							</thead>
+							<tbody>
+								{% for user in userlist %}
+									{% if user.valeur < 5 %}
+										<tr>
+											<td>{{user.username}}</td>
+											<td>{{user.valeur}}</td>
+										</tr>
+									{% endif %}
+								{% endfor %}
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</section>
+		{% endfor %}
+		<!-- /.card-body -->
+	</div>
+{% endblock %}

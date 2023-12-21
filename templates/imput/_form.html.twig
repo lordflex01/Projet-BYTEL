@@ -2,29 +2,26 @@
 {{ dump(form) }}
 <section class="content">
 	<div class="container-fluid">
-		<div
-			class="row">
+		<div class="row">
 			<!-- left column -->
-			<div
-				class="col-md-12">
+			<div class="col-md-12">
 				<!-- general form elements -->
 				<div class="card card-primary">
 					<!-- /.card-header -->
 					<!-- form start -->
-						<form>
-							<div class="card-body"> <div class="form-group">
+					<form>
+						<div class="card-body"> 
+							<div class="form-group">
 								<label for="{{form.user.vars.id}}">Collaborateur</label>
 								{{form_widget( form.user)}}
 								{% do form.user.setRendered %}
 							</div>
-
 
 							<div id="DateV" data-prototype="{{ form_row(form.DateVs.vars.prototype)|e('html_attr') }}">
 								{{form_row(form.DateVs)}}
 								{% do form.DateVs.setRendered %}
 								<span></span>
 							</div>
-
 						</div>
 						<!-- /.card-body -->
 						<div class=" card-footer">
@@ -34,4 +31,6 @@
 				</div>
 			</div>
 		</div>
-		{{ form_end(form) }}
+	</div>
+</section>
+{{ form_end(form) }}

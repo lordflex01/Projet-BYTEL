@@ -14,6 +14,7 @@ use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
 class UserType extends AbstractType
@@ -36,7 +37,12 @@ class UserType extends AbstractType
             ])
             ->add('salaire', TextType::class, [
                 'attr' => [
-                    'placeholder' => "Veuillez entrer le coût journalier du collaborateur"
+                    'placeholder' => "Veuillez entrer le salaire journalier du collaborateur"
+                ]
+            ])
+            ->add('taux', TextType::class, [
+                'attr' => [
+                    'placeholder' => "Veuillez entrer le taux journalier du collaborateur"
                 ]
             ])
             ->add('capit', TextType::class, [
@@ -71,6 +77,10 @@ class UserType extends AbstractType
                 'multiple' => false,
                 'expanded' => false,
                 'class' => Projet::class,
+'query_builder' => function(\Doctrine\ORM\EntityRepository $repository){
+                    return  $repository->createQueryBuilder('projet')
+                        ->where('projet.statut = 1');
+                },
             ])
             ->add('poste', ChoiceType::class, [
                 'required' => true,
@@ -89,6 +99,11 @@ class UserType extends AbstractType
                 'attr' => [
                     'placeholder' => "Veuillez entrer votre site"
                 ]
+])
+            ->add('flag', CheckboxType::class, [
+                'label_attr' => ['class' => 'switch-custom'],
+                'label' => 'Suivi imputation',
+                'required' => false,
             ]);
 
         $builder->get('roles')

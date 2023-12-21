@@ -1,0 +1,41 @@
+{{ form_start(formUp) }}
+<!-- Main content -->
+{% block content %}
+	<div class="container container-fluid">
+		<div class="row">
+			<div class="col-lg-8">
+				{% for message in app.flashes('success') %}
+					<div class="alert alert-success">
+						{{ message }}
+					</div>
+				{% endfor %}
+				{% for message in app.flashes('default') %}
+					<div class="alert alert-default">
+						{{ message }}
+					</div>
+				{% endfor %}
+				{% for message in app.flashes('danger') %}
+					<div class="alert alert-danger">
+						{{ message }}
+					</div>
+				{% endfor %}
+				{{ form_start(formUp, { attr: { 'accept-charset' : 'utf-8' }}) }}
+				<div>
+					{{ form_label(formUp.upload_file) }}
+					{{ form_widget(formUp.upload_file) }}
+					{{ form_errors(formUp.upload_file) }}
+				</div>
+				<div class="form-group">
+					<a href="/uploadMass">
+						<button class="btn btn-primary" type="submit" style="float: right; margin-right: -209px;margin-top: -37px;" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" />
+							<i class="fa fa-upload" aria-hidden="true" style="font-size:14px"></i>
+						</button>
+					</a>
+				</div>
+				{{ form_rest(formUp) }}
+				{{ form_end(formUp) }}
+			</div>
+		</div>
+	</div>
+{% endblock %}
+{{ form_end(formUp) }}

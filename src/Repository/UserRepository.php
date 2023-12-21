@@ -53,15 +53,17 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
     }
     */
 
-    /*
-    public function findOneBySomeField($value): ?User
+    
+    public function findByProject()
     {
-        return $this->createQueryBuilder('u')
-            ->andWhere('u.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
+        $qb = $this->_em->createQueryBuilder();
+        return $qb->select('COUNT(u.id) AS nbusers', 'p.libelle AS nomprojet')
+        ->from(User::class, 'u')
+        ->leftJoin('u.projet', 'p')
+        ->where('u.Flag = 1')
+        ->groupBy('p.libelle')
+        ->getQuery()
+        ->getResult();
     }
-    */
+    
 }

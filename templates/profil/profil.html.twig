@@ -2,15 +2,14 @@
 
 {% block body %}
 	<!-- Content Wrapper. Contains page content -->
-	<div
-		class="content-wrapper">
+	<div class="content-wrapper">
 		<!-- Content Header (Page header) -->
 		<div class="content-header">
 			<div class="container-fluid">
 				<div class="row mb-2">
 					<div class="col-sm-6">
 						<h1 class="m-0">
-							Profil
+							Mon Profil
 						</h1>
 					</div>
 				</div>
@@ -24,14 +23,17 @@
 		<section class="content">
 			<div class="container-fluid">
 				<div class="row">
-					<div
-						class="col-md-3">
+					<div class="col-md-3">
 
 						<!-- Profile Image -->
 						<div class="card card-primary card-outline">
 							<div class="card-body box-profile">
 								<div class="text-center">
-									<img class="profile-user-img img-fluid img-circle" src="{{asset ('/uploads/' ~ app.user.image.name)}}" alt="User profile picture">
+									{% if app.user.image == null %}
+										<img class="profile-user-img img-fluid img-circle" src="{{asset ('/uploads/avatar.png')}}" alt="User profile picture">
+									{% else %}
+										<img class="profile-user-img img-fluid img-circle" src="{{asset ('/uploads/' ~ app.user.image.name)}}" alt="User profile picture">
+									{% endif %}
 								</div>
 
 								<h3 class="profile-username text-center">{{ app.user.username }}</h3>
@@ -39,22 +41,24 @@
 								<p class="text-muted text-center"></p>
 
 								<ul class="list-group list-group-unbordered mb-3">
-									
+
 									<li class="list-group-item">
-										<b> {% if app.user.roles  == ["ROLE_USER"]%}
-									Utilisateur
-								{% else %}
-									Administrateur
-								{% endif %}</b>
-										
+										<b>
+											{% if app.user.roles  == ["ROLE_USER"]%}
+												Utilisateur
+											{% else %}
+												Administrateur
+											{% endif %}
+										</b>
+
 									</li>
 									<li class="list-group-item">
 										<b>{{ app.user.poste }}</b>
-										
+
 									</li>
-                                    <li class="list-group-item">
+									<li class="list-group-item">
 										<b>{{ app.user.email }}</b>
-										
+
 									</li>
 								</ul>
 							</div>
@@ -69,196 +73,104 @@
 								<ul class="nav nav-pills">
 									<li class="nav-item">
 										<a class="nav-link active" href="#activity" data-toggle="tab">
-											Activitées récentes</a>
+											Activités</a>
 									</li>
+									{% if is_granted('ROLE_ADMIN') %}
+										<li class="nav-item">
+											<a class="nav-link" href="#domainechange" data-toggle="tab">
+												Changer de domaine</a>
+										</li>
+									{% endif %}
 									<li class="nav-item">
 										<a class="nav-link" href="#timeline" data-toggle="tab">
-											Tâches en attente</a>
+											Changer de mot de passe</a>
 									</li>
-									
 								</ul>
 							</div>
 							<!-- /.card-header -->
 							<div class="card-body">
 								<div class="tab-content">
-									<div
-										class="active tab-pane" id="activity">
+									<div class="active tab-pane" id="activity">
 										<!-- Post -->
 										<div class="post">
 											<div class="user-block">
-												<img class="img-circle img-bordered-sm" src="{{asset ('/uploads/' ~ app.user.image.name)}}" alt="user image">
+												{% if app.user.image == null %}
+													<img class="img-circle img-bordered-sm" src="{{asset ('/uploads/avatar.png')}}" alt="user image">
+												{% else %}
+													<img class="img-circle img-bordered-sm" src="{{asset ('/uploads/' ~ app.user.image.name)}}" alt="user image">
+												{% endif %}
 												<span class="username">
 													<a href="">{{ app.user.username }}</a>
 													<a href="#" class="float-right btn-tool">
 														<i class="fas fa-times"></i>
 													</a>
 												</span>
-												<span class="description">Shared publicly - 7:30 PM today</span>
+												<span class="description">{{app.user.capit}}</span>
 											</div>
 											<!-- /.user-block -->
 											<p>
-												Lorem ipsum represents a long-held tradition for designers,
-																								                        typographers and the like. Some people hate it and argue for
-																								                        its demise, but others ignore the hate as they create awesome
-																								                        tools to help create filler text for everyone from bacon lovers
-																								                        to Charlie Sheen fans.
+												{{ app.user.projet.libelle }}:
+												{{ app.user.projet.description }}
 											</p>
-
-											</div>
-										<!-- /.post -->
-
-
-									</div>
-									<!-- /.tab-pane -->
-									<div
-										class="tab-pane" id="timeline">
-										<!-- The timeline -->
-										<div
-											class="timeline timeline-inverse">
-											<!-- timeline time label -->
-											<div class="time-label">
-												<span class="bg-danger">
-													10 Feb. 2014
-												</span>
-											</div>
-											<!-- /.timeline-label -->
-											<!-- timeline item -->
-											<div>
-												<i class="fas fa-envelope bg-primary"></i>
-
-												<div class="timeline-item">
-													<span class="time">
-														<i class="far fa-clock"></i>
-														12:05</span>
-
-													<h3 class="timeline-header">
-														<a href="#">Support Team</a>
-														sent you an email</h3>
-
-													<div class="timeline-body">
-														Etsy doostang zoodles disqus groupon greplin oooj voxy zoodles,
-																												                            weebly ning heekya handango imeem plugg dopplr jibjab, movity
-																												                            jajah plickers sifteo edmodo ifttt zimbra. Babblely odeo kaboodle
-																												                            quora plaxo ideeli hulu weebly balihoo...
-													</div>
-													<div class="timeline-footer">
-														<a href="#" class="btn btn-primary btn-sm">Read more</a>
-														<a href="#" class="btn btn-danger btn-sm">Delete</a>
-													</div>
-												</div>
-											</div>
-											<!-- END timeline item -->
-											<!-- timeline item -->
-											<div>
-												<i class="fas fa-user bg-info"></i>
-
-												<div class="timeline-item">
-													<span class="time">
-														<i class="far fa-clock"></i>
-														5 mins ago</span>
-
-													<h3 class="timeline-header border-0">
-														<a href="#">Sarah Young</a>
-														accepted your friend request
-													</h3>
-												</div>
-											</div>
-											<!-- END timeline item -->
-											<!-- timeline item -->
-											<div>
-												<i class="fas fa-comments bg-warning"></i>
-
-												<div class="timeline-item">
-													<span class="time">
-														<i class="far fa-clock"></i>
-														27 mins ago</span>
-
-													<h3 class="timeline-header">
-														<a href="#">Jay White</a>
-														commented on your post</h3>
-
-													<div class="timeline-body">
-														Take me to your leader!
-																												                            Switzerland is small and neutral!
-																												                            We are more like Germany, ambitious and misunderstood!
-													</div>
-													<div class="timeline-footer">
-														<a href="#" class="btn btn-warning btn-flat btn-sm">View comment</a>
-													</div>
-												</div>
-											</div>
-											<!-- END timeline item -->
-											<!-- timeline time label -->
-											
-											<!-- /.timeline-label -->
-											<!-- timeline item -->
-											
 										</div>
+										<!-- /.post -->
 									</div>
 									<!-- /.tab-pane -->
-
-									<div class="tab-pane" id="settings">
-										<form class="form-horizontal">
-											<div class="form-group row">
-												<label for="inputName" class="col-sm-2 col-form-label">Name</label>
-												<div class="col-sm-10">
-													<input type="email" class="form-control" id="inputName" placeholder="Name">
-												</div>
+									<div class="tab-pane" id="timeline">
+										{% for message in app.flashes('success') %}
+											<div class="alert alert-success">
+												{{ message }}
 											</div>
-											<div class="form-group row">
-												<label for="inputEmail" class="col-sm-2 col-form-label">Email</label>
-												<div class="col-sm-10">
-													<input type="email" class="form-control" id="inputEmail" placeholder="Email">
-												</div>
+										{% endfor %}
+											{% for msg in app.flashes('danger') %}
+											<div class="alert alert-danger">
+												{{ msg }}
 											</div>
-											<div class="form-group row">
-												<label for="inputName2" class="col-sm-2 col-form-label">Name</label>
-												<div class="col-sm-10">
-													<input type="text" class="form-control" id="inputName2" placeholder="Name">
-												</div>
+										{% endfor %}
+										<form id="PWchange" action="{{ path('pwchange') }}" method="post">
+											<div class="form-group">
+												<b>Entrez votre nouveau mot de passe</b>
+												<input type="password" id="pass2" name="password2" minlength="5" class="form-control" required>
 											</div>
-											<div class="form-group row">
-												<label for="inputExperience" class="col-sm-2 col-form-label">Experience</label>
-												<div class="col-sm-10">
-													<textarea class="form-control" id="inputExperience" placeholder="Experience"></textarea>
-												</div>
+											<div class="form-group">
+												<b>Confirmer le mot de passe</b>
+												<input type="password" id="pass3" name="password3" minlength="5" class="form-control" required>
 											</div>
-											<div class="form-group row">
-												<label for="inputSkills" class="col-sm-2 col-form-label">Skills</label>
-												<div class="col-sm-10">
-													<input type="text" class="form-control" id="inputSkills" placeholder="Skills">
-												</div>
-											</div>
-											<div class="form-group row">
-												<div class="offset-sm-2 col-sm-10">
-													<div class="checkbox">
-														<label>
-															<input type="checkbox">
-															I agree to the
-															<a href="#">terms and conditions</a>
-														</label>
-													</div>
-												</div>
-											</div>
-											<div class="form-group row">
-												<div class="offset-sm-2 col-sm-10">
-													<button type="submit" class="btn btn-danger">Submit</button>
-												</div>
+											<div>
+												<input type="submit" value="Modifier" style="margin-top:20px" class="btn btn-success float-right">
 											</div>
 										</form>
 									</div>
+									<!-- /.card-body -->
 									<!-- /.tab-pane -->
+									<div class="tab-pane" id="domainechange">
+										<form id="domainechange" action="{{ path('domainechange') }}" method="post">
+											{% for projet in projets %}
+
+												<div class="form-group">
+													<input type="radio" id="projet" name="domainechange" value={{projet.id}}>
+													<label for="projet">{{ projet.libelle }}</label>
+												</div>
+
+											{% endfor %}
+											<div>
+												<input type="submit" value="Modifier" class="btn btn-success float-right">
+											</div>
+										</form>
+									</div>
 								</div>
-								<!-- /.tab-content -->
+								<!-- /.tab-pane -->
 							</div>
-							<!-- /.card-body -->
+							<!-- /.tab-content -->
 						</div>
-						<!-- /.card -->
+						<!-- /.card-body -->
 					</div>
-					<!-- /.col -->
+					<!-- /.card -->
 				</div>
-				<!-- /.row -->
+				<!-- /.col -->
 			</div>
-			<!-- /.container-fluid -->
-		</section>
-	{% endblock %}
+			<!-- /.row -->
+		</div>
+		<!-- /.container-fluid -->
+	</section>
+{% endblock %}

@@ -11,60 +11,59 @@
 	<script src="{{asset ("assets/js/impCal/lib/moment.min.js")}}"></script>
 
 	<script>
-
 		document.addEventListener('DOMContentLoaded', function () {
-var calendarEl = document.getElementById('calendar');
+			var calendarEl = document.getElementById('calendar');
 
-var calendar = new FullCalendar.Calendar(calendarEl, {
+			var calendar = new FullCalendar.Calendar(calendarEl, {
 
-// eventClick: function (info) {
-// alert(info.event.title + "\n\n\n\nModifier cette imputation:");
-// info.el.style.borderColor = 'red';
-// },
-select: function (start, end) {
-$('#ModalAdd #start').val(moment(start.startStr).format('YYYY-MM-DD HH:mm'));
-$('#ModalAdd #end').val(moment(start.endStr).format('YYYY-MM-DD HH:mm'));
-$('#ModalAdd').modal('show');
-},
+				// eventClick: function (info) {
+				// alert(info.event.title + "\n\n\n\nModifier cette imputation:");
+				// info.el.style.borderColor = 'red';
+				// },
+				select: function (start, end) {
+					$('#ModalAdd #start').val(moment(start.startStr).format('YYYY-MM-DD HH:mm'));
+					$('#ModalAdd #end').val(moment(start.endStr).format('YYYY-MM-DD HH:mm'));
+					$('#ModalAdd').modal('show');
+				},
 
-locale: "fr",
-editable: true, // enable draggable events
-selectable: true,
-selectHelper: true,
-aspectRatio: 1.8,
-headerToolbar: {
-left: 'today prev,next',
-center: 'title',
-right: 'resourceTimelineDay,timeGridWeek,dayGridMonth,listWeek'
-},
-initialView: 'resourceTimelineDay',
-resourceAreaHeaderContent: 'Collaborateurs',
-eventResizableFromStart: true,
-resources: {{ uses | raw }},
-eventClick: function (event, element) {
-$('#ModalEdit #id').val(event.id);
-$('#ModalEdit #title').val(event.title);
-$('#ModalEdit #color').val(event.color);
-$('#ModalEdit').modal('show');
-},
-events: {{ datas | raw }}
-});
-calendar.on('eventChange', (e) => {
-let url = `/api/${
-e.event.id
-}/edit`
-let donnees = {
-"title": e.event.title,
-"start": e.event.start,
-"end": e.event.end
-}
-let xhr = new XMLHttpRequest
-xhr.open("PUT", url)
-xhr.send(JSON.stringify(donnees))
-})
+				locale: "fr",
+				editable: true, // enable draggable events
+				selectable: true,
+				selectHelper: true,
+				aspectRatio: 1.8,
+				headerToolbar: {
+					left: 'today prev,next',
+					center: 'title',
+					right: 'resourceTimelineDay,timeGridWeek,dayGridMonth,listWeek'
+				},
+				initialView: 'resourceTimelineDay',
+				resourceAreaHeaderContent: 'Collaborateurs',
+				eventResizableFromStart: true,
+				resources: {{ uses | raw }},
+				eventClick: function (event, element) {
+				$('#ModalEdit #id').val(event.id);
+				$('#ModalEdit #title').val(event.title);
+				$('#ModalEdit #color').val(event.color);
+				$('#ModalEdit').modal('show');
+				},
+				events: {{ datas | raw }}
+			});
+			calendar.on('eventChange', (e) => {
+				let url = `/api/${
+				e.event.id
+				}/edit`
+				let donnees = {
+				"title": e.event.title,
+				"start": e.event.start,
+				"end": e.event.end
+				}
+				let xhr = new XMLHttpRequest
+				xhr.open("PUT", url)
+				xhr.send(JSON.stringify(donnees))
+			})
 
-calendar.render();
-});
+			calendar.render();
+		});
 	</script>
 {% endblock %}
 {% block body %}
@@ -81,8 +80,7 @@ calendar.render();
 				<!--<a style="float:right;" class="btn btn-primary" href="{{ path('imputation_new') }}">Faire une imputation</a>-->
 					<!--</div> -->
 				</div>
-			</div>
-			<!-- /.container-fluid -->
+			</div><!-- /.container-fluid -->
 
 			<!-- /////////////////////////////DEBUT historique/////////////////////////// -->
 			<!-- /////////////////////////////DEBUT historique/////////////////////////// -->
@@ -90,7 +88,8 @@ calendar.render();
 			<!-- Content Wrapper. Contains page content -->
 
 			<!-- Main content -->
-				<section class="content"> <div class="card">
+				<section class="content"> 
+					<div class="card">
 					<div class="card-body" id='calendar'></div>
 					<!-- Modal -->
 					<div class="modal fade" id="ModalEdit" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
@@ -137,7 +136,6 @@ calendar.render();
 					<div class="modal fade" id="ModalAdd" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
 						<div class="modal-dialog" role="document">
 							<div class="modal-content">
-
 								<div class="modal-header">
 									<h4 class="modal-title" id="myModalLabel">Ajouter une imputation</h4>
 									<button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -192,17 +190,14 @@ calendar.render();
 									<button type="submit" class="btn btn-primary">Enregistrer</button>
 								</div>
 							</div>
-
 						</div>
 					</div>
 				</div>
 
-				<div
-					class="container-fluid">
+				<div class="container-fluid">
 					<!-- Timelime example  -->
 					<div class="row">
-						<div
-							class="col-md-12">
+						<div class="col-md-12">
 							<!-- The time line -->
 							<div class="timeline">
 								{% if app.user.roles == ["ROLE_USER"] %}
@@ -220,7 +215,8 @@ calendar.render();
 												<div class="timeline-item">
 													<span class="time">
 														<i class="fas fa-clock"></i>
-														{{ imputation.time|format_datetime('long', 'short', locale='fr') }}</span>
+														{{ imputation.time|format_datetime('long', 'short', locale='fr') }}
+														</span>
 													<h3 class="timeline-header">
 														<a href="#">{{ imputation.user.username }}</a>
 														{{ imputation.codeprojet.libelle }}
@@ -265,7 +261,8 @@ calendar.render();
 											<div class="timeline-item">
 												<span class="time">
 													<i class="fas fa-clock"></i>
-													{{ imputation.time|format_datetime('long', 'short', locale='fr') }}</span>
+													{{ imputation.time|format_datetime('long', 'short', locale='fr') }}
+													</span>
 												<h3 class="timeline-header">
 													<a href="#">{{ imputation.user.username }}</a>
 													{{ imputation.codeprojet.libelle }}
@@ -284,7 +281,6 @@ calendar.render();
 														{{ include('imputation/_delete_form.html.twig') }}
 													</a>
 												</div>
-
 											</div>
 										</div>
 										<!-- END timeline item -->
@@ -304,13 +300,14 @@ calendar.render();
 								<!-- /.timeline-label -->
 
 							</div>
-						</div>
-						<!-- /.col -->
+						</div><!-- /.col -->
 					</div>
+						<!-- /.col -->
 				</div>
-				<!-- /.timeline -->
-			</section>
-			<!-- /.content -->
-
-			<!-- /.content-wrapper -->
-		{% endblock %}
+			</div>
+			<!-- /.timeline -->
+		</section><!-- /.content -->
+	</section>
+</div>
+<!-- /.content-wrapper -->
+{% endblock %}

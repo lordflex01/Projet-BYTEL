@@ -20,9 +20,11 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use App\Repository\UserRepository;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use DateTime;
 
 /**
+* @IsGranted("ROLE_USER")
  * @Route("/imput")
  */
 class ImputController extends AbstractController
@@ -32,6 +34,7 @@ class ImputController extends AbstractController
      */
     public function index(CodeProjetRepository $codeProjetRepository, ImputRepository $imputRepository, UserRepository $userRepository, DateVRepository $dateVRepository): Response
     {
+        $thisweek = date('Y') . '-W' . date('W');
 
         $imputation = [];
         $dateVs = $dateVRepository->findAll();
@@ -43,13 +46,20 @@ class ImputController extends AbstractController
                 'valeur' => $dateV->getValeur(),
             ];
         }
+        $user = $userRepository->findAll();
+        foreach ($user as $users) {
+            if ($users->getFlag()) {
+                $alluser[] = $users;
+            }
+        }
 
         $data = json_encode($imputation);
 
         return $this->render('imput/index.html.twig', [
             'datas' => $data,
+            'thisweek' => $thisweek,
             'imputs' => $imputRepository->findAll(),
-            'users' => $userRepository->findAll(),
+            'users' => $alluser,
             'dateVs' => $dateVRepository->findAll(),
             'code_projets' => $codeProjetRepository->findAll(),
         ]);
@@ -194,7 +204,8 @@ class ImputController extends AbstractController
                     for ($d = $j + 1; $d < $donnees->nbr; $d++) {
                         if (
                             $donnees->tableauimput[$j]->tache == $donnees->tableauimput[$d]->tache &&
-                            $donnees->tableauimput[$j]->codeprojet == $donnees->tableauimput[$d]->codeprojet
+                            $donnees->tableauimput[$j]->codeprojet == $donnees->tableauimput[$d]->codeprojet &&
+                            $donnees->tableauimput[$j]->activite == $donnees->tableauimput[$d]->activite
                         ) {
                             $code = 201;
                         }
@@ -246,7 +257,7 @@ class ImputController extends AbstractController
                         $code = 201;
                     }
                 }
-                //Condition pour voir si les imputation depasse 1
+                //Condition pour voir si les imputation depasse 1 par jour
                 $cm = 0;
                 $totalbase = [];
                 $totalbase[0] = $donnees->tableauimput[$j]->tabcumuleimput[0] + $donnees->tableauimput[$j]->tabcumuleimputM[0];
@@ -259,7 +270,35 @@ class ImputController extends AbstractController
                     if ($totalbase[$ver] > 1)
                         $code = 202;
                 }
+                // Condition pour voir si les imputations depasse 5 pour la semaine
+                $total = 0;
+                for($i=0; $i<5; $i++) {
+                    $total += $donnees->tableauimput[$j]->valeur[$i];
+                }
+                if($total>5){
+                    $code = 202;
+                    break;
+                }
 
+                /*
+                $anneeImput
+
+                // Appel à l'API pour obtenir la liste des jours fériés
+                $apiUrl = 'https://calendrier.api.gouv.fr/jours-feries/metropole/AAAA.json'; // URL de l'API 
+                $response = file_get_contents($apiUrl); // Appel de l'API 
+
+                // Traitement de la réponse de l'API pour obtenir les jours fériés
+                $joursFeries = json_decode($response, true); // Recupération de la liste des jours fériés en format JSON
+
+                // Vérification si la date d'imputation est un jour férié
+                if (in_array($donnees->tableauimput[$j]->date[$i], $joursFeries)) {
+                    // Empêcher l'enregistrement et renvoyer un message d'erreur
+                    return $this->render('imputation/error.html.twig', [
+                        'message' => 'L\'imputation sur un jour férié n\'est pas autorisée.'
+                    ]);
+                }
+
+                */
 
                 //création de l'imput
                 $imput->setUser($user);
@@ -355,14 +394,14 @@ class ImputController extends AbstractController
                     $codeP->setBudgetNRJConsomme($budgetFinale);
                 }
                 if ($dateV->getTache()->getDomaine() == "DECO") {
-                    $budgetFinale = $codeP->getBudgetDECOConsomme() + ($dateV->getValeur() * $dateV->getImput()->getUser()->getSalaire());
-                    $chargeFinale =  $codeP->getChargeDECOConsomme() + $dateV->getValeur();
+                    $budgetFinale = $codeP->getBudgetDECOConsomme() - ($dateV->getValeur() * $dateV->getImput()->getUser()->getSalaire());
+                    $chargeFinale =  $codeP->getChargeDECOConsomme() - $dateV->getValeur();
                     $codeP->setChargeDECOConsomme($chargeFinale);
                     $codeP->setBudgetDECOConsomme($budgetFinale);
                 }
                 if ($dateV->getTache()->getDomaine() == "CLOE") {
-                    $budgetFinale = $codeP->getBudgetCLOEConsomme() + ($dateV->getValeur() * $dateV->getImput()->getUser()->getSalaire());
-                    $chargeFinale =  $codeP->getChargeCLOEConsomme() + $dateV->getValeur();
+                    $budgetFinale = $codeP->getBudgetCLOEConsomme() - ($dateV->getValeur() * $dateV->getImput()->getUser()->getSalaire());
+                    $chargeFinale =  $codeP->getChargeCLOEConsomme() - $dateV->getValeur();
                     $codeP->setChargeCLOEConsomme($chargeFinale);
                     $codeP->setBudgetCLOEConsomme($budgetFinale);
                 }
@@ -416,22 +455,25 @@ class ImputController extends AbstractController
         }
         return $this->redirectToRoute('imput_index');
     }
-    public function ajaxAction(ActiviteRepository $activiteRepository, CodeProjetRepository $codeProjetRepository, TachesRepository $tachesRepository, Request $request, DateVRepository $dateVRepository)
+    
+    public function ajaxAction(ActiviteRepository $activiteRepository, UserRepository $userRepository, CodeProjetRepository $codeProjetRepository, TachesRepository $tachesRepository, Request $request, DateVRepository $dateVRepository)
     {
         if ($request->isXmlHttpRequest() || $request->query->get('showJson') == 1) {
+            $donnees = json_decode($request->getContent());
 
             //lieste des tache
             $tacheliste = [];
-            $tache = $tachesRepository->findAll();
+            $tache = $tachesRepository->findBy(['statut' => 1]);
             foreach ($tache as $taches) {
                 $tacheliste[] = [
                     'id' => $taches->getId(),
                     'libelle' => $taches->getLibelle(),
+                    'description' => $taches->getDescription(),
                 ];
             }
             //liste des code projet
             $codeprojetlist = [];
-            $codeP = $codeProjetRepository->findAll();
+            $codeP = $codeProjetRepository->findBy(['statut' => 1]);
             foreach ($codeP as $codePs) {
                 $codeprojetlist[] = [
                     'id' => $codePs->getId(),
@@ -440,7 +482,7 @@ class ImputController extends AbstractController
                 ];
             }
 
-            //liste des code projet
+            //liste des activité
             $activitelist = [];
             $activite = $activiteRepository->findAll();
             foreach ($activite as $activites) {
@@ -450,23 +492,67 @@ class ImputController extends AbstractController
                 ];
             }
 
+            //Tri par ordre alphabetique activité
+            $columns = array_column($activitelist, 'libelle');
+            array_multisort($columns, SORT_ASC, $activitelist);
+
+            //tri par ordre alphabetique code projet
+            $columns1 = array_column($codeprojetlist, 'libelle');
+            array_multisort($columns1, SORT_ASC, $codeprojetlist);
+
+            //tri par ordre alphabetique taches
+            $columns2 = array_column($tacheliste, 'libelle');
+            array_multisort($columns2, SORT_ASC, $tacheliste);
+
             $imputation = [];
-            $dateVs = $dateVRepository->findAll();
+            //recupere juste les dateV de l'utilisateur selectionné
+            $dateVs = $dateVRepository->findByUserId($donnees[0]);
+            $tabvide = 0;
+            //remplire une seul fois les activite, tache, code
+            $deja = 0;
             foreach ($dateVs as $dateV) {
                 //Numero de semaine
                 $dmy = $dateV->getDate()->format('d-m-Y');
                 $week = "W" . date("W", strtotime($dmy));
-
+                if ($week == $donnees[1] && $dateV->getDate()->format('Y') == $donnees[2]) {
+                    $tabvide = 1;
+                    if ($deja == 0) {
+                        $imputation[] = [
+                            'imputID' => $dateV->getImput()->getId(),
+                            'user' => $dateV->getImput()->getUser()->getId(),
+                            'tache' => $dateV->getTache()->getLibelle(),
+                            'tacheD' => $dateV->getTache()->getDescription(),
+                            'activite' => $dateV->getActivite()->getLibelle(),
+                            'commentaire' =>  $dateV->getImput()->getCommentaire(),
+                            'week' => $week,
+                            'codeprojet' => $dateV->getCodeprojet()->getLibelle(),
+                            'date' => $dateV->getDate(),
+                            'valeur' => $dateV->getValeur(),
+                            'tacheliste' => $tacheliste,
+                            'codeprojetlist' => $codeprojetlist,
+                            'activitelist' => $activitelist,
+                        ];
+                        $deja = 1;
+                    } else {
+                        $imputation[] = [
+                            'imputID' => $dateV->getImput()->getId(),
+                            'user' => $dateV->getImput()->getUser()->getId(),
+                            'tache' => $dateV->getTache()->getLibelle(),
+                            'tacheD' => $dateV->getTache()->getDescription(),
+                            'activite' => $dateV->getActivite()->getLibelle(),
+                            'commentaire' =>  $dateV->getImput()->getCommentaire(),
+                            'week' => $week,
+                            'codeprojet' => $dateV->getCodeprojet()->getLibelle(),
+                            'date' => $dateV->getDate(),
+                            'valeur' => $dateV->getValeur(),
+                        ];
+                    }
+                }
+            }
+            if ($tabvide == 0) {
+                $date = new DateTime('2000-01-01');
                 $imputation[] = [
-                    'imputID' => $dateV->getImput()->getId(),
-                    'user' => $dateV->getImput()->getUser()->getId(),
-                    'tache' => $dateV->getTache()->getLibelle(),
-                    'activite' => $dateV->getActivite()->getLibelle(),
-                    'commentaire' =>  $dateV->getImput()->getCommentaire(),
-                    'week' => $week,
-                    'codeprojet' => $dateV->getCodeprojet()->getLibelle(),
-                    'date' => $dateV->getDate(),
-                    'valeur' => $dateV->getValeur(),
+                    'date' => $date,
                     'tacheliste' => $tacheliste,
                     'codeprojetlist' => $codeprojetlist,
                     'activitelist' => $activitelist,
@@ -477,7 +563,6 @@ class ImputController extends AbstractController
 
             return new JsonResponse($data);
         } else {
-
             return $this->render('imput/index.html.twig');
         }
     }
@@ -508,7 +593,7 @@ class ImputController extends AbstractController
                 //condition pour ajoutez la ligne de l'export avec les information
                 if ($compteurDateV == 5) {
                     //condition pour savoir si il est present ou abs
-                    if ($dateV->getCodeprojet() == "Absent")
+                    if ($dateV->getTache()->getDescription() == "Absence" || $dateV->getCodeprojet()->getId() == 1 || $dateV->getCodeprojet()->getId() == 80)
                         $p = "Absent";
                     else
                         $p = "Présent";
@@ -548,14 +633,27 @@ class ImputController extends AbstractController
                     //Budget en franaçais
                     $budgeten = $Timputsemaine * $dateV->getImput()->getUser()->getSalaire();
                     $budgetfr = number_format($budgeten, 2, ',', ' ');
+                    if ($p == "Absent") {
+                        $budgetfr = 0;
+                    }
                     //rendre le nombre format française
                     $Timputsemainefr = number_format($Timputsemaine, 2, ',', ' ');
                     $semaine = substr($donnees->week, 1);
+                    //Séparer le CODE-Tache de ID-MOE
+                    $CodeTache = $dateV->getCodeprojet()->getLibelle();
+                    $IDMOE = $dateV->getCodeprojet()->getLibelle();
+                    if (substr($CodeTache, -6, 1) == '-' || substr($CodeTache, -6, 1) == '_') {
+                        $IDMOE = substr($CodeTache, -5);
+                        $CodeTache = substr($CodeTache, 0, -6);
+                    } else if ((substr($CodeTache, -7, 1) == '-' || substr($CodeTache, -7, 1) == '_') && substr($CodeTache, -6, 1) == ' ') {
+                        $IDMOE = substr($CodeTache, -5);
+                        $CodeTache = substr($CodeTache, 0, -7);
+                    }
                     $tabexport[$i] = array(
-                        'D00550', 'Pole Digital B2B', 'Interne', $dateV->getImput()->getUser()->getUsername(),
+                        'D00550', 'Pole Digital B2B', 'Capgemini', $dateV->getImput()->getUser()->getUsername(),
                         $dateV->getImput()->getUser()->getCapit(), $dateV->getTache()->getDomaine(), $dateV->getImput()->getUser()->getPoste(),
-                        '', '', '', '', '', $dateV->getCodeprojet()->getLibelle(), $dateV->getCodeprojet()->getDescription(),
-                        $dateV->getTache()->getLibelle(), $dateV->getActivite()->getLibelle(), '', $donnees->year, $p,
+                        '', '', '', '', '', $CodeTache, $dateV->getCodeprojet()->getDescription(),
+                        $dateV->getTache()->getLibelle(), $dateV->getActivite()->getLibelle(), $IDMOE, $donnees->year, $p,
                         $jour->format('d/m/Y 00:00'), $Timputsemainefr, $dateV->getImput()->getCommentaire(), '', $semaine,
                         $dateV->getImput()->getUser()->getSalaire(), $budgetfr, $T[0], $T[1], $T[2], $T[3], $T[4]
                     );
@@ -596,7 +694,7 @@ class ImputController extends AbstractController
     }
 
     /**
-     * @Route("/export", name="export-csv" )
+     * @Route("/exportmois", name="export-csv" )
      */
 
     public function exportmoisAction(DateVRepository $dateVRepository, ImputRepository $imputRepository, Request $request)
@@ -606,7 +704,9 @@ class ImputController extends AbstractController
 
 
         $dateVs = $dateVRepository->findAll();
+
         $tabexport = [];
+
         $i = 0;
         $compteurDateV = 0;
         $Timputsemaine = 0;
@@ -618,6 +718,7 @@ class ImputController extends AbstractController
         $jour = new DateTime($donnees->dates[0]);
         $jourj = $jour->format('Y-m-d');
         $moisEX = substr($jourj, 0, 7);
+
         foreach ($dateVs as $dateV) {
             $bool = 0;
             $jourbase = $dateV->getDate()->format('Y-m-d');
@@ -653,7 +754,7 @@ class ImputController extends AbstractController
             //condition pour ajoutez la ligne de l'export avec les information
             if ($bool == 1  && $compteurDateV == 5) {
                 //condition pour savoir si il est present ou abs
-                if ($dateV->getCodeprojet() == "Absent")
+                if ($dateV->getTache()->getDescription() == "Absence" || $dateV->getCodeprojet()->getId() == 1 || $dateV->getCodeprojet()->getId() == 80)
                     $p = "Absent";
                 else
                     $p = "Présent";
@@ -693,14 +794,27 @@ class ImputController extends AbstractController
                 //Budget en franaçais
                 $budgeten = $Timputsemaine * $dateV->getImput()->getUser()->getSalaire();
                 $budgetfr = number_format($budgeten, 2, ',', ' ');
+                if ($p == "Absent") {
+                    $budgetfr = 0;
+                }
                 //rendre le nombre format française
                 $Timputsemainefr = number_format($Timputsemaine, 2, ',', ' ');
+                //Séparer le CODE-Tache de ID-MOE
+                $CodeTache = $dateV->getCodeprojet()->getLibelle();
+                $IDMOE = $dateV->getCodeprojet()->getLibelle();
+                if (substr($CodeTache, -6, 1) == '-' || substr($CodeTache, -6, 1) == '_') {
+                    $IDMOE = substr($CodeTache, -5);
+                    $CodeTache = substr($CodeTache, 0, -6);
+                } else if ((substr($CodeTache, -7, 1) == '-' || substr($CodeTache, -7, 1) == '_') && substr($CodeTache, -6, 1) == ' ') {
+                    $IDMOE = substr($CodeTache, -5);
+                    $CodeTache = substr($CodeTache, 0, -7);
+                }
                 //remplire la ligne d'export avec les information de chaque imput
                 $tabexport[$i] = array(
-                    'D00550', 'Pole Digital B2B', 'Interne', $dateV->getImput()->getUser()->getUsername(),
+                    'D00550', 'Pole Digital B2B', 'Capgemini', $dateV->getImput()->getUser()->getUsername(),
                     $dateV->getImput()->getUser()->getCapit(), $dateV->getTache()->getDomaine(), $dateV->getImput()->getUser()->getPoste(),
-                    '', '', '', '', '', $dateV->getCodeprojet()->getLibelle(), $dateV->getCodeprojet()->getDescription(),
-                    $dateV->getTache()->getLibelle(), $dateV->getActivite()->getLibelle(), '', $donnees->year, $p,
+                    '', '', '', '', '', $CodeTache, $dateV->getCodeprojet()->getDescription(),
+                    $dateV->getTache()->getLibelle(), $dateV->getActivite()->getLibelle(), $IDMOE, $donnees->year, $p,
                     $datedebutsemaine, $Timputsemainefr, $dateV->getImput()->getCommentaire(), '', $weeknumber,
                     $dateV->getImput()->getUser()->getSalaire(), $budgetfr, $T[0], $T[1], $T[2], $T[3], $T[4]
                 );
@@ -749,6 +863,194 @@ class ImputController extends AbstractController
     }
 
     /**
+     * @Route("/exportinter", name="export-csv" )
+     */
+    public function exportInterval(DateVRepository $dateVRepository, ImputRepository $imputRepository, Request $request)
+    {
+        // Récuperation des données
+        $donnees = json_decode($request->getContent());
+        $dateDebut = new \DateTime($donnees->dateDebut);
+        $dateFin = new \DateTime($donnees->dateFin);
+
+        $dateVs = $dateVRepository->findByDateRange($dateDebut, $dateFin);
+
+
+        $list = array(
+            // COLONNES
+            array(
+                'CENTRE_DE_COUT_RESSOURCE', 
+                'STRUCTURE_BT_RESSOURCE', 
+                'INTERNE_/_EXTERNE', 
+                'NOM_RESSOURCE',
+                'LOGIN_RESSOURCE', 
+                'RESSOURCE_CS_RESSOURCE', 
+                'RESSOURCE_CS_FOURNISSEUR', 
+                'TYPE_DE_PROJET', 'NOM_PROJET','CC_PORTEUR_PROJET', 'STATUT_PROJET', 'CHEF_DE_PROJET', 
+                'CODE_TACHE', 
+                'DESCRIPTION_TACHE', 
+                'JIRA',
+                'TYPE_ACTIVITE', 
+                'ID-MOE', 
+                'ANNEE', 
+                'TYPE_IMPUTATION', 
+                'SEMAINE', 
+                'TOTAL', 
+                'COMMENT_SEMAINE',
+                'COMMENT_MOIS', 
+                'no_semaine', 
+                'Coût unitaire', 
+                ' Montant', 
+                'Charge DEV', 'Charge Testeur', 'Charge Analyste', 'Charge Pilotage', 'Charge architecte'
+            ),
+        );
+
+        // Collecte des informations de chaque collaborateur sous forme de tableau
+        $tabexport = [];
+        $i = 0;
+        $compteurDateV = 0; // Nombre total d'imputation
+        $Timputsemaine = 0;
+
+        foreach ($dateVs as $dateV) {
+            $bool = 0;
+            
+            $dateimput = $dateV->getDate()->format('Y-m-d'); // date imputation
+            $annee = $dateV->getDate()->format('Y'); // année imputation
+            $semaineimput = new DateTime($dateimput); // date complete imputation avec semaine
+            $numsemaine = $semaineimput->format("W"); // numero semaine
+
+            $Timputsemaine += $dateV->getValeur(); // valeur total des imputs
+
+            //condition pour la date de debut de semaine
+            if ($compteurDateV == 0)
+                $dateformat =  $dateV->getDate()->format('d/m/Y 00:00'); // date imputation sous format JJ/MM/AAAA HH:mm
+            else
+                $dateformat = $dateimput;
+
+            //incremente pour afficher le nombre total d'imputation
+            $compteurDateV++;
+
+            //condition pour savoir si il est present ou abs
+            if ($dateV->getTache()->getDescription() == "Absence" || 
+                $dateV->getCodeprojet()->getId() == 1 || 
+                $dateV->getCodeprojet()->getId() == 80)
+                $p = "Absent";
+            else
+                $p = "Présent";
+
+            //Charge en française
+            if ($dateV->getImput()->getUser()->getPoste() == "Développeur") {
+                $T[0] = number_format($Timputsemaine, 2, ',', ' ');
+                $T[1] = 0;
+                $T[2] = 0;
+                $T[3] = 0;
+                $T[4] = 0;
+            } elseif ($dateV->getImput()->getUser()->getPoste() == "Testeur") {
+                $T[0] = 0;
+                $T[1] = number_format($Timputsemaine, 2, ',', ' ');
+                $T[2] = 0;
+                $T[3] = 0;
+                $T[4] = 0;
+            } elseif ($dateV->getImput()->getUser()->getPoste() == "Business analyste") {
+                $T[0] = 0;
+                $T[1] = 0;
+                $T[2] = number_format($Timputsemaine, 2, ',', ' ');
+                $T[3] = 0;
+                $T[4] = 0;
+            } elseif ($dateV->getImput()->getUser()->getPoste() == "Pilotage") {
+                $T[0] = 0;
+                $T[1] = 0;
+                $T[2] = 0;
+                $T[3] = number_format($Timputsemaine, 2, ',', ' ');
+                $T[4] = 0;
+            } elseif ($dateV->getImput()->getUser()->getPoste() == "Architecte") {
+                $T[0] = 0;
+                $T[1] = 0;
+                $T[2] = 0;
+                $T[3] = 0;
+                $T[4] = number_format($Timputsemaine, 2, ',', ' ');
+            }
+            //Budget en français
+            $budgeten = $Timputsemaine * $dateV->getImput()->getUser()->getSalaire();
+            $budgetfr = number_format($budgeten, 2, ',', ' ');
+
+            if ($p == "Absent") {
+                $budgetfr = 0;
+            }
+
+            //rendre le nombre format française
+            $Timputsemainefr = number_format($Timputsemaine, 2, ',', ' ');
+
+            //Séparer le CODE-Tache de ID-MOE
+            $CodeTache = $dateV->getCodeprojet()->getLibelle();
+
+            $IDMOE = $dateV->getCodeprojet()->getLibelle();
+
+            if (substr($CodeTache, -6, 1) == '-' || substr($CodeTache, -6, 1) == '_') 
+            {
+                $IDMOE = substr($CodeTache, -5);
+                $CodeTache = substr($CodeTache, 0, -6);
+            } else if ((substr($CodeTache, -7, 1) == '-' || 
+                substr($CodeTache, -7, 1) == '_') && 
+                substr($CodeTache, -6, 1) == ' ') 
+            {
+                $IDMOE = substr($CodeTache, -5);
+                $CodeTache = substr($CodeTache, 0, -7);
+            }
+
+            //remplire la ligne d'export avec les information de chaque imput
+            $tabexport[$i] = array(
+                'D00550', // centre_de_cout_ressource
+                'Pole Digital B2B', // structure
+                'Capgemini', // interne ou  externe 
+                $dateV->getImput()->getUser()->getUsername(), // nom_collab (nom_ressource)
+                $dateV->getImput()->getUser()->getCapit(), // capit (login_ressource)
+                $dateV->getTache()->getDomaine(), // projet (ressource_cs_ressource)
+                $dateV->getImput()->getUser()->getPoste(), // poste (ressource_cs_fournisseur)
+                '', '', '', '', '', // type_projet, nom_projet, cc_porteur_projet, statut_projet, chef_de_projet
+                $CodeTache, // code projet(code_tache)
+                $dateV->getCodeprojet()->getDescription(), // description (description_tache)
+                $dateV->getTache()->getLibelle(), // tache (jira)
+                $dateV->getActivite()->getLibelle(), // activite (type_activite)
+                $IDMOE, // libelle activité (id-moe)
+                $annee, // annee 
+                $p, // presence
+                $dateformat, // jour imputation (semaine)
+                $Timputsemainefr, // total imputation (total)
+                $dateV->getImput()->getCommentaire(), // commentaire imputation (comment_semaine)
+                '', // commentaire mois 
+                $numsemaine, // numéro semaine (no_semaine)
+                $dateV->getImput()->getUser()->getSalaire(), // TJM (cout_unitaire)
+                $budgetfr, // budget tache (montant)
+                $T[0], $T[1], $T[2], $T[3], $T[4] // charges(dev, testeur, analyste, chargé de pilotage, architecte)
+            );
+            
+            $i++; 
+
+        }
+
+        // Remplissage de la liste 
+        for ($j = 0; $j < $i; $j++) {
+            $list[$j + 1] = $tabexport[$j];
+        }
+
+        // Création du fichier CSV
+        $fp = fopen('php://temp', 'w+');
+        foreach ($list as $fields) {
+            fputcsv($fp, $fields);
+        }
+        rewind($fp);
+
+        $response = new Response(stream_get_contents($fp));
+        fclose($fp);
+
+        $response->headers->set('Content-Type', 'text/csv', 'charset=UTF-8');
+        $response->headers->set('Content-Disposition', 'attachment; filename="testing.csv"');
+
+        return $response;
+
+    }
+
+    /**
      * @Route("/remplirSelect2", name="remplirSelect2" )
      */
 
@@ -758,15 +1060,19 @@ class ImputController extends AbstractController
         $donnees = json_decode($request->getContent());
 
         $tacheliste = [];
-        $tache = $tachesRepository->findAll();
+        $tache = $tachesRepository->findBy(['statut' => 1]);
         foreach ($tache as $taches) {
             if ($taches->getCodeProjet()->getId() ==  $donnees->id) {
                 $tacheliste[] = [
                     'id' => $taches->getId(),
                     'libelle' => $taches->getLibelle(),
+                    'description' => $taches->getDescription(),
                 ];
             }
         }
+        //tri par ordre alphabetique taches
+        $columns2 = array_column($tacheliste, 'libelle');
+        array_multisort($columns2, SORT_ASC, $tacheliste);
 
         $data = json_encode($tacheliste);
 

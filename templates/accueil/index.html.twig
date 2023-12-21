@@ -1,0 +1,257 @@
+{% extends 'header.html.twig' %}
+
+{% block body %}
+	<!--DEBUT declaration-->
+		{% set codeprojetFait = 0 %}
+		{% set codeprojetTotal = 0 %}
+		{% set codeprojetFaitPourcent = 0 %}
+		{% set BudgetRestant = 0 %}
+		{% set BudgetTotal = 0 %}
+		{% set BudgetConsoPourcent = 0 %}
+		{% set BudgetConso = 0 %}
+	<!--FIN declaration-->
+
+	<!--DEBUT calcule des statistiques Codes projets-->
+		{% for code_projet in code_projets %}
+		
+			{% set codeprojetTotal = codeprojetTotal  + 1 %}
+
+			{% if code_projet.statut == 'yes' %}
+				<!--DEBUT calcule des statuts Codes projets-->
+				{% set codeprojetFait = codeprojetFait  + 1 %}
+				<!--FIN calcule des statuts Codes projets-->
+				<!--DEBUT calcule des Budgets-->
+				{% set BudgetTotal = BudgetTotal + code_projet.budget %}
+				{% if code_projet.budgetConsomme is not null %}
+					{% set BudgetConso = BudgetConso + code_projet.budgetConsomme %}
+				{% endif %}
+				<!--FIN calcule des Budgets-->
+			{% else %}
+				
+			{% endif %}
+			{% set codeprojetFaitPourcent = (codeprojetFait*100)/codeprojetTotal %}
+		{% endfor %}
+		
+		{% set BudgetConsoPourcent = (BudgetConso*100)/BudgetTotal%}
+	<!-- FIN calcule statistiques Codes projets -->
+
+	<!--DEBUT calcule des statuts projets-->
+		{% set ProjetFait = 0 %}
+
+		{% set ProjetTotal = 0 %}
+
+		{% set ProjetFaitPourcent = 0 %}
+
+		{% for projet in projets %}
+			{% set ProjetTotal = ProjetTotal  + 1 %}
+			{% if projet.statut == 'yes' %}
+				{% else %}
+					{% set ProjetFait = ProjetFait  + 1 %}
+			{% endif %}
+		{% endfor %}
+
+		{% set ProjetFaitPourcent = (ProjetFait*100)/ProjetTotal %}
+		{% set ProjetRestPourcent =  100 - ProjetFaitPourcent %}
+		{% set ProjetRest = ProjetTotal - ProjetFait %}
+	<!--FIN calcule des statuts projets-->
+
+	<!--DEBUT calcule des collaborateurs-->
+		{% set userSuivi = 0 %}
+		{% for user in users %}
+			{% if user.flag == 0 %}
+				{% else %}
+					{% set userSuivi = userSuivi + 1 %}
+			{% endif %}
+		{% endfor %}
+	<!--FIN calcule des collaboreteurs-->
+
+	<!-- Content Wrapper. Contains page content -->
+	<div class="content-wrapper"> <!-- Content Header (Page header) -->
+		<div class="content-header">
+			<div class="container-fluid">
+				<div class="row mb-2">
+					<div class="col-sm-6">
+						<h1 class="m-0"> Page d'accueil </h1>
+					</div>
+				</div>
+				<!-- /.row -->
+			</div>
+			<!-- /.container-fluid -->
+		</div>
+		<!-- /.content-header -->
+
+		<!-- Main content -->
+		<div class="content">
+			<div class="container-fluid">
+				<!-- ./card-body -->
+				<div class="card-footer-index">
+					<div class="row">
+						<div class="col-lg-3 col-6">
+							<!-- small box -->
+							<div class="small-box bg-info">
+								<div class="inner">
+									<h3>{{userSuivi}}</h3>
+									<p>Nombres de collaborateurs suivis</p>
+									<br>
+									{% for leUser in userProjet %}
+										<p>{{leUser.nomprojet}} : {{leUser.nbusers}}</p>
+									{% endfor %}
+								</div>
+								<div class="icon">
+									<i class="ion ion-person-add"></i>
+								</div>
+								<a href="/user" class="small-box-footer">+</a>
+							</div>
+						</div>
+						<!-- ./col -->
+						<div class="col-lg-3 col-6">
+							<!-- small box -->
+							<div class="small-box bg-success">
+								<div class="inner">
+									<h3>{{BudgetConsoPourcent|number_format(0)}}<sup style="font-size: 20px">%</sup>
+									</h3>
+									<p>Budget cumulé: 
+										{{BudgetTotal|number_format(0)}}
+										€</p>
+								</div>
+								<div class="icon">
+									<i class="ion ion-cash"></i>
+								</div>
+								<a href="/projet" class="small-box-footer">+</a>
+							</div>
+						</div>
+						<!-- ./col -->
+						<div class="col-lg-3 col-6">
+							<!-- small box -->
+							<div class="small-box bg-warning">
+								<div class="inner">
+									<h3>{{ProjetRestPourcent|number_format(0)}}<sup style="font-size: 20px">%</h3>
+									<p>Projet en cours: {{ProjetRest}}</p>
+									<br>
+									{% for projet in projets %}
+										{% if projet.statut == 'yes' %}
+											<p>{{projet.libelle}}</p>	
+										{% endif %}
+									{% endfor %}
+								</div>
+								<div class="icon">
+									<i class="ion ion-pie-graph"></i>
+								</div>
+								<a href="/projet" class="small-box-footer">+</a>
+							</div>
+						</div>
+						<!-- ./col -->
+						<div class="col-lg-3 col-6">
+							<!-- small box -->
+							<div class="small-box bg-danger">
+								<div class="inner">
+									<h3>{{codeprojetFaitPourcent|number_format(0)}}<sup style="font-size: 20px">%</h3>
+
+									<p>Code projet actifs:
+										{{codeprojetFait}}</p>
+								</div>
+								<div class="icon">
+									<i class="ion ion-stats-bars"></i>
+								</div>
+								<a href="/projet" class="small-box-footer">+</a>
+							</div>
+						</div>
+						<!-- ./col -->
+					</div>
+					<!-- /.row -->
+				</div>
+				<!-- /.card-footer -->
+				<br>
+				<div class="row">
+					<div class="col-lg-6">
+						<div class="card">
+							<div class="card-header border-0">
+								<div class="d-flex justify-content-between">
+									<h3 class="card-title"> TOP Budgets </h3>
+									<a href="javascript:void(0);">Voir le rapport</a>
+								</div>
+							</div>
+							<div class="card-body">
+								<div class="d-flex">
+									<canvas id="chartBudget" height="200"></canvas>
+								</div>
+							</div>
+						</div>
+						<!-- /.card -->
+					</div>
+					<!-- /.col-md-6 -->
+					<div class="col-lg-6">
+						<div class="card">
+							<div class="card-header border-0">
+								<div class="d-flex justify-content-between">
+									<h3 class="card-title">
+										TOP Dépenses
+									</h3>
+									<a href="/projet">Voir les projets</a>
+								</div>
+							</div>
+							<div class="card-body">
+								<div class="d-flex">
+									<canvas id="chartDepense" height="200"></canvas>
+								</div>
+							</div>
+						</div>
+						<!-- /.card -->
+					</div>
+					<!-- /.col-md-6 -->
+				</div>
+				<!-- /.row -->
+			</div>
+			<!-- /.container-fluid -->
+		</div>
+		<!-- /.content -->
+	</div>
+	<!-- /.content-wrapper -->
+	<!-- Main Footer -->
+	<footer class="main-footer">
+		<!-- Default to the left -->
+		Copyright &copy;
+		<strong>Bouygues Telecom</strong>
+		| Tous les droits sont réservés.
+	</footer>
+</div>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+	<script>
+		var totalBudgetCloe = {{ totalBudgetCloe[0].CLOEBud}};
+		var totalBudgetDeco = {{ totalBudgetDeco[0].DECOBud}};
+		var totalBudgetNrj = {{ totalBudgetNrj[0].NRJBud}};
+
+		var totalDepenseCloe = {{ totalDepenseCloe[0].CLOEDep}};
+		var totalDepenseDeco = {{ totalDepenseDeco[0].DECODep}};
+		var totalDepenseNrj = {{ totalDepenseNrj[0].NRJDep}};
+
+		var ctxBudget = document.getElementById('chartBudget').getContext('2d');
+		var chartBudget = new Chart(ctxBudget, {
+			type: 'bar',
+			data: {
+				labels: ['CLOE','DECO','NRJ'],
+				datasets: [{
+					label: 'Budget',
+					data: [totalBudgetCloe, totalBudgetDeco, totalBudgetNrj],
+					backgroundColor: 'lightblue'
+				}]
+			}
+		})
+		
+		var ctxDepense = document.getElementById('chartDepense').getContext('2d');
+		var chartDepense = new Chart(ctxDepense, {
+			type: 'bar',
+			data: {
+				labels: ['CLOE','DECO','NRJ'],
+				datasets: [{
+					label: 'Dépenses',
+					data: [totalDepenseCloe, totalDepenseDeco, totalDepenseNrj],
+					backgroundColor: 'lightblue'
+				}]
+			}
+		})
+	</script>
+{% endblock %}

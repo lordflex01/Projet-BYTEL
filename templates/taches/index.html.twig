@@ -44,28 +44,27 @@
 	<script src="{{asset ("/assets/plugins/toastr/toastr.min.js")}}"></script>
 	<script>
 		$(function () {
-$("#example1").DataTable({"responsive": true, "lengthChange": true, "autoWidth": false}).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
-});
+			$("#example1").DataTable({"responsive": true, "lengthChange": true, "autoWidth": false}).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+			});
 
-$('.swalDefaultDelete').click(function () {
-Swal.fire({
-title: 'Êtes-vous sûr de bien vouloir supprimer cet élément ?',
-icon: 'warning',
-showCancelButton: true,
-confirmButtonColor: '#3085d6',
-cancelButtonColor: '#d33',
-confirmButtonText: 'Oui'
-}).then((result) => {
-if (result.isConfirmed) {
-Swal.fire('Supprimé!', "L'élément a été bien supprimé ", 'success')
-}
-})
-});
+			$('.swalDefaultDelete').click(function () {
+				Swal.fire({
+					title: 'Êtes-vous sûr de bien vouloir supprimer cet élément ?',
+					icon: 'warning',
+					showCancelButton: true,
+					confirmButtonColor: '#3085d6',
+					cancelButtonColor: '#d33',
+					confirmButtonText: 'Oui'
+				}).then((result) => {
+				if (result.isConfirmed) {
+					Swal.fire('Supprimé!', "L'élément a été bien supprimé ", 'success')
+				}
+			})
+		});
 	</script>
 {% endblock %}
 {% block body %}
-	<div
-		class="content-wrapper">
+	<div class="content-wrapper">
 		<!-- Content Header (Page header) -->
 		<section class="content-header">
 			<div class="container-fluid">
@@ -73,30 +72,28 @@ Swal.fire('Supprimé!', "L'élément a été bien supprimé ", 'success')
 					<div class="col-sm-6">
 						<h1 class="m-0" style="font-size:19px">Liste des Tâches</h1>
 					</div>
+					<div class="col-sm-6">
+						<a class="btn btn-default" style="float:right;" href="/doUpload">Télécharger les fichiers &nbsp; <i class="fa fa-upload" aria-hidden="true" style="font-size:14px"></i></a>
+					</div>
 				</div>
 			</div>
 			<!-- /.container-fluid -->
 		</section>
-		<section
-			class="content">
-
+		<section class="content">
 			<!-- Default box -->
-			<div
-				class="card">
-
+			<div class="card">
 				<!-- /.card-header -->
 				<div class="card-body">
 					{% if is_granted('ROLE_ADMIN') %}
 						<a class="btn btn-primary" style="float:right;" href="{{ path('taches_new') }}">Ajouter une nouvelle tâche</a>
-
 					{% endif %}
 					<table id="example1" class="table table-bordered table-striped">
 						<thead>
 							<tr>
 								<th>
-									#
+									N°
 								</th>
-								<th style="width: 30%">
+								<th style="width: 17%">
 									Jira
 								</th>
 								<th>
@@ -107,6 +104,9 @@ Swal.fire('Supprimé!', "L'élément a été bien supprimé ", 'success')
 								</th>
 								<th>
 									Domaine
+								</th>
+								<th>
+									Etat
 								</th>
 								{% if is_granted('ROLE_ADMIN') %}
 									<th>
@@ -120,7 +120,9 @@ Swal.fire('Supprimé!', "L'élément a été bien supprimé ", 'success')
 								{% if app.user.projet.libelle == tach.domaine %}
 									<tr>
 										<td>
-											#
+											{% set number = ( number | default(0) ) + 1 %}
+											<p>{{ number }}
+											</p>
 										</td>
 										<td>
 											{{ tach.libelle }}
@@ -130,11 +132,21 @@ Swal.fire('Supprimé!', "L'élément a été bien supprimé ", 'success')
 										</td>
 										<td>
 											{{ tach.codeprojet }}
+											:
+											{{ tach.codeprojet.description }}
 										</td>
 										<td>
 											{{ tach.domaine }}
 										</td>
-
+										{% if tach.statut == 'yes' %}
+											<td class="project-state">
+												<span class="badge badge-success">En cours</span>
+											</td>
+										{% else %}
+											<td class="project-state">
+												<span class="badge badge-danger">Terminé</span>
+											</td>
+										{% endif %}
 										<td>
 											{% if is_granted('ROLE_ADMIN') %}
 												<a class="btn btn-info btn-sm" href="{{ path('taches_edit', {'id': tach.id}) }}">
@@ -145,16 +157,13 @@ Swal.fire('Supprimé!', "L'élément a été bien supprimé ", 'success')
 												</a>
 											{% endif %}
 										</td>
-
 									</tr>
 								{% endif %}
 							{% endfor %}
-
 						</tbody>
 					</table>
-				</div>
-				<!-- /.card-body -->
-			</div>
-		</div><!-- /.card-body --></div><!-- /.card --></section>
-
-<!-- /.content --></div>{% endblock %}
+				</div><!-- /.card-body -->
+			</div><!-- /.card -->
+		</section><!-- /.content -->
+	</div>
+{% endblock %}

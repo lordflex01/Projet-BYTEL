@@ -26,6 +26,7 @@ class Projet
     private $id;
 
     /**
+* 
      * @ORM\Column(type="string", length=255)
      */
     private $libelle;
@@ -40,11 +41,16 @@ class Projet
      */
     private $statut;
 
-
     /**
      * @ORM\OneToMany(targetEntity=User::class, mappedBy="projet")
      */
     private $users;
+
+/**
+     * @ORM\OneToMany(targetEntity=Taches::class, mappedBy="domaine")
+     */
+    private $taches;
+    
 
     public function __construct()
     {
@@ -65,7 +71,6 @@ class Projet
     public function setLibelle(string $libelle): self
     {
         $this->libelle = $libelle;
-
         return $this;
     }
 
@@ -77,7 +82,6 @@ class Projet
     public function setDescription(?string $description): self
     {
         $this->description = $description;
-
         return $this;
     }
 
@@ -89,7 +93,6 @@ class Projet
     public function setStatut(bool $statut): self
     {
         $this->statut = $statut;
-
         return $this;
     }
 
@@ -116,7 +119,6 @@ class Projet
             $this->users[] = $user;
             $user->setProjet($this);
         }
-
         return $this;
     }
 
@@ -128,7 +130,8 @@ class Projet
                 $user->setProjet(null);
             }
         }
-
         return $this;
     }
+
+    
 }

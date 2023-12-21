@@ -1,31 +1,27 @@
 {% extends 'header.html.twig' %}
 {% block body %}
-	<div
-		class="content-wrapper">
+	<div class="content-wrapper">
 		<!-- Content Header (Page header) -->
 		<section class="content-header">
 			<div class="container-fluid">
 				<div class="row mb-2">
 					<div class="col-sm-6">
-						<h1 class="m-0" style="font-size:19px">Liste des activitées</h1>
+						<h1 class="m-0" style="font-size:19px">Liste des activités</h1>
 					</div>
 					<div class="col-sm-6">
 						{% if is_granted('ROLE_ADMIN') %}
-							<a class="btn btn-primary" style="float: right;" href="{{ path('activite_new') }}">Ajouter une nouvelle activitée</a>
+							<a class="btn btn-primary" style="float: right;" href="{{ path('activite_new') }}">Ajouter une nouvelle activité</a>
 						{% endif %}
 					</div>
 				</div>
 			</div>
 			<!-- /.container-fluid -->
 		</section>
-		<section
-			class="content">
-
+		<section class="content">
 			<!-- Default box -->
 			<div class="card">
 				<div class="card-header">
-					<h3 class="card-title">Activitées</h3>
-
+					<h3 class="card-title">Activités</h3>
 					<div class="card-tools">
 						<button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
 							<i class="fas fa-minus"></i>
@@ -34,36 +30,34 @@
 							<i class="fas fa-times"></i>
 						</button>
 					</div>
-
-
 				</div>
 				<div class="card-body p-0">
 					<table class="table table-striped projects">
 						<thead>
 							<tr>
-								<th>
-									Id
+								<th style="width: 20%">
+									N°
 								</th>
-								<th style="width: 30%">
+								<th style=" width: 30%">
 									Libelle
 								</th>
-								<th>
+								<th style="/* margin-right: 51% */width: 38%;">
 									Description
 								</th>
-								{% if is_granted('ROLE_ADMIN') %}
-									<th>
+								<th style="/* margin-right: 40%; */width: -2px;">
 										Actions
 									</th>
-								{% endif %}
-							</tr>
+															</tr>
 						</thead>
 						<tbody>
 							{% for activite in activites %}
 								<tr>
-									<td>{{ activite.id }}</td>
+									<td>{% set number = ( number | default(0) ) + 1 %}
+										<p>{{ number }}
+										</p>
+									</td>
 									<td>{{ activite.libelle }}</td>
 									<td>{{ activite.description }}</td>
-
 									<td>
 										{% if is_granted('ROLE_ADMIN') %}
 											<a class="btn btn-info btn-sm" href="{{ path('activite_edit', {'id': activite.id}) }}">
@@ -74,10 +68,8 @@
 											</a>
 										{% endif %}
 									</td>
-
 								</tr>
 							{% endfor %}
-
 						</tbody>
 					</table>
 				</div>
@@ -87,5 +79,4 @@
 		</section>
 		<!-- /.content -->
 	</div>
-
 {% endblock %}

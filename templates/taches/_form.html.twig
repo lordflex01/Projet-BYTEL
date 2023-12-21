@@ -1,23 +1,17 @@
 {{ form_start(form) }}
 <!-- Main content -->
-<section
-	class="content">
-
-	<!--{{ dump() }}-->
+<section class="content">
 	<div class="container-fluid">
-		<div
-			class="row">
+		<div class="row">
 			<!-- left column -->
-			<div
-				class="col-md-12">
+			<div class="col-md-12">
 				<!-- general form elements -->
 				<div class="card card-primary">
-
-
 					<!-- /.card-header -->
 					<!-- form start -->
-						<form>
-							<div class="card-body"> <div class="form-group">
+					<form>
+						<div class="card-body"> 
+							<div class="form-group">
 								<label for="{{form.libelle.vars.id}}">Jira n°</label>
 								{{form_widget( form.libelle)}}
 								{{form_errors(form.libelle)}}
@@ -38,6 +32,10 @@
 								{{form_widget( form.domaine)}}
 								{% do form.domaine.setRendered %}
 							</div>
+							<div class="form-group">
+								{{form_widget( form.statut)}}
+								{% do form.statut.setRendered %}
+							</div>
 						</div>
 						<!-- /.card-body -->
 						<div class=" card-footer">
@@ -48,4 +46,5 @@
 			</div>
 		</div>
 	</div>
-	{{ form_end(form) }}
+</section>
+{{ form_end(form) }}

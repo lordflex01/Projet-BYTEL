@@ -7,7 +7,6 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Doctrine\ORM\Mapping as ORM;
-
 /**
  * @ORM\Entity(repositoryClass=TachesRepository::class)
  * @UniqueEntity(
@@ -46,9 +45,16 @@ class Taches
     private $domaine;
 
     /**
+     * @ORM\Column(type="boolean")
+     */
+    private $statut;
+
+    /**
      * @ORM\ManyToOne(targetEntity=CodeProjet::class, inversedBy="tache")
      */
     private $codeProjet;
+
+
 
     public function __construct()
     {
@@ -80,6 +86,18 @@ class Taches
     public function setDescription(?string $description): self
     {
         $this->description = $description;
+
+        return $this;
+    }
+
+    public function getStatut(): ?bool
+    {
+        return $this->statut;
+    }
+
+    public function setStatut(bool $statut): self
+    {
+        $this->statut = $statut;
 
         return $this;
     }

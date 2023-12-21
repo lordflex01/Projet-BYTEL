@@ -13,6 +13,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpKernel\Profiler\Profiler;
 
 /**
  * @IsGranted("ROLE_ADMIN")
@@ -29,6 +30,7 @@ class UserController extends AbstractController
         return $this->render('user/user.html.twig', [
             'users' => $userRepository->findAll(),
         ]);
+$this->get('profiler')->disable();
     }
     private $passwordEncoder;
 
@@ -51,16 +53,19 @@ class UserController extends AbstractController
      * @IsGranted("ROLE_ADMIN")
      * @Route("/new", name="user_new", methods={"GET","POST"})
      */
-    public function new(Request $request): Response
+    public function new(Request $request ): Response
     {
         $user = new User();
         $form = $this->createForm(UserType::class, $user);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+
             //On récupère les images transmises
             $image = $form->get('image')->getData();
 
+//si on modifie pas l'image on ne fait rien 
+            if ($image != null) {
             //on gèrère un nouveau nom de fichier
             $fichier = md5(uniqid()) . '.' . $image->guessExtension();
 
@@ -74,6 +79,7 @@ class UserController extends AbstractController
             $img = new Image();
             $img->setName($fichier);
             $user->setImage($img);
+}
 
             $entityManager = $this->getDoctrine()->getManager();
 
@@ -112,30 +118,37 @@ class UserController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            //on récupère le nom de l'image
-            $img = $user->getImage();
-            $nom = $img->getName();
-            //on supprime le fichier
-            unlink($this->getParameter('image_directory') . '/' . $nom);
-            //on supprime l'entrée de la base
-            $em = $this->getDoctrine()->getManager();
-            $em->remove($img);
 
             //On récupère les images transmises
             $image = $form->get('image')->getData();
 
-            //on gèrère un nouveau nom de fichier
-            $fichier = md5(uniqid()) . '.' . $image->guessExtension();
+            //si on modifie pas l'image on ne fait rien 
+            if ($image != null) {
+                //on récupère le nom de l'image
+                if ($user->getImage() != null) {
+                    $img = $user->getImage();
+                    $nom = $img->getName();
+                    //on supprime le fichier
+                    unlink($this->getParameter('image_directory') . '/' . $nom);
+                    //on supprime l'entrée de la base
+                    $em = $this->getDoctrine()->getManager();
+                    $em->remove($img);
+                }
+                //on gèrère un nouveau nom de fichier
+                $fichier = md5(uniqid()) . '.' . $image->guessExtension();
 
-            //on copie le fichier dans le dossier uploads
-            $image->move(
-                $this->getParameter('image_directory'),
-                $fichier
-            );
-
-            //on stocke l'image dans la base de données (son nom)
-            $img->setName($fichier);
-            $user->setImage($img);
+                //on copie le fichier dans le dossier uploads
+                $image->move(
+                    $this->getParameter('image_directory'),
+                    $fichier
+                );
+                if ($user->getImage() == null) {
+                    $img = new Image();
+                }
+                //on stocke l'image dans la base de données (son nom)
+                $img->setName($fichier);
+                $user->setImage($img);
+            }
 
             $entityManager = $this->getDoctrine()->getManager();
 
@@ -162,16 +175,17 @@ class UserController extends AbstractController
     public function delete(Request $request, User $user): Response
     {
         if ($this->isCsrfTokenValid('delete' . $user->getId(), $request->request->get('_token'))) {
-            //on récupère le nom de l'image
-            $img = $user->getImage();
-            $nom = $img->getName();
-            //on supprime le fichier
-            unlink($this->getParameter('image_directory') . '/' . $nom);
-            //on supprime l'entrée de la base
-            $em = $this->getDoctrine()->getManager();
-            $em->remove($img);
-            $em->flush();
-
+            if ($user->getImage() != null) {
+                        //on récupère le nom de l'image
+                        $img = $user->getImage();
+                        $nom = $img->getName();
+                        //on supprime le fichier
+                        unlink($this->getParameter('image_directory') . '/' . $nom);
+                        //on supprime l'entrée de la base
+                        $em = $this->getDoctrine()->getManager();
+                        $em->remove($img);
+                        $em->flush();
+            }
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($user);
             $entityManager->flush();

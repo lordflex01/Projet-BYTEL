@@ -1,0 +1,21 @@
+# Changelog
+
+## 2023-11-22
+### Fixed
+    Masquage projets cloturés dans le formulaire d'ajout de collaborateur
+### Added
+    Envoi de relance automatique
+    Export mensuel avec intervalle
+
+## 2023-11-23
+### Fixed
+    Masquage des code projets cloturés dans le formulaire d'imputation
+    Affichage des taches en cours 
+
+## 2023-11-24
+### Added
+    Page d'accueil avec informations de suivi et statistiques du budget
+
+## 2023-11-28
+### Fixed
+    Modification formulaire d'ajout de collaborateur

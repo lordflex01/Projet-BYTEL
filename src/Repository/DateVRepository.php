@@ -18,7 +18,72 @@ class DateVRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, DateV::class);
     }
+    public function findByUserId($userId)
+    {
+        $qb = $this->_em->createQueryBuilder();
+        return $qb->select('d')
+            ->from(DateV::class, 'd')
+            ->leftJoin('d.imput', 'i')
+            ->leftJoin('i.user', 'u')
+            ->where('u.id = :userId')
+            ->setParameter('userId', $userId)
+            ->getQuery()
+            ->getResult();
+    }
 
+    public function getDateVValuesPerDay($userId, $date){
+        $qb = $this->_em->createQueryBuilder();
+
+        $from = new \DateTime($date->format("Y-m-d")." 00:00:00");
+        $to   = new \DateTime($date->format("Y-m-d")." 23:59:59");
+
+        return $qb->select('d')
+            ->from(DateV::class, 'd')
+            ->leftJoin('d.imput', 'i')
+            ->leftJoin('i.user', 'u')
+            ->where('u.id = :userId')
+            ->andWhere('d.date BETWEEN :from AND :to')
+            ->setParameter('from', $from )
+            ->setParameter('to', $to)
+            ->setParameter('userId', $userId)
+            ->orderBy('d.date', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function getDateVValuesPerWeek($userId, $date){
+        $qb = $this->_em->createQueryBuilder();
+
+        $from = new \DateTime($date->format("Y-m-d")." 00:00:00");
+        $to   = (new \DateTime($date->format("Y-m-d")." 23:59:59"))->modify('+4 day');;
+
+        return $qb->select('d')
+            ->from(DateV::class, 'd')
+            ->leftJoin('d.imput', 'i')
+            ->leftJoin('i.user', 'u')
+            ->where('u.id = :userId')
+            ->andWhere('d.date BETWEEN :from AND :to')
+            ->setParameter('from', $from )
+            ->setParameter('to', $to)
+            ->setParameter('userId', $userId)
+            ->orderBy('d.date', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
+public function findByDateRange($dateDebut, $dateFin)
+    {
+        $qb = $this->_em->createQueryBuilder();
+        return $qb->select('d')
+        ->from(DateV::class, 'd')
+        ->leftJoin('d.imput', 'i')
+        ->where('d.date BETWEEN :dateDebut AND :dateFin')
+        ->setParameter('dateDebut', $dateDebut )
+        ->setParameter('dateFin', $dateFin)
+        ->orderBy('d.date', 'ASC')
+        ->getQuery()
+        ->getResult();
+    }
     // /**
     //  * @return DateV[] Returns an array of DateV objects
     //  */

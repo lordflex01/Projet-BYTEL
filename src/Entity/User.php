@@ -39,7 +39,6 @@ class User implements UserInterface
     /**
      * @ORM\Column(type="json")
      */
-
     private $roles = [];
 
     /**
@@ -94,6 +93,17 @@ class User implements UserInterface
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $capit;
+
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $Flag;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    private $Taux;
+    
 
     public function __construct()
     {
@@ -330,6 +340,30 @@ class User implements UserInterface
     public function setCapit(?string $capit): self
     {
         $this->capit = $capit;
+
+        return $this;
+    }
+
+    public function getFlag(): ?bool
+    {
+        return $this->Flag;
+    }
+
+    public function setFlag(?bool $Flag): self
+    {
+        $this->Flag = $Flag;
+
+        return $this;
+    }
+
+    public function getTaux(): ?float
+    {
+        return $this->Taux;
+    }
+
+    public function setTaux(?float $Taux): self
+    {
+        $this->Taux = $Taux;
 
         return $this;
     }

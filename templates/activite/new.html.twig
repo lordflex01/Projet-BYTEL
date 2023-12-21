@@ -1,22 +1,20 @@
 {% extends 'header.html.twig' %}
 {% block body %}
 	<!-- Content Wrapper. Contains page content -->
-	<div
-		class="content-wrapper">
+	<div class="content-wrapper">
 		<!-- Content Header (Page header) -->
 		<div class="content-header">
 			<div class="container-fluid">
 				<div class="row mb-2">
 					<div class="col-sm-6">
-						<h1 class="m-0" style="font-size:19px">Ajouter une nouvelle activitée</h1>
+						<h1 class="m-0" style="font-size:19px">Ajouter une nouvelle activité</h1>
 					</div>
 					<div class="col-sm-6">
 						<ol class="breadcrumb float-sm-right">
-
 							<li class="breadcrumb-item">
-								<a href="/activite">Activitées</a>
+								<a href="/activite">Activités</a>
 							</li>
-							<li class="breadcrumb-item active">Nouvelle Activitée</li>
+							<li class="breadcrumb-item active">Nouvelle Activité</li>
 						</ol>
 					</div>
 				</div>
@@ -26,6 +24,5 @@
 		</div>
 		<!-- /.content-header -->
 		{{ include('activite/_form.html.twig') }}
-
 	</div>
 {% endblock %}
