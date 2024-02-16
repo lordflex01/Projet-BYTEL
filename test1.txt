@@ -1,0 +1,135 @@
+ //Boucle pour ajoutez plusieur imputation
+            for ($j = 0; $j < $donnees->nbr; $j++) {
+
+                $imput = new Imput;
+                $tache = new Taches;
+                $user = new User;
+                $codeP = new CodeProjet;
+                $activite = new Activite;
+                $charge_imput = 0;
+
+                //connaitre le user
+                foreach ($userlistes as $userliste) {
+                    if ($donnees->tableauimput[$j]->user == $userliste->getId())
+                        $user = $userliste;
+                }
+                //connaitre la tache
+                foreach ($tachelistes as $tacheliste) {
+                    if ($donnees->tableauimput[$j]->tache == $tacheliste->getId())
+                        $tache = $tacheliste;
+                }
+                //connaitre le codeprojet
+                foreach ($codeprojetlistes as $codeprojetliste) {
+                    if ($donnees->tableauimput[$j]->codeprojet == $codeprojetliste->getId())
+                        $codeP = $codeprojetliste;
+                }
+                //connaitre l'activite
+                foreach ($activitelistes as $activiteliste) {
+                    if ($donnees->tableauimput[$j]->activite == $activiteliste->getId())
+                        $activite = $activiteliste;
+                }
+                //condition sur l'existance des code
+                foreach ($dateVlistes as $dateVliste) {
+                    $datetest1 = new DateTime($donnees->tableauimput[$j]->date[0]);
+                    $datetest = $datetest1->format('Y-m-d');
+                    $datecomp = $dateVliste->getDate()->format('Y-m-d');
+                    if (
+                        $donnees->tableauimput[$j]->user == $dateVliste->getImput()->getUser()->getId() &&
+                        $donnees->tableauimput[$j]->tache == $dateVliste->getTache()->getId() &&
+                        $donnees->tableauimput[$j]->codeprojet == $dateVliste->getCodeprojet()->getId() &&
+                        $donnees->tableauimput[$j]->activite == $dateVliste->getActivite()->getId() &&
+                        date($datetest) == date($datecomp)
+                    ) {
+                        $code = 201;
+                    }
+                }
+                //Condition pour voir si les imputations depassent 1 par jour
+                $cm = 0;
+                $totalbase = [];
+                $totalbase[0] = $donnees->tableauimput[$j]->tabcumuleimput[0] + $donnees->tableauimput[$j]->tabcumuleimputM[0];
+                $totalbase[1] = $donnees->tableauimput[$j]->tabcumuleimput[1] + $donnees->tableauimput[$j]->tabcumuleimputM[1];
+                $totalbase[2] = $donnees->tableauimput[$j]->tabcumuleimput[2] + $donnees->tableauimput[$j]->tabcumuleimputM[2];
+                $totalbase[3] = $donnees->tableauimput[$j]->tabcumuleimput[3] + $donnees->tableauimput[$j]->tabcumuleimputM[3];
+                $totalbase[4] = $donnees->tableauimput[$j]->tabcumuleimput[4] + $donnees->tableauimput[$j]->tabcumuleimputM[4];
+                for ($ver = 0; $ver < 5; $ver++) {
+                    if ($totalbase[$ver] > 1)
+                        $code = 202;
+                }
+                // Condition pour voir si les imputations depasse 5 pour la semaine
+                $total = 0;
+                for($i=0; $i<5; $i++) {
+                    $total += $donnees->tableauimput[$j]->valeur[$i];
+                }
+                if($total>5){
+                    $code = 202;
+                    break;
+                }
+
+                // Condition pour voir si le jour d'imputation tombe un jour férié
+                for($i=0; $i<5; $i++) {
+                    $dateImputation = new DateTime($donnees->tableauimput[$j]->date[$i]);
+                    $annee = $dateImputation->format('Y');
+                    $dateImputVerif = $dateImputation->format('Y-m-d');
+
+                    $collab = $userRepository->find($donnees->tableauimput[$j]->user);
+                    $lieu = $collab->getSite();
+                    $lieuArray = explode(', ',$lieu);
+                    $pays = end($lieuArray);
+
+                    $joursFeries = $this->getJoursFeries($pays, $annee);
+
+                    $existeABS = 0;
+
+                    // Vérification si la date d'imputation est un jour férié
+                    if (array_key_exists($dateImputVerif, $joursFeries)) {
+                        if($existeABS == 0) {
+                            $imput->setUser($user);
+                            $imput->setCommentaire("Férié: ".$dateImputVerif);
+                            $em = $this->getDoctrine()->getManager();
+                            $em->persist($imput);
+
+                            $donnees->tableauimput[$j]->valeur[$i] = 1;
+
+                            $CodeAbsence = $codeProjetRepository->findCodeAbsence();
+                            
+                            $IDCode = $CodeAbsence->getId();
+                            $domaine = $collab->getProjet()->getLibelle();
+                            $TacheAbsence = $tachesrepository->findTacheAbsence($IDCode, $domaine);
+                            $ActiviteAbsence = $activiteRepository->findActiviteAbsence();
+
+                            $dateV = new DateV;
+                            $dateV->setImput($imput);
+                            $dateV->setValeur($donnees->tableauimput[$j]->valeur[$i]);
+                            $dateV->setDate(new DateTime($donnees->tableauimput[$j]->date[$i]));
+                            $dateV->setTache($TacheAbsence);
+                            $dateV->setCodeprojet($CodeAbsence);
+                            $dateV->setActivite($ActiviteAbsence);
+                            $charge_imput += $donnees->tableauimput[$j]->valeur[$i];
+                            $em->persist($dateV);
+
+                            $existeABS = 1;
+                        }else{
+                            $donnees->tableauimput[$j]->valeur[$i] = 0;
+                        }
+                    }
+                }
+                //création de l'imput
+                $imput->setUser($user);
+                $imput->setCommentaire($donnees->tableauimput[$j]->Commentaires);
+
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($imput);
+                //Création des donnée
+                for ($i = 0; $i < 5; $i++) {
+                    $dateV = new DateV;
+                    //on hydrate l'objet avec les données
+                    $dateV->setImput($imput);
+                    $dateV->setValeur($donnees->tableauimput[$j]->valeur[$i]);
+                    $dateV->setDate(new DateTime($donnees->tableauimput[$j]->date[$i]));
+                    $dateV->setTache($tache);
+                    $dateV->setCodeprojet($codeP);
+                    $dateV->setActivite($activite);
+                    $charge_imput += $donnees->tableauimput[$j]->valeur[$i];
+                    $em->persist($dateV);
+                }
+            }
