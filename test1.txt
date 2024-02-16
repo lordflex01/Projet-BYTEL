@@ -1,5 +1,11 @@
 $existeABS = 0;
-                // Condition pour voir si le jour d'imputation tombe un jour férié
+                
+                //création de l'imput
+                $imput->setUser($user);
+                $imput->setCommentaire($donnees->tableauimput[$j]->Commentaires);
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($imput);
+
                 for($i=0; $i<5; $i++) {
                     $dateImputation = new DateTime($donnees->tableauimput[$j]->date[$i]);
                     $annee = $dateImputation->format('Y');
@@ -11,17 +17,15 @@ $existeABS = 0;
                     $pays = end($lieuArray);
 
                     $joursFeries = $this->getJoursFeries($pays, $annee);
-
-                    // Vérification si la date d'imputation est un jour férié
+                    // Condition pour voir si le jour d'imputation tombe un jour férié
                     if (array_key_exists($dateImputVerif, $joursFeries)) {
                         if($existeABS == 0) {
+                            $imputs = new Imput;
                             // Création de l'absence
-                            $imput->setUser($user);
-                            $imput->setCommentaire("Férié: ".$dateImputVerif);
+                            $imputs->setUser($user);
+                            $imputs->setCommentaire("Férié: ".$dateImputVerif);
                             $em = $this->getDoctrine()->getManager();
-                            $em->persist($imput);
-
-                            $donnees->tableauimput[$j]->valeur[$i] = 1;
+                            $em->persist($imputs);
 
                             $CodeAbsence = $codeProjetRepository->findCodeAbsence();
                             
@@ -31,7 +35,7 @@ $existeABS = 0;
                             $ActiviteAbsence = $activiteRepository->findActiviteAbsence();
 
                             $dateV = new DateV;
-                            $dateV->setImput($imput);
+                            $dateV->setImput($imputs);
                             $dateV->setValeur(1);
                             $dateV->setDate(new DateTime($donnees->tableauimput[$j]->date[$i]));
                             $dateV->setTache($TacheAbsence);
@@ -44,38 +48,15 @@ $existeABS = 0;
                         }else{
                             $donnees->tableauimput[$j]->valeur[$i] = 0;
                         }
-                        //création de l'imput
-                        $imput->setUser($user);
-                        $imput->setCommentaire($donnees->tableauimput[$j]->Commentaires);
-                        $em = $this->getDoctrine()->getManager();
-                        $em->persist($imput);
-        
-                        //Création des données
-                        $dateV = new DateV;
-                        $dateV->setImput($imput);
-                        $dateV->setValeur($donnees->tableauimput[$j]->valeur[$i]);
-                        $dateV->setDate(new DateTime($donnees->tableauimput[$j]->date[$i]));
-                        $dateV->setTache($tache);
-                        $dateV->setCodeprojet($codeP);
-                        $dateV->setActivite($activite);
-                        $charge_imput += $donnees->tableauimput[$j]->valeur[$i];
-                        $em->persist($dateV);
-                    }else{
-                        //création de l'imput
-                        $imput->setUser($user);
-                        $imput->setCommentaire($donnees->tableauimput[$j]->Commentaires);
-                        $em = $this->getDoctrine()->getManager();
-                        $em->persist($imput);
-    
-                        //Création des données
-                        $dateV = new DateV;
-                        $dateV->setImput($imput);
-                        $dateV->setValeur($donnees->tableauimput[$j]->valeur[$i]);
-                        $dateV->setDate(new DateTime($donnees->tableauimput[$j]->date[$i]));
-                        $dateV->setTache($tache);
-                        $dateV->setCodeprojet($codeP);
-                        $dateV->setActivite($activite);
-                        $charge_imput += $donnees->tableauimput[$j]->valeur[$i];
-                        $em->persist($dateV);
                     }
+                    //Création des données
+                    $dateV = new DateV;
+                    $dateV->setImput($imput);
+                    $dateV->setValeur($donnees->tableauimput[$j]->valeur[$i]);
+                    $dateV->setDate(new DateTime($donnees->tableauimput[$j]->date[$i]));
+                    $dateV->setTache($tache);
+                    $dateV->setCodeprojet($codeP);
+                    $dateV->setActivite($activite);
+                    $charge_imput += $donnees->tableauimput[$j]->valeur[$i];
+                    $em->persist($dateV);
                 }
