@@ -1,4 +1,5 @@
 $existeABS = 0;
+                $dateABS = [];
                 
                 //création de l'imput
                 $imput->setUser($user);
@@ -19,36 +20,11 @@ $existeABS = 0;
                     $joursFeries = $this->getJoursFeries($pays, $annee);
                     // Condition pour voir si le jour d'imputation tombe un jour férié
                     if (array_key_exists($dateImputVerif, $joursFeries)) {
-                        if($existeABS == 0) {
-                            $imputs = new Imput;
-                            // Création de l'absence
-                            $imputs->setUser($user);
-                            $imputs->setCommentaire("Férié: ".$dateImputVerif);
-                            $em = $this->getDoctrine()->getManager();
-                            $em->persist($imputs);
-
-                            $CodeAbsence = $codeProjetRepository->findCodeAbsence();
-                            
-                            $IDCode = $CodeAbsence->getId();
-                            $domaine = $collab->getProjet()->getLibelle();
-                            $TacheAbsence = $tachesrepository->findTacheAbsence($IDCode, $domaine);
-                            $ActiviteAbsence = $activiteRepository->findActiviteAbsence();
-
-                            $dateV = new DateV;
-                            $dateV->setImput($imputs);
-                            $dateV->setValeur(1);
-                            $dateV->setDate(new DateTime($donnees->tableauimput[$j]->date[$i]));
-                            $dateV->setTache($TacheAbsence);
-                            $dateV->setCodeprojet($CodeAbsence);
-                            $dateV->setActivite($ActiviteAbsence);
-                            $charge_imput += 1;
-                            $em->persist($dateV);
-
-                            $existeABS = 1;
-                        }else{
-                            $donnees->tableauimput[$j]->valeur[$i] = 0;
-                        }
+                        $existeABS = 1;
+                        $donnees->tableauimput[$j]->valeur[$i] = 0;
+                        $dateABS[] = $donnees->tableauimput[$j]->date[$i];
                     }
+        
                     //Création des données
                     $dateV = new DateV;
                     $dateV->setImput($imput);
@@ -58,5 +34,34 @@ $existeABS = 0;
                     $dateV->setCodeprojet($codeP);
                     $dateV->setActivite($activite);
                     $charge_imput += $donnees->tableauimput[$j]->valeur[$i];
+                    $em->persist($dateV);
+                }
+
+                if($existeABS == 1) {
+                    $imputs = new Imput;
+                    // Création de l'absence
+                    $imputs->setUser($user);
+                    $imputs->setCommentaire("Férié");
+                    $em = $this->getDoctrine()->getManager();
+                    $em->persist($imputs);
+
+                    $CodeAbsence = $codeProjetRepository->findCodeAbsence();
+                    
+                    $IDCode = $CodeAbsence->getId();
+                    $domaine = $collab->getProjet()->getLibelle();
+                    $TacheAbsence = $tachesrepository->findTacheAbsence($IDCode, $domaine);
+                    $ActiviteAbsence = $activiteRepository->findActiviteAbsence();
+
+                    foreach ($dateABS as $dABS) {
+                        $dateV = new DateV;
+                        $dateV->setImput($imputs);
+                        $dateV->setValeur(1);
+                        $dateV->setDate(new DateTime($dABS));
+                        $dateV->setTache($TacheAbsence);
+                        $dateV->setCodeprojet($CodeAbsence);
+                        $dateV->setActivite($ActiviteAbsence);
+                        $charge_imput += 1;
+                    }
+                    
                     $em->persist($dateV);
                 }
