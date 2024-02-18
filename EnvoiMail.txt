@@ -1,0 +1,188 @@
+public function envoiRelance (MailerInterface $mailer, UserRepository $userRepository, DateVRepository $dateVRepository, ImputRepository $imputRepository, Request $request)
+{
+    if ($request->isXmlHttpRequest()) {
+        $data = json_decode($request->getContent(), true);
+        $selectedCollaborators = $data['selectedCollaborators'];
+
+        foreach ($selectedCollaborators as $userId) {
+            $LeUser = $userRepository->find($userId);
+
+            $emailUser = $LeUser->getEmail();
+
+            $email = (new Email())
+                        ->from('test@example.com')
+                        ->to($emailUser)
+                        // ->cc('lamya.bellouche@capgemini.com')
+                        ->priority(Email::PRIORITY_HIGH)
+                        ->subject('Rappel Imputation SIPRA')
+                        ->text('Bonjour, ceci est un rappel pour effectuer vos imputations SIPRA');
+                    try {
+                        $mailer->send($email);
+                    } catch (TransportExceptionInterface $e) {
+                        throw $e;
+                    }
+        }
+
+        return new JsonResponse(['success' => true]);
+    }
+}
+
+-------------------------------------------------------------------------------------------------------------------------------------------
+
+
+{% extends 'header.html.twig' %}
+{% block javascripts %}
+	<!-- jQuery -->
+	<script src="{{asset ("assets/plugins/jquery/jquery.min.js")}}"></script>
+	<!-- Bootstrap 4 -->
+	<script src="{{asset ("assets/plugins/bootstrap/js/bootstrap.bundle.min.js")}}"></script>
+	<!-- script page -->
+	<script src="{{asset ("assets/js/AdminLTE.js")}}"></script>
+	<!-- AdminLTE for demo purposes -->
+	<script src="{{asset ("assets/js/demo.js")}}"></script>
+	<!-- select 2 -->
+	<script src="{{asset ("assets/plugins/select2/js/select2.full.min.js")}}"></script>
+	<!-- overlayScrollbars -->
+	<script src="{{asset ("assets/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js")}}"></script>
+
+	<!-- OPTIONAL SCRIPTS -->
+	<script src="{{asset ("assets/plugins/chart.js/Chart.min.js")}}"></script>
+	<!-- AdminLTE dashboard demo (This is only for demo purposes) -->
+	<script src="{{asset ("assets/js/pages/dashboard3.js")}}"></script>
+
+	<!-- Imputation -->
+	<script src="{{asset ("assets/js/utilImputation.js")}}"></script>
+	<!-- datatable -->
+	<script src="{{asset ("/assets/js/datatable/jquery.dataTable.min tache.js")}}"></script>
+
+	<link rel="stylesheet" href="{{asset ("/assets/css/datatable/buttons.bootstrap4.min.css")}}">
+	<link rel="stylesheet" href="{{asset ("/assets/css/datatable/dataTables.bootstrap4.min.css")}}">
+	<link rel="stylesheet" href="{{asset ("/assets/css/datatable/responsive.bootstrap4.min.css")}}">
+
+	<script src="{{asset ("/assets/js/datatable/buttons.colVis.min.js")}}"></script>
+	<script src="{{asset ("/assets/js/datatable/buttons.print.min.js")}}"></script>
+	<script src="{{asset ("/assets/js/datatable/dataTables.bootstrap4.min.js")}}"></script>
+	<script src="{{asset ("/assets/js/datatable/dataTables.buttons.min.js")}}"></script>
+	<script src="{{asset ("/assets/js/datatable/dataTables.responsive.min.js")}}"></script>
+	<script src="{{asset ("/assets/js/datatable/jszip.min.js")}}"></script>
+	<script src="{{asset ("/assets/js/datatable/pdfmake.min.js")}}"></script>
+	<script src="{{asset ("/assets/js/datatable/responsive.bootstrap4.min.js")}}"></script>
+	<script src="{{asset ("/assets/js/datatable/vfs_fonts.js")}}"></script>
+
+	<!-- SweetAlert2 -->
+	<script src="{{asset ("/assets/plugins/sweetalert2/sweetalert2.min.js")}}"></script>
+	<!-- TOAST -->
+	<script src="{{asset ("/assets/plugins/toastr/toastr.min.js")}}"></script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const sendReminderButton = document.getElementById('sendReminderButton');
+            if (sendReminderButton) {
+                sendReminderButton.addEventListener('click', function() {
+                    // Récupérer les identifiants des collaborateurs sélectionnés
+                    var selectedCollaborators = [];
+                    var checkboxes = document.querySelectorAll(".selectCollab:checked");
+                    checkboxes.forEach(function(checkbox) {
+                        selectedCollaborators.push(checkbox.getAttribute('data-id'));
+                    });
+
+                    // Effectuer une requête AJAX avec les identifiants des collaborateurs sélectionnés
+                    fetch('/envoyer_relance', {
+                        method: 'POST', // ou 'POST' selon votre configuration
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ selectedCollaborators: selectedCollaborators }) // Envoyer les identifiants des collaborateurs sélectionnés
+                    })
+                    .then(response => {
+                        if (response.ok) {
+                            console.log("Email envoyé");
+                        } else {
+                            console.error("Echec envoi:");
+                        }
+                    })
+                    .catch(error => {
+                        // Gérer les erreurs de requête
+                    });
+                });
+            }
+        });
+    </script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            var selectAllCheckbox = document.getElementById("selectAll");
+
+            if (selectAllCheckbox) {
+                selectAllCheckbox.addEventListener("change", function() {
+                    var checkboxes = document.querySelectorAll(".selectCollab");
+
+                    for (var i = 0; i < checkboxes.length; i++) {
+                        checkboxes[i].checked = this.checked;
+                    }
+                });
+            }
+        });
+    </script>
+{% endblock %}
+{% block body %}
+	<br>
+	<div class="content-wrapper">
+		<!-- Content Header (Page header) -->
+		<section class="content-header">
+			<div class="container-fluid">
+				<div class="row mb-2">
+					<div class="col-sm-6">
+						<h1>Suivi Imputation mensuel</h1>
+					</div>
+				</div>
+			</div>
+			<!-- /.container-fluid -->
+		</section>
+		{% set i = 0 %}
+		{% for userlist in userlisteTotal %}
+			<section class="content">
+				<div class="card card-info">
+					<div class="card-header">
+						<h3 class="card-title">
+							{{weeks[i]}}
+						</h3>
+						{% set i = i + 1 %}
+						<div class="card-tools">
+							<button class="btn btn-primary" id="sendReminderButton">Envoyer des relances</button>
+							<button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+								<i class="fas fa-minus"></i>
+							</button>
+							<button type="button" class="btn btn-tool" data-card-widget="remove" title="Remove">
+								<i class="fas fa-times"></i>
+							</button>
+						</div>
+					</div>
+					<div class="card-body p-0">
+						<table class="table table-striped projects">
+							<thead>
+								<tr>
+									<th>Nom</th>
+									<th>Total imputation semaine</th>
+									<th><input type="checkbox" id="selectAll"></th>
+								</tr>
+							</thead>
+							<tbody>
+								{% for user in userlist %}
+									{% if user.valeur < 5 %}
+										<tr>
+											<td>{{user.username}}</td>
+											<td>{{user.valeur}}</td>
+											<td><input type="checkbox" class="selectCollab" data-id="{{user.id}}"></td>
+										</tr>
+									{% endif %}
+								{% endfor %}
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</section>
+		{% endfor %}
+		<!-- /.card-body -->
+	</div>
+{% endblock %}
