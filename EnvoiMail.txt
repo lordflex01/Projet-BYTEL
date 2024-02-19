@@ -1,37 +1,25 @@
-public function envoiRelance (MailerInterface $mailer, UserRepository $userRepository, DateVRepository $dateVRepository, ImputRepository $imputRepository, Request $request)
+public function envoiRelance (MailerInterface $mailer, UserRepository $userRepository, DateVRepository $dateVRepository, ImputRepository $imputRepository, Request $request): Response
     {
-        $reponse = false;
         if ($request->isXmlHttpRequest()) {
             $data = json_decode($request->getContent(), true);
             $selectedCollaborators = $data['selectedCollaborators'];
 
             foreach ($selectedCollaborators as $userId) {
                 $LeUser = $userRepository->find($userId);
-
                 $emailUser = $LeUser->getEmail();
 
                 $email = (new Email())
-                    ->from('test@example.com')
-                    ->to($emailUser)
+                    ->from('dieneabass2001@gmail.com')
+                    ->to('bman4124@gmail.com')
                     // ->cc('lamya.bellouche@capgemini.com')
                     ->priority(Email::PRIORITY_HIGH)
                     ->subject('Rappel Imputation SIPRA')
-                    ->html('<p>Bonjour,</p><br><br><p>Ceci est un rappel pour effectuer vos imputations SIPRA</p><br><br><p>Merci</p>');
-                try {
-                    $mailer->send($email);
-                    $reponse = true;
-                } catch (TransportExceptionInterface $e) {
-                    throw $e;
-                }
+                    ->text('Bonjour, ceci est un rappel pour effectuer vos imputations SIPRA');
+                $mailer->send($email);
             }
-            if($reponse){
-                return new JsonResponse(['success' => true , 'message' => 'Mail envoyé']);
-            }else{
-                return new JsonResponse(['error' => 'Erreur lors de l\'envoi']);
-            }
-            
+            return new JsonResponse(['success' => true]);
         }
-        return new Response('Erreur serveur. Veuillez réessayer ultérieurement');
+        return new JsonResponse(['success' => false]);
     }
 
 -------------------------------------------------------------------------------------------------------------------------------------------
@@ -103,13 +91,29 @@ public function envoiRelance (MailerInterface $mailer, UserRepository $userRepos
                     })
                     .then(response => {
                         if (response.ok) {
-                            console.log("Email envoyé");
+                            var Toast = Swal.mixin({
+								toast: true,
+								position: "top-end",
+								showConfirmButton: false,
+								timer: 6000,
+							});
+
+							Toast.fire({ icon: "success", title: " Email envoyé. " });
                         } else {
-                            console.error("Echec envoi:");
+                            var Toast = Swal.mixin({
+								toast: true,
+								position: "top-end",
+								showConfirmButton: false,
+								timer: 6000,
+							});
+							Toast.fire({
+								icon: "error",
+								title: " Echec de l\'envoi. Veuillez réessayer",
+							});
                         }
                     })
                     .catch(error => {
-                        // Gérer les erreurs de requête
+                        
                     });
                 });
             }
