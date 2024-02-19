@@ -1,31 +1,38 @@
 public function envoiRelance (MailerInterface $mailer, UserRepository $userRepository, DateVRepository $dateVRepository, ImputRepository $imputRepository, Request $request)
-{
-    if ($request->isXmlHttpRequest()) {
-        $data = json_decode($request->getContent(), true);
-        $selectedCollaborators = $data['selectedCollaborators'];
+    {
+        $reponse = false;
+        if ($request->isXmlHttpRequest()) {
+            $data = json_decode($request->getContent(), true);
+            $selectedCollaborators = $data['selectedCollaborators'];
 
-        foreach ($selectedCollaborators as $userId) {
-            $LeUser = $userRepository->find($userId);
+            foreach ($selectedCollaborators as $userId) {
+                $LeUser = $userRepository->find($userId);
 
-            $emailUser = $LeUser->getEmail();
+                $emailUser = $LeUser->getEmail();
 
-            $email = (new Email())
-                        ->from('test@example.com')
-                        ->to($emailUser)
-                        // ->cc('lamya.bellouche@capgemini.com')
-                        ->priority(Email::PRIORITY_HIGH)
-                        ->subject('Rappel Imputation SIPRA')
-                        ->text('Bonjour, ceci est un rappel pour effectuer vos imputations SIPRA');
-                    try {
-                        $mailer->send($email);
-                    } catch (TransportExceptionInterface $e) {
-                        throw $e;
-                    }
+                $email = (new Email())
+                    ->from('test@example.com')
+                    ->to($emailUser)
+                    // ->cc('lamya.bellouche@capgemini.com')
+                    ->priority(Email::PRIORITY_HIGH)
+                    ->subject('Rappel Imputation SIPRA')
+                    ->html('<p>Bonjour,</p><br><br><p>Ceci est un rappel pour effectuer vos imputations SIPRA</p><br><br><p>Merci</p>');
+                try {
+                    $mailer->send($email);
+                    $reponse = true;
+                } catch (TransportExceptionInterface $e) {
+                    throw $e;
+                }
+            }
+            if($reponse){
+                return new JsonResponse(['success' => true , 'message' => 'Mail envoyé']);
+            }else{
+                return new JsonResponse(['error' => 'Erreur lors de l\'envoi']);
+            }
+            
         }
-
-        return new JsonResponse(['success' => true]);
+        return new Response('Erreur serveur. Veuillez réessayer ultérieurement');
     }
-}
 
 -------------------------------------------------------------------------------------------------------------------------------------------
 
