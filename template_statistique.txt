@@ -1,0 +1,213 @@
+{% extends 'header.html.twig' %}
+
+{% block body %}
+	<div class="content-wrapper">
+		<!-- Content Header (Page header) -->
+		<section class="content-header">
+			<div class="container-fluid">
+				<div class="row mb-2">
+					<div class="col-sm-6">
+						<h1>Statistiques Projet</h1>
+					</div>
+					<div class="col-sm-6">
+						<a class="btn btn-default" style="float:right;" href="{{ path('export-statistique') }}"> Exporter les statistiques &nbsp; <i class="fa fa-upload" aria-hidden="true" style="font-size:14px"></i></a>
+					</div>
+				</div>
+			</div>
+			<!-- /.container-fluid -->
+		</section>
+		{% set i = 0 %}
+		{% for code_projet in code_projets %}
+			<section class="content">
+				<div class="card card-info">
+					<div class="card-header">
+						<h3 class="card-title">Charge et budget du
+							{{ code_projet.libelle }}:
+							{{ code_projet.description }}
+						</h3>
+						<div class="card-tools">
+							<button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+								<i class="fas fa-minus"></i>
+							</button>
+							<button type="button" class="btn btn-tool" data-card-widget="remove" title="Remove">
+								<i class="fas fa-times"></i>
+							</button>
+						</div>
+					</div>
+					<div class="card-body p-0">
+						<table class="table table-striped projects">
+							<thead>
+								<tr>
+									<th>
+										#
+									</th>
+									<th style="width: 30%">
+										Budget global en €
+									</th>
+									<th>
+										Budget consommé en €
+									</th>
+									<th>
+										Delta
+									</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td>Global</td>
+									<td>{{ code_projet.budget }}</td>
+									<td>{{ code_projet.budgetConsomme }}</td>
+									{% set deltabudget = code_projet.budget - code_projet.budgetConsomme %}
+									<td>{{ deltabudget }}</td>
+								</tr>
+								<tr>
+									<td>NRJ</td>
+									<td>{{ code_projet.budgetNRJ }}</td>
+									<td>{{ code_projet.budgetNRJConsomme }}</td>
+									{% set deltabudgetNRJ = code_projet.budgetNRJ - code_projet.budgetNRJConsomme %}
+									<td>{{ deltabudgetNRJ }}</td>
+								</tr>
+								<tr>
+									<td>DECO</td>
+									<td>{{ code_projet.budgetDECO }}</td>
+									<td>{{ code_projet.budgetDECOConsomme }}</td>
+									{% set deltabudgetDECO = code_projet.budgetDECO - code_projet.budgetDECOConsomme %}
+									<td>{{ deltabudgetDECO }}</td>
+								</tr>
+								<tr>
+									<td>CLOE</td>
+									<td>{{ code_projet.budgetCLOE }}</td>
+									<td>{{ code_projet.budgetCLOEConsomme }}</td>
+									{% set deltabudgetCLOE = code_projet.budgetCLOE - code_projet.budgetCLOEConsomme %}
+									<td>{{ deltabudgetCLOE }}</td>
+								</tr>
+							</tbody>
+						</table>
+						<div class="row">
+							<div class="col-md-6">
+								<div class="card card-secondary">
+									<div class="card-header">
+										<h3 class="card-title">Charge par domaine</h3>
+									</div>
+									<div class="card-body p-0">
+										<table class="table table-striped projects">
+											<thead>
+												<tr>
+													<th>
+														#
+													</th>
+													<th>
+														Charges prévues en j/H
+													</th>
+													<th>
+														Charges Consommées en j/H
+													</th>
+													<th>
+														Delta
+													</th>
+												</tr>
+											</thead>
+											<tbody>
+												<tr>
+													<td>NRJ</td>
+													<td>{{ code_projet.chageNRJ }}</td>
+													<td>{{ code_projet.chargeNRJConsomme }}</td>
+													{% set chargeNRJ = code_projet.chageNRJ - code_projet.chargeNRJConsomme %}
+													<td>{{ chargeNRJ }}</td>
+												</tr>
+												<tr>
+													<td>DECO</td>
+													<td>{{ code_projet.chageDECO }}</td>
+													<td>{{ code_projet.chargeDECOConsomme }}</td>
+													{% set chargeDECO = code_projet.chageDECO - code_projet.chargeDECOConsomme %}
+													<td>{{ chargeDECO }}</td>
+												</tr>
+												<tr>
+													<td>CLOE</td>
+													<td>{{ code_projet.chargeCLOE }}</td>
+													<td>{{ code_projet.chargeCLOEConsomme }}</td>
+													{% set chargeCLOE = code_projet.chargeCLOE - code_projet.chargeCLOEConsomme %}
+													<td>{{ chargeCLOE }}</td>
+												</tr>
+												<tr>
+													<td>Total</td>
+													<td>{{ code_projet.chageJH }}</td>
+													<td>{{ code_projet.chargeConsomme }}</td>
+													{% set charge = code_projet.chageJH - code_projet.chargeConsomme %}
+													<td>{{ charge }}</td>
+												</tr>
+											</tbody>
+										</table>
+									</div>
+									<!-- /.card-body -->
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="card card-secondary">
+									<div class="card-header">
+										<h3 class="card-title">Charge par poste</h3>
+									</div>
+									<div class="card-body p-0">
+										<table class="table table-striped projects">
+											<thead>
+												<tr>
+													<th>
+														#
+													</th>
+													<th>
+														NRJ
+													</th>
+													<th>
+														DECO
+													</th>
+													<th>
+														CLOE
+													</th>
+													<th>
+														Total
+													</th>
+												</tr>
+											</thead>
+											<tbody>
+												<tr>
+													<td>DEV</td>
+													<td>{{ devNRJ[i] }}</td>
+													<td>{{ devDECO[i] }}</td>
+													<td>{{ devCLOE[i] }}</td>
+													<td>{{ dev[i] }}</td>
+												</tr>
+												<tr>
+													<td>Testeur</td>
+													<td>{{ testeurNRJ[i] }}</td>
+													<td>{{ testeurDECO[i] }}</td>
+													<td>{{ testeurCLOE[i] }}</td>
+													<td>{{ testeur[i] }}</td>
+												</tr>
+												<tr>
+													<td>analyste</td>
+													<td>{{ analysteNRJ[i] }}</td>
+													<td>{{ analysteDECO[i] }}</td>
+													<td>{{ analysteCLOE[i] }}</td>
+													<td>{{ analyste[i] }}</td>
+												</tr>
+												<tr>
+													<td>Pilotage</td>
+													<td>{{ pilotageNRJ[i] }}</td>
+													<td>{{ pilotageDECO[i] }}</td>
+													<td>{{ pilotageCLOE[i] }}</td>
+													<td>{{ pilotage[i] }}</td>
+												</tr>
+												{% set i = i + 1 %}
+											</tbody>
+										</table>
+									</div>
+									<!-- /.card-body -->
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+		{% endfor %}
+	</div>
+{% endblock %}
