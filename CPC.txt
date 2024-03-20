@@ -35,7 +35,6 @@ class CodeProjetController extends AbstractController
             $this->addFlash('success', 'nombres des codes projets insérées est : ' . $nbrAdd);
             $this->addFlash('default', ' Les codes projets doublantes sont :' . implode(" - ", $codeProjectsExists));
             $this->addFlash('danger', ' Les codes projets non ajoutés  sont :' . implode(" - ", $notAdd));
-
         }
         return $this->render('code_projet/index.html.twig', [
             'code_projets' => $codeProjetRepository->findAll(),
@@ -49,23 +48,33 @@ class CodeProjetController extends AbstractController
     public function new(Request $request): Response
     {
         $codeProjet = new CodeProjet();
+        $gestionProjet = new GestionProjet();
         $form = $this->createForm(CodeProjetType::class, $codeProjet);
         $form->handleRequest($request);
         $codeProjet->setBudgetConsomme(0);
-        $codeProjet->setBudgetNRJConsomme(0);
-        $codeProjet->setBudgetDECOConsomme(0);
-        $codeProjet->setBudgetCLOEConsomme(0);
         $codeProjet->setChargeConsomme(0);
-        $codeProjet->setChargeNRJConsomme(0);
-        $codeProjet->setChargeDECOConsomme(0);
-        $codeProjet->setChargeCLOEConsomme(0);
+
+        $gestionProjet->setBudgetNRJConsomme(0);
+        $gestionProjet->setChargeNRJConsomme(0);
+
+        $gestionProjet->setBudgetDECOConsomme(0);
+        $gestionProjet->setChargeDECOConsomme(0);
+
+        $gestionProjet->setBudgetCLOEConsomme(0);
+        $gestionProjet->setChargeCLOEConsomme(0);
+
+        $gestionProjet->setBudgetTransverseConsomme(0);
+        $gestionProjet->setChargeTransverseConsomme(0); 
 
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($codeProjet);
-            $entityManager->flush();
 
+            $gestionProjet->setCodeProjet($codeProjet);
+            $entityManager->persist($gestionProjet);
+
+            $entityManager->flush();
             return $this->redirectToRoute('code_projet_index');
         }
 
