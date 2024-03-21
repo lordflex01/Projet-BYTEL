@@ -1,97 +1,120 @@
-<?php
-
-namespace App\Form;
-
-use App\Entity\CodeProjet;
-use App\Entity\Projet;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
-use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\Extension\Core\Type\IntegerType;
-use Symfony\Component\Form\Extension\Core\Type\DateType;
-
-class CodeProjetType extends AbstractType
-{
-    public function buildForm(FormBuilderInterface $builder, array $options)
-    {
-        $builder
-            ->add('libelle', TextType::class, [
-                'attr' => [
-                    'placeholder' => "Veuillez entrer votre Code projet"
-                ]
-            ])
-            ->add('description', TextType::class, [
-                'attr' => [
-                    'placeholder' => "Veuillez entrer une description",
-
-                ],
-
-            ])
-            ->add('statut', CheckboxType::class, [
-                'label_attr' => ['class' => 'switch-custom'],
-                'required' => false,
-            ])
-            ->add('budget', IntegerType::class, [
-                'attr' => [
-                    'placeholder' => "Veuillez entrer votre budget"
-                ],
-            ])
-            ->add('budgetNRJ', TextType::class, [
-                'attr' => [
-                    'placeholder' => "Veuillez entrer le budget d'NRJ"
-                ],
-                'required' => false,
-            ])
-            ->add('budgetDECO', TextType::class, [
-                'attr' => [
-                    'placeholder' => "Veuillez entrer le budget de DECO"
-                ],
-                'required' => false,
-            ])
-            ->add('budgetCLOE', TextType::class, [
-                'attr' => [
-                    'placeholder' => "Veuillez entrer le budget de CLOE"
-                ],
-                'required' => false,
-            ])
-            ->add('chageJH', TextType::class, [
-                'attr' => [
-                    'placeholder' => "Veuillez entrer la charge en jour-homme"
-                ],
-            ])
-            ->add('chageNRJ', TextType::class, [
-                'attr' => [
-                    'placeholder' => "Veuillez entrer la charge en jour-homme pour le projet NRJ"
-                ],
-                'required' => false,
-            ])
-            ->add('chageDECO', TextType::class, [
-                'attr' => [
-                    'placeholder' => "Veuillez entrer la charge en jour-homme pour le projet DECO"
-                ],
-                'required' => false,
-            ])
-            ->add('chargeCLOE', TextType::class, [
-                'attr' => [
-                    'placeholder' => "Veuillez entrer la charge en jour-homme pour le projet CLOE"
-                ],
-                'required' => false,
-            ])
-            ->add('dateD', DateType::class, [
-                'widget' => 'single_text',
-            ])
-            ->add('DateF', DateType::class, [
-                'widget' => 'single_text',
-            ]);
-    }
-
-    public function configureOptions(OptionsResolver $resolver)
-    {
-        $resolver->setDefaults([
-            'data_class' => CodeProjet::class,
-        ]);
-    }
-}
+{{ form_start(form) }}
+<!-- Main content -->
+<section class="content">
+	<style>
+		.row {
+			display: flex;
+		}
+		.col {
+			flex: 1;
+		}
+	</style>
+	
+	<div class="container-fluid">
+		<div class="row">
+			<!-- left column -->
+			<div class="col-md-12">
+				<!-- general form elements -->
+				<div class="card card-primary">
+					<!-- /.card-header -->
+					<!-- form start -->
+					<form>
+						<div class="card-body"> 
+							<div class="form-group">
+								<label for="{{form.libelle.vars.id}}">Code projet</label>
+								{{form_widget( form.libelle)}}
+								{{form_errors(form.libelle)}}
+								{% do form.libelle.setRendered %}
+							</div>
+							<div class="form-group">
+								<label for="{{form.description.vars.id}}">Description</label>
+								{{form_widget( form.description)}}
+								{% do form.description.setRendered %}
+							</div>
+							<div class="row">
+								<div class="col">
+									<label for="{{form.budget.vars.id}}">Budget en Euro</label>
+									{{form_widget( form.budget)}}
+									{% do form.budget.setRendered %}
+								</div>
+								<div class="col">
+									<label for="{{form.chageJH.vars.id}}">Charges</label>
+									{{form_widget( form.chageJH)}}
+									{% do form.chageJH.setRendered %}
+								</div>
+							</div>
+							<div class="row">
+								<div class="col">
+									<label for="{{form.budgetNRJ.vars.id}}">Budget NRJ</label>
+									{{form_widget( form.budgetNRJ)}}
+									{% do form.budgetNRJ.setRendered %}
+								</div>
+								<div class="col">
+									<label for="{{form.chargeNRJ.vars.id}}">Charges NRJ</label>
+									{{form_widget( form.chargeNRJ)}}
+									{% do form.chargeNRJ.setRendered %}
+								</div>
+							</div>
+							<div class="row">
+								<div class="col">
+									<label for="{{form.budgetCLOE.vars.id}}">Budget CLOE</label>
+									{{form_widget( form.budgetCLOE)}}
+									{% do form.budgetCLOE.setRendered %}
+								</div>
+								<div class="col">
+									<label for="{{form.chargeCLOE.vars.id}}">Charges CLOE</label>
+									{{form_widget( form.chargeCLOE)}}
+									{% do form.chargeCLOE.setRendered %}
+								</div>
+							</div>
+							<div class="row">
+								<div class="col">
+									<label for="{{form.budgetDECO.vars.id}}">Budget DECO</label>
+									{{form_widget( form.budgetDECO)}}
+									{% do form.budgetDECO.setRendered %}
+								</div>
+								<div class="col">
+									<label for="{{form.chargeDECO.vars.id}}">Charges DECO</label>
+									{{form_widget( form.chargeDECO)}}
+									{% do form.chargeDECO.setRendered %}
+								</div>
+							</div>
+							<div class="row">
+								<div class="col">
+									<label for="{{form.budgetTransverse.vars.id}}">Budget Transverse</label>
+									{{form_widget( form.budgetTransverse)}}
+									{% do form.budgetTransverse.setRendered %}
+								</div>
+								<div class="col">
+									<label for="{{form.chargeTransverse.vars.id}}">Charges Transverse</label>
+									{{form_widget( form.chargeTransverse)}}
+									{% do form.chargeTransverse.setRendered %}
+								</div>
+							</div>
+							<div class="row">
+								<div class="col">
+									<label for="{{form.dateD.vars.id}}">Date de debut</label>
+									{{form_widget( form.dateD)}}
+									{% do form.dateD.setRendered %}
+								</div>
+								<div class="col">
+									<label for="{{form.DateF.vars.id}}">Date de fin</label>
+									{{form_widget( form.DateF)}}
+									{% do form.DateF.setRendered %}
+								</div>
+							</div>
+							<div class="form-group">
+								{{form_widget( form.statut)}}
+								{% do form.statut.setRendered %}
+							</div>
+						</div>
+						<!-- /.card-body -->
+						<div class=" card-footer">
+							<button type="submit" class="btn btn-success swalDefaultSuccess">{{ button_label|default('Ajouter') }}</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+{{ form_end(form) }}
