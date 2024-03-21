@@ -3,6 +3,7 @@
 namespace App\Form;
 
 use App\Entity\CodeProjet;
+use App\Entity\GestionProjet;
 use App\Entity\Projet;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
@@ -37,56 +38,6 @@ class CodeProjetType extends AbstractType
                     'placeholder' => "Veuillez entrer votre budget"
                 ],
             ])
-            // PARTIE GESTION PROJET //
-            ->add('budgetNRJ', TextType::class, [
-                'attr' => [
-                    'placeholder' => "Veuillez entrer le budget d'NRJ"
-                ],
-                'required' => false,
-            ])
-            ->add('budgetDECO', TextType::class, [
-                'attr' => [
-                    'placeholder' => "Veuillez entrer le budget de DECO"
-                ],
-                'required' => false,
-            ])
-            ->add('budgetCLOE', TextType::class, [
-                'attr' => [
-                    'placeholder' => "Veuillez entrer le budget de CLOE"
-                ],
-                'required' => false,
-            ])
-            ->add('budgetTransverse', TextType::class, [
-                'attr' => [
-                    'placeholder' => "Veuillez entrer le budget de Transverse"
-                ],
-                'required' => false,
-            ])
-            ->add('chargeNRJ', TextType::class, [
-                'attr' => [
-                    'placeholder' => "Veuillez entrer la charge en jour-homme pour le projet NRJ"
-                ],
-                'required' => false,
-            ])
-            ->add('chargeDECO', TextType::class, [
-                'attr' => [
-                    'placeholder' => "Veuillez entrer la charge en jour-homme pour le projet DECO"
-                ],
-                'required' => false,
-            ])
-            ->add('chargeCLOE', TextType::class, [
-                'attr' => [
-                    'placeholder' => "Veuillez entrer la charge en jour-homme pour le projet CLOE"
-                ],
-                'required' => false,
-            ])
-            ->add('chargeTransverse', TextType::class, [
-                'attr' => [
-                    'placeholder' => "Veuillez entrer la charge en jour-homme pour le projet Transverse"
-                ],
-                'required' => false,
-            ])
-            // FIN PARTIE GESTION PROJET //
             ->add('chageJH', TextType::class, [
                 'attr' => [
                     'placeholder' => "Veuillez entrer la charge en jour-homme"
@@ -97,7 +48,66 @@ class CodeProjetType extends AbstractType
             ])
             ->add('DateF', DateType::class, [
                 'widget' => 'single_text',
-            ]);
+            ])
+            // PARTIE GESTION PROJET //
+            ->add('budgetNRJ', TextType::class, [
+                'attr' => [
+                    'placeholder' => "Veuillez entrer le budget d'NRJ"
+                ],
+                'required' => false,
+                'class' => GestionProjet::class,
+            ])
+            ->add('budgetDECO', TextType::class, [
+                'attr' => [
+                    'placeholder' => "Veuillez entrer le budget de DECO"
+                ],
+                'required' => false,
+                'class' => GestionProjet::class,
+            ])
+            ->add('budgetCLOE', TextType::class, [
+                'attr' => [
+                    'placeholder' => "Veuillez entrer le budget de CLOE"
+                ],
+                'required' => false,
+                'class' => GestionProjet::class,
+            ])
+            ->add('budgetTransverse', TextType::class, [
+                'attr' => [
+                    'placeholder' => "Veuillez entrer le budget de Transverse"
+                ],
+                'required' => false,
+                'class' => GestionProjet::class,
+            ])
+            ->add('chargeNRJ', TextType::class, [
+                'attr' => [
+                    'placeholder' => "Veuillez entrer la charge en jour-homme pour le projet NRJ"
+                ],
+                'required' => false,
+                'class' => GestionProjet::class,
+            ])
+            ->add('chargeDECO', TextType::class, [
+                'attr' => [
+                    'placeholder' => "Veuillez entrer la charge en jour-homme pour le projet DECO"
+                ],
+                'required' => false,
+                'class' => GestionProjet::class,
+            ])
+            ->add('chargeCLOE', TextType::class, [
+                'attr' => [
+                    'placeholder' => "Veuillez entrer la charge en jour-homme pour le projet CLOE"
+                ],
+                'required' => false,
+                'class' => GestionProjet::class,
+            ])
+            ->add('chargeTransverse', TextType::class, [
+                'attr' => [
+                    'placeholder' => "Veuillez entrer la charge en jour-homme pour le projet Transverse"
+                ],
+                'required' => false,
+                'class' => GestionProjet::class,
+            ])
+            // FIN PARTIE GESTION PROJET //
+        ;
     }
 
     public function configureOptions(OptionsResolver $resolver)
