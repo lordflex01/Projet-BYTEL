@@ -50,61 +50,70 @@ class CodeProjetType extends AbstractType
                 'widget' => 'single_text',
             ])
             // PARTIE GESTION PROJET //
-            ->add('budgetNRJ', TextType::class, [
+            ->add('gestion', EntityType::class, [
+                'class' => GestionProjet::class,
+                'required' => false,
+                'choice_label' => 'budgetNRJ',
+                'multiple' => true,
                 'attr' => [
                     'placeholder' => "Veuillez entrer le budget d'NRJ"
                 ],
-                'required' => false,
-                'class' => GestionProjet::class,
             ])
-            ->add('budgetDECO', TextType::class, [
+            ->add('gestion', EntityType::class, [
+                'class' => GestionProjet::class,
+                'required' => false,
+                'choice_label'=> 'budgetDECO',
                 'attr' => [
                     'placeholder' => "Veuillez entrer le budget de DECO"
                 ],
-                'required' => false,
-                'class' => GestionProjet::class,
             ])
-            ->add('budgetCLOE', TextType::class, [
+            ->add('gestion', EntityType::class, [
+                'class' => GestionProjet::class,
+                'required' => false,
+                'choice_label'=> 'budgetCLOE',
                 'attr' => [
                     'placeholder' => "Veuillez entrer le budget de CLOE"
                 ],
-                'required' => false,
-                'class' => GestionProjet::class,
             ])
-            ->add('budgetTransverse', TextType::class, [
+            ->add('gestion', EntityType::class, [
+                'class' => GestionProjet::class,
+                'required' => false,
+                'choice_label'=> 'budgetTransverse',
                 'attr' => [
                     'placeholder' => "Veuillez entrer le budget de Transverse"
                 ],
-                'required' => false,
-                'class' => GestionProjet::class,
             ])
-            ->add('chargeNRJ', TextType::class, [
+            ->add('gestion', EntityType::class, [
+                'class' => GestionProjet::class,
+                'required' => false,
+                'choice_label'=> 'chargeNRJ',
                 'attr' => [
                     'placeholder' => "Veuillez entrer la charge en jour-homme pour le projet NRJ"
                 ],
-                'required' => false,
-                'class' => GestionProjet::class,
             ])
-            ->add('chargeDECO', TextType::class, [
+            ->add('gestion', EntityType::class, [
+                'class' => GestionProjet::class,
+                'required' => false,
+                'choice_label'=> 'chargeDECO',
                 'attr' => [
                     'placeholder' => "Veuillez entrer la charge en jour-homme pour le projet DECO"
                 ],
-                'required' => false,
-                'class' => GestionProjet::class,
             ])
-            ->add('chargeCLOE', TextType::class, [
+            ->add('gestion', EntityType::class, [
+                'class' => GestionProjet::class,
+                'required' => false,
+                'choice_label'=> 'chargeCLOE',
                 'attr' => [
                     'placeholder' => "Veuillez entrer la charge en jour-homme pour le projet CLOE"
                 ],
-                'required' => false,
-                'class' => GestionProjet::class,
             ])
-            ->add('chargeTransverse', TextType::class, [
+            ->add('gestion', EntityType::class, [
+                'class' => GestionProjet::class,
+                'required' => false,
+                'choice_label'=> 'chargeTransverse',
                 'attr' => [
                     'placeholder' => "Veuillez entrer la charge en jour-homme pour le projet Transverse"
                 ],
-                'required' => false,
-                'class' => GestionProjet::class,
             ])
             // FIN PARTIE GESTION PROJET //
         ;
