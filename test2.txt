@@ -1,0 +1,110 @@
+{{ form_start(form) }}
+{{ form_row(form._token) }}
+<!-- Main content -->
+<section class="content">
+	<style>
+		.row {
+			display: flex;
+		}
+		.col {
+			flex: 1;
+		}
+	</style>
+	<div class="container-fluid">
+		<div class="row">
+			<!-- left column -->
+			<div class="col-md-12">
+				<!-- general form elements -->
+				<div class="card card-primary">
+					<!-- /.card-header -->
+					<!-- form start -->
+					<form>
+						<div class="card-body"> 
+							<div class="form-group">
+								<label for="{{form.roles.vars.id}}">Rôle <span style="color:red;">*</span></label>
+								{{form_widget( form.roles)}}
+								{% do form.roles.setRendered %}
+							</div>
+							<div class="row">
+								<div class="col">
+									<label for="{{form.email.vars.id}}">Adresse E-mail <span style="color:red;">*</span></label>
+									{{form_widget( form.email)}}
+									{{form_errors(form.email)}}
+									{% do form.email.setRendered %}
+								</div>
+								<div class="col">
+									<label for="{{form.username.vars.id}}">Nom du collaborateur <span style="color:red;">*</span></label>
+									{{form_widget( form.username)}}
+									{% do form.username.setRendered %}
+								</div>
+							</div>
+							<div class="row">
+								<div class="col">
+									<label for="{{form.capit.vars.id}}">Code CAPIT</label>
+									{{form_widget( form.capit)}}
+									{% do form.capit.setRendered %}
+								</div>
+								<div class="col">
+									<label for="{{form.site.vars.id}}">Site <span style="color:red;">*</span></label>
+									{{form_widget( form.site)}}
+									{% do form.site.setRendered %}
+								</div>
+							</div>
+							<div class="row">
+								<div class="col">
+									<label for="{{form.taux.vars.id}}">TJM</label>
+									{{form_widget( form.taux)}}
+									{% do form.taux.setRendered %}
+								</div>
+								<div class="col">
+									<label for="{{form.salaire.vars.id}}">CJM</label>
+									{{form_widget( form.salaire)}}
+									{% do form.salaire.setRendered %}
+								</div>
+							</div>
+							<div class="row">
+								<div class="col">
+									<label for="{{form.projet.vars.id}}">Département <span style="color:red;">*</span></label>
+									{{form_widget( form.projet)}}
+									{% do form.projet.setRendered %}</div>
+								<div class="col">
+									<label for="{{form.poste.vars.id}}">Poste <span style="color:red;">*</span></label>
+									{{form_widget( form.poste)}}
+									{% do form.poste.setRendered %}
+								</div>
+							</div>
+							<div class="form-group">
+								{{form_widget( form.password)}}
+								{% do form.password.setRendered %}
+							</div>
+							<div class="row">
+								<div class="col">
+									<div>
+										<label for="{{form.image.vars.id}}">Sélectionner une photo</label>
+									</div>
+									<div>
+										<input type="file" id="{{form.image.vars.id}}" name="{{form.image.vars.full_name}}" accept="image/*">
+										{% do form.image.setRendered %}
+									</div>
+								</div>
+								<div class="col">
+									<div>
+										{{form_row( form.flag)}}
+										{% do form.flag.setRendered %}
+									</div>
+								</div>
+							</div>
+						</div>
+						<!-- /.card-body -->
+						<div class=" card-footer">
+							<button type="submit" class="btn btn-success swalDefaultSuccess">{{ button_label|default('Ajouter') }}</button>
+						</div>
+						{{ form_rest(form) }}
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+{{ form_rest(form) }}
+{{ form_end(form) }}
