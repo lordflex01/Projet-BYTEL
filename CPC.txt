@@ -8,6 +8,7 @@ use App\Form\CodeProjetType;
 use App\Form\GestionProjetType;
 use App\Form\FileUploadType;
 use App\Repository\CodeProjetRepository;
+use App\Repository\GestionProjetRepository;
 use App\Repository\TachesRepository;
 use App\Service\CodeProjetService;
 use App\Service\FileUploader;
@@ -43,6 +44,7 @@ class CodeProjetController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
+
     /**
      * @IsGranted("ROLE_ADMIN")
      * @Route("/new", name="code_projet_new", methods={"GET","POST"})
@@ -54,7 +56,9 @@ class CodeProjetController extends AbstractController
 
         $form = $this->createForm(CodeProjetType::class, $codeProjet);
         $forms = $this->createForm(GestionProjetType::class, $gestionProjet);
+
         $form->handleRequest($request);
+        $forms->handleRequest($request);
 
         $codeProjet->setBudgetConsomme(0);
         $codeProjet->setChargeConsomme(0);
@@ -72,7 +76,7 @@ class CodeProjetController extends AbstractController
         $gestionProjet->setChargeTransverseConsomme(0); 
 
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($form->isSubmitted() && $form->isValid() && $forms->isSubmitted() && $forms->isValid()) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($codeProjet);
 
@@ -86,6 +90,7 @@ class CodeProjetController extends AbstractController
         return $this->render('code_projet/new.html.twig', [
             'code_projet' => $codeProjet,
             'form' => $form->createView(),
+            'forms' => $forms->createView(),
         ]);
     }
 
@@ -104,12 +109,15 @@ class CodeProjetController extends AbstractController
      * @IsGranted("ROLE_ADMIN")
      * @Route("/{id}/edit", name="code_projet_edit", methods={"GET","POST"})
      */
-    public function edit(Request $request, CodeProjet $codeProjet): Response
+    public function edit(Request $request, CodeProjet $codeProjet, GestionProjet $gestionProjet): Response
     {
+        
         $form = $this->createForm(CodeProjetType::class, $codeProjet);
+        $forms = $this->createForm(GestionProjetType::class, $gestionProjet);
         $form->handleRequest($request);
+        $forms->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($form->isSubmitted() && $form->isValid() && $forms->isSubmitted() && $forms->isValid()) {
             $this->getDoctrine()->getManager()->flush();
 
             return $this->redirectToRoute('code_projet_index');
@@ -118,6 +126,7 @@ class CodeProjetController extends AbstractController
         return $this->render('code_projet/edit.html.twig', [
             'code_projet' => $codeProjet,
             'form' => $form->createView(),
+            'forms' => $forms->createView(),
         ]);
     }
 
@@ -125,10 +134,12 @@ class CodeProjetController extends AbstractController
      * @IsGranted("ROLE_ADMIN")
      * @Route("/{id}", name="code_projet_delete", methods={"DELETE"})
      */
-    public function delete(Request $request, CodeProjet $codeProjet): Response
+    public function delete(Request $request, CodeProjet $codeProjet, GestionProjet $gestionProjet, GestionProjetRepository $gestrep): Response
     {
         if ($this->isCsrfTokenValid('delete' . $codeProjet->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
+            $gestrep->findBy(['codeProjet' => $codeProjet]);
+            $entityManager->remove($gestrep);
             $entityManager->remove($codeProjet);
             $entityManager->flush();
         }
