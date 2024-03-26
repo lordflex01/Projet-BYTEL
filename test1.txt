@@ -1,67 +1,139 @@
-$existeABS = 0;
-                $dateABS = [];
-                
-                //création de l'imput
-                $imput->setUser($user);
-                $imput->setCommentaire($donnees->tableauimput[$j]->Commentaires);
-                $em = $this->getDoctrine()->getManager();
-                $em->persist($imput);
+<?php
 
-                for($i=0; $i<5; $i++) {
-                    $dateImputation = new DateTime($donnees->tableauimput[$j]->date[$i]);
-                    $annee = $dateImputation->format('Y');
-                    $dateImputVerif = $dateImputation->format('Y-m-d');
+namespace App\Form;
 
-                    $collab = $userRepository->find($donnees->tableauimput[$j]->user);
-                    $lieu = $collab->getSite();
-                    $lieuArray = explode(', ',$lieu);
-                    $pays = end($lieuArray);
+use App\Entity\User;
+use App\Entity\Projet;
+use phpDocumentor\Reflection\PseudoTypes\True_;
+use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\CallbackTransformer;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\Validator\Constraints\Regex;
 
-                    $joursFeries = $this->getJoursFeries($pays, $annee);
-                    // Condition pour voir si le jour d'imputation tombe un jour férié
-                    if (array_key_exists($dateImputVerif, $joursFeries)) {
-                        $existeABS = 1;
-                        $donnees->tableauimput[$j]->valeur[$i] = 0;
-                        $dateABS[] = $donnees->tableauimput[$j]->date[$i];
-                    }
-        
-                    //Création des données
-                    $dateV = new DateV;
-                    $dateV->setImput($imput);
-                    $dateV->setValeur($donnees->tableauimput[$j]->valeur[$i]);
-                    $dateV->setDate(new DateTime($donnees->tableauimput[$j]->date[$i]));
-                    $dateV->setTache($tache);
-                    $dateV->setCodeprojet($codeP);
-                    $dateV->setActivite($activite);
-                    $charge_imput += $donnees->tableauimput[$j]->valeur[$i];
-                    $em->persist($dateV);
+class UserType extends AbstractType
+{
+    public function buildForm(FormBuilderInterface $builder, array $options)
+    {
+        $builder
+            //On ajoute le champ "image" dans le formulaire
+            //il n'est pas lié a la base de données
+            ->add('image', FileType::class, [
+                'label' => false,
+                'mapped' => false,
+                'required' => false,
+            ])
+
+            ->add('email', TextType::class, [
+                'required' => true,
+                'attr' => [
+                    'placeholder' => "xxxxx@yyyy.zzzz"
+                ]
+            ])
+            ->add('salaire', TextType::class, [
+                'required' => false,
+                'attr' => [
+                    'placeholder' => "Veuillez entrer le salaire journalier du collaborateur"
+                ]
+            ])
+            ->add('taux', TextType::class, [
+                'required' => false,
+                'attr' => [
+                    'placeholder' => "Veuillez entrer le taux journalier du collaborateur"
+                ]
+            ])
+            ->add('capit', TextType::class, [
+                'required' => false,
+                'attr' => [
+                    'placeholder' => "Veuillez entrer le code CAPIT du collaborateur"
+                ]
+            ])
+            ->add('roles', ChoiceType::class, [
+                'required' => true,
+                'multiple' => false,
+                'expanded' => true,
+                'choices' => [
+                    'Collaborateur' => 'ROLE_USER',
+                    'Administrateur' => 'ROLE_ADMIN',
+                ],
+            ])
+            ->add('password', RepeatedType::class, [
+                'type' => PasswordType::class,
+                'invalid_message' => 'Les champs du mot de passe doivent être identiques.',
+                'options' => ['attr' => ['class' => 'Mot de passe']],
+                'required' => false,
+                'first_options'  => ['label' => 'Mot de passe'],
+                'second_options' => ['label' => 'Confirmer le mot de passe'],
+            ])
+            ->add('username', TextType::class, [
+                'required' => true,
+                'attr' => [
+                    'placeholder' => "Veuillez entrer votre nom "
+                ],
+            ])
+            ->add('projet', EntityType::class, [
+                'required' => true,
+                'multiple' => false,
+                'expanded' => false,
+                'class' => Projet::class,
+                'query_builder' => function(\Doctrine\ORM\EntityRepository $repository){
+                    return  $repository->createQueryBuilder('projet')
+                        ->where('projet.statut = 1');
+                },
+            ])
+            ->add('poste', ChoiceType::class, [
+                'required' => true,
+                'multiple' => false,
+                'expanded' => false,
+                'choices' => [
+                    'Développeur' => 'Développeur',
+                    'Testeur' => 'Testeur',
+                    'Business analyste' => 'Business analyste',
+                    'Manager' => 'Manager',
+                    'Pilotage' => 'Pilotage',
+                    'Architecte' => 'Architecte',
+                ],
+            ])
+            ->add('site', TextType::class, [
+                'required' => true,
+                'attr' => [
+                    'placeholder' => "Veuillez entrer votre site (Ville, Pays)"
+                ],
+                'constraints' => [
+                    new Regex([
+                        'pattern' => '/^[a-zA-Z\s]+,\s[a-zA-Z\s]+$/',
+                        'message' => 'Le format du site doit être "Ville, Pays"'
+                    ]),
+                ]
+            ])
+            ->add('flag', CheckboxType::class, [
+                'label_attr' => ['class' => 'switch-custom'],
+                'label' => 'Suivi imputation',
+                'required' => true,
+            ]);
+
+        $builder->get('roles')
+            ->addModelTransformer(new CallbackTransformer(
+                function ($rolesArray) {
+                    return count($rolesArray) ? $rolesArray[0] : null;
+                },
+                function ($rolesString) {
+                    return [$rolesString];
                 }
+            ));
+    }
 
-                if($existeABS == 1) {
-                    $imputs = new Imput;
-                    // Création de l'absence
-                    $imputs->setUser($user);
-                    $imputs->setCommentaire("Férié");
-                    $em = $this->getDoctrine()->getManager();
-                    $em->persist($imputs);
-
-                    $CodeAbsence = $codeProjetRepository->findCodeAbsence();
-                    
-                    $IDCode = $CodeAbsence->getId();
-                    $domaine = $collab->getProjet()->getLibelle();
-                    $TacheAbsence = $tachesrepository->findTacheAbsence($IDCode, $domaine);
-                    $ActiviteAbsence = $activiteRepository->findActiviteAbsence();
-
-                    foreach ($dateABS as $dABS) {
-                        $dateV = new DateV;
-                        $dateV->setImput($imputs);
-                        $dateV->setValeur(1);
-                        $dateV->setDate(new DateTime($dABS));
-                        $dateV->setTache($TacheAbsence);
-                        $dateV->setCodeprojet($CodeAbsence);
-                        $dateV->setActivite($ActiviteAbsence);
-                        $charge_imput += 1;
-                    }
-                    
-                    $em->persist($dateV);
-                }
+    public function configureOptions(OptionsResolver $resolver)
+    {
+        $resolver->setDefaults([
+            'data_class' => User::class,
+        ]);
+    }
+}
