@@ -36,6 +36,8 @@ class ImputController extends AbstractController
     {
         $thisweek = date('Y') . '-W' . date('W');
 
+        $today = date('Y-m-d');
+
         $imputation = [];
         $dateVs = $dateVRepository->findAll();
         foreach ($dateVs as $dateV) {
@@ -58,6 +60,7 @@ class ImputController extends AbstractController
         return $this->render('imput/index.html.twig', [
             'datas' => $data,
             'thisweek' => $thisweek,
+            'today' => $today,
             'imputs' => $imputRepository->findAll(),
             'users' => $alluser,
             'dateVs' => $dateVRepository->findAll(),
@@ -65,6 +68,32 @@ class ImputController extends AbstractController
         ]);
     }
 
+    public function getJoursFeries($pays, $annee){
+        if ($pays == "France"){
+            // Appel à l'API pour obtenir la liste des jours fériés
+            $apiUrl = 'https://calendrier.api.gouv.fr/jours-feries/metropole/'.$annee.'.json'; // URL de l'API 
+            $response = file_get_contents($apiUrl); // Appel de l'API 
+            // Traitement de la réponse de l'API pour obtenir les jours fériés
+            $joursFeries = json_decode($response, true); // Recupération de la liste des jours fériés en format JSON
+        }else if ($pays == "Maroc"){
+            $joursFeries = [
+                "2024-01-01"=>"Jour de l'an", 
+                "2024-01-11"=>"Manifeste de l'indépendance", 
+                "2024-04-10"=>"Aid El Fitr", 
+                "2024-05-01"=>"Fête du travail", 
+                "2024-06-17"=>"Aid Al Adha", 
+                "2024-07-08"=>"1er Moharram", 
+                "2024-08-30"=>"Fête du trône", 
+                "2024-08-14"=>"Journée de Oued Ed-Dahab", 
+                "2024-08-20"=>"La révolution du roi et du peuple", 
+                "2024-08-21"=>"Fête de la jeunesse", 
+                "2024-09-16"=>"Aid Al Mawlid", 
+                "2024-11-06"=>"Marche verte", 
+                "2024-11-18"=>"Fête de l'indépendance"
+            ];
+        } 
+        return $joursFeries;
+    }
     /**
      * @Route("/new", name="imput_new", methods={"GET","POST"})
      */
@@ -148,6 +177,13 @@ class ImputController extends AbstractController
                         $codeP->setChargeCLOEConsomme($chargeFinale);
                         $codeP->setBudgetCLOEConsomme($budgetFinale);
                     }
+                    if ($tache->getDomaine() == "Transverse") {
+                        $budgetFinale = $codeP->getBudgetTransverseconsomme() + ($charge * $dateVliste->getImput()->getUser()->getSalaire());
+                        $chargeFinale =  $codeP->getChargeTransverseconsomme() + $charge;
+                        $codeP->setChargeTransverseconsomme($chargeFinale);
+                        $codeP->setBudgetTransverseconsomme($budgetFinale);
+                    }
+
                     //editer les valeur
                     $dateV->setValeur($donnees->tableaumodif[$j]->valeur[$i]);
                     $modif = 1;
@@ -215,7 +251,7 @@ class ImputController extends AbstractController
                 }
             }
 
-            //Boucle pour ajoutez plusieur imputation
+            //Boucle pour ajouter plusieurs imputations
             for ($j = 0; $j < $donnees->nbr; $j++) {
 
                 $imput = new Imput;
@@ -224,6 +260,7 @@ class ImputController extends AbstractController
                 $codeP = new CodeProjet;
                 $activite = new Activite;
                 $charge_imput = 0;
+
                 //connaitre le user
                 foreach ($userlistes as $userliste) {
                     if ($donnees->tableauimput[$j]->user == $userliste->getId())
@@ -267,7 +304,6 @@ class ImputController extends AbstractController
                 $totalbase[2] = $donnees->tableauimput[$j]->tabcumuleimput[2] + $donnees->tableauimput[$j]->tabcumuleimputM[2];
                 $totalbase[3] = $donnees->tableauimput[$j]->tabcumuleimput[3] + $donnees->tableauimput[$j]->tabcumuleimputM[3];
                 $totalbase[4] = $donnees->tableauimput[$j]->tabcumuleimput[4] + $donnees->tableauimput[$j]->tabcumuleimputM[4];
-
                 for ($ver = 0; $ver < 5; $ver++) {
                     if ($totalbase[$ver] > 1)
                         $code = 202;
@@ -281,12 +317,18 @@ class ImputController extends AbstractController
                     $code = 202;
                     break;
                 }
-
+                $existeABS = 0;
+                $dateABS = [];
                 
-                // Condition pour voir si le jour d'imputation tombe un jour férié
+                //création de l'imput
+                $imput->setUser($user);
+                $imput->setCommentaire($donnees->tableauimput[$j]->Commentaires);
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($imput);
+
                 for($i=0; $i<5; $i++) {
                     $dateImputation = new DateTime($donnees->tableauimput[$j]->date[$i]);
-                    $anneeImput = $dateImputation->format('Y');
+                    $annee = $dateImputation->format('Y');
                     $dateImputVerif = $dateImputation->format('Y-m-d');
 
                     $collab = $userRepository->find($donnees->tableauimput[$j]->user);
@@ -294,71 +336,16 @@ class ImputController extends AbstractController
                     $lieuArray = explode(', ',$lieu);
                     $pays = end($lieuArray);
 
-                    if ($pays == "France"){
-                        // Appel à l'API pour obtenir la liste des jours fériés
-                        $apiUrl = 'https://calendrier.api.gouv.fr/jours-feries/metropole/'.$anneeImput.'.json'; // URL de l'API 
-                        $response = file_get_contents($apiUrl); // Appel de l'API 
-
-                        // Traitement de la réponse de l'API pour obtenir les jours fériés
-                        $joursFeries = json_decode($response, true); // Recupération de la liste des jours fériés en format JSON
-
-                        // Vérification si la date d'imputation est un jour férié
-                        if (array_key_exists($dateImputVerif, $joursFeries)) {
-                            // Empêcher l'enregistrement et remettre la valeur à 0
-                            $donnees->tableauimput[$j]->valeur[$i] = 1;
-                            $donnees->tableauimput[$j]->Commentaires = "Férié: ".$dateImputVerif."";
-                        }
-                    }else if ($pays == "Maroc"){
-                        $apiMaroc = [
-                            "2024-01-01"=>"Jour de l'an", 
-                            "2024-01-11"=>"Manifeste de l'indépendance", 
-                            "2024-04-10"=>"Aid El Fitr", 
-                            "2024-05-01"=>"Fête du travail", 
-                            "2024-06-17"=>"Aid Al Adha", 
-                            "2024-07-08"=>"1er Moharram", 
-                            "2024-08-30"=>"Fête du trône", 
-                            "2024-08-14"=>"Journée de Oued Ed-Dahab", 
-                            "2024-08-20"=>"La révolution du roi et du peuple", 
-                            "2024-08-21"=>"Fête de la jeunesse", 
-                            "2024-09-16"=>"Aid Al Mawlid", 
-                            "2024-11-06"=>"Marche verte", 
-                            "2024-11-18"=>"Fête de l'indépendance"
-                        ];
-                        // Vérification si la date d'imputation est un jour férié
-                        if (array_key_exists($dateImputVerif, $apiMaroc)) {
-                            $totalbase = [];
-                            $totalbase[0] = $donnees->tableauimput[$j]->tabcumuleimput[0] + $donnees->tableauimput[$j]->tabcumuleimputM[0];
-                            $totalbase[1] = $donnees->tableauimput[$j]->tabcumuleimput[1] + $donnees->tableauimput[$j]->tabcumuleimputM[1];
-                            $totalbase[2] = $donnees->tableauimput[$j]->tabcumuleimput[2] + $donnees->tableauimput[$j]->tabcumuleimputM[2];
-                            $totalbase[3] = $donnees->tableauimput[$j]->tabcumuleimput[3] + $donnees->tableauimput[$j]->tabcumuleimputM[3];
-                            $totalbase[4] = $donnees->tableauimput[$j]->tabcumuleimput[4] + $donnees->tableauimput[$j]->tabcumuleimputM[4];
-
-                            if($donnees->tableauimput[$j]->valeur[$i] !== 1 && $totalbase[$i] < 1){
-                                // Empêcher l'enregistrement et remettre la valeur à 1
-                                $donnees->tableauimput[$j]->valeur[$i] = 1;
-                                if($donnees->tableauimput[$j]->Commentaires == null){
-                                    $donnees->tableauimput[$j]->Commentaires = "Férié: ".$dateImputVerif;
-                                }
-                            }else if($donnees->tableauimput[$j]->valeur[$i] == 1 && $totalbase[$i] < 1){
-                                if($donnees->tableauimput[$j]->Commentaires == null){
-                                    $donnees->tableauimput[$j]->Commentaires = "Férié: ".$dateImputVerif;
-                                }
-                            }else{
-
-                            }
-                        }
-                    } 
-                }
-                //création de l'imput
-                $imput->setUser($user);
-                $imput->setCommentaire($donnees->tableauimput[$j]->Commentaires);
-
-                $em = $this->getDoctrine()->getManager();
-                $em->persist($imput);
-                //Création des donnée
-                for ($i = 0; $i < 5; $i++) {
+                    $joursFeries = $this->getJoursFeries($pays, $annee);
+                    // Condition pour voir si le jour d'imputation tombe un jour férié
+                    if (array_key_exists($dateImputVerif, $joursFeries)) {
+                        $existeABS = 1;
+                        $donnees->tableauimput[$j]->valeur[$i] = 0;
+                        $dateABS[] = $donnees->tableauimput[$j]->date[$i];
+                    }
+        
+                    //Création des données
                     $dateV = new DateV;
-                    //on hydrate l'objet avec les données
                     $dateV->setImput($imput);
                     $dateV->setValeur($donnees->tableauimput[$j]->valeur[$i]);
                     $dateV->setDate(new DateTime($donnees->tableauimput[$j]->date[$i]));
@@ -368,6 +355,48 @@ class ImputController extends AbstractController
                     $charge_imput += $donnees->tableauimput[$j]->valeur[$i];
                     $em->persist($dateV);
                 }
+
+                if($existeABS == 1) {
+                    $imputs = new Imput;
+                    // Création de l'absence
+                    $imputs->setUser($user);
+                    $imputs->setCommentaire("Férié");
+                    $em = $this->getDoctrine()->getManager();
+                    $em->persist($imputs);
+
+                    $CodeAbsence = $codeProjetRepository->findCodeAbsence();
+                    
+                    $IDCode = $CodeAbsence->getId();
+                    $domaine = $collab->getProjet()->getLibelle();
+                    $TacheAbsence = $tachesrepository->findTacheAbsence($IDCode, $domaine);
+                    $ActiviteAbsence = $activiteRepository->findActiviteAbsence();
+                    for($i=0; $i<5; $i++) {
+                        foreach ($dateABS as $dABS) {
+                            if($donnees->tableauimput[$j]->date[$i] == $dABS){
+                                $donnees->tableauimput[$j]->valeur[$i] = 1;
+                            }else{
+                                $donnees->tableauimput[$j]->valeur[$i] = 0;
+                            }
+                        }
+                        $dateV = new DateV;
+                        $dateV->setImput($imputs);
+                        $dateV->setValeur($donnees->tableauimput[$j]->valeur[$i]);
+                        $dateV->setDate(new DateTime($donnees->tableauimput[$j]->date[$i]));
+                        $dateV->setTache($TacheAbsence);
+                        $dateV->setCodeprojet($CodeAbsence);
+                        $dateV->setActivite($ActiviteAbsence);
+                        $charge_imput += $donnees->tableauimput[$j]->valeur[$i];
+
+                        $em->persist($dateV);
+                    }
+                    $em->flush();
+                }
+
+                //Ajout des charge et budget consomé
+                $budgetFinale = $codeP->getBudgetConsomme() + ($charge_imput * $user->getSalaire());
+                $chargeFinale =  $codeP->getChargeConsomme() + $charge_imput;
+                $codeP->setChargeConsomme($chargeFinale);
+                $codeP->setBudgetConsomme($budgetFinale);
             }
             if ($code == 201) {
                 return new Response($code);
@@ -404,6 +433,15 @@ class ImputController extends AbstractController
                 $dateV = $dateVliste;
                 $imput = $dateVliste->getImput();
                 $entityManager->remove($dateV);
+
+                //calcules avec soustraction des imputation
+                $codeP = $dateV->getCodeprojet();
+                $chargeC = $codeP->getChargeConsomme() - $dateV->getValeur();
+                $budgetC = $codeP->getBudgetConsomme() - ($dateV->getValeur() * $dateV->getImput()->getUser()->getSalaire());
+                $codeP->setChargeConsomme($chargeC);
+                $codeP->setBudgetConsomme($budgetC);
+
+                $entityManager->persist($codeP);
             }
         }
         $entityManager->remove($imput);
@@ -458,214 +496,147 @@ class ImputController extends AbstractController
     {
         if ($request->isXmlHttpRequest() || $request->query->get('showJson') == 1) {
             $donnees = json_decode($request->getContent());
-
-            //lieste des tache
-            $tacheliste = [];
-            $tache = $tachesRepository->findBy(['statut' => 1]);
-            foreach ($tache as $taches) {
-                $tacheliste[] = [
-                    'id' => $taches->getId(),
-                    'libelle' => $taches->getLibelle(),
-                    'description' => $taches->getDescription(),
-                ];
-            }
-            //liste des code projet
-            $codeprojetlist = [];
-            $codeP = $codeProjetRepository->findBy(['statut' => 1]);
-            foreach ($codeP as $codePs) {
-                $codeprojetlist[] = [
-                    'id' => $codePs->getId(),
-                    'libelle' => $codePs->getLibelle(),
-                    'description' => $codePs->getDescription(),
-                ];
-            }
-
-            //liste des activité
-            $activitelist = [];
-            $activite = $activiteRepository->findAll();
-            foreach ($activite as $activites) {
-                $activitelist[] = [
-                    'id' => $activites->getId(),
-                    'libelle' => $activites->getLibelle(),
-                ];
-            }
-
-            //Tri par ordre alphabetique activité
-            $columns = array_column($activitelist, 'libelle');
-            array_multisort($columns, SORT_ASC, $activitelist);
-
-            //tri par ordre alphabetique code projet
-            $columns1 = array_column($codeprojetlist, 'libelle');
-            array_multisort($columns1, SORT_ASC, $codeprojetlist);
-
-            //tri par ordre alphabetique taches
-            $columns2 = array_column($tacheliste, 'libelle');
-            array_multisort($columns2, SORT_ASC, $tacheliste);
-
-            $imputation = [];
-            //recupere juste les dateV de l'utilisateur selectionné
-            $dateVs = $dateVRepository->findByUserId($donnees[0]);
-            $tabvide = 0;
-            //remplire une seul fois les activite, tache, code
-            $deja = 0;
-            
-            $estFerie = 0;
-
-            foreach ($dateVs as $dateV) {
-                //Numero de semaine
-                $dmy = $dateV->getDate()->format('d-m-Y');
-                $week = "W" . date("W", strtotime($dmy));
-                
-                if ($week == $donnees[1] && $dateV->getDate()->format('Y') == $donnees[2]) {
-                    
-                    // Condition pour voir si le jour d'imputation tombe un jour férié
-                        $collab = $userRepository->find($donnees[0]);
-                        $lieu = $collab->getSite();
-                        $lieuArray = explode(', ',$lieu);
-                        $pays = end($lieuArray);
-
-                        if ($pays == "France"){
-                            // Appel à l'API pour obtenir la liste des jours fériés
-                            $apiUrl = 'https://calendrier.api.gouv.fr/jours-feries/metropole/'.$donnees[2].'.json'; // URL de l'API 
-                            $response = file_get_contents($apiUrl); // Appel de l'API 
-
-                            // Traitement de la réponse de l'API pour obtenir les jours fériés
-                            $joursFeries = json_decode($response, true); // Recupération de la liste des jours fériés en format JSON
-
-                            // Vérification si la date d'imputation est un jour férié
-                            if (array_key_exists($dateV->getDate()->format('Y-m-d'), $joursFeries)) {
-                                // Empêcher l'enregistrement et remettre la valeur à 0
-                                $estFerie = 1;
-                            }
-                        }else if ($pays == "Maroc"){
-                            $apiMaroc = [
-                                "2024-01-01"=>"Jour de l'an", 
-                                "2024-01-11"=>"Manifeste de l'indépendance", 
-                                "2024-04-10"=>"Aid El Fitr", 
-                                "2024-05-01"=>"Fête du travail", 
-                                "2024-06-17"=>"Aid Al Adha", 
-                                "2024-07-08"=>"1er Moharram", 
-                                "2024-08-30"=>"Fête du trône", 
-                                "2024-08-14"=>"Journée de Oued Ed-Dahab", 
-                                "2024-08-20"=>"La révolution du roi et du peuple", 
-                                "2024-08-21"=>"Fête de la jeunesse", 
-                                "2024-09-16"=>"Aid Al Mawlid", 
-                                "2024-11-06"=>"Marche verte", 
-                                "2024-11-18"=>"Fête de l'indépendance"
-                            ];
-                            // Vérification si la date d'imputation est un jour férié
-                            if (array_key_exists($dateV->getDate()->format('Y-m-d'), $apiMaroc)) {
-                                // Empêcher l'enregistrement et remettre la valeur à 0
-                                $estFerie = 1;
-                            }
-                        } 
-
-                    $tabvide = 1;
-                    if ($deja == 0) {
-                        $imputation[] = [
-                            'imputID' => $dateV->getImput()->getId(),
-                            'user' => $dateV->getImput()->getUser()->getId(),
-                            'tache' => $dateV->getTache()->getLibelle(),
-                            'tacheD' => $dateV->getTache()->getDescription(),
-                            'activite' => $dateV->getActivite()->getLibelle(),
-                            'commentaire' =>  $dateV->getImput()->getCommentaire(),
-                            'week' => $week,
-                            'codeprojet' => $dateV->getCodeprojet()->getLibelle(),
-                            'date' => $dateV->getDate(),
-                            'valeur' => $dateV->getValeur(),
-                            'tacheliste' => $tacheliste,
-                            'codeprojetlist' => $codeprojetlist,
-                            'activitelist' => $activitelist,
-                            'estFerie' => $estFerie,
-                        ];
-                        $deja = 1;
-                    } else {
-                        $imputation[] = [
-                            'imputID' => $dateV->getImput()->getId(),
-                            'user' => $dateV->getImput()->getUser()->getId(),
-                            'tache' => $dateV->getTache()->getLibelle(),
-                            'tacheD' => $dateV->getTache()->getDescription(),
-                            'activite' => $dateV->getActivite()->getLibelle(),
-                            'commentaire' =>  $dateV->getImput()->getCommentaire(),
-                            'week' => $week,
-                            'codeprojet' => $dateV->getCodeprojet()->getLibelle(),
-                            'date' => $dateV->getDate(),
-                            'valeur' => $dateV->getValeur(),
-                            'estFerie' => $estFerie,
-                        ];
-                    }
+            if(!empty($donnees[0])){
+                //lieste des tache
+                $tacheliste = [];
+                $tache = $tachesRepository->findBy(['statut' => 1]);
+                foreach ($tache as $taches) {
+                    $tacheliste[] = [
+                        'id' => $taches->getId(),
+                        'libelle' => $taches->getLibelle(),
+                        'description' => $taches->getDescription(),
+                    ];
                 }
-            }
-            if ($tabvide == 0) {
-                $W = substr($donnees[1], 1);
-                $year = $donnees[2];
+                //liste des code projet
+                $codeprojetlist = [];
+                $codeP = $codeProjetRepository->findBy(['statut' => 1]);
+                foreach ($codeP as $codePs) {
+                    $codeprojetlist[] = [
+                        'id' => $codePs->getId(),
+                        'libelle' => $codePs->getLibelle(),
+                        'description' => $codePs->getDescription(),
+                    ];
+                }
+
+                //liste des activité
+                $activitelist = [];
+                $activite = $activiteRepository->findAll();
+                foreach ($activite as $activites) {
+                    $activitelist[] = [
+                        'id' => $activites->getId(),
+                        'libelle' => $activites->getLibelle(),
+                    ];
+                }
+
+                //Tri par ordre alphabetique activité
+                $columns = array_column($activitelist, 'libelle');
+                array_multisort($columns, SORT_ASC, $activitelist);
+
+                //tri par ordre alphabetique code projet
+                $columns1 = array_column($codeprojetlist, 'libelle');
+                array_multisort($columns1, SORT_ASC, $codeprojetlist);
+
+                //tri par ordre alphabetique taches
+                $columns2 = array_column($tacheliste, 'libelle');
+                array_multisort($columns2, SORT_ASC, $tacheliste);
+
+                $imputation = [];
+                //recupere juste les dateV de l'utilisateur selectionné
+                $dateVs = $dateVRepository->findByUserId($donnees[0]);
+                $tabvide = 0;
+                //remplire une seul fois les activite, tache, code
+                $deja = 0;
+                
+                $estFerie = 0;
+
+                // Condition pour voir si le jour d'imputation tombe un jour férié
                 $collab = $userRepository->find($donnees[0]);
                 $lieu = $collab->getSite();
                 $lieuArray = explode(', ',$lieu);
                 $pays = end($lieuArray);
+                $annee = $donnees[2];
+                $joursFeries = $this->getJoursFeries($pays, $annee);
+            
 
-                $firstday = new \DateTime();
-                $monday = new \DateTime();
-                $firstday->setISODate($year, $W, 1);
-                $monday = $firstday->format('Y-m-d');
-                $dates = array();
-                $dates[0] = $monday;
-                for($i = 1; $i <7; $i++) {
-                    $dates[$i] = $firstday->modify('+1 day')->format('Y-m-d');;
+                foreach ($dateVs as $dateV) {
+                    //Numero de semaine
+                    $dmy = $dateV->getDate()->format('Y-m-d');
+                    $week = "W" . date("W", strtotime($dmy));
+                    
+                    if ($week == $donnees[1] && $dateV->getDate()->format('Y') == $donnees[2]) {
+                        if(array_key_exists($dmy,$joursFeries)){
+                            $estFerie = 1;
+                        }
+                        $tabvide = 1;
+                        if ($deja == 0) {
+                            $imputation[] = [
+                                'imputID' => $dateV->getImput()->getId(),
+                                'user' => $dateV->getImput()->getUser()->getId(),
+                                'tache' => $dateV->getTache()->getLibelle(),
+                                'tacheD' => $dateV->getTache()->getDescription(),
+                                'activite' => $dateV->getActivite()->getLibelle(),
+                                'commentaire' =>  $dateV->getImput()->getCommentaire(),
+                                'week' => $week,
+                                'codeprojet' => $dateV->getCodeprojet()->getLibelle(),
+                                'date' => $dateV->getDate(),
+                                'valeur' => $dateV->getValeur(),
+                                'tacheliste' => $tacheliste,
+                                'codeprojetlist' => $codeprojetlist,
+                                'activitelist' => $activitelist,
+                                'estFerie' => $estFerie,
+                            ];
+                            $deja = 1;
+                        } else {
+                            $imputation[] = [
+                                'imputID' => $dateV->getImput()->getId(),
+                                'user' => $dateV->getImput()->getUser()->getId(),
+                                'tache' => $dateV->getTache()->getLibelle(),
+                                'tacheD' => $dateV->getTache()->getDescription(),
+                                'activite' => $dateV->getActivite()->getLibelle(),
+                                'commentaire' =>  $dateV->getImput()->getCommentaire(),
+                                'week' => $week,
+                                'codeprojet' => $dateV->getCodeprojet()->getLibelle(),
+                                'date' => $dateV->getDate(),
+                                'valeur' => $dateV->getValeur(),
+                                'estFerie' => $estFerie,
+                            ];
+                        }
+                    }
                 }
-                
-                if ($pays == "France"){
-                    // Appel à l'API pour obtenir la liste des jours fériés
-                    $apiUrl = 'https://calendrier.api.gouv.fr/jours-feries/metropole/'.$year.'.json'; // URL de l'API 
-                    $response = file_get_contents($apiUrl); // Appel de l'API 
-
-                    // Traitement de la réponse de l'API pour obtenir les jours fériés
-                    $joursFeries = json_decode($response, true); // Recupération de la liste des jours fériés en format JSON
-
-                    // Vérification si la date d'imputation est un jour férié
-                    foreach($dates as $date) {
-                        if (array_key_exists($date, $joursFeries)) {
-                            // Empêcher l'enregistrement et remettre la valeur à 0
+                if ($tabvide == 0) {
+                    $W = substr($donnees[1], 1);
+                    $firstday = new \DateTime();
+                    $monday = new \DateTime();
+                    $firstday->setISODate($annee, $W, 1);
+                    $monday = $firstday->format('Y-m-d');
+                    $dates = array();
+                    $dates[0] = $monday;
+                    for($i = 1; $i <7; $i++) {
+                        $dates[$i] = $firstday->modify('+1 day')->format('Y-m-d');;
+                    }
+                    
+                    foreach($dates as $date){
+                        if(array_key_exists($date,$joursFeries)){
                             $estFerie = 1;
                         }
                     }
-                }else if ($pays == "Maroc"){
-                    $apiMaroc = [
-                        "2024-01-01"=>"Jour de l'an", 
-                        "2024-01-11"=>"Manifeste de l'indépendance", 
-                        "2024-04-10"=>"Aid El Fitr", 
-                        "2024-05-01"=>"Fête du travail", 
-                        "2024-06-17"=>"Aid Al Adha", 
-                        "2024-07-08"=>"1er Moharram", 
-                        "2024-08-30"=>"Fête du trône", 
-                        "2024-08-14"=>"Journée de Oued Ed-Dahab", 
-                        "2024-08-20"=>"La révolution du roi et du peuple", 
-                        "2024-08-21"=>"Fête de la jeunesse", 
-                        "2024-09-16"=>"Aid Al Mawlid", 
-                        "2024-11-06"=>"Marche verte", 
-                        "2024-11-18"=>"Fête de l'indépendance"
+
+                    $date = new DateTime('2000-01-01');
+                    $imputation[] = [
+                        'date' => $date,
+                        'tacheliste' => $tacheliste,
+                        'codeprojetlist' => $codeprojetlist,
+                        'activitelist' => $activitelist,
+                        'estFerie' => $estFerie,
                     ];
-                    // Vérification si la date d'imputation est un jour férié
-                    foreach($dates as $date) {
-                        if (array_key_exists($date, $apiMaroc)) {
-                            // Empêcher l'enregistrement et remettre la valeur à 0
-                            $estFerie = 1;
-                        }
-                    }
-                }  
-                $date = new DateTime('2000-01-01');
-                $imputation[] = [
-                    'date' => $date,
-                    'tacheliste' => $tacheliste,
-                    'codeprojetlist' => $codeprojetlist,
-                    'activitelist' => $activitelist,
-                    'estFerie' => $estFerie,
-                ];
+                }
+
+                $data = json_encode($imputation);
+
+                return new JsonResponse($data);
+            }else{
+                return new JsonResponse();
             }
-
-            $data = json_encode($imputation);
-
-            return new JsonResponse($data);
         } else {
             return $this->render('imput/index.html.twig');
         }
@@ -726,7 +697,7 @@ class ImputController extends AbstractController
                 //condition pour ajoutez la ligne de l'export avec les information
                 if ($compteurDateV == 5) {
                     //condition pour savoir si il est present ou abs
-                    if ($dateV->getTache()->getDescription() == "Absence" || $dateV->getCodeprojet()->getId() == 1 || $dateV->getCodeprojet()->getId() == 80)
+                    if ($dateV->getTache()->getDescription() == "CAPABS" || $dateV->getCodeprojet()->getId() == 1 || $dateV->getCodeprojet()->getId() == 98 || $dateV->getCodeprojet()->getId() == 237)
                         $p = "Absent";
                     else
                         $p = "Présent";
@@ -924,7 +895,7 @@ class ImputController extends AbstractController
             //condition pour ajoutez la ligne de l'export avec les information
             if ($bool == 1  && $compteurDateV == 5) {
                 //condition pour savoir si il est present ou abs
-                if ($dateV->getTache()->getDescription() == "Absence" || $dateV->getCodeprojet()->getId() == 1 || $dateV->getCodeprojet()->getId() == 80)
+                if ($dateV->getTache()->getDescription() == "CAPABS" || $dateV->getCodeprojet()->getId() == 1 || $dateV->getCodeprojet()->getId() == 98 || $dateV->getCodeprojet()->getId() == 237)
                     $p = "Absent";
                 else
                     $p = "Présent";
@@ -1095,8 +1066,8 @@ class ImputController extends AbstractController
             $annee = $dateV->getDate()->format('Y'); // année imputation
             $semaineimput = new DateTime($dateimput); // date complete imputation avec semaine
             $numsemaine = $semaineimput->format("W"); // numero semaine
-
-            $Timputsemaine += $dateV->getValeur(); // valeur total des imputs
+            
+            $Timputsemaine = $dateV->getValeur(); // valeur total des imputs
 
             //condition pour la date de debut de semaine
             if ($compteurDateV == 0)
@@ -1108,9 +1079,10 @@ class ImputController extends AbstractController
             $compteurDateV++;
 
             //condition pour savoir si il est present ou abs
-            if ($dateV->getTache()->getDescription() == "Absence" || 
+            if ($dateV->getTache()->getDescription() == "CAPABS" || 
                 $dateV->getCodeprojet()->getId() == 1 || 
-                $dateV->getCodeprojet()->getId() == 80)
+                $dateV->getCodeprojet()->getId() == 98|| 
+                $dateV->getCodeprojet()->getId() == 237)
                 $p = "Absent";
             else
                 $p = "Présent";
@@ -1243,7 +1215,7 @@ class ImputController extends AbstractController
 
         foreach ($tache as $taches) {
             // vérifie si le code lié à la tache correspond à celui qui est envoyé
-            if ($taches->getCodeProjet()->getId() == $donnees->id && $taches->getDomaine() == $donnees->projet) { 
+            if ($taches->getCodeProjet()->getId() == $donnees->id) { 
                 // Rempli le tableau
                 $tacheliste[] = [ 
                     'id' => $taches->getId(),
