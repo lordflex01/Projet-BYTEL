@@ -336,12 +336,36 @@ class ImputController extends AbstractController
                     $lieuArray = explode(', ',$lieu);
                     $pays = end($lieuArray);
 
+                    $CodeAbsence = $codeProjetRepository->findCodeAbsence();
+                    
+                    $IDCode = $CodeAbsence->getId();
+                    $domaine = $collab->getProjet()->getLibelle();
+                    $TacheAbsence = $tachesrepository->findTacheAbsence($IDCode, $domaine);
+                    $ActiviteAbsence = $activiteRepository->findActiviteAbsence();
+
                     $joursFeries = $this->getJoursFeries($pays, $annee);
+
                     // Condition pour voir si le jour d'imputation tombe un jour férié
                     if (array_key_exists($dateImputVerif, $joursFeries)) {
-                        $existeABS = 1;
-                        $donnees->tableauimput[$j]->valeur[$i] = 0;
-                        $dateABS[] = $donnees->tableauimput[$j]->date[$i];
+                        $deja = false;
+                        foreach($dateVlistes as $dateVliste){
+                            if(
+                                $dateVliste->getImput()->getUser()->getId() == $user->getId() &&
+                                $dateVliste->getDate()->format('W') == $dateImputation->format('W') &&
+                                $dateVliste->getDate()->format('Y') == $dateImputation->format('Y') &&
+                                $dateVliste->getActivite()->getId() == $ActiviteAbsence->getId() &&
+                                $dateVliste->getTache()->getId() == $TacheAbsence->getId() &&
+                                $dateVliste->getCodeprojet()->getId() == $CodeAbsence->getId()
+                            ){
+                                $deja = true;
+                                break;
+                            } else{
+                                $deja = false;
+                                $existeABS = 1;
+                                $donnees->tableauimput[$j]->valeur[$i] = 0;
+                                $dateABS[] = $donnees->tableauimput[$j]->date[$i];
+                            }
+                        }
                     }
         
                     //Création des données
@@ -356,7 +380,7 @@ class ImputController extends AbstractController
                     $em->persist($dateV);
                 }
 
-                if($existeABS == 1) {
+                if($existeABS == 1 && $deja == false) {
                     $imputs = new Imput;
                     // Création de l'absence
                     $imputs->setUser($user);
@@ -364,12 +388,6 @@ class ImputController extends AbstractController
                     $em = $this->getDoctrine()->getManager();
                     $em->persist($imputs);
 
-                    $CodeAbsence = $codeProjetRepository->findCodeAbsence();
-                    
-                    $IDCode = $CodeAbsence->getId();
-                    $domaine = $collab->getProjet()->getLibelle();
-                    $TacheAbsence = $tachesrepository->findTacheAbsence($IDCode, $domaine);
-                    $ActiviteAbsence = $activiteRepository->findActiviteAbsence();
                     for($i=0; $i<5; $i++) {
                         foreach ($dateABS as $dABS) {
                             if($donnees->tableauimput[$j]->date[$i] == $dABS){
@@ -378,6 +396,7 @@ class ImputController extends AbstractController
                                 $donnees->tableauimput[$j]->valeur[$i] = 0;
                             }
                         }
+                        
                         $dateV = new DateV;
                         $dateV->setImput($imputs);
                         $dateV->setValeur($donnees->tableauimput[$j]->valeur[$i]);
@@ -390,6 +409,7 @@ class ImputController extends AbstractController
                         $em->persist($dateV);
                     }
                     $em->flush();
+                    $deja = false;
                 }
 
                 //Ajout des charge et budget consomé
@@ -397,6 +417,33 @@ class ImputController extends AbstractController
                 $chargeFinale =  $codeP->getChargeConsomme() + $charge_imput;
                 $codeP->setChargeConsomme($chargeFinale);
                 $codeP->setBudgetConsomme($budgetFinale);
+
+                if ($tache->getDomaine() == "NRJ") {
+                    $budgetFinale = $codeP->getBudgetNRJConsomme() + ($charge_imput * $user->getSalaire());
+                    $chargeFinale =  $codeP->getChargeNRJConsomme() + $charge_imput;
+                    $codeP->setChargeNRJConsomme($chargeFinale);
+                    $codeP->setBudgetNRJConsomme($budgetFinale);
+                }
+                if ($tache->getDomaine() == "DECO") {
+                    $budgetFinale = $codeP->getBudgetDECOConsomme() + ($charge_imput * $user->getSalaire());
+                    $chargeFinale =  $codeP->getChargeDECOConsomme() + $charge_imput;
+                    $codeP->setChargeDECOConsomme($chargeFinale);
+                    $codeP->setBudgetDECOConsomme($budgetFinale);
+                }
+                if ($tache->getDomaine() == "CLOE") {
+                    $budgetFinale = $codeP->getBudgetCLOEConsomme() + ($charge_imput * $user->getSalaire());
+                    $chargeFinale =  $codeP->getChargeCLOEConsomme() + $charge_imput;
+                    $codeP->setChargeCLOEConsomme($chargeFinale);
+                    $codeP->setBudgetCLOEConsomme($budgetFinale);
+                }
+                if ($tache->getDomaine() == "Transverse") {
+                    $budgetFinale = $codeP->getBudgetTransverseconsomme() + ($charge_imput * $user->getSalaire());
+                    $chargeFinale =  $codeP->getChargeTransverseconsomme() + $charge_imput;
+                    $codeP->setChargeTransverseconsomme($chargeFinale);
+                    $codeP->setBudgetTransverseconsomme($budgetFinale);
+                }
+
+                $em->persist($codeP);
             }
             if ($code == 201) {
                 return new Response($code);
@@ -417,7 +464,6 @@ class ImputController extends AbstractController
      */
     public function apidelete(CodeProjetRepository $codeProjetRepository, DateVRepository $dateVRepository, Request $request)
     {
-
         //on recupère les données
         $donnees = json_decode($request->getContent());
 
@@ -440,6 +486,31 @@ class ImputController extends AbstractController
                 $budgetC = $codeP->getBudgetConsomme() - ($dateV->getValeur() * $dateV->getImput()->getUser()->getSalaire());
                 $codeP->setChargeConsomme($chargeC);
                 $codeP->setBudgetConsomme($budgetC);
+
+                if ($dateV->getTache()->getDomaine() == "NRJ") {
+                    $budgetFinale = $codeP->getBudgetNRJConsomme() - ($dateV->getValeur() * $dateV->getImput()->getUser()->getSalaire());
+                    $chargeFinale =  $codeP->getChargeNRJConsomme() - $dateV->getValeur();
+                    $codeP->setChargeNRJConsomme($chargeFinale);
+                    $codeP->setBudgetNRJConsomme($budgetFinale);
+                }
+                if ($dateV->getTache()->getDomaine() == "DECO") {
+                    $budgetFinale = $codeP->getBudgetDECOConsomme() - ($dateV->getValeur() * $dateV->getImput()->getUser()->getSalaire());
+                    $chargeFinale =  $codeP->getChargeDECOConsomme() - $dateV->getValeur();
+                    $codeP->setChargeDECOConsomme($chargeFinale);
+                    $codeP->setBudgetDECOConsomme($budgetFinale);
+                }
+                if ($dateV->getTache()->getDomaine() == "CLOE") {
+                    $budgetFinale = $codeP->getBudgetCLOEConsomme() - ($dateV->getValeur() * $dateV->getImput()->getUser()->getSalaire());
+                    $chargeFinale =  $codeP->getChargeCLOEConsomme() - $dateV->getValeur();
+                    $codeP->setChargeCLOEConsomme($chargeFinale);
+                    $codeP->setBudgetCLOEConsomme($budgetFinale);
+                }
+                if ($dateV->getTache()->getDomaine() == "Transverse") {
+                    $budgetFinale = $codeP->getBudgetTransverseconsomme() - ($dateV->getValeur() * $dateV->getImput()->getUser()->getSalaire());
+                    $chargeFinale =  $codeP->getChargeTransverseconsomme() - $dateV->getValeur();
+                    $codeP->setChargeTransverseconsomme($chargeFinale);
+                    $codeP->setBudgetTransverseconsomme($budgetFinale);
+                }
 
                 $entityManager->persist($codeP);
             }
@@ -697,7 +768,7 @@ class ImputController extends AbstractController
                 //condition pour ajoutez la ligne de l'export avec les information
                 if ($compteurDateV == 5) {
                     //condition pour savoir si il est present ou abs
-                    if ($dateV->getTache()->getDescription() == "CAPABS" || $dateV->getCodeprojet()->getId() == 1 || $dateV->getCodeprojet()->getId() == 98 || $dateV->getCodeprojet()->getId() == 237)
+                    if ($dateV->getTache()->getDescription() == "CAPABS" )
                         $p = "Absent";
                     else
                         $p = "Présent";
@@ -895,7 +966,7 @@ class ImputController extends AbstractController
             //condition pour ajoutez la ligne de l'export avec les information
             if ($bool == 1  && $compteurDateV == 5) {
                 //condition pour savoir si il est present ou abs
-                if ($dateV->getTache()->getDescription() == "CAPABS" || $dateV->getCodeprojet()->getId() == 1 || $dateV->getCodeprojet()->getId() == 98 || $dateV->getCodeprojet()->getId() == 237)
+                if ($dateV->getTache()->getDescription() == "CAPABS")
                     $p = "Absent";
                 else
                     $p = "Présent";
@@ -1017,8 +1088,8 @@ class ImputController extends AbstractController
     {
         // Récuperation des données
         $donnees = json_decode($request->getContent());
-        $dateDebut = new \DateTime($donnees->dateDebut);
-        $dateFin = new \DateTime($donnees->dateFin);
+        $dateDebut = new DateTime($donnees->dateDebut);
+        $dateFin = new DateTime($donnees->dateFin);
 
         $dateVs = $dateVRepository->findByDateRange($dateDebut, $dateFin);
 
@@ -1079,10 +1150,7 @@ class ImputController extends AbstractController
             $compteurDateV++;
 
             //condition pour savoir si il est present ou abs
-            if ($dateV->getTache()->getDescription() == "CAPABS" || 
-                $dateV->getCodeprojet()->getId() == 1 || 
-                $dateV->getCodeprojet()->getId() == 98|| 
-                $dateV->getCodeprojet()->getId() == 237)
+            if ($dateV->getTache()->getDescription() == "CAPABS")
                 $p = "Absent";
             else
                 $p = "Présent";
