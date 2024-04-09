@@ -1,61 +1,37 @@
-for ($j = 0; $j < 4; $j++) {
-    $i = 0;
-    //Début du traitement
-    foreach ($dateVlistes as $dateVliste) {
-        $dateV = $dateVliste;
-        //editer la date valeur
-        if ($donnees->tableaumodif[$j]->imputID == $dateVliste->getImput()->getId() && $donnees->tableaumodif[$j]->valeur[$i] != $dateVliste->getValeur()) {
-            $dateV = new DateV;
-            $dateV = $dateVliste;
-
-            //les nouveaux calcules apres modification
-            $codeP = new CodeProjet;
-            $tache = new Taches;
-            $charge = 0;
-            $codeP = $dateVliste->getCodeprojet();
-            $tache = $dateVliste->getTache();
-            $charge = $donnees->tableaumodif[$j]->valeur[$i] - $dateVliste->getValeur();
-            $chargeFinale = $codeP->getChargeConsomme() + $charge;
-            $budgetFinale = $codeP->getBudgetConsomme() + ($charge * $dateVliste->getImput()->getUser()->getSalaire());
-            $codeP->setBudgetConsomme($budgetFinale);
-            $codeP->setChargeConsomme($chargeFinale);
-
-            if ($tache->getDomaine() == "NRJ") {
-                $budgetFinale = $codeP->getBudgetNRJConsomme() + ($charge * $dateVliste->getImput()->getUser()->getSalaire());
-                $chargeFinale =  $codeP->getChargeNRJConsomme() + $charge;
-                $codeP->setChargeNRJConsomme($chargeFinale);
-                $codeP->setBudgetNRJConsomme($budgetFinale);
-            }
-            if ($tache->getDomaine() == "DECO") {
-                $budgetFinale = $codeP->getBudgetDECOConsomme() + ($charge * $dateVliste->getImput()->getUser()->getSalaire());
-                $chargeFinale =  $codeP->getChargeDECOConsomme() + $charge;
-                $codeP->setChargeDECOConsomme($chargeFinale);
-                $codeP->setBudgetDECOConsomme($budgetFinale);
-            }
-            if ($tache->getDomaine() == "CLOE") {
-                $budgetFinale = $codeP->getBudgetCLOEConsomme() + ($charge * $dateVliste->getImput()->getUser()->getSalaire());
-                $chargeFinale =  $codeP->getChargeCLOEConsomme() + $charge;
-                $codeP->setChargeCLOEConsomme($chargeFinale);
-                $codeP->setBudgetCLOEConsomme($budgetFinale);
-            }
-            if ($tache->getDomaine() == "Transverse") {
-                $budgetFinale = $codeP->getBudgetTransverseconsomme() + ($charge * $dateVliste->getImput()->getUser()->getSalaire());
-                $chargeFinale =  $codeP->getChargeTransverseconsomme() + $charge;
-                $codeP->setChargeTransverseconsomme($chargeFinale);
-                $codeP->setBudgetTransverseconsomme($budgetFinale);
-            }
-
-            //editer les valeur
-            $dateV->setValeur($donnees->tableaumodif[$j]->valeur[$i]);
-            $modif = 1;
-            $em->persist($codeP);
-            $em->persist($dateV);
-        }
-        $i++;
-
-        if ($i == 5){
-            $i = 0;
-            break;
-        }
-    }
-}
+object(stdClass)#824 (2) { 
+	["tableaumodif"]=> array(2) 
+	{ 
+		[0]=> object(stdClass)#821 (2) 
+		{ 
+			["imputID"]=> int(12035) 
+			["valeur"]=> array(5) { 
+				[0]=> string(1) "1" 
+				[1]=> string(1) "0" 
+				[2]=> string(1) "0" 
+				[3]=> string(1) "0" 
+				[4]=> string(1) "0" 
+			} 
+			["Commentaires"]=> string(0) "" 
+		} 
+		[1]=> object(stdClass)#822 (2) 
+		{ 
+			["imputID"]=> int(12036) 
+			["valeur"]=> array(5) { 
+				[0]=> string(1) "0" 
+				[1]=> string(1) "0" 
+				[2]=> string(1) "1" 
+				[3]=> string(1) "0" 
+				[4]=> string(1) "0" 
+			} 
+		["Commentaires"]=> string(7) "FÃ©riÃ©" 
+		}  
+	} 
+	["nbrmodification"]=> int(2) 
+	["tabcumuleimput"]=> array(5) { 
+		[0]=> int(1) 
+		[1]=> float(0.25) 
+		[2]=> int(1) 
+		[3]=> int(1) 
+		4]=> int(0) 
+	} 
+} 0
