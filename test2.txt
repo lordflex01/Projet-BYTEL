@@ -1,37 +1,22 @@
-object(stdClass)#824 (2) { 
-	["tableaumodif"]=> array(2) 
-	{ 
-		[0]=> object(stdClass)#821 (2) 
-		{ 
-			["imputID"]=> int(12035) 
-			["valeur"]=> array(5) { 
-				[0]=> string(1) "1" 
-				[1]=> string(1) "0" 
-				[2]=> string(1) "0" 
-				[3]=> string(1) "0" 
-				[4]=> string(1) "0" 
-			} 
-			["Commentaires"]=> string(0) "" 
-		} 
-		[1]=> object(stdClass)#822 (2) 
-		{ 
-			["imputID"]=> int(12036) 
-			["valeur"]=> array(5) { 
-				[0]=> string(1) "0" 
-				[1]=> string(1) "0" 
-				[2]=> string(1) "1" 
-				[3]=> string(1) "0" 
-				[4]=> string(1) "0" 
-			} 
-		["Commentaires"]=> string(7) "FÃ©riÃ©" 
-		}  
+object(stdClass)#821 (3) { 
+	["imputID"]=> int(12039) 
+	["valeur"]=> array(5) { 
+		[0]=> string(1) "0" 
+		[1]=> string(1) "0" 
+		[2]=> string(1) "0" 
+		[3]=> string(1) "0" 
+		[4]=> string(1) "0" 
 	} 
-	["nbrmodification"]=> int(2) 
-	["tabcumuleimput"]=> array(5) { 
-		[0]=> int(1) 
-		[1]=> float(0.25) 
-		[2]=> int(1) 
-		[3]=> int(1) 
-		4]=> int(0) 
+	["Commentaires"]=> string(0) "" 
+} 
+object(stdClass)#822 (3) { 
+	["imputID"]=> int(12040) 
+	["valeur"]=> array(5) { 
+		[0]=> string(1) "0" 
+		[1]=> string(1) "0" 
+		[2]=> string(1) "0" 
+		[3]=> string(1) "0" 
+		[4]=> string(1) "0" 
 	} 
-} 0
+	["Commentaires"]=> string(7) "Férié" 
+} 
