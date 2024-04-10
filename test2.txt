@@ -1,22 +1,8 @@
-object(stdClass)#821 (3) { 
-	["imputID"]=> int(12039) 
-	["valeur"]=> array(5) { 
-		[0]=> string(1) "0" 
-		[1]=> string(1) "0" 
-		[2]=> string(1) "0" 
-		[3]=> string(1) "0" 
-		[4]=> string(1) "0" 
-	} 
-	["Commentaires"]=> string(0) "" 
-} 
-object(stdClass)#822 (3) { 
-	["imputID"]=> int(12040) 
-	["valeur"]=> array(5) { 
-		[0]=> string(1) "0" 
-		[1]=> string(1) "0" 
-		[2]=> string(1) "0" 
-		[3]=> string(1) "0" 
-		[4]=> string(1) "0" 
-	} 
-	["Commentaires"]=> string(7) "Férié" 
-} 
+$donnees = json_decode($request->getContent());
+foreach ($donnees->tableaumodif as $tab) {
+    //var_dump($tab->valeur); --> array(5) { [0]=> string(1) "0" [1]=> string(1) "0" [2]=> string(1) "0" [3]=> string(1) "0" [4]=> string(1) "0" }
+    $dateVlistes = $dateVRepository->findBy(['imput' => $tab->imputID]);
+    foreach($dateVlistes as $dateVliste){
+		//var_dump($dateVliste->getValeur()); --> float(0) float(0) float(0) float(0) float(0)
+	}
+}
