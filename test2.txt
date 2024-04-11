@@ -1,55 +1,15 @@
-foreach ($donnees->tableaumodif as $tab) {
-	$dateVlistes = $dateVRepository->findBy(['imput' => $tab->imputID]);
-        foreach($dateVlistes as $dateVliste){
-                $tabValeurs = $tab->valeur;
-        	$dateValeurs = explode(" ", $dateVliste->getValeur());
-        	$nbtabValeurs = count($tabValeurs);
-        	//var_dump($nbtabValeurs);
-        	for($i = 0; $i < $nbtabValeurs; $i++){
-                	if($tabValeurs[$i] != $dateValeurs[$i]){
-                        	var_dump('PAS OK');
-                    	}else{
-                        	var_dump('OK');
-                    	}
-                }
-	}
+array(5) { 
+	[0]=> string(4) "0.25" 
+	[1]=> string(1) "0" 
+	[2]=> string(4) "0.25" 
+	[3]=> string(3) "0.5" 
+	[4]=> string(1) "0" 
 }
 
-
----------------------------------------------------
-
-var_dump($dateValeurs);
-
-array(1) { [0]=> string(1) "0" } 
-array(1) { [0]=> string(1) "0" } 
-array(1) { [0]=> string(1) "0" } 
-array(1) { [0]=> string(1) "0" } 
-array(1) { [0]=> string(1) "0" } 
-
-array(1) { [0]=> string(1) "1" } 
-array(1) { [0]=> string(4) "0.25" } 
-array(1) { [0]=> string(3) "0.5" } 
-array(1) { [0]=> string(4) "0.75" } 
-array(1) { [0]=> string(1) "1" }
-
-------------------------------------------------------
-
-var_dump($tabValeurs);
-
 array(5) { 
-	[0]=> string(1) "0" 
-	[1]=> string(1) "0" 
-	[2]=> string(1) "0" 
-	[3]=> string(1) "0" 
-	[4]=> string(1) "0" 
-} 
-
-array(5) { 
-	[0]=> string(1) "1" 
-	[1]=> string(4) "0.25" 
-	[2]=> string(3) "0.5" 
-	[3]=> string(4) "0.75" 
-	[4]=> string(1) "1" 
-} 
-
---------------------------------------------------------
+	[1]=> float(0.25) 
+	[2]=> float(0) 
+	[3]=> float(0.25) 
+	[4]=> float(0.5) 
+	[5]=> float(0) 
+}
