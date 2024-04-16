@@ -1,15 +1,75 @@
-array(5) { 
-	[0]=> string(4) "0.25" 
-	[1]=> string(1) "0" 
-	[2]=> string(4) "0.25" 
-	[3]=> string(3) "0.5" 
-	[4]=> string(1) "0" 
-}
+$donnees = json_decode($request->getContent());
+var_dump($donnees);
 
-array(5) { 
-	[1]=> float(0.25) 
-	[2]=> float(0) 
-	[3]=> float(0.25) 
-	[4]=> float(0.5) 
-	[5]=> float(0) 
-}
+object(stdClass)#822 (3) { ["tableaumodif"]=> array(1) { [0]=> object(stdClass)#821 (2) { ["imputID"]=> int(0) ["valeur"]=> array(5) { [0]=> NULL [1]=> NULL [2]=> NULL [3]=> NULL [4]=> NULL } } } ["nbrmodification"]=> int(1) ["tabcumuleimput"]=> array(5) { [0]=> NULL [1]=> NULL [2]=> NULL [3]=> NULL [4]=> NULL } }
+
+
+foreach ($donnees->tableaumodif as $tab){
+            foreach($dateVlistes as $dateVliste){
+                if($tab->imputID == $dateVliste->getImput()->getId()){
+                    $nbDateV++;
+                    ($dateVs[$nbDateV] = $dateVliste->getValeur());
+                    ($dateDs[$nbDateV] = $dateVliste->getDate());
+                }
+            }
+            foreach($tab->valeur as $key => $value){
+                if($dateVs[$key+1] != $value){
+                    foreach($dateVlistes as $listeD){
+                        $dateV = new DateV;
+                        $dateV = $listeD;
+                        $codeP = new CodeProjet;
+                        $tache = new Taches;
+                        $imput = new Imput;
+                        $charge = 0;
+                        $codeP = $listeD->getCodeprojet();
+                        $tache = $listeD->getTache();
+                        if($tab->imputID == $listeD->getImput()->getId() && $dateDs[$key+1] == $listeD->getDate()){
+                            $charge = $value - $dateVs[$key+1];
+                            $chargeFinale = $codeP->getChargeConsomme() + $charge;
+                            $budgetFinale = $codeP->getBudgetConsomme() + ($charge * $listeD->getImput()->getUser()->getSalaire());
+                            $codeP->setBudgetConsomme($budgetFinale);
+                            $codeP->setChargeConsomme($chargeFinale);
+
+                            if ($tache->getDomaine() == "NRJ") {
+                                $budgetFinale = $codeP->getBudgetNRJConsomme() + ($charge * $listeD->getImput()->getUser()->getSalaire());
+                                $chargeFinale =  $codeP->getChargeNRJConsomme() + $charge;
+                                $codeP->setChargeNRJConsomme($chargeFinale);
+                                $codeP->setBudgetNRJConsomme($budgetFinale);
+                            }
+                            if ($tache->getDomaine() == "DECO") {
+                                $budgetFinale = $codeP->getBudgetDECOConsomme() + ($charge * $listeD->getImput()->getUser()->getSalaire());
+                                $chargeFinale =  $codeP->getChargeDECOConsomme() + $charge;
+                                $codeP->setChargeDECOConsomme($chargeFinale);
+                                $codeP->setBudgetDECOConsomme($budgetFinale);
+                            }
+                            if ($tache->getDomaine() == "CLOE") {
+                                $budgetFinale = $codeP->getBudgetCLOEConsomme() + ($charge * $listeD->getImput()->getUser()->getSalaire());
+                                $chargeFinale =  $codeP->getChargeCLOEConsomme() + $charge;
+                                $codeP->setChargeCLOEConsomme($chargeFinale);
+                                $codeP->setBudgetCLOEConsomme($budgetFinale);
+                            }
+                            if ($tache->getDomaine() == "Transverse") {
+                                $budgetFinale = $codeP->getBudgetTransverseconsomme() + ($charge * $listeD->getImput()->getUser()->getSalaire());
+                                $chargeFinale =  $codeP->getChargeTransverseconsomme() + $charge;
+                                $codeP->setChargeTransverseconsomme($chargeFinale);
+                                $codeP->setBudgetTransverseconsomme($budgetFinale);
+                            }
+                            //editer les valeur
+                            $dateV->setValeur($value);
+                            $modif = 1;
+                        }
+                        if ($tab->imputID == $listeD->getImput()->getId() && $tab->Commentaires != $listeD->getImput()->getCommentaire() && $bool == 0) {
+                            $imput = $dateV->getImput();
+                            $imput->setCommentaire($tab->Commentaires);
+                            $modif = 1;
+                            $bool = 1;
+                        }
+                        
+                        $em->persist($codeP);
+                        $em->persist($dateV);
+                        $em->persist($imput);
+                    }
+                }
+            }
+        }
+
