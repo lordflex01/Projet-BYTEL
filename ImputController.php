@@ -39,6 +39,7 @@ class ImputController extends AbstractController
         $today = date('Y-m-d');
 
         $imputation = [];
+
         $dateVs = $dateVRepository->findAll();
         foreach ($dateVs as $dateV) {
             $imputation[] = [
@@ -136,75 +137,91 @@ class ImputController extends AbstractController
         $code = 200;
         //verifier si il ya eu une Modification
         $modif = 0;
-        //Boucle pour ajoutez plusieur imputation
-        for ($j = 0; $j < $donnees->nbrmodification; $j++) {
 
-            //Debut du traitement
-            foreach ($dateVlistes as $dateVliste) {
-                $dateV = $dateVliste;
-                //editer la date valeur
-                if ($donnees->tableaumodif[$j]->imputID == $dateVliste->getImput()->getId() && $donnees->tableaumodif[$j]->valeur[$i] != $dateVliste->getValeur()) {
-                    $dateV = new DateV;
-                    $dateV = $dateVliste;
+        //Boucle pour ajoutez plusieurs imputations
+        $dateVs = [];
+        $dateDs = [] ;
 
-                    //les nouveaux calcules apres modification
-                    $codeP = new CodeProjet;
-                    $tache = new Taches;
-                    $charge = 0;
-                    $codeP = $dateVliste->getCodeprojet();
-                    $tache = $dateVliste->getTache();
-                    $charge = $donnees->tableaumodif[$j]->valeur[$i] - $dateVliste->getValeur();
-                    $chargeFinale = $codeP->getChargeConsomme() + $charge;
-                    $budgetFinale = $codeP->getBudgetConsomme() + ($charge * $dateVliste->getImput()->getUser()->getSalaire());
-                    $codeP->setBudgetConsomme($budgetFinale);
-                    $codeP->setChargeConsomme($chargeFinale);
+        $dateTs = [] ;
+        $tableTs = [] ;
 
-                    if ($tache->getDomaine() == "NRJ") {
-                        $budgetFinale = $codeP->getBudgetNRJConsomme() + ($charge * $dateVliste->getImput()->getUser()->getSalaire());
-                        $chargeFinale =  $codeP->getChargeNRJConsomme() + $charge;
-                        $codeP->setChargeNRJConsomme($chargeFinale);
-                        $codeP->setBudgetNRJConsomme($budgetFinale);
-                    }
-                    if ($tache->getDomaine() == "DECO") {
-                        $budgetFinale = $codeP->getBudgetDECOConsomme() + ($charge * $dateVliste->getImput()->getUser()->getSalaire());
-                        $chargeFinale =  $codeP->getChargeDECOConsomme() + $charge;
-                        $codeP->setChargeDECOConsomme($chargeFinale);
-                        $codeP->setBudgetDECOConsomme($budgetFinale);
-                    }
-                    if ($tache->getDomaine() == "CLOE") {
-                        $budgetFinale = $codeP->getBudgetCLOEConsomme() + ($charge * $dateVliste->getImput()->getUser()->getSalaire());
-                        $chargeFinale =  $codeP->getChargeCLOEConsomme() + $charge;
-                        $codeP->setChargeCLOEConsomme($chargeFinale);
-                        $codeP->setBudgetCLOEConsomme($budgetFinale);
-                    }
-                    if ($tache->getDomaine() == "Transverse") {
-                        $budgetFinale = $codeP->getBudgetTransverseconsomme() + ($charge * $dateVliste->getImput()->getUser()->getSalaire());
-                        $chargeFinale =  $codeP->getChargeTransverseconsomme() + $charge;
-                        $codeP->setChargeTransverseconsomme($chargeFinale);
-                        $codeP->setBudgetTransverseconsomme($budgetFinale);
-                    }
+        $nbDateV = 0;
+        $nbDateT = 0;
 
-                    //editer les valeur
-                    $dateV->setValeur($donnees->tableaumodif[$j]->valeur[$i]);
-                    $modif = 1;
-                    $em->persist($codeP);
-                    $em->persist($dateV);
+        foreach ($donnees->tableaumodif as $tab){
+            foreach($dateVlistes as $dateVliste){
+                if($tab->imputID == $dateVliste->getImput()->getId()){
+                    $nbDateV++;
+                    ($dateVs[$nbDateV] = $dateVliste->getValeur());
+                    ($dateDs[$nbDateV] = $dateVliste->getDate());
                 }
-                //edit le commenataire
-                if ($donnees->tableaumodif[$j]->imputID == $dateVliste->getImput()->getId() && $donnees->tableaumodif[$j]->Commentaires != $dateVliste->getImput()->getCommentaire() && $bool == 0) {
-                    $imput = new Imput;
-                    $imput = $dateV->getImput();
-                    $imput->setCommentaire($donnees->tableaumodif[$j]->Commentaires);
-                    $modif = 1;
-                    $em->persist($imput);
-                    $bool = 1;
-                }
-                $i++;
-                if ($i == 5)
-                    $i = 0;
+            }
+            foreach($tab->valeur as $tabvalue){
+                $nbDateT++;
+                ($dateTs[$nbDateT] = $tabvalue);
+                ($tableTs[$nbDateT] = $tab->imputID);
             }
         }
 
+        for($i = 1; $i < count($dateTs)+1; $i++){
+            if(isset($dateVs[$i]) && isset($dateTs[$i]) && $dateVs[$i] != $dateTs[$i]){
+                foreach($dateVlistes as $listeD){
+                    $dateV = new DateV;
+                    $dateV = $listeD;
+                    $codeP = new CodeProjet;
+                    $tache = new Taches;
+                    $imput = new Imput;
+                    $charge = 0;
+                    $codeP = $listeD->getCodeprojet();
+                    $tache = $listeD->getTache();
+                    if($tableTs[$i] == $listeD->getImput()->getId() && $dateDs[$i] == $listeD->getDate()){
+                        $charge = $dateTs[$i] - $dateVs[$i];
+                        $chargeFinale = $codeP->getChargeConsomme() + $charge;
+                        $budgetFinale = $codeP->getBudgetConsomme() + ($charge * $listeD->getImput()->getUser()->getSalaire());
+                        $codeP->setBudgetConsomme($budgetFinale);
+                        $codeP->setChargeConsomme($chargeFinale);
+
+                        if ($tache->getDomaine() == "NRJ") {
+                            $budgetFinale = $codeP->getBudgetNRJConsomme() + ($charge * $listeD->getImput()->getUser()->getSalaire());
+                            $chargeFinale =  $codeP->getChargeNRJConsomme() + $charge;
+                            $codeP->setChargeNRJConsomme($chargeFinale);
+                            $codeP->setBudgetNRJConsomme($budgetFinale);
+                        }
+                        if ($tache->getDomaine() == "DECO") {
+                            $budgetFinale = $codeP->getBudgetDECOConsomme() + ($charge * $listeD->getImput()->getUser()->getSalaire());
+                            $chargeFinale =  $codeP->getChargeDECOConsomme() + $charge;
+                            $codeP->setChargeDECOConsomme($chargeFinale);
+                            $codeP->setBudgetDECOConsomme($budgetFinale);
+                        }
+                        if ($tache->getDomaine() == "CLOE") {
+                            $budgetFinale = $codeP->getBudgetCLOEConsomme() + ($charge * $listeD->getImput()->getUser()->getSalaire());
+                            $chargeFinale =  $codeP->getChargeCLOEConsomme() + $charge;
+                            $codeP->setChargeCLOEConsomme($chargeFinale);
+                            $codeP->setBudgetCLOEConsomme($budgetFinale);
+                        }
+                        if ($tache->getDomaine() == "Transverse") {
+                            $budgetFinale = $codeP->getBudgetTransverseconsomme() + ($charge * $listeD->getImput()->getUser()->getSalaire());
+                            $chargeFinale =  $codeP->getChargeTransverseconsomme() + $charge;
+                            $codeP->setChargeTransverseconsomme($chargeFinale);
+                            $codeP->setBudgetTransverseconsomme($budgetFinale);
+                        }
+                        //editer les valeur
+                        $dateV->setValeur($dateTs[$i]);
+                        $modif = 1;
+                    }
+                    if ($tab->imputID == $listeD->getImput()->getId() && $tab->Commentaires != $listeD->getImput()->getCommentaire() && $bool == 0) {
+                        $imput = $dateV->getImput();
+                        $imput->setCommentaire($tab->Commentaires);
+                        $modif = 1;
+                        $bool = 1;
+                    }
+
+                    $em->persist($codeP);
+                    $em->persist($dateV);
+                    $em->persist($imput);
+                } 
+            }
+        }
         for ($Q = 0; $Q < 5; $Q++) {
             if ($donnees->tabcumuleimput[$Q] > 1)
                 $code = 202;
@@ -251,7 +268,7 @@ class ImputController extends AbstractController
                 }
             }
 
-            //Boucle pour ajouter plusieurs imputations
+            //Boucle pour ajoutez plusieur imputation
             for ($j = 0; $j < $donnees->nbr; $j++) {
 
                 $imput = new Imput;
@@ -260,7 +277,6 @@ class ImputController extends AbstractController
                 $codeP = new CodeProjet;
                 $activite = new Activite;
                 $charge_imput = 0;
-
                 //connaitre le user
                 foreach ($userlistes as $userliste) {
                     if ($donnees->tableauimput[$j]->user == $userliste->getId())
@@ -296,7 +312,7 @@ class ImputController extends AbstractController
                         $code = 201;
                     }
                 }
-                //Condition pour voir si les imputations depassent 1 par jour
+                //Condition pour voir si les imputation depasse 1
                 $cm = 0;
                 $totalbase = [];
                 $totalbase[0] = $donnees->tableauimput[$j]->tabcumuleimput[0] + $donnees->tableauimput[$j]->tabcumuleimputM[0];
@@ -304,72 +320,22 @@ class ImputController extends AbstractController
                 $totalbase[2] = $donnees->tableauimput[$j]->tabcumuleimput[2] + $donnees->tableauimput[$j]->tabcumuleimputM[2];
                 $totalbase[3] = $donnees->tableauimput[$j]->tabcumuleimput[3] + $donnees->tableauimput[$j]->tabcumuleimputM[3];
                 $totalbase[4] = $donnees->tableauimput[$j]->tabcumuleimput[4] + $donnees->tableauimput[$j]->tabcumuleimputM[4];
+
                 for ($ver = 0; $ver < 5; $ver++) {
                     if ($totalbase[$ver] > 1)
                         $code = 202;
                 }
-                // Condition pour voir si les imputations depasse 5 pour la semaine
-                $total = 0;
-                for($i=0; $i<5; $i++) {
-                    $total += $donnees->tableauimput[$j]->valeur[$i];
-                }
-                if($total>5){
-                    $code = 202;
-                    break;
-                }
-                $existeABS = 0;
-                $dateABS = [];
-                
+
                 //création de l'imput
                 $imput->setUser($user);
                 $imput->setCommentaire($donnees->tableauimput[$j]->Commentaires);
+
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($imput);
-
-                for($i=0; $i<5; $i++) {
-                    $dateImputation = new DateTime($donnees->tableauimput[$j]->date[$i]);
-                    $annee = $dateImputation->format('Y');
-                    $dateImputVerif = $dateImputation->format('Y-m-d');
-
-                    $collab = $userRepository->find($donnees->tableauimput[$j]->user);
-                    $lieu = $collab->getSite();
-                    $lieuArray = explode(', ',$lieu);
-                    $pays = end($lieuArray);
-
-                    $CodeAbsence = $codeProjetRepository->findCodeAbsence();
-                    
-                    $IDCode = $CodeAbsence->getId();
-                    $domaine = $collab->getProjet()->getLibelle();
-                    $TacheAbsence = $tachesrepository->findTacheAbsence($IDCode, $domaine);
-                    $ActiviteAbsence = $activiteRepository->findActiviteAbsence();
-
-                    $joursFeries = $this->getJoursFeries($pays, $annee);
-
-                    // Condition pour voir si le jour d'imputation tombe un jour férié
-                    if (array_key_exists($dateImputVerif, $joursFeries)) {
-                        $deja = false;
-                        foreach($dateVlistes as $dateVliste){
-                            if(
-                                $dateVliste->getImput()->getUser()->getId() == $user->getId() &&
-                                $dateVliste->getDate()->format('W') == $dateImputation->format('W') &&
-                                $dateVliste->getDate()->format('Y') == $dateImputation->format('Y') &&
-                                $dateVliste->getActivite()->getId() == $ActiviteAbsence->getId() &&
-                                $dateVliste->getTache()->getId() == $TacheAbsence->getId() &&
-                                $dateVliste->getCodeprojet()->getId() == $CodeAbsence->getId()
-                            ){
-                                $deja = true;
-                                break;
-                            } else{
-                                $deja = false;
-                                $existeABS = 1;
-                                $donnees->tableauimput[$j]->valeur[$i] = 0;
-                                $dateABS[] = $donnees->tableauimput[$j]->date[$i];
-                            }
-                        }
-                    }
-        
-                    //Création des données
+                //Création des donnée
+                for ($i = 0; $i < 5; $i++) {
                     $dateV = new DateV;
+                    //on hydrate l'objet avec les données
                     $dateV->setImput($imput);
                     $dateV->setValeur($donnees->tableauimput[$j]->valeur[$i]);
                     $dateV->setDate(new DateTime($donnees->tableauimput[$j]->date[$i]));
@@ -379,45 +345,12 @@ class ImputController extends AbstractController
                     $charge_imput += $donnees->tableauimput[$j]->valeur[$i];
                     $em->persist($dateV);
                 }
-
-                if($existeABS == 1 && $deja == false) {
-                    $imputs = new Imput;
-                    // Création de l'absence
-                    $imputs->setUser($user);
-                    $imputs->setCommentaire("Férié");
-                    $em = $this->getDoctrine()->getManager();
-                    $em->persist($imputs);
-
-                    for($i=0; $i<5; $i++) {
-                        foreach ($dateABS as $dABS) {
-                            if($donnees->tableauimput[$j]->date[$i] == $dABS){
-                                $donnees->tableauimput[$j]->valeur[$i] = 1;
-                            }else{
-                                $donnees->tableauimput[$j]->valeur[$i] = 0;
-                            }
-                        }
-                        
-                        $dateV = new DateV;
-                        $dateV->setImput($imputs);
-                        $dateV->setValeur($donnees->tableauimput[$j]->valeur[$i]);
-                        $dateV->setDate(new DateTime($donnees->tableauimput[$j]->date[$i]));
-                        $dateV->setTache($TacheAbsence);
-                        $dateV->setCodeprojet($CodeAbsence);
-                        $dateV->setActivite($ActiviteAbsence);
-                        $charge_imput += $donnees->tableauimput[$j]->valeur[$i];
-
-                        $em->persist($dateV);
-                    }
-                    $em->flush();
-                    $deja = false;
-                }
-
+                
                 //Ajout des charge et budget consomé
                 $budgetFinale = $codeP->getBudgetConsomme() + ($charge_imput * $user->getSalaire());
                 $chargeFinale =  $codeP->getChargeConsomme() + $charge_imput;
                 $codeP->setChargeConsomme($chargeFinale);
                 $codeP->setBudgetConsomme($budgetFinale);
-
                 if ($tache->getDomaine() == "NRJ") {
                     $budgetFinale = $codeP->getBudgetNRJConsomme() + ($charge_imput * $user->getSalaire());
                     $chargeFinale =  $codeP->getChargeNRJConsomme() + $charge_imput;
@@ -471,6 +404,7 @@ class ImputController extends AbstractController
         $codeprojet = $codeProjetRepository->findAll();
         $dateVlistes = $dateVRepository->findAll();
         $entityManager = $this->getDoctrine()->getManager();
+
         foreach ($dateVlistes as $dateVliste) {
             if ($donnees->imputID == $dateVliste->getImput()->getId()) {
                 $codeP = new CodeProjet;
