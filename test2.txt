@@ -1,75 +1,59 @@
-$donnees = json_decode($request->getContent());
-var_dump($donnees);
+public function exportmoisAction(DateVRepository $dateVRepository, ImputRepository $imputRepository, Request $request)
+{
+    $donnees = json_decode($request->getContent());
 
-object(stdClass)#822 (3) { ["tableaumodif"]=> array(1) { [0]=> object(stdClass)#821 (2) { ["imputID"]=> int(0) ["valeur"]=> array(5) { [0]=> NULL [1]=> NULL [2]=> NULL [3]=> NULL [4]=> NULL } } } ["nbrmodification"]=> int(1) ["tabcumuleimput"]=> array(5) { [0]=> NULL [1]=> NULL [2]=> NULL [3]=> NULL [4]=> NULL } }
+    // Récupération de toutes les imputations pour le mois donné
+    $dateVs = $dateVRepository->findByMonth($donnees->dates[0]); // Supposons que findByMonth() est une méthode personnalisée pour récupérer les imputations par mois
 
+    // Initialisation des variables
+    $tabexport = [];
+    $list = [
+        ['CENTRE_DE_COUT_RESSOURCE', 'STRUCTURE_BT_RESSOURCE', 'INTERNE_/_EXTERNE', 'NOM_RESSOURCE', 'LOGIN_RESSOURCE', 'RESSOURCE_CS_RESSOURCE', 'RESSOURCE_CS_FOURNISSEUR', 'TYPE_DE_PROJET', 'NOM_PROJET', 'CC_PORTEUR_PROJET', 'STATUT_PROJET', 'CHEF_DE_PROJET', 'CODE_TACHE', 'DESCRIPTION_TACHE', 'JIRA', 'TYPE_ACTIVITE', 'ID-MOE', 'ANNEE', 'TYPE_IMPUTATION', 'SEMAINE', 'TOTAL', 'COMMENT_SEMAINE', 'COMMENT_MOIS', 'no_semaine', 'Coût unitaire', 'Montant', 'Charge DEV', 'Charge Testeur', 'Charge Analyste', 'Charge Pilotage', 'Charge architecte', 'Concat'],
+    ];
+    $i = 0;
 
-foreach ($donnees->tableaumodif as $tab){
-            foreach($dateVlistes as $dateVliste){
-                if($tab->imputID == $dateVliste->getImput()->getId()){
-                    $nbDateV++;
-                    ($dateVs[$nbDateV] = $dateVliste->getValeur());
-                    ($dateDs[$nbDateV] = $dateVliste->getDate());
-                }
-            }
-            foreach($tab->valeur as $key => $value){
-                if($dateVs[$key+1] != $value){
-                    foreach($dateVlistes as $listeD){
-                        $dateV = new DateV;
-                        $dateV = $listeD;
-                        $codeP = new CodeProjet;
-                        $tache = new Taches;
-                        $imput = new Imput;
-                        $charge = 0;
-                        $codeP = $listeD->getCodeprojet();
-                        $tache = $listeD->getTache();
-                        if($tab->imputID == $listeD->getImput()->getId() && $dateDs[$key+1] == $listeD->getDate()){
-                            $charge = $value - $dateVs[$key+1];
-                            $chargeFinale = $codeP->getChargeConsomme() + $charge;
-                            $budgetFinale = $codeP->getBudgetConsomme() + ($charge * $listeD->getImput()->getUser()->getSalaire());
-                            $codeP->setBudgetConsomme($budgetFinale);
-                            $codeP->setChargeConsomme($chargeFinale);
+    // Parcourir toutes les imputations
+    foreach ($dateVs as $dateV) {
+        // Récupérer la semaine et le mois de la date de l'imputation
+        $weeknumber = $dateV->getDate()->format("W");
+        $moisBase = $dateV->getDate()->format('Y-m');
 
-                            if ($tache->getDomaine() == "NRJ") {
-                                $budgetFinale = $codeP->getBudgetNRJConsomme() + ($charge * $listeD->getImput()->getUser()->getSalaire());
-                                $chargeFinale =  $codeP->getChargeNRJConsomme() + $charge;
-                                $codeP->setChargeNRJConsomme($chargeFinale);
-                                $codeP->setBudgetNRJConsomme($budgetFinale);
-                            }
-                            if ($tache->getDomaine() == "DECO") {
-                                $budgetFinale = $codeP->getBudgetDECOConsomme() + ($charge * $listeD->getImput()->getUser()->getSalaire());
-                                $chargeFinale =  $codeP->getChargeDECOConsomme() + $charge;
-                                $codeP->setChargeDECOConsomme($chargeFinale);
-                                $codeP->setBudgetDECOConsomme($budgetFinale);
-                            }
-                            if ($tache->getDomaine() == "CLOE") {
-                                $budgetFinale = $codeP->getBudgetCLOEConsomme() + ($charge * $listeD->getImput()->getUser()->getSalaire());
-                                $chargeFinale =  $codeP->getChargeCLOEConsomme() + $charge;
-                                $codeP->setChargeCLOEConsomme($chargeFinale);
-                                $codeP->setBudgetCLOEConsomme($budgetFinale);
-                            }
-                            if ($tache->getDomaine() == "Transverse") {
-                                $budgetFinale = $codeP->getBudgetTransverseconsomme() + ($charge * $listeD->getImput()->getUser()->getSalaire());
-                                $chargeFinale =  $codeP->getChargeTransverseconsomme() + $charge;
-                                $codeP->setChargeTransverseconsomme($chargeFinale);
-                                $codeP->setBudgetTransverseconsomme($budgetFinale);
-                            }
-                            //editer les valeur
-                            $dateV->setValeur($value);
-                            $modif = 1;
-                        }
-                        if ($tab->imputID == $listeD->getImput()->getId() && $tab->Commentaires != $listeD->getImput()->getCommentaire() && $bool == 0) {
-                            $imput = $dateV->getImput();
-                            $imput->setCommentaire($tab->Commentaires);
-                            $modif = 1;
-                            $bool = 1;
-                        }
-                        
-                        $em->persist($codeP);
-                        $em->persist($dateV);
-                        $em->persist($imput);
-                    }
-                }
-            }
-        }
+        // Calculer le total par semaine
+        $Timputsemaine = $dateV->getValeur();
 
+        // Ajouter la ligne d'exportation avec les informations de l'imputation
+        $tabexport[$i] = [
+            // Informations de l'imputation
+            '...',
+            // Informations sur la semaine et le total
+            $weeknumber,
+            number_format($Timputsemaine, 2, ',', ' '),
+            // Autres informations...
+        ];
+
+        // Incrémenter l'index pour la prochaine ligne d'exportation
+        $i++;
+    }
+
+    // Ajouter les lignes d'exportation au tableau
+    foreach ($tabexport as $fields) {
+        $list[] = $fields;
+    }
+
+    // Générer le fichier CSV
+    $fp = fopen('php://temp', 'w+');
+    foreach ($list as $fields) {
+        fputcsv($fp, $fields);
+    }
+    rewind($fp);
+
+    // Créer la réponse HTTP avec le contenu du fichier CSV
+    $response = new Response(stream_get_contents($fp));
+    fclose($fp);
+
+    // Définir les en-têtes de la réponse
+    $response->headers->set('Content-Type', 'text/csv', 'charset=UTF-8');
+    $response->headers->set('Content-Disposition', 'attachment; filename="testing.csv"');
+
+    return $response;
+}
