@@ -1,139 +1,82 @@
-<?php
+CREATE TABLE `date_v` (
+	`id` INT(11) NOT NULL AUTO_INCREMENT,
+	`imput_id` INT(11) NULL DEFAULT NULL,
+	`date` DATE NULL DEFAULT NULL,
+	`valeur` DOUBLE NULL DEFAULT NULL,
+	`tache_id` INT(11) NULL DEFAULT NULL,
+	`codeprojet_id` INT(11) NULL DEFAULT NULL,
+	`activite_id` INT(11) NULL DEFAULT NULL,
+	PRIMARY KEY (`id`) USING BTREE,
+	INDEX `IDX_A8F119807AA004B` (`imput_id`) USING BTREE,
+	INDEX `IDX_A8F11980D2235D39` (`tache_id`) USING BTREE,
+	INDEX `IDX_A8F11980D780BF39` (`codeprojet_id`) USING BTREE,
+	INDEX `IDX_A8F119809B0F88B1` (`activite_id`) USING BTREE,
+	CONSTRAINT `FK_A8F119807AA004B` FOREIGN KEY (`imput_id`) REFERENCES `imput` (`id`) ON UPDATE RESTRICT ON DELETE RESTRICT,
+	CONSTRAINT `FK_A8F119809B0F88B1` FOREIGN KEY (`activite_id`) REFERENCES `activite` (`id`) ON UPDATE RESTRICT ON DELETE RESTRICT,
+	CONSTRAINT `FK_A8F11980D2235D39` FOREIGN KEY (`tache_id`) REFERENCES `taches` (`id`) ON UPDATE RESTRICT ON DELETE RESTRICT,
+	CONSTRAINT `FK_A8F11980D780BF39` FOREIGN KEY (`codeprojet_id`) REFERENCES `code_projet` (`id`) ON UPDATE RESTRICT ON DELETE RESTRICT
+)
+COLLATE='utf8_general_ci'
+ENGINE=InnoDB
+AUTO_INCREMENT=60523
+;
 
-namespace App\Form;
+CREATE TABLE `imput` (
+	`id` INT(11) NOT NULL AUTO_INCREMENT,
+	`user_id` INT(11) NULL DEFAULT NULL,
+	`commentaire` VARCHAR(255) NULL DEFAULT NULL COLLATE 'utf8_general_ci',
+	PRIMARY KEY (`id`) USING BTREE,
+	INDEX `IDX_CA9D9D39A76ED395` (`user_id`) USING BTREE,
+	CONSTRAINT `FK_CA9D9D39A76ED395` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON UPDATE NO ACTION ON DELETE SET NULL
+)
+COLLATE='utf8_general_ci'
+ENGINE=InnoDB
+AUTO_INCREMENT=445867
+;
 
-use App\Entity\User;
-use App\Entity\Projet;
-use phpDocumentor\Reflection\PseudoTypes\True_;
-use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\CallbackTransformer;
-use Symfony\Component\Form\Extension\Core\Type\FileType;
-use Symfony\Component\Form\Extension\Core\Type\PasswordType;
-use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
-use Symfony\Component\Validator\Constraints\Regex;
 
-class UserType extends AbstractType
-{
-    public function buildForm(FormBuilderInterface $builder, array $options)
-    {
-        $builder
-            //On ajoute le champ "image" dans le formulaire
-            //il n'est pas lié a la base de données
-            ->add('image', FileType::class, [
-                'label' => false,
-                'mapped' => false,
-                'required' => false,
-            ])
 
-            ->add('email', TextType::class, [
-                'required' => true,
-                'attr' => [
-                    'placeholder' => "xxxxx@yyyy.zzzz"
-                ]
-            ])
-            ->add('salaire', TextType::class, [
-                'required' => false,
-                'attr' => [
-                    'placeholder' => "Veuillez entrer le salaire journalier du collaborateur"
-                ]
-            ])
-            ->add('taux', TextType::class, [
-                'required' => false,
-                'attr' => [
-                    'placeholder' => "Veuillez entrer le taux journalier du collaborateur"
-                ]
-            ])
-            ->add('capit', TextType::class, [
-                'required' => false,
-                'attr' => [
-                    'placeholder' => "Veuillez entrer le code CAPIT du collaborateur"
-                ]
-            ])
-            ->add('roles', ChoiceType::class, [
-                'required' => true,
-                'multiple' => false,
-                'expanded' => true,
-                'choices' => [
-                    'Collaborateur' => 'ROLE_USER',
-                    'Administrateur' => 'ROLE_ADMIN',
-                ],
-            ])
-            ->add('password', RepeatedType::class, [
-                'type' => PasswordType::class,
-                'invalid_message' => 'Les champs du mot de passe doivent être identiques.',
-                'options' => ['attr' => ['class' => 'Mot de passe']],
-                'required' => false,
-                'first_options'  => ['label' => 'Mot de passe'],
-                'second_options' => ['label' => 'Confirmer le mot de passe'],
-            ])
-            ->add('username', TextType::class, [
-                'required' => true,
-                'attr' => [
-                    'placeholder' => "Veuillez entrer votre nom "
-                ],
-            ])
-            ->add('projet', EntityType::class, [
-                'required' => true,
-                'multiple' => false,
-                'expanded' => false,
-                'class' => Projet::class,
-                'query_builder' => function(\Doctrine\ORM\EntityRepository $repository){
-                    return  $repository->createQueryBuilder('projet')
-                        ->where('projet.statut = 1');
-                },
-            ])
-            ->add('poste', ChoiceType::class, [
-                'required' => true,
-                'multiple' => false,
-                'expanded' => false,
-                'choices' => [
-                    'Développeur' => 'Développeur',
-                    'Testeur' => 'Testeur',
-                    'Business analyste' => 'Business analyste',
-                    'Manager' => 'Manager',
-                    'Pilotage' => 'Pilotage',
-                    'Architecte' => 'Architecte',
-                ],
-            ])
-            ->add('site', TextType::class, [
-                'required' => true,
-                'attr' => [
-                    'placeholder' => "Veuillez entrer votre site (Ville, Pays)"
-                ],
-                'constraints' => [
-                    new Regex([
-                        'pattern' => '/^[a-zA-Z\s]+,\s[a-zA-Z\s]+$/',
-                        'message' => 'Le format du site doit être "Ville, Pays"'
-                    ]),
-                ]
-            ])
-            ->add('flag', CheckboxType::class, [
-                'label_attr' => ['class' => 'switch-custom'],
-                'label' => 'Suivi imputation',
-                'required' => true,
-            ]);
+INSERT INTO `imput` (`id`, `user_id`, `commentaire`) VALUES (445860, 15, '');
+INSERT INTO `imput` (`id`, `user_id`, `commentaire`) VALUES (445861, 15, '');
+INSERT INTO `imput` (`id`, `user_id`, `commentaire`) VALUES (445862, 15, '');
+INSERT INTO `imput` (`id`, `user_id`, `commentaire`) VALUES (445863, 15, '');
+INSERT INTO `imput` (`id`, `user_id`, `commentaire`) VALUES (445864, 15, '');
+INSERT INTO `imput` (`id`, `user_id`, `commentaire`) VALUES (445865, 15, '');
+INSERT INTO `imput` (`id`, `user_id`, `commentaire`) VALUES (445866, 15, 'férié');
 
-        $builder->get('roles')
-            ->addModelTransformer(new CallbackTransformer(
-                function ($rolesArray) {
-                    return count($rolesArray) ? $rolesArray[0] : null;
-                },
-                function ($rolesString) {
-                    return [$rolesString];
-                }
-            ));
-    }
 
-    public function configureOptions(OptionsResolver $resolver)
-    {
-        $resolver->setDefaults([
-            'data_class' => User::class,
-        ]);
-    }
-}
+INSERT INTO `date_v` (`id`, `imput_id`, `date`, `valeur`, `tache_id`, `codeprojet_id`, `activite_id`) VALUES (60488, 445860, '2024-04-01', 0.75, 943, 153, 16);
+INSERT INTO `date_v` (`id`, `imput_id`, `date`, `valeur`, `tache_id`, `codeprojet_id`, `activite_id`) VALUES (60489, 445860, '2024-04-02', 0.25, 943, 153, 16);
+INSERT INTO `date_v` (`id`, `imput_id`, `date`, `valeur`, `tache_id`, `codeprojet_id`, `activite_id`) VALUES (60490, 445860, '2024-04-03', 1, 943, 153, 16);
+INSERT INTO `date_v` (`id`, `imput_id`, `date`, `valeur`, `tache_id`, `codeprojet_id`, `activite_id`) VALUES (60491, 445860, '2024-04-04', 0.5, 943, 153, 16);
+INSERT INTO `date_v` (`id`, `imput_id`, `date`, `valeur`, `tache_id`, `codeprojet_id`, `activite_id`) VALUES (60492, 445860, '2024-04-05', 0.5, 943, 153, 16);
+INSERT INTO `date_v` (`id`, `imput_id`, `date`, `valeur`, `tache_id`, `codeprojet_id`, `activite_id`) VALUES (60493, 445861, '2024-04-01', 0.25, 1194, 172, 16);
+INSERT INTO `date_v` (`id`, `imput_id`, `date`, `valeur`, `tache_id`, `codeprojet_id`, `activite_id`) VALUES (60494, 445861, '2024-04-02', 0.75, 1194, 172, 16);
+INSERT INTO `date_v` (`id`, `imput_id`, `date`, `valeur`, `tache_id`, `codeprojet_id`, `activite_id`) VALUES (60495, 445861, '2024-04-03', 0, 1194, 172, 16);
+INSERT INTO `date_v` (`id`, `imput_id`, `date`, `valeur`, `tache_id`, `codeprojet_id`, `activite_id`) VALUES (60496, 445861, '2024-04-04', 0.5, 1194, 172, 16);
+INSERT INTO `date_v` (`id`, `imput_id`, `date`, `valeur`, `tache_id`, `codeprojet_id`, `activite_id`) VALUES (60497, 445861, '2024-04-05', 0.5, 1194, 172, 16);
+INSERT INTO `date_v` (`id`, `imput_id`, `date`, `valeur`, `tache_id`, `codeprojet_id`, `activite_id`) VALUES (60498, 445862, '2024-04-15', 1, 652, 107, 16);
+INSERT INTO `date_v` (`id`, `imput_id`, `date`, `valeur`, `tache_id`, `codeprojet_id`, `activite_id`) VALUES (60499, 445862, '2024-04-16', 0, 652, 107, 16);
+INSERT INTO `date_v` (`id`, `imput_id`, `date`, `valeur`, `tache_id`, `codeprojet_id`, `activite_id`) VALUES (60500, 445862, '2024-04-17', 1, 652, 107, 16);
+INSERT INTO `date_v` (`id`, `imput_id`, `date`, `valeur`, `tache_id`, `codeprojet_id`, `activite_id`) VALUES (60501, 445862, '2024-04-18', 0, 652, 107, 16);
+INSERT INTO `date_v` (`id`, `imput_id`, `date`, `valeur`, `tache_id`, `codeprojet_id`, `activite_id`) VALUES (60502, 445862, '2024-04-19', 0.5, 652, 107, 16);
+INSERT INTO `date_v` (`id`, `imput_id`, `date`, `valeur`, `tache_id`, `codeprojet_id`, `activite_id`) VALUES (60503, 445863, '2024-04-15', 0, 1256, 211, 16);
+INSERT INTO `date_v` (`id`, `imput_id`, `date`, `valeur`, `tache_id`, `codeprojet_id`, `activite_id`) VALUES (60504, 445863, '2024-04-16', 1, 1256, 211, 16);
+INSERT INTO `date_v` (`id`, `imput_id`, `date`, `valeur`, `tache_id`, `codeprojet_id`, `activite_id`) VALUES (60505, 445863, '2024-04-17', 0, 1256, 211, 16);
+INSERT INTO `date_v` (`id`, `imput_id`, `date`, `valeur`, `tache_id`, `codeprojet_id`, `activite_id`) VALUES (60506, 445863, '2024-04-18', 1, 1256, 211, 16);
+INSERT INTO `date_v` (`id`, `imput_id`, `date`, `valeur`, `tache_id`, `codeprojet_id`, `activite_id`) VALUES (60507, 445863, '2024-04-19', 0.5, 1256, 211, 16);
+INSERT INTO `date_v` (`id`, `imput_id`, `date`, `valeur`, `tache_id`, `codeprojet_id`, `activite_id`) VALUES (60508, 445864, '2024-04-22', 1, 1337, 169, 16);
+INSERT INTO `date_v` (`id`, `imput_id`, `date`, `valeur`, `tache_id`, `codeprojet_id`, `activite_id`) VALUES (60509, 445864, '2024-04-23', 1, 1337, 169, 16);
+INSERT INTO `date_v` (`id`, `imput_id`, `date`, `valeur`, `tache_id`, `codeprojet_id`, `activite_id`) VALUES (60510, 445864, '2024-04-24', 1, 1337, 169, 16);
+INSERT INTO `date_v` (`id`, `imput_id`, `date`, `valeur`, `tache_id`, `codeprojet_id`, `activite_id`) VALUES (60511, 445864, '2024-04-25', 1, 1337, 169, 16);
+INSERT INTO `date_v` (`id`, `imput_id`, `date`, `valeur`, `tache_id`, `codeprojet_id`, `activite_id`) VALUES (60512, 445864, '2024-04-26', 1, 1337, 169, 16);
+INSERT INTO `date_v` (`id`, `imput_id`, `date`, `valeur`, `tache_id`, `codeprojet_id`, `activite_id`) VALUES (60513, 445865, '2024-04-29', 1, 644, 99, 16);
+INSERT INTO `date_v` (`id`, `imput_id`, `date`, `valeur`, `tache_id`, `codeprojet_id`, `activite_id`) VALUES (60514, 445865, '2024-04-30', 1, 644, 99, 16);
+INSERT INTO `date_v` (`id`, `imput_id`, `date`, `valeur`, `tache_id`, `codeprojet_id`, `activite_id`) VALUES (60515, 445865, '2024-05-01', 0, 644, 99, 16);
+INSERT INTO `date_v` (`id`, `imput_id`, `date`, `valeur`, `tache_id`, `codeprojet_id`, `activite_id`) VALUES (60516, 445865, '2024-05-02', 1, 644, 99, 16);
+INSERT INTO `date_v` (`id`, `imput_id`, `date`, `valeur`, `tache_id`, `codeprojet_id`, `activite_id`) VALUES (60517, 445865, '2024-05-03', 1, 644, 99, 16);
+INSERT INTO `date_v` (`id`, `imput_id`, `date`, `valeur`, `tache_id`, `codeprojet_id`, `activite_id`) VALUES (60518, 445866, '2024-04-29', 0, 1454, 265, 8);
+INSERT INTO `date_v` (`id`, `imput_id`, `date`, `valeur`, `tache_id`, `codeprojet_id`, `activite_id`) VALUES (60519, 445866, '2024-04-30', 0, 1454, 265, 8);
+INSERT INTO `date_v` (`id`, `imput_id`, `date`, `valeur`, `tache_id`, `codeprojet_id`, `activite_id`) VALUES (60520, 445866, '2024-05-01', 1, 1454, 265, 8);
+INSERT INTO `date_v` (`id`, `imput_id`, `date`, `valeur`, `tache_id`, `codeprojet_id`, `activite_id`) VALUES (60521, 445866, '2024-05-02', 0, 1454, 265, 8);
+INSERT INTO `date_v` (`id`, `imput_id`, `date`, `valeur`, `tache_id`, `codeprojet_id`, `activite_id`) VALUES (60522, 445866, '2024-05-03', 0, 1454, 265, 8);
