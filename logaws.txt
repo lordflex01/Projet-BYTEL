@@ -1,51 +1,202 @@
-public function apiedit(TachesRepository $tachesrepository, DateVRepository $dateVRepository, Request $request)
-{
-    $donnees = json_decode($request->getContent());
-    $dateVlistes = $dateVRepository->findAll();
-    $modif = false;
+public function exportmoisAction(DateVRepository $dateVRepository, ImputRepository $imputRepository, Request $request)
+    {
+	
+        $donnees = json_decode($request->getContent());
 
-    // Collecter les modifications dans des tableaux temporaires
-    $modificationsDateV = [];
-    $modificationsImput = [];
 
-    foreach ($donnees->tableaumodif as $tab) {
-        foreach ($dateVlistes as $dateVliste) {
-            if ($tab->imputID == $dateVliste->getImput()->getId()) {
-                if (isset($tab->valeur) && $tab->valeur != $dateVliste->getValeur()) {
-                    $modificationsDateV[] = ['dateV' => $dateVliste, 'nouvelleValeur' => $tab->valeur];
-                    $modif = true;
-                }
+        $dateVs = $dateVRepository->findAll();
+        $tabexport = [];
+        $i = 0;
+        $compteurDateV = 0;
+        $Timputsemaine = 0;
+		
+        $findemois = 0;
+        $moisverif = 0;
+        $moisverifin = 0;
+        $boolnext = 0;
+
+        $jour = new DateTime($donnees->dates[0]);
+        $jourj = $jour->format('Y-m-d'); // 2024-05-07
+        $moisEX = substr($jourj, 0, 7); // 2024-05
+        $weekEX = $jour->format("W");
+
+        $list = array(
+            //these are the columns
+            array(
+                'CENTRE_DE_COUT_RESSOURCE', 
+                'STRUCTURE_BT_RESSOURCE', 
+                'INTERNE_/_EXTERNE', 
+                'NOM_RESSOURCE',
+                'LOGIN_RESSOURCE', 
+                'RESSOURCE_CS_RESSOURCE', 
+                'RESSOURCE_CS_FOURNISSEUR', 
+                'TYPE_DE_PROJET', 'NOM_PROJET', 'CC_PORTEUR_PROJET', 'STATUT_PROJET', 'CHEF_DE_PROJET', 
+                'CODE_TACHE', 
+                'DESCRIPTION_TACHE', 
+                'JIRA',
+                'TYPE_ACTIVITE', 
+                'ID-MOE', 
+                'ANNEE', 
+                'TYPE_IMPUTATION', 
+                'SEMAINE', 
+                'TOTAL', 
+                'COMMENT_SEMAINE',
+                'COMMENT_MOIS', 
+                'no_semaine', 
+                'Coût unitaire', 
+                'Montant', 
+                'Charge DEV', 'Charge Testeur', 'Charge Analyste', 'Charge Pilotage', 'Charge architecte', 
+                'Concat'
+            ),
+        );
+
+        foreach ($dateVs as $dateV) {
+            $bool = 0;
+            $jourbase = $dateV->getDate()->format('Y-m-d'); 
+            $weekdatetime = new DateTime($jourbase); 
+            $weeknumber = $weekdatetime->format("W");
+            $moisBase = substr($jourbase, 0, 7);
+
+            //condition sur le mois selectionné
+            if ($moisEX == $moisBase) { 
+                $bool = 1;
+                $moisverifin = 0; 
+                $moisverif = 1;
+                $Timputsemaine += $dateV->getValeur(); 
             }
-        }
+            //condition pour la date de debut de semaine
+            if ($compteurDateV == 0)
+                $datedebutsemaine =  $dateV->getDate()->format('d/m/Y 00:00');
 
-        if (isset($tab->Commentaires)) {
-            foreach ($dateVlistes as $listeD) {
-                if ($tab->imputID == $listeD->getImput()->getId() && $tab->Commentaires != $listeD->getImput()->getCommentaire()) {
-                    $modificationsImput[] = ['imput' => $listeD->getImput(), 'nouveauCommentaire' => $tab->Commentaires];
-                    $modif = true;
-                    break; // Sortir de la boucle dès qu'un changement est détecté
-                }
+            //Condition sur la fin du mois
+            if ($findemois == $dateV->getImput()->getId() && $moisEX != $moisBase && $moisverif == 1 && $moisverifin == 0 && $boolnext == 1) {
+                //garder la valeur du compteur
+                $retour = $compteurDateV;
+                //pour afficher le resultat au milieux de la semaine vu que le mois est fini
+                $compteurDateV = 4;
+                //pour savoir qu'on a deja acceder a cette condition
+                $moisverifin = 1;
+                //pour savoir qu'on est deja passé par le mois choisi
+                $bool = 1;
             }
+
+            //incremente pour afficher la dernier DateV pour recuperer le total
+            $compteurDateV++;
+
+            //condition pour ajoutez la ligne de l'export avec les information
+            if ($bool == 1  && $compteurDateV == 5) {
+                //condition pour savoir si il est present ou abs
+                if ($dateV->getTache()->getDescription() == "CAPABS")
+                    $p = "Absent";
+                else
+                    $p = "Présent";
+
+                //Charge en française
+                if ($dateV->getImput()->getUser()->getPoste() == "Développeur") {
+                    $T[0] = number_format($Timputsemaine, 2, ',', ' ');
+                    $T[1] = 0;
+                    $T[2] = 0;
+                    $T[3] = 0;
+                    $T[4] = 0;
+                } elseif ($dateV->getImput()->getUser()->getPoste() == "Testeur") {
+                    $T[0] = 0;
+                    $T[1] = number_format($Timputsemaine, 2, ',', ' ');
+                    $T[2] = 0;
+                    $T[3] = 0;
+                    $T[4] = 0;
+                } elseif ($dateV->getImput()->getUser()->getPoste() == "Business analyste") {
+                    $T[0] = 0;
+                    $T[1] = 0;
+                    $T[2] = number_format($Timputsemaine, 2, ',', ' ');
+                    $T[3] = 0;
+                    $T[4] = 0;
+                } elseif ($dateV->getImput()->getUser()->getPoste() == "Pilotage") {
+                    $T[0] = 0;
+                    $T[1] = 0;
+                    $T[2] = 0;
+                    $T[3] = number_format($Timputsemaine, 2, ',', ' ');
+                    $T[4] = 0;
+                } elseif ($dateV->getImput()->getUser()->getPoste() == "Architecte") {
+                    $T[0] = 0;
+                    $T[1] = 0;
+                    $T[2] = 0;
+                    $T[3] = 0;
+                    $T[4] = number_format($Timputsemaine, 2, ',', ' ');
+                }
+                //Budget en français
+                $budgeten = $Timputsemaine * $dateV->getImput()->getUser()->getSalaire();
+                //$budgetfr = number_format($budgeten, 2, ',', ' ');
+                if ($p == "Absent") {
+                    $budgeten = 0;
+                }
+                //rendre le nombre format française
+                $Timputsemainefr = number_format($Timputsemaine, 2, ',', ' ');
+                //Séparer le CODE-Tache de ID-MOE
+                $CodeTache = $dateV->getCodeprojet()->getLibelle();
+                $IDMOE = $dateV->getCodeprojet()->getLibelle();
+                if (substr($CodeTache, -6, 1) == '-' || substr($CodeTache, -6, 1) == '_') {
+                    $IDMOE = substr($CodeTache, -5);
+                    $CodeTache = substr($CodeTache, 0, -6);
+                } else if ((substr($CodeTache, -7, 1) == '-' || substr($CodeTache, -7, 1) == '_') && substr($CodeTache, -6, 1) == ' ') {
+                    $IDMOE = substr($CodeTache, -5);
+                    $CodeTache = substr($CodeTache, 0, -7);
+                }
+                //remplir la ligne d'export avec les information de chaque imput
+                $tabexport[$i] = array(
+                    'D00550', 
+                    'Pole Digital B2B', 
+                    'Capgemini', 
+                    $dateV->getImput()->getUser()->getUsername(),
+                    $dateV->getImput()->getUser()->getCapit(), 
+                    $dateV->getTache()->getDomaine(), 
+                    $dateV->getImput()->getUser()->getPoste(),
+                    '', '', '', '', '', 
+                    $CodeTache, 
+                    $dateV->getCodeprojet()->getDescription(),
+                    $dateV->getTache()->getLibelle(), 
+                    $dateV->getActivite()->getLibelle(), 
+                    $IDMOE, 
+                    $donnees->year, 
+                    $p,
+                    $datedebutsemaine, 
+                    $Timputsemainefr, 
+                    $dateV->getImput()->getCommentaire(), 
+                    '', 
+                    $weeknumber,
+                    $dateV->getImput()->getUser()->getSalaire(), 
+                    $budgeten, 
+                    $T[0], $T[1], $T[2], $T[3], $T[4], 
+                    $CodeTache .' '. $IDMOE .' | '. $dateV->getCodeprojet()->getDescription()
+                );
+                //si plusieur imputation sont dans une semaine qui chevauche deux mois
+                if ($moisverifin ==  1)
+                    $compteurDateV = $retour + 1;
+                $i++;
+                $Timputsemaine = 0;
+            }
+            //pour passer a une autre imputation
+            if ($compteurDateV == 5) {
+                $compteurDateV = 0;
+            }
+            $findemois = $dateV->getImput()->getId();
+            $boolnext = $bool;
         }
+
+        for ($j = 0; $j < $i; $j++) {
+            $list[$j + 1] = $tabexport[$j];
+        }
+
+        $fp = fopen('php://temp', 'w+');
+        foreach ($list as $fields) {
+            fputcsv($fp, $fields);
+        }
+
+        rewind($fp);
+        $response = new Response(stream_get_contents($fp));
+        fclose($fp);
+
+        $response->headers->set('Content-Type', 'text/csv', 'charset=UTF-8');
+        $response->headers->set('Content-Disposition', 'attachment; filename="testing.csv"');
+
+        return $response;
     }
-
-    if ($modif) {
-        $em = $this->getDoctrine()->getManager();
-
-        // Appliquer les modifications
-        foreach ($modificationsDateV as $modifDateV) {
-            $modifDateV['dateV']->setValeur($modifDateV['nouvelleValeur']);
-            $em->persist($modifDateV['dateV']);
-        }
-
-        foreach ($modificationsImput as $modifImput) {
-            $modifImput['imput']->setCommentaire($modifImput['nouveauCommentaire']);
-            $em->persist($modifImput['imput']);
-        }
-
-        $em->flush();
-        return new Response(200); // Succès
-    } else {
-        return new Response(0); // Aucune modification
-    }
-}
