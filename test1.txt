@@ -35,7 +35,8 @@ AUTO_INCREMENT=445867
 ;
 
 
-
+INSERT INTO `imput` (`id`, `user_id`, `commentaire`) VALUES (425449, 15, '');
+INSERT INTO `imput` (`id`, `user_id`, `commentaire`) VALUES (425450, 15, 'férié');
 INSERT INTO `imput` (`id`, `user_id`, `commentaire`) VALUES (445860, 15, '');
 INSERT INTO `imput` (`id`, `user_id`, `commentaire`) VALUES (445861, 15, '');
 INSERT INTO `imput` (`id`, `user_id`, `commentaire`) VALUES (445862, 15, '');
@@ -44,7 +45,16 @@ INSERT INTO `imput` (`id`, `user_id`, `commentaire`) VALUES (445864, 15, '');
 INSERT INTO `imput` (`id`, `user_id`, `commentaire`) VALUES (445865, 15, '');
 INSERT INTO `imput` (`id`, `user_id`, `commentaire`) VALUES (445866, 15, 'férié');
 
-
+INSERT INTO `date_v` (`id`, `imput_id`, `date`, `valeur`, `tache_id`, `codeprojet_id`, `activite_id`) VALUES (60441, 425449, '2024-04-08', 1, 946, 146, 6);
+INSERT INTO `date_v` (`id`, `imput_id`, `date`, `valeur`, `tache_id`, `codeprojet_id`, `activite_id`) VALUES (60442, 425449, '2024-04-09', 1, 946, 146, 6);
+INSERT INTO `date_v` (`id`, `imput_id`, `date`, `valeur`, `tache_id`, `codeprojet_id`, `activite_id`) VALUES (60443, 425449, '2024-04-10', 0, 946, 146, 6);
+INSERT INTO `date_v` (`id`, `imput_id`, `date`, `valeur`, `tache_id`, `codeprojet_id`, `activite_id`) VALUES (60444, 425449, '2024-04-11', 0, 946, 146, 6);
+INSERT INTO `date_v` (`id`, `imput_id`, `date`, `valeur`, `tache_id`, `codeprojet_id`, `activite_id`) VALUES (60445, 425449, '2024-04-12', 1, 946, 146, 6);
+INSERT INTO `date_v` (`id`, `imput_id`, `date`, `valeur`, `tache_id`, `codeprojet_id`, `activite_id`) VALUES (60446, 425450, '2024-04-08', 0, 1455, 265, 8);
+INSERT INTO `date_v` (`id`, `imput_id`, `date`, `valeur`, `tache_id`, `codeprojet_id`, `activite_id`) VALUES (60447, 425450, '2024-04-09', 0, 1455, 265, 8);
+INSERT INTO `date_v` (`id`, `imput_id`, `date`, `valeur`, `tache_id`, `codeprojet_id`, `activite_id`) VALUES (60448, 425450, '2024-04-10', 1, 1455, 265, 8);
+INSERT INTO `date_v` (`id`, `imput_id`, `date`, `valeur`, `tache_id`, `codeprojet_id`, `activite_id`) VALUES (60449, 425450, '2024-04-11', 1, 1455, 265, 8);
+INSERT INTO `date_v` (`id`, `imput_id`, `date`, `valeur`, `tache_id`, `codeprojet_id`, `activite_id`) VALUES (60450, 425450, '2024-04-12', 0, 1455, 265, 8);
 INSERT INTO `date_v` (`id`, `imput_id`, `date`, `valeur`, `tache_id`, `codeprojet_id`, `activite_id`) VALUES (60488, 445860, '2024-04-01', 0.75, 943, 153, 16);
 INSERT INTO `date_v` (`id`, `imput_id`, `date`, `valeur`, `tache_id`, `codeprojet_id`, `activite_id`) VALUES (60489, 445860, '2024-04-02', 0.25, 943, 153, 16);
 INSERT INTO `date_v` (`id`, `imput_id`, `date`, `valeur`, `tache_id`, `codeprojet_id`, `activite_id`) VALUES (60490, 445860, '2024-04-03', 1, 943, 153, 16);
