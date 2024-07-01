@@ -137,14 +137,12 @@ class ImputController extends AbstractController
         $code = 200;
         //verifier si il ya eu une Modification
         $modif = 0;
-
         //Boucle pour ajoutez plusieurs imputations
         $dateVs = [];
         $dateDs = [] ;
 
         $dateTs = [] ;
         $tableTs = [] ;
-
         $nbDateV = 0;
         $nbDateT = 0;
 
@@ -160,21 +158,24 @@ class ImputController extends AbstractController
                 $nbDateT++;
                 ($dateTs[$nbDateT] = $tabvalue);
                 ($tableTs[$nbDateT] = $tab->imputID);
+
             }
         }
-
+        $imput = new Imput;
         for($i = 1; $i < count($dateTs)+1; $i++){
             if(isset($dateVs[$i]) && isset($dateTs[$i]) && $dateVs[$i] != $dateTs[$i]){
+                //var_dump('n°', $i, ' est different');
                 foreach($dateVlistes as $listeD){
                     $dateV = new DateV;
                     $dateV = $listeD;
-                    $codeP = new CodeProjet;
-                    $tache = new Taches;
-                    $imput = new Imput;
                     $charge = 0;
-                    $codeP = $listeD->getCodeprojet();
-                    $tache = $listeD->getTache();
                     if($tableTs[$i] == $listeD->getImput()->getId() && $dateDs[$i] == $listeD->getDate()){
+                        
+                        $codeP = new CodeProjet;
+                        $tache = new Taches;
+                        $codeP = $listeD->getCodeprojet();
+                        $tache = $listeD->getTache();
+
                         $charge = $dateTs[$i] - $dateVs[$i];
                         $chargeFinale = $codeP->getChargeConsomme() + $charge;
                         $budgetFinale = $codeP->getBudgetConsomme() + ($charge * $listeD->getImput()->getUser()->getSalaire());
@@ -208,20 +209,22 @@ class ImputController extends AbstractController
                         //editer les valeur
                         $dateV->setValeur($dateTs[$i]);
                         $modif = 1;
+
+                        $em->persist($codeP);
+                        $em->persist($dateV);
+                        
                     }
                     if ($tab->imputID == $listeD->getImput()->getId() && $tab->Commentaires != $listeD->getImput()->getCommentaire() && $bool == 0) {
-                        $imput = $dateV->getImput();
+                        $imput = $listeD->getImput();
                         $imput->setCommentaire($tab->Commentaires);
                         $modif = 1;
                         $bool = 1;
+                        $em->persist($imput);
                     }
-
-                    $em->persist($codeP);
-                    $em->persist($dateV);
-                    $em->persist($imput);
                 } 
             }
         }
+        
         for ($Q = 0; $Q < 5; $Q++) {
             if ($donnees->tabcumuleimput[$Q] > 1)
                 $code = 202;
@@ -325,6 +328,7 @@ class ImputController extends AbstractController
                     if ($totalbase[$ver] > 1)
                         $code = 202;
                 }
+
 
                 //création de l'imput
                 $imput->setUser($user);
@@ -741,9 +745,9 @@ class ImputController extends AbstractController
                     }
                     //Budget en franaçais
                     $budgeten = $Timputsemaine * $dateV->getImput()->getUser()->getSalaire();
-                    $budgetfr = number_format($budgeten, 2, ',', ' ');
+                    $budgetfr = number_format($budgeten, 2, ',', '');
                     if ($p == "Absent") {
-                        $budgetfr = 0;
+                        $budgeten = 0;
                     }
                     //rendre le nombre format française
                     $Timputsemainefr = number_format($Timputsemaine, 2, ',', ' ');
@@ -818,22 +822,24 @@ class ImputController extends AbstractController
 
         $donnees = json_decode($request->getContent());
 
-
         $dateVs = $dateVRepository->findAll();
-
         $tabexport = [];
-
         $i = 0;
         $compteurDateV = 0;
         $Timputsemaine = 0;
-        $findemois = 0;
+
+        
         $moisverif = 0;
         $moisverifin = 0;
         $boolnext = 0;
 
         $jour = new DateTime($donnees->dates[0]);
         $jourj = $jour->format('Y-m-d');
-        $moisEX = substr($jourj, 0, 7);
+        $moisEX = $jour->format('Y-m');
+        $lastday = new DateTime($moisEX . '-01');
+        $lastday->modify('last day of this month');
+        $findemois = $lastday->format('Y-m-d');
+        $weekEX = $jour->format("W");
 
         $list = array(
             //these are the columns
@@ -867,133 +873,114 @@ class ImputController extends AbstractController
 
         foreach ($dateVs as $dateV) {
             $bool = 0;
-            $jourbase = $dateV->getDate()->format('Y-m-d');
-            $weekdatetime = new DateTime($jourbase);
-            $weeknumber = $weekdatetime->format("W");
-            $moisBase = substr($jourbase, 0, 7);
-            //condition sur le mois selectionner
-            if ($moisEX == $moisBase) {
+            $jourbase = $dateV->getDate()->format('Y-m-d'); 
+            $weekdatetime = new DateTime($jourbase); 
+            $weeknumber = $weekdatetime->format("W"); 
+            $moisBase = $dateV->getDate()->format('Y-m');
+            
+
+            //condition sur le mois selectionné
+            if ($moisEX == $moisBase && $jourbase <= $findemois) { 
                 $bool = 1;
-                $moisverifin = 0;
-                $moisverif = 1;
-                $Timputsemaine += $dateV->getValeur();
-            }
-            //condition pour la date de debut de semaine
-            if ($compteurDateV == 0)
-                $datedebutsemaine =  $dateV->getDate()->format('d/m/Y 00:00');
+                $moisverifin = 0; // 
+                $moisverif = 1; // 
+                $Timputsemaine += $dateV->getValeur(); // La on a le total de la semaine 
+            
+                $datedebutsemaine =  $dateV->getDate()->format('d/m/Y');
 
-            //Condition sur la fin du mois
-            if ($findemois == $dateV->getImput()->getId() && $moisEX != $moisBase && $moisverif == 1 && $moisverifin == 0 && $boolnext == 1) {
-                //garder la valeur du compteur
-                $retour = $compteurDateV;
-                //pour afficher le resumtat au milieux de la semaine vu que le mois est fini
-                $compteurDateV = 4;
-                //pour savoir qu'on a deja acceder a cette condition
-                $moisverifin = 1;
-                //pour savoir qu'on est deja passé par le mois choisi
-                $bool = 1;
-            }
+                //incremente pour afficher la dernier DateV pour recuperer le total
+                $compteurDateV++; // Le nombre de dates trouvée
 
-            //incremente pour afficher la dernier DateV pour recuperer le total
-            $compteurDateV++;
+                //condition pour ajoutez la ligne de l'export avec les information
+                if ($compteurDateV == 5 || $jourbase == $findemois) {
+                    //condition pour savoir si il est present ou abs
+                    if ($dateV->getTache()->getDescription() == "CAPABS")
+                        $p = "Absent";
+                    else
+                        $p = "Présent";
 
-            //condition pour ajoutez la ligne de l'export avec les information
-            if ($bool == 1  && $compteurDateV == 5) {
-                //condition pour savoir si il est present ou abs
-                if ($dateV->getTache()->getDescription() == "CAPABS")
-                    $p = "Absent";
-                else
-                    $p = "Présent";
-
-                //Charge en française
-                if ($dateV->getImput()->getUser()->getPoste() == "Développeur") {
-                    $T[0] = number_format($Timputsemaine, 2, ',', ' ');
-                    $T[1] = 0;
-                    $T[2] = 0;
-                    $T[3] = 0;
-                    $T[4] = 0;
-                } elseif ($dateV->getImput()->getUser()->getPoste() == "Testeur") {
-                    $T[0] = 0;
-                    $T[1] = number_format($Timputsemaine, 2, ',', ' ');
-                    $T[2] = 0;
-                    $T[3] = 0;
-                    $T[4] = 0;
-                } elseif ($dateV->getImput()->getUser()->getPoste() == "Business analyste") {
-                    $T[0] = 0;
-                    $T[1] = 0;
-                    $T[2] = number_format($Timputsemaine, 2, ',', ' ');
-                    $T[3] = 0;
-                    $T[4] = 0;
-                } elseif ($dateV->getImput()->getUser()->getPoste() == "Pilotage") {
-                    $T[0] = 0;
-                    $T[1] = 0;
-                    $T[2] = 0;
-                    $T[3] = number_format($Timputsemaine, 2, ',', ' ');
-                    $T[4] = 0;
-                } elseif ($dateV->getImput()->getUser()->getPoste() == "Architecte") {
-                    $T[0] = 0;
-                    $T[1] = 0;
-                    $T[2] = 0;
-                    $T[3] = 0;
-                    $T[4] = number_format($Timputsemaine, 2, ',', ' ');
+                    //Charge en française
+                    if ($dateV->getImput()->getUser()->getPoste() == "Développeur") {
+                        $T[0] = number_format($Timputsemaine, 2, ',', ' ');
+                        $T[1] = 0;
+                        $T[2] = 0;
+                        $T[3] = 0;
+                        $T[4] = 0;
+                    } elseif ($dateV->getImput()->getUser()->getPoste() == "Testeur") {
+                        $T[0] = 0;
+                        $T[1] = number_format($Timputsemaine, 2, ',', ' ');
+                        $T[2] = 0;
+                        $T[3] = 0;
+                        $T[4] = 0;
+                    } elseif ($dateV->getImput()->getUser()->getPoste() == "Business analyste") {
+                        $T[0] = 0;
+                        $T[1] = 0;
+                        $T[2] = number_format($Timputsemaine, 2, ',', ' ');
+                        $T[3] = 0;
+                        $T[4] = 0;
+                    } elseif ($dateV->getImput()->getUser()->getPoste() == "Pilotage") {
+                        $T[0] = 0;
+                        $T[1] = 0;
+                        $T[2] = 0;
+                        $T[3] = number_format($Timputsemaine, 2, ',', ' ');
+                        $T[4] = 0;
+                    } elseif ($dateV->getImput()->getUser()->getPoste() == "Architecte") {
+                        $T[0] = 0;
+                        $T[1] = 0;
+                        $T[2] = 0;
+                        $T[3] = 0;
+                        $T[4] = number_format($Timputsemaine, 2, ',', ' ');
+                    }
+                    //Budget en franaçais
+                    $budgeten = $Timputsemaine * $dateV->getImput()->getUser()->getSalaire();
+                    $budgetfr = number_format($budgeten, 2, ',', '');
+                    if ($p == "Absent") {
+                        $budgeten = 0;
+                    }
+                    //rendre le nombre format française
+                    $Timputsemainefr = number_format($Timputsemaine, 2, ',', ' ');
+                    //Séparer le CODE-Tache de ID-MOE
+                    $CodeTache = $dateV->getCodeprojet()->getLibelle();
+                    $IDMOE = $dateV->getCodeprojet()->getLibelle();
+                    if (substr($CodeTache, -6, 1) == '-' || substr($CodeTache, -6, 1) == '_') {
+                        $IDMOE = substr($CodeTache, -5);
+                        $CodeTache = substr($CodeTache, 0, -6);
+                    } else if ((substr($CodeTache, -7, 1) == '-' || substr($CodeTache, -7, 1) == '_') && substr($CodeTache, -6, 1) == ' ') {
+                        $IDMOE = substr($CodeTache, -5);
+                        $CodeTache = substr($CodeTache, 0, -7);
+                    }
+                    //remplire la ligne d'export avec les information de chaque imput
+                    $tabexport[$i] = array(
+                        'D00550', 
+                        'Pole Digital B2B', 
+                        'Capgemini', 
+                        $dateV->getImput()->getUser()->getUsername(),
+                        $dateV->getImput()->getUser()->getCapit(), 
+                        $dateV->getTache()->getDomaine(), 
+                        $dateV->getImput()->getUser()->getPoste(),
+                        '', '', '', '', '', 
+                        $CodeTache, 
+                        $dateV->getCodeprojet()->getDescription(),
+                        $dateV->getTache()->getLibelle(), 
+                        $dateV->getActivite()->getLibelle(), 
+                        $IDMOE, 
+                        $donnees->year, 
+                        $p,
+                        $datedebutsemaine, 
+                        $Timputsemainefr, 
+                        $dateV->getImput()->getCommentaire(), 
+                        '', 
+                        $weeknumber,
+                        $dateV->getImput()->getUser()->getSalaire(), 
+                        $budgetfr, 
+                        $T[0], $T[1], $T[2], $T[3], $T[4], 
+                        $CodeTache .' '. $IDMOE .' | '. $dateV->getCodeprojet()->getDescription()
+                    );
+                    $compteurDateV = 0;
+                    $Timputsemaine = 0;
+                    $i++;
                 }
-                //Budget en franaçais
-                $budgeten = $Timputsemaine * $dateV->getImput()->getUser()->getSalaire();
-                $budgetfr = number_format($budgeten, 2, ',', ' ');
-                if ($p == "Absent") {
-                    $budgetfr = 0;
-                }
-                //rendre le nombre format française
-                $Timputsemainefr = number_format($Timputsemaine, 2, ',', ' ');
-                //Séparer le CODE-Tache de ID-MOE
-                $CodeTache = $dateV->getCodeprojet()->getLibelle();
-                $IDMOE = $dateV->getCodeprojet()->getLibelle();
-                if (substr($CodeTache, -6, 1) == '-' || substr($CodeTache, -6, 1) == '_') {
-                    $IDMOE = substr($CodeTache, -5);
-                    $CodeTache = substr($CodeTache, 0, -6);
-                } else if ((substr($CodeTache, -7, 1) == '-' || substr($CodeTache, -7, 1) == '_') && substr($CodeTache, -6, 1) == ' ') {
-                    $IDMOE = substr($CodeTache, -5);
-                    $CodeTache = substr($CodeTache, 0, -7);
-                }
-                //remplire la ligne d'export avec les information de chaque imput
-                $tabexport[$i] = array(
-                    'D00550', 
-                    'Pole Digital B2B', 
-                    'Capgemini', 
-                    $dateV->getImput()->getUser()->getUsername(),
-                    $dateV->getImput()->getUser()->getCapit(), 
-                    $dateV->getTache()->getDomaine(), 
-                    $dateV->getImput()->getUser()->getPoste(),
-                    '', '', '', '', '', 
-                    $CodeTache, 
-                    $dateV->getCodeprojet()->getDescription(),
-                    $dateV->getTache()->getLibelle(), 
-                    $dateV->getActivite()->getLibelle(), 
-                    $IDMOE, 
-                    $donnees->year, 
-                    $p,
-                    $datedebutsemaine, 
-                    $Timputsemainefr, 
-                    $dateV->getImput()->getCommentaire(), 
-                    '', 
-                    $weeknumber,
-                    $dateV->getImput()->getUser()->getSalaire(), 
-                    $budgetfr, 
-                    $T[0], $T[1], $T[2], $T[3], $T[4], 
-                    $CodeTache .' '. $IDMOE .' | '. $dateV->getCodeprojet()->getDescription()
-                );
-                //si plusieur imputation sont dans une semaine qui chevauche deux mois
-                if ($moisverifin ==  1)
-                    $compteurDateV = $retour + 1;
-                $i++;
-                $Timputsemaine = 0;
             }
-            //pour passer a une autre imputation
-            if ($compteurDateV == 5) {
-                $compteurDateV = 0;
-            }
-            $findemois = $dateV->getImput()->getId();
-            $boolnext = $bool;
         }
 
         for ($j = 0; $j < $i; $j++) {
